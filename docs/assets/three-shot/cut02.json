@@ -1,0 +1,8 @@
+{
+  "previous": "output/shot02.gif",
+  "next": "output/shot03.gif",
+  "pixel_mae_0_255": 33.075,
+  "threshold": 35.0,
+  "status": "pixel-similar-review-still-required",
+  "note": "Pixel MAE cannot measure identity or narrative continuity."
+}
