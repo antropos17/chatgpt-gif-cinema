@@ -18,6 +18,13 @@ from urllib.request import Request, urlopen
 API_URL = "https://api.openai.com/v1/images/generations"
 MODELS = ("gpt-image-2.6-flare", "gpt-image-2.6-sunburst")
 
+
+class APIError(RuntimeError):
+    """Safe status-only error; raw server bodies must never reach receipts."""
+    def __init__(self, status):
+        self.status = status
+        super().__init__(f"OpenAI API HTTP {status}; response body omitted to protect credentials")
+
 def validate_gif(source):
     """Decode every frame before accepting an animated GIF."""
     from PIL import Image, ImageSequence
@@ -96,7 +103,7 @@ def request_gif(payload, key, endpoint=API_URL, transport=urlopen):
         with transport(req, timeout=180) as res:
             body = json.load(res)
     except HTTPError as exc:
-        raise RuntimeError(f"OpenAI API HTTP {exc.code}; response body omitted to protect credentials") from exc
+        raise APIError(exc.code) from exc
     except URLError as exc:
         raise RuntimeError("OpenAI network request failed; check connectivity") from exc
     except (TimeoutError, OSError) as exc:
@@ -232,6 +239,8 @@ def continuity(args):
 def build_parser():
     p=argparse.ArgumentParser(prog="gif-cinema",description="GPT Image GIF generator and film assembler")
     sub=p.add_subparsers(dest="command",required=True)
+    from .render import add_parser
+    add_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")

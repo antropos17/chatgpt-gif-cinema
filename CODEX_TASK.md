@@ -6,6 +6,16 @@ Branch: create `feat/script-to-film`; do not modify `main` directly without test
 ## Goal
 Turn a structured multi-shot script into a reproducible, resumable short film using OpenAI GPT Image GIF generation and FFmpeg. The existing v0.4 pipeline can generate individual GIFs and assemble them; it cannot yet autonomously render a full film from `film.json`.
 
+## Implementation status
+
+The v0.5 script runner is implemented in `gif_cinema/render.py`; see
+`docs/SCRIPT-FORMAT.md`. The checklist below is retained as the original acceptance
+contract. Offline assembly is separate from visual acceptance: the existing three
+GIFs have style/pose discontinuities. `examples/consistent-film.proposed.json` is an
+unrendered replacement proposal. No new paid generation is authorized by this file.
+The current user requirement is the same recognizable character and aligned motion
+across shots. Neither matching prompts nor dissolves establish that requirement.
+
 ## Implement
 1. Add `gif-cinema render examples/film.json --out output/last-light --dry-run`.
 2. Add `--execute` for actual API calls, `--max-api-calls 3` default, and a clear preview of planned calls before execution. No requests in dry-run.

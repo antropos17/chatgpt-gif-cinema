@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "title": "The Answer — proposed three-shot character continuity test",
+  "ratio": "1:1",
+  "width": 512,
+  "height": 512,
+  "fps": 25,
+  "style_bible": "One adult paper-cut astronaut throughout: round matte-black visor, white rounded helmet, two narrow red bands on each forearm, three black chest buttons, short stocky silhouette, no other characters. Static medium-wide front three-quarter camera throughout. Astronaut occupies the left third, facing screen right. Flat grey lunar ground, small black crater at bottom right, plain black sky. Fixed soft illumination from upper left. Matte black, white and grey only, except muted red suit bands. No camera motion or cuts within a shot. No return-to-start pose reset. Preserve the same composition and identity. These are generation instructions, not a guarantee of matching outputs.",
+  "audio_notes": "Silent first acceptance pass. No music until the action reads clearly without it.",
+  "shots": [
+    {
+      "id": "01-signal",
+      "prompt": "The astronaut slowly raises the right hand to greet the empty sky, then holds it raised. The left arm stays down. Clear single forward action; do not wave back down or loop.",
+      "frames": 9,
+      "duration_ms": 200,
+      "transition": "cut",
+      "first_frame_target": "Same astronaut at left, both arms down, looking screen right into empty sky.",
+      "last_frame_target": "Right hand raised at helmet height, palm screen right; feet, body and camera unchanged.",
+      "caption": "Is anyone there?"
+    },
+    {
+      "id": "02-answer",
+      "prompt": "The astronaut holds the raised right hand absolutely still. A tiny white star at upper right gently brightens once. No movement of the astronaut or camera; no new props.",
+      "frames": 9,
+      "duration_ms": 200,
+      "transition": "cut",
+      "first_frame_target": "Astronaut at left with right hand raised at helmet height, palm screen right; same feet, body, camera and lunar ground as the end of shot 01.",
+      "last_frame_target": "The same raised-hand pose; one bright white star at upper right.",
+      "caption": "A light answered."
+    },
+    {
+      "id": "03-recognition",
+      "prompt": "The star remains still at upper right. The astronaut slowly lowers the right hand from helmet height to the chest, with a small relieved head tilt toward the star. Keep feet, body position, identity and camera fixed. End on the held pose; do not loop.",
+      "frames": 9,
+      "duration_ms": 200,
+      "transition": "cut",
+      "first_frame_target": "Same raised-hand astronaut at left and one bright star at upper right, matching the end of shot 02.",
+      "last_frame_target": "The same astronaut rests the right hand on the chest, looking at the unchanged star.",
+      "caption": "Not alone."
+    }
+  ]
+}

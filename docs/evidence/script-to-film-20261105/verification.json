@@ -1,0 +1,111 @@
+{
+  "scope": "Offline assembly from three existing authenticated GPT GIF assets; no new generation",
+  "runs": [
+    {
+      "api_calls": 0,
+      "film_seconds": 5.4,
+      "generated": 0,
+      "imported": 3,
+      "max_api_calls": 0,
+      "skipped": 0,
+      "status": "complete",
+      "verification": "decoded-h264; narrative-human-review-required"
+    },
+    {
+      "api_calls": 0,
+      "film_seconds": 5.4,
+      "generated": 0,
+      "imported": 0,
+      "max_api_calls": 0,
+      "skipped": 3,
+      "status": "complete",
+      "verification": "decoded-h264; narrative-human-review-required"
+    }
+  ],
+  "film": {
+    "fingerprint": "14860f6a7254263e5676fb404e91d12251a15aa41bd7aeee0a049a536d5be479",
+    "output": "film.mp4",
+    "probe": {
+      "codec_name": "h264",
+      "duration": "5.400000",
+      "height": 512,
+      "nb_read_frames": "135",
+      "width": 512
+    },
+    "sha256": "20f67375dd068c447ea8136fd2ea75f3ae91e5f1eac874744d6277244836560f"
+  },
+  "shots": {
+    "01-greeting": {
+      "duration_ms": 1800,
+      "fingerprint": "7a9437cc1e47a762435adc9ac1c5833b189b6c5a7b414ca317bd0e6ea656d36b",
+      "frame_durations_ms": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "frames": 9,
+      "origin": "imported",
+      "output": "01-greeting-7a9437cc1e47-7cf9bcc475ff.gif",
+      "seconds": 0,
+      "sha256": "7cf9bcc475ff2c491ac580301449f353fc162e274b690073015859474fca0191",
+      "source_sha256": "7cf9bcc475ff2c491ac580301449f353fc162e274b690073015859474fca0191",
+      "status": "verified-gif",
+      "usage": null
+    },
+    "02-reply": {
+      "duration_ms": 1800,
+      "fingerprint": "33da439f023cb57470f8810966a50c405ea47f3c979d7c247626b135a05f1bb4",
+      "frame_durations_ms": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "frames": 9,
+      "origin": "imported",
+      "output": "02-reply-33da439f023c-f0437a45ee14.gif",
+      "seconds": 0,
+      "sha256": "f0437a45ee14bf0de3980aa7c7e5e6383e667dbccec374b4c170f5ba6dcecd66",
+      "source_sha256": "f0437a45ee14bf0de3980aa7c7e5e6383e667dbccec374b4c170f5ba6dcecd66",
+      "status": "verified-gif",
+      "usage": null
+    },
+    "03-constellation": {
+      "duration_ms": 1800,
+      "fingerprint": "06f659621909ec09c446b7cacd96153323c0b252490a3bc38331fea920d1c196",
+      "frame_durations_ms": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "frames": 9,
+      "origin": "imported",
+      "output": "03-constellation-06f659621909-518041369b00.gif",
+      "seconds": 0,
+      "sha256": "518041369b006d8d9c7113333395513989e92216272769695a69210774cee426",
+      "source_sha256": "518041369b006d8d9c7113333395513989e92216272769695a69210774cee426",
+      "status": "verified-gif",
+      "usage": null
+    }
+  },
+  "api_calls_total": 0,
+  "visual_acceptance": "NOT PASSED: style/pose discontinuity at 01->02; continuous recognizable character not established",
+  "new_generation": "Not performed; requires user approval"
+}

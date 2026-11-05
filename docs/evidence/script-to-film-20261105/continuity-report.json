@@ -1,0 +1,22 @@
+{
+  "joins": [
+    {
+      "next": "02-reply",
+      "next_start_target": "An insert of the glove reaching toward a faint light. Review the style and pose discontinuity from shot 01.",
+      "pixel_mae_0_255": 60.643,
+      "previous": "01-greeting",
+      "previous_end_target": "The greeting is complete; attention moves toward the sky.",
+      "status": "human-review-required"
+    },
+    {
+      "next": "03-constellation",
+      "next_start_target": "Cut away to the same lunar night; a small light is visible.",
+      "pixel_mae_0_255": 33.075,
+      "previous": "02-reply",
+      "previous_end_target": "The light brightens in response to the reaching hand.",
+      "status": "human-review-required"
+    }
+  ],
+  "note": "Pixel MAE cannot measure identity, motion or narrative continuity. Targets are instructions, not verified observations.",
+  "status": "human-review-required"
+}
