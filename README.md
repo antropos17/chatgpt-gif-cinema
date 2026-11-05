@@ -6,9 +6,15 @@ Generate animated GIF shots with OpenAI GPT Image 2.6, inspect first/last frames
 
 > Status: **First authenticated OpenAI GIF generated and verified** on November 5, 2026; automated multi-shot movie creation still experimental.
 
-## First verified GPT Image 2.6 GIF (Nov 5, 2026)
+## Demo: cleaned background and continuous loop (Nov 5, 2026)
 
-![A paper-cut astronaut waving once on the Moon, generated with GPT Image 2.6 Flare](docs/assets/first-live-render.gif)
+![Astronaut waving with background cleanup and a ping-pong loop applied after generation](docs/assets/astronaut-clean-loop.gif)
+
+**Post-processed demo:** 512×512, 16 frames, 3.2 seconds. The background patches were removed after generation, and the motion was arranged as a forward-and-reverse (ping-pong) loop to avoid the original pose jump. [Download the corrected GIF](docs/assets/astronaut-clean-loop.gif).
+
+The source for this corrected demo is the [original manual API render](docs/assets/manual-live-41980327841/live-test.gif) from [run #41980327841](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41980327841). This edit did not make another API request.
+
+### Earlier authenticated API output
 
 **Real API output:** 512×512, 9 frames, 1.8 seconds. [Original GIF](docs/assets/first-live-render.gif) · [MP4 export](docs/assets/first-live-film.mp4) · [API run](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41978897155).
 
@@ -24,11 +30,11 @@ The output demonstrates real multi-shot assembly, but each shot is independently
 
 ## Manual live verification (Nov 5, 2026)
 
-![Astronaut waving, from the verified manual API run](docs/assets/manual-live-41980327841/live-test.gif)
+[Unmodified GIF from the manual API run](docs/assets/manual-live-41980327841/live-test.gif).
 
 [Manual API run #41980327841](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41980327841) succeeded: **512x512, 9 frames at 200 ms each = 1.8 seconds**, infinite loop. The downloaded artifact was independently decoded and its SHA-256 matched the [API metadata](docs/assets/manual-live-41980327841/live-test.json). [Frame inspection](docs/assets/manual-live-41980327841/live-test-inspect.json).
 
-Visual review confirms the waving motion, but several frames contain tan patches in the background and the loop has a visible pose change. This demonstrates authenticated GIF generation, not finished film quality.
+The unmodified output contains tan background patches and a visible pose change at the loop boundary. The demo at the top of this README applies background cleanup and a forward-and-reverse loop after generation; the original GIF and API metadata remain unchanged. This demonstrates authenticated GIF generation and subsequent editing, not finished film quality.
 
 To repeat: open **Actions > Live GIF API Test > Run workflow** on `main`. This workflow runs only through `workflow_dispatch`, makes one paid request without automatic retries, uses the repository's `OPENAI_API_KEY` secret only in the relevant steps, and retains artifacts for seven days. It has read-only repository permissions. The demo files above remain in the repository.
 
