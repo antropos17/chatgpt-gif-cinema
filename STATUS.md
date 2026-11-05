@@ -1,9 +1,25 @@
-# Release status (2026-11-05)
+# GIF Cinema verification status · November 5, 2026
 
-- Public repository: created and initial source published.
-- Offline CLI tests: available in GitHub Actions.
-- GIF generation via authenticated OpenAI API: **NOT YET VERIFIED**.
-- End-to-end actual GIF film production: **NOT YET VERIFIED**.
-- Mock API testing and local FFmpeg checks were performed on an earlier local package.
-- Site: static marketing page; no browser-side API-key input.
-- License: custom source-available evaluation license, not OSI open source.
+## Verified
+- Public repository: https://github.com/antropos17/chatgpt-gif-cinema
+- Offline unit tests: GitHub Actions CI passed.
+- Authenticated GPT Image 2.6 Flare GIF generation: **PASS**, run [#41978897155](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41978897155).
+- First GIF: 512×512, nine frames, 1,800 ms, 754,055 bytes; source: `docs/assets/first-live-render.gif`.
+- GIF-to-H.264 MP4 export: **PASS**, run [#41979370241](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41979370241).
+- Three separately generated GIF scenes into one H.264 MP4: **PASS**, run [#41979631572](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41979631572).
+- Three-shot output: 512×512, 129 video frames, 5.375 seconds; `docs/assets/three-shot/three-shot-film.mp4`.
+
+## Not yet established
+- Character identity consistency across independent renders (requires human QA).
+- Smoothness of match cuts, narrative continuity, audio mixing or subtitles.
+- Reliable production of a long film from a single idea; currently needs explicit per-shot rendering.
+- Browser-based generation service; site is a static showcase.
+
+## Continuity diagnostics
+- Shot 1→2 pixel MAE: 60.643 / 255; manual review flagged.
+- Shot 2→3 pixel MAE: 33.075 / 255; still requires subjective review.
+- These heuristics are not identity detection.
+
+## Security and licensing
+- OpenAI API key is stored as an Actions secret and is not in the repository.
+- Custom source-available license, not OSI open-source.
