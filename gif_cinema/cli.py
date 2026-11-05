@@ -1,7 +1,9 @@
-"""OpenAI GIF client and FFmpeg film assembler (zero runtime dependencies)."""
+"""OpenAI GIF client and FFmpeg film assembler ."""
 import argparse
 import base64
 import json
+import hashlib
+import io
 import os
 from pathlib import Path
 import shutil
@@ -38,15 +40,16 @@ def request_gif(payload, key, endpoint=API_URL, transport=urlopen):
         with transport(req, timeout=180) as res:
             body = json.load(res)
     except HTTPError as exc:
-        raise RuntimeError(f"OpenAI API HTTP {exc.code}: {exc.read().decode(errors='replace')[:1500]}") from exc
+        raise RuntimeError(f"OpenAI API HTTP {exc.code}; response body omitted to protect credentials") from exc
     except URLError as exc:
-        raise RuntimeError(f"Network problem: {exc.reason}") from exc
+        raise RuntimeError("OpenAI network request failed; no automatic retry was made") from exc
+    except (TimeoutError, OSError) as exc:
+        raise RuntimeError("OpenAI request timed out or failed; no automatic retry was made") from exc
     try:
         raw = base64.b64decode(body["data"][0]["b64_json"], validate=True)
     except (KeyError, IndexError, ValueError, TypeError) as exc:
         raise RuntimeError("Missing/invalid b64_json in image response") from exc
-    if raw[:6] not in (b"GIF87a",b"GIF89a"):
-        raise RuntimeError("API did not return GIF data")
+    gif_frames(io.BytesIO(raw))
     return raw, body.get("usage")
 
 def generate(args):
@@ -55,11 +58,16 @@ def generate(args):
         raise RuntimeError("Set OPENAI_API_KEY in your environment. Never commit it.")
     payload = make_payload(args.prompt,args.model,args.frames,args.duration,args.size,args.quality,args.complexity)
     out = Path(args.output); out.parent.mkdir(parents=True,exist_ok=True)
+    if out.suffix.lower() != ".gif":
+        raise ValueError("Output must have a .gif extension")
+    if out.exists() or out.with_suffix(".json").exists():
+        raise ValueError("Output or metadata already exists; choose a new path before a paid request")
     start = time.monotonic()
     raw,usage = request_gif(payload,key)
     out.write_bytes(raw)
     metadata={"prompt":args.prompt,"parameters":payload,"output":str(out),
-              "seconds":round(time.monotonic()-start,2),"usage":usage}
+              "seconds":round(time.monotonic()-start,2),"usage":usage,
+              "sha256":hashlib.sha256(raw).hexdigest()}
     out.with_suffix(".json").write_text(json.dumps(metadata,ensure_ascii=False,indent=2),encoding="utf-8")
     print(f"Created {out} ({len(raw):,} bytes)")
 
@@ -97,7 +105,12 @@ def gif_frames(path):
         frames=[];durations=[]
         for frame in ImageSequence.Iterator(im):
             frames.append(frame.convert("RGB").copy())
-            durations.append(int(frame.info.get("duration",im.info.get("duration",100))))
+            duration = int(frame.info.get("duration", 0))
+            if duration < 20:
+                raise ValueError("GIF frames must have a duration of at least 20 ms")
+            durations.append(duration)
+        if len(frames) < 2:
+            raise ValueError("GIF must contain at least two frames")
         return frames,durations,im.info.get("loop")
 
 def inspect(args):
@@ -145,6 +158,6 @@ def build_parser():
 def main():
     args=build_parser().parse_args()
     try:args.func(args)
-    except (RuntimeError,ValueError,subprocess.CalledProcessError) as exc:
+    except (RuntimeError,ValueError,OSError,subprocess.CalledProcessError) as exc:
         print(f"Error: {exc}",file=sys.stderr)
         raise SystemExit(1) from exc

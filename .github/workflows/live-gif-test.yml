@@ -1,11 +1,6 @@
 name: Live GIF API Test
 
-# First publication performs one small live check. Subsequent runs are manual.
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/live-gif-test.yml'
   workflow_dispatch:
 
 permissions:
@@ -26,6 +21,11 @@ jobs:
           python-version: '3.12'
       - name: Install
         run: python -m pip install -e '.[filmqa]'
+      - name: Offline checks before paid request
+        run: |
+          python -m compileall -q gif_cinema
+          python -m unittest discover -s tests -v
+          gif-cinema --help
       - name: Check API secret
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -43,12 +43,16 @@ jobs:
       - name: Validate rendered animation
         run: |
           gif-cinema inspect output/live-test.gif -o output/live-test-inspect.json
+          gif-cinema endpoints output/live-test.gif -o output/live-test
           python - <<'PY'
           import json
           from pathlib import Path
           info=json.loads(Path("output/live-test-inspect.json").read_text())
-          assert info["frames"] >= 2, f"GIF only has {info['frames']} frames"
-          assert info["duration_ms"] >= 20
+          assert info["frames"] == 9, f"Unexpected frame count: {info['frames']}"
+          assert info["frame_durations_ms"] == [200] * 9
+          import hashlib
+          metadata=json.loads(Path("output/live-test.json").read_text())
+          assert metadata["sha256"] == hashlib.sha256(Path("output/live-test.gif").read_bytes()).hexdigest()
           assert Path("output/live-test.gif").stat().st_size > 100
           print("GIF render verified:", info["frames"], "frames,", info["duration_ms"], "ms")
           PY
@@ -61,5 +65,7 @@ jobs:
             output/live-test.gif
             output/live-test.json
             output/live-test-inspect.json
+            output/live-test-first.png
+            output/live-test-last.png
           retention-days: 7
           if-no-files-found: error
