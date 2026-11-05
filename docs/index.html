@@ -23,12 +23,13 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:25px;border:1px solid #3
 section{margin:55px 0}h2{letter-spacing:-.055em;font-size:36px}
 footer{padding:35px 0 60px;border-top:1px solid #333;color:#888;font-size:13px}
 @media(max-width:740px){.hero{padding:75px 0 40px}.grid{grid-template-columns:1fr}header{height:74px}}
+.showcase{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.65fr);gap:28px;align-items:center;margin:12px 0 65px}.movie{border:1px solid #383838;border-radius:20px;background:rgba(255,255,255,.045);padding:12px;backdrop-filter:blur(20px)}.movie video{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:#000;border-radius:12px}.showcase p{line-height:1.7}.small{font-size:12px;color:#999}@media(max-width:740px){.showcase{grid-template-columns:1fr}}
 </style></head>
 <body><header><a class="logo" href="#"><b>▰</b> GIF CINEMA</a><a class="muted" href="https://github.com/antropos17/chatgpt-gif-cinema">GITHUB ↗</a></header>
 <main><div class="hero"><div class="eyebrow">ChatGPT GIFs → short films</div><h1>Every frame tells a story.</h1>
 <p class="lead">OpenAI GPT Image GIF generation, shot continuity checks, and MP4 film assembly. One focused toolkit for creators and developers.</p>
 <div class="actions"><a class="button" href="https://github.com/antropos17/chatgpt-gif-cinema">View source ↗</a><a class="button outline" href="https://github.com/antropos17/chatgpt-gif-cinema/tree/main/.agents/skills">Explore skills</a></div></div>
-<section><div class="grid">
+<section class="showcase"><div class="movie"><video autoplay muted loop playsinline controls preload="metadata" aria-label="Three scene AI GIF short film, A Reply from the Stars"><source src="assets/three-shot/three-shot-film.mp4" type="video/mp4">Your browser does not support video playback.</video></div><div><div class="eyebrow">01 / VERIFIED LIVE PROOF</div><h2>A Reply from the Stars.</h2><p class="muted">Three independently generated GPT Image GIF shots. A 5.4-second film assembled automatically into H.264 MP4, with real API calls and recorded continuity diagnostics.</p><p class="small">512 × 512 · 3 shots · no simulated renders</p><a class="button outline" href="https://github.com/antropos17/chatgpt-gif-cinema/blob/main/docs/assets/three-shot/three-shot-film.mp4">See the film ↗</a></div></section><section><div class="grid">
 <div class="card"><span>01 / GENERATE</span><h3>Animated shots</h3><p>Call GPT Image 2.6 to create actual GIF files. Save parameters and output metadata.</p></div>
 <div class="card"><span>02 / INSPECT</span><h3>Frame continuity</h3><p>Extract first and last frames, compare adjacent shots, and review transitions.</p></div>
 <div class="card"><span>03 / ASSEMBLE</span><h3>Cinematic output</h3><p>Combine GIF sequences into H.264 MP4 files with optional audio using FFmpeg.</p></div></div></section>
@@ -38,5 +39,5 @@ python -m pip install -e ".[filmqa]"
 ffmpeg -version
 python -m gif_cinema film docs/assets/first-live-render.gif -o output/demo.mp4</pre></section>
 <section><h2>Six agent skills. One pipeline.</h2><p class="muted">Director · GIF API · Continuity · Assembly · QA · Orchestrator.</p>
-<p class="muted">Authenticated GIF generation and a three-shot MP4 demo were verified on November 5, 2026. Shots are generated independently; identity and narrative continuity need human review. Automatic story-to-film and a visual editor are planned.</p></section></main>
+<p class="muted">Live API generation verified on November 5, 2026. Multi-shot assembly also verified; character continuity and sound design need human review. Automatic story-to-film and a visual editor are planned.</p></section></main>
 <footer>GIF Cinema © 2026 · Source-available evaluation license · Built for creators.</footer></body></html>
