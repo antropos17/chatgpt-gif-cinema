@@ -4,7 +4,32 @@
 
 Generate animated GIF shots with OpenAI GPT Image 2.6, inspect first/last frames, and assemble silent scenes into MP4.
 
-> Status: **First authenticated OpenAI GIF generated and verified** on November 5, 2026; automated multi-shot movie creation still experimental.
+> Status: native GPT GIF generation is verified. Version 0.5 adds resumable script-to-film assembly. Character identity and seamless motion across independently generated scenes still require visual acceptance.
+
+## Script to film (v0.5)
+
+Plan a three-shot film without a key, network calls or output writes:
+
+```bash
+python -m gif_cinema render examples/film.json --dry-run
+```
+
+Assemble the three existing GPT GIFs without spending money (FFmpeg and ffprobe required):
+
+```bash
+python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/offline-story
+```
+
+Repeat the command to reuse verified shots and the movie. The project contains
+`film.mp4`, `captions.srt`, first/last PNGs, `contact-sheet.png`,
+`continuity-report.json`, `film-inspect.json`, `render-manifest.json` and `receipt.json`.
+The sample is a story assembly proof with known visual differences between shots,
+not a claim of seamless character animation. Captions are a separate SRT file.
+
+`examples/consistent-film.proposed.json` is an **unrendered** three-shot plan for one
+recognizable astronaut and aligned poses. Dry-run is free. Executing prompt-based
+shots makes paid API calls and requires authorization; the call cap includes retries.
+See [script format, resume and safety](docs/SCRIPT-FORMAT.md).
 
 ## Demo: cleaned background and continuous loop (Nov 5, 2026)
 
@@ -40,7 +65,7 @@ To repeat: open **Actions > Live GIF API Test > Run workflow** on `main`. This w
 
 ## Quickstart
 
-Requirements: Python 3.10 or newer, Git, and FFmpeg on PATH. Install FFmpeg from
+Requirements: Python 3.10 or newer, Git, and FFmpeg/ffprobe on PATH. Install FFmpeg from
 [the official download page](https://ffmpeg.org/download.html), then check
 `ffmpeg -version`. Pillow is installed automatically with this package.
 

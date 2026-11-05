@@ -1,5 +1,10 @@
 # Creating short films from GPT-generated GIFs
 
+For the implemented script pipeline and zero-call demonstration, see
+[Script format](SCRIPT-FORMAT.md). Begin with `render --dry-run`, then use the
+existing-asset example with `--execute --max-api-calls 0`. The output includes a
+manifest, first/last frames, a contact sheet and a continuity review report.
+
 ## Five production passes
 
 1. **Script**: establish one story beat per short shot, consistent camera direction, scale, light and character props. Use explicit shot IDs and timestamps.
