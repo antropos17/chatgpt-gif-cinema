@@ -1,8 +1,5 @@
 name: Publish Verified GIF Demo
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/publish-demo.yml']
   workflow_dispatch:
 permissions:
   contents: write
@@ -32,7 +29,7 @@ jobs:
           python -m pip install -e '.[filmqa]'
           mkdir -p docs/assets
           gif-cinema inspect docs/assets/live-test.gif
-          gif-cinema film docs/assets/live-test.gif -o docs/assets/first-live-film.mp4 --width 512 --height 512 --fps 24
+          gif-cinema film docs/assets/live-test.gif --force -o docs/assets/first-live-film.mp4 --width 512 --height 512 --fps 24
           ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,duration -of default=noprint_wrappers=1 docs/assets/first-live-film.mp4
           mv docs/assets/live-test.gif docs/assets/first-live-render.gif
           mv docs/assets/live-test.json docs/assets/first-live-render.json

@@ -23,3 +23,10 @@
 ## Security and licensing
 - OpenAI API key is stored as an Actions secret and is not in the repository.
 - Custom source-available license, not OSI open-source.
+
+## Offline reliability checks
+- Regression tests cover corrupt GIF responses, credential-safe errors, protected outputs, checksum-based reuse, concurrent output locks, and real FFmpeg montage with short and long audio.
+- Local verification makes no paid API requests. CI installs FFmpeg and uses fixtures only.
+- Film timing and final-frame retention are checked; this does not establish artistic quality or sound mixing quality.
+- Live generation and demo publishing workflows require manual dispatch.
+- Planned script orchestration in CODEX_TASK.md remains separate development work.
