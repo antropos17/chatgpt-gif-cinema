@@ -32,10 +32,11 @@ footer{padding:35px 0 60px;border-top:1px solid #333;color:#888;font-size:13px}
 <div class="card"><span>01 / GENERATE</span><h3>Animated shots</h3><p>Call GPT Image 2.6 to create actual GIF files. Save parameters and output metadata.</p></div>
 <div class="card"><span>02 / INSPECT</span><h3>Frame continuity</h3><p>Extract first and last frames, compare adjacent shots, and review transitions.</p></div>
 <div class="card"><span>03 / ASSEMBLE</span><h3>Cinematic output</h3><p>Combine GIF sequences into H.264 MP4 files with optional audio using FFmpeg.</p></div></div></section>
-<section><h2>Build your first shot.</h2><pre>pip install -e ".[filmqa]"
-export OPENAI_API_KEY="your-key"
-gif-cinema generate "A paper airplane flies past the camera" -o output/shot.gif
-gif-cinema film output/shot.gif -o output/film.mp4</pre></section>
+<section><h2>Try the verified demo.</h2><p class="muted">Requires Python 3.10+, Git and FFmpeg on PATH. This example makes no paid API request. See the repository Quickstart for new generation and Windows setup.</p><pre>git clone https://github.com/antropos17/chatgpt-gif-cinema.git
+cd chatgpt-gif-cinema
+python -m pip install -e ".[filmqa]"
+ffmpeg -version
+python -m gif_cinema film docs/assets/first-live-render.gif -o output/demo.mp4</pre></section>
 <section><h2>Six agent skills. One pipeline.</h2><p class="muted">Director · GIF API · Continuity · Assembly · QA · Orchestrator.</p>
-<p class="muted">Offline tests available. Live API generation requires account access and is not yet independently verified.</p></section></main>
+<p class="muted">Authenticated GIF generation and a three-shot MP4 demo were verified on November 5, 2026. Shots are generated independently; identity and narrative continuity need human review. Automatic story-to-film and a visual editor are planned.</p></section></main>
 <footer>GIF Cinema © 2026 · Source-available evaluation license · Built for creators.</footer></body></html>
