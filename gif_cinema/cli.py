@@ -1,4 +1,4 @@
-"""OpenAI GIF client and FFmpeg film assembler ."""
+"""OpenAI GIF client and FFmpeg film assembler."""
 import argparse
 import base64
 import json
