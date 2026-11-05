@@ -1,0 +1,92 @@
+name: Three-Shot GIF Film Proof
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/three-shot-demo.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: three-shot-gif-proof
+  cancel-in-progress: false
+
+jobs:
+  film:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install -e '.[filmqa]'
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - name: Require existing scene and key
+        run: |
+          test -n "$OPENAI_API_KEY" || { echo "Missing OPENAI_API_KEY secret"; exit 1; }
+          test -s docs/assets/first-live-render.gif
+      - name: Shot two | The reply
+        run: |
+          mkdir -p output
+          gif-cinema generate "Minimal cinematic paper-cut animation. On a matte grey lunar surface beneath a pitch-black starry sky, CLOSE-UP of a white astronaut glove with small muted red stripes reaching from the left toward a tiny warm-white star that begins glowing at center. Handmade stop-motion paper texture, locked camera, understated black and grey palette, deliberate short gentle motion, no text, no new characters, nine distinct sequential poses." --model gpt-image-2.6-flare --frames 9 --duration 200 --quality low --complexity low -o output/shot02.gif
+      - name: Shot three | A new constellation
+        run: |
+          gif-cinema generate "Minimal cinematic paper-cut animation, black lunar night sky and distant grey mountain horizon, medium-wide static view. A tiny white glowing star floats gently upward from the lower center and slowly reveals two more faint stars, forming a simple little constellation. Stop-motion paper material, matte blacks and greys, warm white pinpoints, gentle motion, no people, no text, no logos, nine distinct sequential poses." --model gpt-image-2.6-flare --frames 9 --duration 200 --quality low --complexity low -o output/shot03.gif
+      - name: Inspect and assemble
+        run: |
+          gif-cinema inspect output/shot02.gif -o output/shot02-inspect.json
+          gif-cinema inspect output/shot03.gif -o output/shot03-inspect.json
+          gif-cinema continuity docs/assets/first-live-render.gif output/shot02.gif -o output/cut01.json
+          gif-cinema continuity output/shot02.gif output/shot03.gif -o output/cut02.json
+          gif-cinema film docs/assets/first-live-render.gif output/shot02.gif output/shot03.gif -o output/three-shot-film.mp4 --width 512 --height 512 --fps 24
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,nb_frames,duration,width,height -of json output/three-shot-film.mp4 > output/three-shot-film-inspect.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('output/three-shot-film-inspect.json').read_text())['streams'][0]
+          assert x['codec_name']=='h264',x
+          assert float(x.get('duration',0)) > 5.0,x
+          assert Path('output/three-shot-film.mp4').stat().st_size > 1000
+          print('Three-scene MP4 verified:', x)
+          PY
+      - name: Publish first three-shot film and evidence
+        run: |
+          mkdir -p docs/assets/three-shot
+          cp output/shot02.gif output/shot03.gif output/three-shot-film.mp4 output/cut01.json output/cut02.json output/three-shot-film-inspect.json docs/assets/three-shot/
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('README.md')
+          txt=p.read_text()
+          marker='## Three-shot short film proof'
+          block='''## Three-shot short film proof
+
+          **A Reply from the Stars (5.4s)**: first authenticated GIF followed by two separately generated GPT Image 2.6 scenes. A montage experiment, not seamless character animation.
+
+          [Watch the three-shot MP4](docs/assets/three-shot/three-shot-film.mp4) · [Shot 2](docs/assets/three-shot/shot02.gif) · [Shot 3](docs/assets/three-shot/shot03.gif) · [Cut diagnostics](docs/assets/three-shot/cut01.json)
+
+          The output demonstrates real multi-shot assembly, but each shot is independently generated and visual continuity still needs human review.
+
+          '''
+          if marker not in txt:
+              txt=txt.replace('## Quickstart', block+'## Quickstart')
+          p.write_text(txt)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/assets/three-shot README.md
+          if ! git diff --cached --quiet; then git commit -m "demo: release three-scene GIF microfilm with continuity diagnostics"; git push; fi
+      - name: Upload full test artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: three-shot-gif-film-proof
+          path: output/
+          retention-days: 7
+          if-no-files-found: error
