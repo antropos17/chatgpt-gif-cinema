@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GIF Cinema | Turn ChatGPT GIFs into short films</title>
+<meta name="description" content="Generate animated GIFs with OpenAI GPT Image 2.6, inspect continuity and assemble cinematic MP4 shorts with an AI filmmaking toolkit.">
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#080808;color:#fafafa;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.09),transparent 48%);pointer-events:none}
+header,main,footer{width:min(1100px,calc(100% - 44px));margin:auto}
+header{height:90px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #252525}
+.logo{font-weight:850;letter-spacing:-.05em;font-size:23px}.logo b{border:1px solid #aaa;border-radius:8px;padding:6px 10px;margin-right:8px}
+a{color:inherit;text-decoration:none}.muted{color:#aaa}
+a.button{display:inline-block;color:#101010;background:#fff;border-radius:11px;padding:13px 18px;font-weight:650}
+a.outline{border:1px solid #555;color:#eee;background:#161616}
+.hero{text-align:center;padding:115px 0 75px}.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#aaa}
+h1{font-size:clamp(48px,8vw,104px);letter-spacing:-.075em;line-height:1.02;margin:22px auto;max-width:920px;font-weight:750}
+.lead{max-width:660px;font-size:18px;line-height:1.7;color:#b6b6b6;margin:20px auto 32px}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:45px 0}
+.card{border:1px solid #353535;background:rgba(255,255,255,.055);backdrop-filter:blur(18px);border-radius:18px;padding:26px;min-height:190px}
+.card span{color:#929292;font-size:11px}.card h3{font-size:20px;margin:24px 0 8px;letter-spacing:-.035em}.card p{color:#aaa;font-size:14px;line-height:1.6}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:25px;border:1px solid #333;border-radius:16px;background:#141414;color:#dfdfdf;font-size:14px}
+section{margin:55px 0}h2{letter-spacing:-.055em;font-size:36px}
+footer{padding:35px 0 60px;border-top:1px solid #333;color:#888;font-size:13px}
+@media(max-width:740px){.hero{padding:75px 0 40px}.grid{grid-template-columns:1fr}header{height:74px}}
+</style></head>
+<body><header><a class="logo" href="#"><b>▰</b> GIF CINEMA</a><a class="muted" href="https://github.com/antropos17/chatgpt-gif-cinema">GITHUB ↗</a></header>
+<main><div class="hero"><div class="eyebrow">ChatGPT GIFs → short films</div><h1>Every frame tells a story.</h1>
+<p class="lead">OpenAI GPT Image GIF generation, shot continuity checks, and MP4 film assembly. One focused toolkit for creators and developers.</p>
+<div class="actions"><a class="button" href="https://github.com/antropos17/chatgpt-gif-cinema">View source ↗</a><a class="button outline" href="https://github.com/antropos17/chatgpt-gif-cinema/tree/main/.agents/skills">Explore skills</a></div></div>
+<section><div class="grid">
+<div class="card"><span>01 / GENERATE</span><h3>Animated shots</h3><p>Call GPT Image 2.6 to create actual GIF files. Save parameters and output metadata.</p></div>
+<div class="card"><span>02 / INSPECT</span><h3>Frame continuity</h3><p>Extract first and last frames, compare adjacent shots, and review transitions.</p></div>
+<div class="card"><span>03 / ASSEMBLE</span><h3>Cinematic output</h3><p>Combine GIF sequences into H.264 MP4 files with optional audio using FFmpeg.</p></div></div></section>
+<section><h2>Build your first shot.</h2><pre>pip install -e ".[filmqa]"
+export OPENAI_API_KEY="your-key"
+gif-cinema generate "A paper airplane flies past the camera" -o output/shot.gif
+gif-cinema film output/shot.gif -o output/film.mp4</pre></section>
+<section><h2>Six agent skills. One pipeline.</h2><p class="muted">Director · GIF API · Continuity · Assembly · QA · Orchestrator.</p>
+<p class="muted">Offline tests available. Live API generation requires account access and is not yet independently verified.</p></section></main>
+<footer>GIF Cinema © 2026 · Source-available evaluation license · Built for creators.</footer></body></html>
