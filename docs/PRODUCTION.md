@@ -1,5 +1,10 @@
 # Creating short films from GPT-generated GIFs
 
+For the implemented script pipeline and zero-call demonstration, see
+[Script format](SCRIPT-FORMAT.md). Begin with `render --dry-run`, then use the
+existing-asset example with `--execute --max-api-calls 0`. The output includes a
+manifest, first/last frames, a contact sheet and a continuity review report.
+
 ## Five production passes
 
 1. **Script**: establish one story beat per short shot, consistent camera direction, scale, light and character props. Use explicit shot IDs and timestamps.
@@ -15,3 +20,23 @@ Animated GIFs contain no audio. Frame durations are variable, and duplicate fram
 ## Honest validation protocol
 
 An offline mocked test verifies request shape and decoding but **not model access or render quality**. A live end-to-end verification requires a successful OpenAI API call, inspecting actual GIF frames, and playing the final MP4.
+
+## Output safety and offline checks
+
+The generator decodes every GIF frame and requires at least two frames with
+positive supported delays before reporting success. Use a new output path by
+default. `generate --resume` reuses only matching parameters and checksum-verified
+GIFs; `--force` authorizes a new paid render. Do not run concurrent jobs against
+the same output path. A process lock rejects this and must only be removed after
+confirming the original process has stopped.
+
+Film export preserves existing output until FFmpeg succeeds. Short audio is padded
+with silence; long audio ends with the video. Montage tests verify total decoded
+frame count and the final shot's last color using synthetic GIFs with unequal frame
+delays. Such tests establish timing behavior, not artistic quality.
+
+Live API and demo publishing workflows are manual. Ordinary pushes and pull
+requests run offline checks only. The committed demo can be inspected and encoded
+locally without an API key. Do not infer universal API availability from a prior
+successful run. GIF limits currently differ between the OpenAI guide and endpoint
+reference; the client retains the conservative 2..16 frame range.

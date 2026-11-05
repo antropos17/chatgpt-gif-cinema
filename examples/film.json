@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "title": "A Reply from the Stars — offline assembly proof",
+  "ratio": "1:1",
+  "width": 512,
+  "height": 512,
+  "fps": 25,
+  "style_bible": "Existing paper-cut lunar shots. A white-suited astronaut with red accents greets the darkness; a light answers; a constellation forms. These previously generated sources have visible style differences and do not establish seamless character continuity.",
+  "audio_notes": "Silent by design; no generated or downloaded soundtrack.",
+  "shots": [
+    {
+      "id": "01-greeting",
+      "source": "../docs/assets/first-live-render.gif",
+      "transition": "cut",
+      "first_frame_target": "The astronaut stands alone on the Moon.",
+      "last_frame_target": "The greeting is complete; attention moves toward the sky.",
+      "caption": "He sent a greeting into the dark."
+    },
+    {
+      "id": "02-reply",
+      "source": "../docs/assets/three-shot/shot02.gif",
+      "transition": "cut",
+      "first_frame_target": "An insert of the glove reaching toward a faint light. Review the style and pose discontinuity from shot 01.",
+      "last_frame_target": "The light brightens in response to the reaching hand.",
+      "caption": "A small light answered."
+    },
+    {
+      "id": "03-constellation",
+      "source": "../docs/assets/three-shot/shot03.gif",
+      "transition": "cut",
+      "first_frame_target": "Cut away to the same lunar night; a small light is visible.",
+      "last_frame_target": "Three points form a constellation: he is no longer alone.",
+      "caption": "He was not alone."
+    }
+  ]
+}

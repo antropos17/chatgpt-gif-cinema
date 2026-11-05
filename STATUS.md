@@ -12,7 +12,7 @@
 ## Not yet established
 - Character identity consistency across independent renders (requires human QA).
 - Smoothness of match cuts, narrative continuity, audio mixing or subtitles.
-- Reliable production of a long film from a single idea; currently needs explicit per-shot rendering.
+- Reliable production of a long film from a single idea. Script assembly now executes explicit author-defined shots; it does not autonomously validate story meaning.
 - Browser-based generation service; site is a static showcase.
 
 ## Continuity diagnostics
@@ -23,3 +23,10 @@
 ## Security and licensing
 - OpenAI API key is stored as an Actions secret and is not in the repository.
 - Custom source-available license, not OSI open-source.
+
+## Offline reliability checks
+- Regression tests cover corrupt GIF responses, credential-safe errors, protected outputs, checksum-based reuse, concurrent output locks, and real FFmpeg montage with short and long audio.
+- Local verification makes no paid API requests. CI installs FFmpeg and uses fixtures only.
+- Film timing and final-frame retention are checked; this does not establish artistic quality or sound mixing quality.
+- Live generation and demo publishing workflows require manual dispatch.
+- Script orchestration is implemented through `render`; the offline and generated-shot acceptance scopes are documented in `docs/SCRIPT-FORMAT.md`.
