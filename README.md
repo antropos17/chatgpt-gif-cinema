@@ -40,13 +40,58 @@ To repeat: open **Actions > Live GIF API Test > Run workflow** on `main`. This w
 
 ## Quickstart
 
+Requirements: Python 3.10 or newer, Git, and FFmpeg on PATH. Install FFmpeg from
+[the official download page](https://ffmpeg.org/download.html), then check
+`ffmpeg -version`. Pillow is installed automatically with this package.
+
 ```bash
+git clone https://github.com/antropos17/chatgpt-gif-cinema.git
+cd chatgpt-gif-cinema
 python -m pip install -e ".[filmqa]"
+```
+
+Try the committed demo without an API key or paid request:
+
+```bash
+python -m gif_cinema inspect docs/assets/first-live-render.gif
+python -m gif_cinema film docs/assets/first-live-render.gif -o output/demo.mp4
+```
+
+For new generation, set your API key in the current shell. API billing and model
+access are separate from a ChatGPT subscription. This command makes a paid request.
+
+Bash / macOS / Linux:
+
+```bash
 export OPENAI_API_KEY="your-key"
+```
+
+Windows PowerShell:
+
+```powershell
+$env:OPENAI_API_KEY="your-key"
+```
+
+```bash
 python -m gif_cinema generate "Astronaut waving, static camera, seamless loop" --frames 9 --duration 200 -o output/shot.gif
 python -m gif_cinema inspect output/shot.gif
 python -m gif_cinema film output/shot.gif -o output/film.mp4
 ```
+
+### Preserve and reuse results
+
+Existing GIFs, metadata, movies, reports, and endpoint PNGs are protected from accidental overwrite.
+Use `generate --resume` with the same prompt and parameters to reuse a decoded
+GIF whose checksum matches its metadata, without a key or another API request.
+Older files without checksum metadata cannot be resumed automatically: keep them
+and use another output path, or explicitly regenerate with `--force`.
+`generate --force` makes a new paid request. `film --force` replaces a movie only
+after encoding succeeds. A `.lock` file prevents concurrent commands targeting
+the same output; after a crash, confirm no command is running before removing it.
+
+When using `film --audio soundtrack.wav`, short audio is padded with silence and
+long audio is trimmed to the video. GIF delays are preserved within the selected
+output FPS precision; changing FPS does not create new AI motion frames.
 
 ## Included
 
@@ -62,6 +107,25 @@ Source-available evaluation license, not an open-source license. See LICENSE. Co
 
 ## Verification
 
-9 offline regression tests pass locally and in GitHub Actions for the manual workflow update. First real API render confirmed by GitHub Actions [run #41978897155](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41978897155).
+Run `python -m unittest discover -s tests -v` and
+`python -m compileall -q gif_cinema`. Tests use synthetic API responses and local
+GIFs; they do not call OpenAI. Install FFmpeg to run the montage integration cases
+(they are skipped when FFmpeg is absent). CI installs FFmpeg and runs them.
+
+The historical real API render is confirmed by GitHub Actions
+[run #41978897155](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41978897155).
+The three-shot demo is confirmed by
+[run #41979631572](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41979631572).
+These artifacts establish those specific runs, not universal account access or
+character continuity. Paid generation workflows are manual only.
+
+### Current scope
+
+The CLI generates individual shots, inspects frames, and assembles supplied GIFs.
+The three-shot example was scripted separately. Automatic story-to-film rendering,
+a visual editor, photo input, and Character Lock are not implemented. Pixel
+similarity is a review aid, not an identity or narrative continuity guarantee.
+`CODEX_TASK.md` describes future work; its proposed `examples/film.json` format is
+not an existing implemented contract.
 
 [OpenAI Image Generation guide](https://developers.openai.com/api/docs/guides/image-generation)
