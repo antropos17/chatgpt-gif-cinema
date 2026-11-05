@@ -1,4 +1,13 @@
 import unittest
+import io
+import json
+import base64
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
+from urllib.error import HTTPError
+from PIL import Image
+from gif_cinema.cli import request_gif, generate
 from gif_cinema.cli import make_payload, build_parser
 
 class APIPayloadTests(unittest.TestCase):
@@ -25,5 +34,43 @@ class APIPayloadTests(unittest.TestCase):
         args=build_parser().parse_args(["generate","A moving leaf","-o","output/a.gif"])
         self.assertEqual(args.output,"output/a.gif")
 
-if __name__=="__main__":
+
+
+class LiveSafetyTests(unittest.TestCase):
+    def response(self, raw):
+        return io.BytesIO(json.dumps({"data": [{"b64_json": base64.b64encode(raw).decode()}]}).encode())
+
+    def test_real_animation_decode(self):
+        data = io.BytesIO()
+        Image.new("RGB", (8, 8), "red").save(data, format="GIF", save_all=True,
+            append_images=[Image.new("RGB", (8, 8), "blue")], duration=200, loop=0)
+        raw, _ = request_gif({}, "fake-key", transport=lambda *a, **kw: self.response(data.getvalue()))
+        self.assertEqual(raw, data.getvalue())
+
+    def test_static_gif_is_rejected(self):
+        data = io.BytesIO()
+        Image.new("RGB", (8, 8), "red").save(data, format="GIF", duration=200)
+        with self.assertRaisesRegex(ValueError, "at least two frames"):
+            request_gif({}, "fake-key", transport=lambda *a, **kw: self.response(data.getvalue()))
+
+    def test_error_body_is_not_exposed(self):
+        def fail(*a, **kw):
+            raise HTTPError("https://example.invalid", 401, "error", {}, io.BytesIO(b"private-value"))
+        with self.assertRaises(RuntimeError) as result:
+            request_gif({}, "fake-key", transport=fail)
+        self.assertNotIn("private-value", str(result.exception))
+        self.assertIn("401", str(result.exception))
+
+    def test_existing_output_prevents_paid_request(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "existing.gif"
+            output.write_bytes(b"keep")
+            args = build_parser().parse_args(["generate", "test", "-o", str(output)])
+            with patch.dict("os.environ", {"OPENAI_API_KEY": "fake-key"}), patch("gif_cinema.cli.request_gif") as request:
+                with self.assertRaisesRegex(ValueError, "already exists"):
+                    generate(args)
+                request.assert_not_called()
+            self.assertEqual(output.read_bytes(), b"keep")
+
+if __name__ == "__main__":
     unittest.main()
