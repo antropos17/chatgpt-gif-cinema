@@ -1,0 +1,8 @@
+{
+  "previous": "docs/assets/first-live-render.gif",
+  "next": "output/shot02.gif",
+  "pixel_mae_0_255": 60.643,
+  "threshold": 35.0,
+  "status": "review-required",
+  "note": "Pixel MAE cannot measure identity or narrative continuity."
+}
