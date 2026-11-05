@@ -64,7 +64,7 @@ python -m gif_cinema film output/shot.gif -o output/film.mp4
 
 ### Preserve and reuse results
 
-Existing GIFs, metadata, and movies are protected from accidental overwrite.
+Existing GIFs, metadata, movies, reports, and endpoint PNGs are protected from accidental overwrite.
 Use `generate --resume` with the same prompt and parameters to reuse a decoded
 GIF whose checksum matches its metadata, without a key or another API request.
 Older files without checksum metadata cannot be resumed automatically: keep them
