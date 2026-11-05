@@ -1,0 +1,29 @@
+{
+  "prompt": "A tiny paper-cut astronaut waves once on the Moon, locked camera, matte monochrome background, clear silhouette, smooth loop, no text",
+  "parameters": {
+    "model": "gpt-image-2.6-flare",
+    "prompt": "A tiny paper-cut astronaut waves once on the Moon, locked camera, matte monochrome background, clear silhouette, smooth loop, no text",
+    "output_format": "gif",
+    "frame_count": 9,
+    "frame_duration_ms": 200,
+    "size": "auto",
+    "quality": "low",
+    "complexity": "low"
+  },
+  "output": "output/live-test.gif",
+  "seconds": 9.91,
+  "usage": {
+    "input_tokens": 55,
+    "input_tokens_details": {
+      "image_tokens": 0,
+      "text_tokens": 55
+    },
+    "output_tokens": 1172,
+    "output_tokens_details": {
+      "image_tokens": 1172,
+      "text_tokens": 0
+    },
+    "total_tokens": 1227
+  },
+  "sha256": "d2241957d48f2419312115a63ace3da35c9ddb58ff608c9db02cf7a60c5cf8c4"
+}
