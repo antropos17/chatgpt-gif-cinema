@@ -1,8 +1,5 @@
 name: Three-Shot GIF Film Proof
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/three-shot-demo.yml']
   workflow_dispatch:
 
 permissions:

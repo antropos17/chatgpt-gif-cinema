@@ -1,11 +1,7 @@
 name: Live GIF API Test
 
-# First publication performs one small live check. Subsequent runs are manual.
+# Live requests require an explicit manual workflow dispatch.
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/live-gif-test.yml'
   workflow_dispatch:
 
 permissions:
