@@ -23,6 +23,10 @@ jobs:
           run-id: 41978897155
           github-token: ${{ github.token }}
           path: docs/assets
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
       - name: Inspect and encode MP4
         run: |
           python -m pip install -e '.[filmqa]'
