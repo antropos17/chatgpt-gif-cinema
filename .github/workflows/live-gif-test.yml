@@ -1,0 +1,65 @@
+name: Live GIF API Test
+
+# First publication performs one small live check. Subsequent runs are manual.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/live-gif-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gif-cinema-live-api
+  cancel-in-progress: false
+
+jobs:
+  gif:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: python -m pip install -e '.[filmqa]'
+      - name: Check API secret
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::Repository secret OPENAI_API_KEY not found"
+            exit 1
+          fi
+      - name: Generate one GPT Image 2.6 GIF
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          mkdir -p output
+          gif-cinema generate "A tiny paper-cut astronaut waves once on the Moon, locked camera, matte monochrome background, clear silhouette, smooth loop, no text" --model gpt-image-2.6-flare --frames 9 --duration 200 --quality low --complexity low -o output/live-test.gif
+      - name: Validate rendered animation
+        run: |
+          gif-cinema inspect output/live-test.gif -o output/live-test-inspect.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          info=json.loads(Path("output/live-test-inspect.json").read_text())
+          assert info["frames"] >= 2, f"GIF only has {info['frames']} frames"
+          assert info["duration_ms"] >= 20
+          assert Path("output/live-test.gif").stat().st_size > 100
+          print("GIF render verified:", info["frames"], "frames,", info["duration_ms"], "ms")
+          PY
+      - name: Upload live render artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatgpt-gif-cinema-first-live-render
+          path: |
+            output/live-test.gif
+            output/live-test.json
+            output/live-test-inspect.json
+          retention-days: 7
+          if-no-files-found: error
