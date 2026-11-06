@@ -1,5 +1,8 @@
 # Creating short films from GPT-generated GIFs
 
+For practical advice on framing, native motion, references and retakes, read
+[Tips: make short GIFs feel like a scene](TIPS.md).
+
 For the implemented script pipeline and zero-call demonstration, see
 [Script format](SCRIPT-FORMAT.md). Begin with `render --dry-run`, then use the
 existing-asset example with `--execute --max-api-calls 0`. The output includes a

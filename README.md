@@ -11,7 +11,7 @@
 Plan a scene, generate a take, inspect the cut, replace what does not work, and export MP4.
 The public toolkit runs locally with Codex or Claude Code and your own OpenAI API key.
 
-[**Get the skill →**](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) · [Try the included GIFs](#try-it-without-an-api-key) · [Before / after](#see-the-difference) · [Verification](STATUS.md)
+[**Get the skill →**](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) · [Try the included GIFs](#try-it-without-an-api-key) · [Before / after](#see-the-difference) · [Tips](docs/TIPS.md) · [Verification](STATUS.md)
 
 ## See the difference
 
