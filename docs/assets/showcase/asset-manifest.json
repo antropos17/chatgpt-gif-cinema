@@ -1,0 +1,243 @@
+{
+  "created": "2026-11-06",
+  "new_provider_calls": 0,
+  "scope": "Existing selected footage; local presentation only. Native motion and local processing are separate.",
+  "comparisons": {
+    "astronaut": {
+      "seconds": 5.12,
+      "description": "Native poses vs. locally interpolated motion. First two shots only.",
+      "samples_seconds": [
+        1.04,
+        3.28,
+        4.72
+      ]
+    },
+    "cat": {
+      "seconds": 7.68,
+      "description": "Native drawings vs. local compositing, framing cleanup and selective interpolation.",
+      "samples_seconds": [
+        1.2,
+        3.76,
+        6.32
+      ]
+    },
+    "dog": {
+      "seconds": 10.24,
+      "description": "Same four selected takes. Interpolation does not repair generation errors.",
+      "samples_seconds": [
+        1.2,
+        4.08,
+        8.24
+      ]
+    }
+  },
+  "assets": [
+    {
+      "file": "astronaut-comparison.mp4",
+      "bytes": 950594,
+      "sha256": "7b0634c30a8ba068ab03da38756be18c237d5f8c6eed7a35ac872983f65136b0",
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1024,
+          "height": 576,
+          "r_frame_rate": "25/1",
+          "nb_frames": "128",
+          "tags": {
+            "language": "und",
+            "handler_name": "VideoHandler",
+            "encoder": "Lavc libx264"
+          }
+        }
+      ],
+      "format": {
+        "duration": "5.120000",
+        "tags": {
+          "major_brand": "isom",
+          "minor_version": "512",
+          "compatible_brands": "isomiso2avc1mp41"
+        }
+      }
+    },
+    {
+      "file": "astronaut-frames.png",
+      "bytes": 942972,
+      "sha256": "d4f6a969b91a31492f7eacfa2c1a370d998a83958f763c0ac68a776fedddc609",
+      "width": 1024,
+      "height": 1784,
+      "frames": 1
+    },
+    {
+      "file": "astronaut-poster.png",
+      "bytes": 319085,
+      "sha256": "4d1422f887dd7dff9d53ea7f44f974b20e8a6fc04fcf7088362737d0f74787b0",
+      "width": 1024,
+      "height": 576,
+      "frames": 1
+    },
+    {
+      "file": "astronaut-preview.gif",
+      "bytes": 2483496,
+      "sha256": "c8c0f5e8a4b1a383b39a64c9afa30dbbc5390e5cd2c7c2f228994b2325132403",
+      "width": 768,
+      "height": 432,
+      "frames": 56
+    },
+    {
+      "file": "cat-comparison.mp4",
+      "bytes": 736779,
+      "sha256": "a7bed48d5797cf754b44eef657e2785518a6a2bc9bd2a6e37d2b999ca0edbcf1",
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1024,
+          "height": 576,
+          "r_frame_rate": "25/1",
+          "nb_frames": "192",
+          "tags": {
+            "language": "und",
+            "handler_name": "VideoHandler",
+            "encoder": "Lavc libx264"
+          }
+        }
+      ],
+      "format": {
+        "duration": "7.680000",
+        "tags": {
+          "major_brand": "isom",
+          "minor_version": "512",
+          "compatible_brands": "isomiso2avc1mp41"
+        }
+      }
+    },
+    {
+      "file": "cat-film.mp4",
+      "bytes": 2073952,
+      "sha256": "b2cd08b602210af08568aff5f560a44c7ef8602d55555d3927a99e31eb199c3e",
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 512,
+          "height": 512,
+          "r_frame_rate": "25/1",
+          "nb_frames": "1430",
+          "tags": {
+            "language": "und",
+            "handler_name": "VideoHandler"
+          }
+        }
+      ],
+      "format": {
+        "duration": "57.200000",
+        "tags": {
+          "major_brand": "isom",
+          "minor_version": "512",
+          "compatible_brands": "isomiso2avc1mp41"
+        }
+      }
+    },
+    {
+      "file": "cat-frames.png",
+      "bytes": 672292,
+      "sha256": "555e0efaac56d4e4953f58cf7000f8c7f6ac3b2e3dbb2bb1c24aca74415a22cf",
+      "width": 1024,
+      "height": 1784,
+      "frames": 1
+    },
+    {
+      "file": "cat-poster.png",
+      "bytes": 245685,
+      "sha256": "08504ba5c8e0478cb1388b84c7efe06a154334d62276b05f72e00b8caae804bf",
+      "width": 1024,
+      "height": 576,
+      "frames": 1
+    },
+    {
+      "file": "cat-preview.gif",
+      "bytes": 941833,
+      "sha256": "75cdc47d64b0ce2e38002c002b1aaa2a73ca44ebd8ded92aa5ac3647b1dee93c",
+      "width": 768,
+      "height": 432,
+      "frames": 56
+    },
+    {
+      "file": "cover.png",
+      "bytes": 583446,
+      "sha256": "56fc63ec208f5d88d9f582b8caeef341b7322aae27c9d84a9c2da11451f1d041",
+      "width": 1600,
+      "height": 1000,
+      "frames": 1
+    },
+    {
+      "file": "dog-comparison.mp4",
+      "bytes": 4340677,
+      "sha256": "a00e96de77ef51027765ac1587b8314c0bb18f36e041c6ba0d646ac37930522f",
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1024,
+          "height": 576,
+          "r_frame_rate": "50/1",
+          "nb_frames": "512",
+          "tags": {
+            "language": "und",
+            "handler_name": "VideoHandler"
+          }
+        }
+      ],
+      "format": {
+        "duration": "10.240000",
+        "tags": {
+          "major_brand": "isom",
+          "minor_version": "512",
+          "compatible_brands": "isomiso2avc1mp41"
+        }
+      }
+    },
+    {
+      "file": "dog-frames.png",
+      "bytes": 1648777,
+      "sha256": "d939eeb70accf5019752a664d076331c0c117252df2463183f20b623a9bd9a23",
+      "width": 1024,
+      "height": 1784,
+      "frames": 1
+    },
+    {
+      "file": "dog-poster.png",
+      "bytes": 605616,
+      "sha256": "ccc2c8d985cf2687b47d16709097f48e5b998f1140b31939fadec9e39e1a8a7a",
+      "width": 1024,
+      "height": 576,
+      "frames": 1
+    },
+    {
+      "file": "dog-preview.gif",
+      "bytes": 2665127,
+      "sha256": "f501faba10b327cf499c084aac777c20f617a5666003082ccf95f320f80780d1",
+      "width": 704,
+      "height": 396,
+      "frames": 56
+    },
+    {
+      "file": "astronaut-native-film.mp4",
+      "bytes": 402028,
+      "sha256": "75d9f230bf0b03a4aed6b511f7d6666692672f72cf889278ec3fc9667df40efd",
+      "width": 512,
+      "height": 512,
+      "duration_seconds": 7.68,
+      "export_fps": 25,
+      "native_drawings": 48,
+      "scope": "Public CLI export of three bundled16-frameGIFs; no interpolation or provider calls."
+    }
+  ],
+  "preview_excerpt_seconds": [
+    0.32,
+    2.56
+  ],
+  "preview_output_fps": 25,
+  "preview_note": "Animated previews repeat an excerpt; their reset is not an original shot cut. Full comparisons retain native timing."
+}

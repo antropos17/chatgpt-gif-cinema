@@ -7,5 +7,6 @@ Take premise, duration and aspect ratio. Produce numbered shots with durations, 
 
 Use schema version 1 from `docs/SCRIPT-FORMAT.md`. Specify the same recognizable
 character, screen position, props and camera across related shots, with explicit pose
-and action handoffs. `examples/consistent-film.proposed.json` is unrendered; do not
-present its intentions as observed continuity. No paid requests without authorization.
+and action handoffs. `examples/consistent-film.proposed.json` was tested and failed
+visual continuity at both joins; describe it as an experiment, not a character-lock
+recipe. No paid requests without authorization.

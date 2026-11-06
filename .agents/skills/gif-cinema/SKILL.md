@@ -22,13 +22,13 @@ Activate that environment using the current shell's normal activation command, t
 
 ```text
 python -m pip install --upgrade pip "setuptools>=77" wheel
-python -m pip install --no-build-isolation "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@df48ccb9e2d7fea6917828e465569c970860983e"
+python -m pip install --no-build-isolation "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@41c06dd09ebe5b40c8e5173abd4a2e5fd8a1eb70"
 python -m gif_cinema --help
 ffmpeg -version
 ffprobe -version
 ```
 
-Keep the runtime's [evaluation license](https://github.com/antropos17/chatgpt-gif-cinema/blob/df48ccb9e2d7fea6917828e465569c970860983e/LICENSE): personal non-commercial evaluation/research is permitted; commercial use, redistribution and hosting require permission. The included LICENSE preserves those terms.
+Keep the runtime's [evaluation license](https://github.com/antropos17/chatgpt-gif-cinema/blob/41c06dd09ebe5b40c8e5173abd4a2e5fd8a1eb70/LICENSE): personal non-commercial evaluation/research is permitted; commercial use, redistribution and hosting require permission. The included LICENSE preserves those terms.
 
 Run this skill's `scripts/smoke_test.py --out NEW_DIRECTORY` with that environment's
 Python (resolve the helper path relative to this skill directory, not the current
@@ -42,9 +42,21 @@ a new dedicated output directory and refuses to overwrite an existing one.
 Translate the user's idea into a few short actions with a beginning, response and
 payoff. Describe each shot's first/last pose, camera, subject scale, horizon and motion
 direction. Keep identity details stable while allowing deliberate camera changes.
-Read the pinned runtime's [script schema](https://github.com/antropos17/chatgpt-gif-cinema/blob/df48ccb9e2d7fea6917828e465569c970860983e/docs/SCRIPT-FORMAT.md)
+Read the pinned runtime's [script schema](https://github.com/antropos17/chatgpt-gif-cinema/blob/41c06dd09ebe5b40c8e5173abd4a2e5fd8a1eb70/docs/SCRIPT-FORMAT.md)
 before authoring a JSON script. Source paths and still-image references resolve
 relative to that script, not the shell directory.
+
+The skill includes a real three-shot astronaut example in `assets/example/`: three
+16-frame GPT GIFs plus `film.json`. From this skill's folder, run:
+
+```text
+python -m gif_cinema render assets/example/film.json --dry-run
+python -m gif_cinema render assets/example/film.json --execute --max-api-calls 0 --out output/first-film
+```
+
+From another project, resolve the script to its absolute path and put output in that
+project's own new directory. This produces a 7.68-second silent MP4 without a key.
+It preserves native drawing cadence; the showcased private smoothing is separate.
 
 Plan first, without a key or paid request:
 

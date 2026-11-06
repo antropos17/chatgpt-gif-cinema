@@ -1,182 +1,140 @@
-# GIF CINEMA
+# GIF Cinema
 
-**A film pipeline built on ChatGPT GIFs.**
+[![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml)
+[![Agent skill](https://img.shields.io/badge/agent_skill-0.1.1-e9a67c)](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1)
+[![License](https://img.shields.io/badge/license-source--available-9bbfaf)](LICENSE)
 
-Generate animated GIF shots with OpenAI GPT Image 2.6, inspect first/last frames, and assemble silent scenes into MP4.
+![GIF Cinema — real frames from the astronaut, dog and cat experiments](docs/assets/showcase/cover.png)
 
-> Status: native GPT GIF generation is verified. Version 0.5 adds resumable script-to-film assembly. Character identity and seamless motion across independently generated scenes still require visual acceptance.
+**An agent skill that turns short GPT GIFs into a film, one shot at a time.**
 
-## Install the agent skill
+Plan a scene, generate a take, inspect the cut, replace what does not work, and export MP4.
+The public toolkit runs locally with Codex or Claude Code and your own OpenAI API key.
 
-The [GIF Cinema skill](.agents/skills/gif-cinema/SKILL.md) gives Codex or Claude Code
-a workflow for planning short shots, generating GIFs with explicit request budgets,
-reusing still-image references, reviewing both cuts around a retake, and exporting MP4.
-It contains its own instructions and offline verification helper; the CLI source and
-license are included in this repository. Python 3.10+, Git, FFmpeg and ffprobe are
-required. New generation uses your own OpenAI API key and account access.
+[**Get the skill →**](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) · [Try the included GIFs](#try-it-without-an-api-key) · [Before / after](#see-the-difference) · [Verification](STATUS.md)
 
-Copy `.agents/skills/gif-cinema` to `~/.codex/skills/gif-cinema` for Codex or
-`~/.claude/skills/gif-cinema` for Claude Code, then follow its setup instructions.
-Ask the agent to use `gif-cinema` to assemble two existing GIFs without paid calls
-before authorizing generation. The helper uses synthetic images and checks the
-installed CLI; it does not contact a provider.
+## See the difference
 
-The public skill covers generation and assembly. The separate private Studio editor
-and its motion processing are not included. A film made with those additional tools
-is not a one-click reproduction claim for this skill. Export FPS does not measure
-newly generated motion. The source-available evaluation license remains unchanged.
+### An astronaut gets an answer
 
-## Script to film (v0.5)
+[![Astronaut: native GIF timing on the left, local interpolation on the right](docs/assets/showcase/astronaut-preview.gif)](docs/assets/showcase/astronaut-comparison.mp4)
 
-Plan a three-shot film without a key, network calls or output writes:
+Two separately generated shots, the same takes on both sides. Left: native GIF timing.
+Right: locally interpolated motion. This 5.12-second comparison covers the first two
+shots; it makes the difference between a held drawing and an intermediate pose visible.
 
-```bash
-python -m gif_cinema render examples/film.json --dry-run
-```
+[Watch comparison](docs/assets/showcase/astronaut-comparison.mp4) · [Inspect three frame pairs](docs/assets/showcase/astronaut-frames.png) · [Run the native three-shot example](examples/film.json)
 
-Assemble the three existing GPT GIFs without spending money (FFmpeg and ffprobe required):
+### A dog and a ball
 
-```bash
-python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/offline-story
-```
+[![Dog and ball: native timing compared with local interpolation](docs/assets/showcase/dog-preview.gif)](docs/assets/showcase/dog-comparison.mp4)
 
-Repeat the command to reuse verified shots and the movie. The project contains
-`film.mp4`, `captions.srt`, first/last PNGs, `contact-sheet.png`,
-`continuity-report.json`, `film-inspect.json`, `render-manifest.json` and `receipt.json`.
-The sample is a story assembly proof with known visual differences between shots,
-not a claim of seamless character animation. Captions are a separate SRT file.
+Four selected takes, compared over 10.24 seconds. Local interpolation fills time between
+existing drawings. It can also reveal trails or prop errors; a smoother playback does
+not establish that every generated action is correct.
 
-`examples/consistent-film.proposed.json` is an **unrendered** three-shot plan for one
-recognizable astronaut and aligned poses. Dry-run is free. Executing prompt-based
-shots makes paid API calls and requires authorization; the call cap includes retries.
-See [script format, resume and safety](docs/SCRIPT-FORMAT.md).
+[Watch comparison](docs/assets/showcase/dog-comparison.mp4) · [Inspect three frame pairs](docs/assets/showcase/dog-frames.png)
 
-## Demo: cleaned background and continuous loop (Nov 5, 2026)
+### A cat finds the windowsill
 
-![Astronaut waving with background cleanup and a ping-pong loop applied after generation](docs/assets/astronaut-clean-loop.gif)
+[![Cat: original generated takes compared with local framing, compositing and motion finishing](docs/assets/showcase/cat-preview.gif)](docs/assets/showcase/cat-comparison.mp4)
 
-**Post-processed demo:** 512×512, 16 frames, 3.2 seconds. The background patches were removed after generation, and the motion was arranged as a forward-and-reverse (ping-pong) loop to avoid the original pose jump. [Download the corrected GIF](docs/assets/astronaut-clean-loop.gif).
+Walk, jump, curl up. The 7.68-second comparison uses the same three generated takes.
+The finished side combines framing corrections, compositing and selective interpolation.
+The complete silent cat edit runs **57.2 seconds**.
 
-The source for this corrected demo is the [original manual API render](docs/assets/manual-live-41980327841/live-test.gif) from [run #41980327841](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41980327841). This edit did not make another API request.
+[Watch comparison](docs/assets/showcase/cat-comparison.mp4) · [Inspect three frame pairs](docs/assets/showcase/cat-frames.png) · [Watch the full cat film](docs/assets/showcase/cat-film.mp4)
 
-### Earlier authenticated API output
+**What ships:** the public skill and CLI generate reference-conditioned GIF shots,
+review endpoints, handle explicit retakes and assemble MP4. The comparison films also
+use additional private motion/compositing tools. Those finishing tools and the Studio
+interface are separate from this release. [Methods and exact comparison scope](docs/SHOWCASE.md).
 
-**Real API output:** 512×512, 9 frames, 1.8 seconds. [Original GIF](docs/assets/first-live-render.gif) · [MP4 export](docs/assets/first-live-film.mp4) · [API run](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41978897155).
+## Try it without an API key
 
-The animation was generated by a paid API request, not a mock. MP4 is a one-shot technical export, not a multi-shot short film.
-
-## Three-shot short film proof
-
-**A Reply from the Stars (5.4s)**: first authenticated GIF followed by two separately generated GPT Image 2.6 scenes. A montage experiment, not seamless character animation.
-
-[Watch the three-shot MP4](docs/assets/three-shot/three-shot-film.mp4) · [Shot 2](docs/assets/three-shot/shot02.gif) · [Shot 3](docs/assets/three-shot/shot03.gif) · [Cut diagnostics](docs/assets/three-shot/cut01.json)
-
-The output demonstrates real multi-shot assembly, but each shot is independently generated and visual continuity still needs human review.
-
-## Manual live verification (Nov 5, 2026)
-
-[Unmodified GIF from the manual API run](docs/assets/manual-live-41980327841/live-test.gif).
-
-[Manual API run #41980327841](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41980327841) succeeded: **512x512, 9 frames at 200 ms each = 1.8 seconds**, infinite loop. The downloaded artifact was independently decoded and its SHA-256 matched the [API metadata](docs/assets/manual-live-41980327841/live-test.json). [Frame inspection](docs/assets/manual-live-41980327841/live-test-inspect.json).
-
-The unmodified output contains tan background patches and a visible pose change at the loop boundary. The demo at the top of this README applies background cleanup and a forward-and-reverse loop after generation; the original GIF and API metadata remain unchanged. This demonstrates authenticated GIF generation and subsequent editing, not finished film quality.
-
-To repeat: open **Actions > Live GIF API Test > Run workflow** on `main`. This workflow runs only through `workflow_dispatch`, makes one paid request without automatic retries, uses the repository's `OPENAI_API_KEY` secret only in the relevant steps, and retains artifacts for seven days. It has read-only repository permissions. The demo files above remain in the repository.
-
-## Quickstart
-
-Requirements: Python 3.10 or newer, Git, and FFmpeg/ffprobe on PATH. Install FFmpeg from
-[the official download page](https://ffmpeg.org/download.html), then check
-`ffmpeg -version`. Pillow is installed automatically with this package.
+You need **Python 3.10+, Git, FFmpeg and ffprobe**. Check `ffmpeg -version` and
+`ffprobe -version` before rendering. [FFmpeg downloads](https://ffmpeg.org/download.html).
 
 ```bash
 git clone https://github.com/antropos17/chatgpt-gif-cinema.git
 cd chatgpt-gif-cinema
-python -m pip install -e ".[filmqa]"
+python -m venv .venv
 ```
 
-Try the committed demo without an API key or paid request:
+Activate `.venv` for your shell (`source .venv/bin/activate` on macOS/Linux,
+`.\.venv\Scripts\Activate.ps1` on Windows PowerShell), then:
 
 ```bash
-python -m gif_cinema inspect docs/assets/first-live-render.gif
-python -m gif_cinema film docs/assets/first-live-render.gif -o output/demo.mp4
+python -m pip install .
+python -m gif_cinema render examples/film.json --dry-run
+python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/my-first-film
 ```
 
-For new generation, set your API key in the current shell. API billing and model
-access are separate from a ChatGPT subscription. This command makes a paid request.
+Open `output/my-first-film/film.mp4`. Three committed GPT GIFs become a **7.68-second**
+H.264 MP4 at 512×512. The source has **16 generated drawings per shot**; 25 export fps
+preserves playback timing rather than generating extra motion. Repeat the last command
+to reuse the verified result. This example needs **zero paid API calls**.
 
-Bash / macOS / Linux:
+You also get first/last PNGs, a contact sheet, separate SRT captions, a continuity
+report and a resumable manifest. The older 5.4-second assembly experiment is retained
+as [film-historical.json](examples/film-historical.json).
 
-```bash
-export OPENAI_API_KEY="your-key"
-```
+## Give the skill to your agent
 
-Windows PowerShell:
+Download [the skill ZIP](https://github.com/antropos17/chatgpt-gif-cinema/releases/download/skill-v0.1.1/gif-cinema-skill-0.1.1.zip)
+and extract its `gif-cinema` folder to:
 
-```powershell
-$env:OPENAI_API_KEY="your-key"
-```
+| Agent | Skill directory |
+| --- | --- |
+| Codex | `~/.codex/skills/gif-cinema` |
+| Claude Code | `~/.claude/skills/gif-cinema` |
 
-```bash
-python -m gif_cinema generate "Astronaut waving, static camera, seamless loop" --frames 9 --duration 200 -o output/shot.gif
-python -m gif_cinema inspect output/shot.gif
-python -m gif_cinema film output/shot.gif -o output/film.mp4
-```
+The [skill instructions](.agents/skills/gif-cinema/SKILL.md) include an isolated runtime
+setup, an executable offline check, and three real GIFs with a runnable script.
+The ZIP includes this example too. Start with:
 
-### Preserve and reuse results
+> Use gif-cinema to assemble the included example without paid calls. Show the movie
+> and both cuts, and report native frame timing separately from export FPS.
 
-Existing GIFs, metadata, movies, reports, and endpoint PNGs are protected from accidental overwrite.
-Use `generate --resume` with the same prompt and parameters to reuse a decoded
-GIF whose checksum matches its metadata, without a key or another API request.
-Older files without checksum metadata cannot be resumed automatically: keep them
-and use another output path, or explicitly regenerate with `--force`.
-`generate --force` makes a new paid request. `film --force` replaces a movie only
-after encoding succeeds. A `.lock` file prevents concurrent commands targeting
-the same output; after a crash, confirm no command is running before removing it.
+Then try an authored scene:
 
-When using `film --audio soundtrack.wav`, short audio is padded with silence and
-long audio is trimmed to the video. GIF delays are preserved within the selected
-output FPS precision; changing FPS does not create new AI motion frames.
+> Plan three short shots for a tiny story. Keep the character and camera geography
+> recognizable. Show the dry-run and request budget before generating. Review each
+> shot before using its last frame as a reference for the next one.
 
-## Included
+## Make a shot, keep a take
 
-- Resumable script-to-film rendering with per-run request budgets and receipts
-- Still-image references for generated script shots through image edits
-- GPT Image GIF generator CLI
-- First/last frame inspection and continuity checks
-- FFmpeg GIF-to-MP4 assembler
-- Six Codex agent skills: gif-cinema, chat-director, api-gif-generator, continuity-editor, film-assembler, qa-release
-- Minimal black-and-white website
+| Step | What the public toolkit does |
+| --- | --- |
+| Direct | The agent writes a versioned JSON script with first/last pose targets. |
+| Generate | `render` submits explicitly authorized shots using your API key and request cap. |
+| Reference | Local PNG/JPEG/WebP images condition a shot; a reviewed endpoint can guide the next. |
+| Inspect | Native timing, first/last frames and contact sheets support visual review. |
+| Retake | `--force-shot SHOT_ID` replaces the target while unchanged accepted shots are reused. |
+| Export | FFmpeg assembles selected GIFs, preserving source timing within export precision. |
+
+Reference chaining is explicit: create and review an endpoint before validating the
+next script. A middle-shot retake needs review at **both** neighboring cuts.
+See [the script format](docs/SCRIPT-FORMAT.md) and [production guide](docs/PRODUCTION.md).
+
+New GIF generation uses your own API billing and model access. Keep `OPENAI_API_KEY`
+in your local environment. Dry-runs report request counts; monetary cost depends on
+actual usage and current provider rates. Local assembly and finishing do not imply
+another generation charge.
+
+## What is verified
+
+Fresh public installation, real GIF-to-MP4 assembly, unchanged source hashes, exact
+endpoint extraction, full video decode, repeat/resume and **40 offline tests** were
+checked on November 6, 2026. [Evidence and limits](STATUS.md).
+
+Historical authenticated generation is documented separately. Offline tests do not
+prove current access on every account, guaranteed character continuity, or a finished
+long film from one prompt. Native GIF drawings, repeated export frames and locally
+interpolated frames are different things.
 
 ## License
 
-Source-available evaluation license, not an open-source license. See LICENSE. Commercial use requires permission.
-
-## Verification
-
-Run `python -m unittest discover -s tests -v` and
-`python -m compileall -q gif_cinema`. Tests use synthetic API responses and local
-GIFs; they do not call OpenAI. Install FFmpeg to run the montage integration cases
-(they are skipped when FFmpeg is absent). CI installs FFmpeg and runs them.
-
-The historical real API render is confirmed by GitHub Actions
-[run #41978897155](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41978897155).
-The three-shot demo is confirmed by
-[run #41979631572](https://github.com/antropos17/chatgpt-gif-cinema/actions/runs/41979631572).
-These artifacts establish those specific runs, not universal account access or
-character continuity. Paid generation workflows are manual only.
-
-### Current scope
-
-The CLI generates shots, inspects endpoints, and renders the implemented v1 JSON
-script into an MP4 with local-source reuse, explicit request budgets, resumable
-manifests and receipts. Generated script shots accept local PNG/JPEG/WebP references
-through image edits. See [the script contract](docs/SCRIPT-FORMAT.md).
-Passing a reviewed last frame to the next shot is an explicit workflow; references
-must exist before that script is validated. A visual editor, automatic take ranking,
-automatic reference dependency graph and guaranteed Character Lock are not included.
-Pixel similarity supports human review; it does not prove identity or narrative
-continuity. Historical live outputs establish those runs, not current access on every
-account. New live calls are separate from offline verification.
-
-[OpenAI Image Generation guide](https://developers.openai.com/api/docs/guides/image-generation)
+[Source-available evaluation license](LICENSE). Personal non-commercial evaluation
+and research are permitted. Commercial use, redistribution and hosting require
+permission. This is an independent project, not an OpenAI product.

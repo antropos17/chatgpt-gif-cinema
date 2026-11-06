@@ -1,5 +1,17 @@
 # Changelog
 
+## Skill 0.1.1 — verified showcase
+
+- Add matched before/after footage for the astronaut, dog and cat, with varied
+  frame pairs and a clear distinction between public tools and private finishing.
+- Include three reference-conditioned astronaut GIFs in the default API-free
+  example; retain the historical example separately.
+- Verify a fresh public installation, real GIF assembly, endpoints and resume.
+- Remove personal Git author email from active history and sanitize showcase media.
+- Retire obsolete demo write-back workflows that could overwrite the current
+  presentation with historical output.
+- Preserve the source-available evaluation license.
+
 ## 0.5.0 — script rendering
 
 - Integrate offline reliability fixes while preserving the independently updated GIF demo.
