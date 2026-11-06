@@ -239,5 +239,12 @@
     2.56
   ],
   "preview_output_fps": 25,
-  "preview_note": "Animated previews repeat an excerpt; their reset is not an original shot cut. Full comparisons retain native timing."
+  "preview_note": "Animated previews repeat an excerpt; their reset is not an original shot cut. Full comparisons retain native timing.",
+  "playback_urls": {
+    "astronaut-comparison.mp4": "https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34",
+    "dog-comparison.mp4": "https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638",
+    "cat-comparison.mp4": "https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5",
+    "cat-film.mp4": "https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456",
+    "astronaut-native-film.mp4": "https://github.com/user-attachments/assets/c4dc8c9b-1e97-4f1a-9632-e285d9b969e0"
+  }
 }

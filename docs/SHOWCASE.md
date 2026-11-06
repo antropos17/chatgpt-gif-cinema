@@ -7,7 +7,7 @@ separately so the examples can be assessed fairly.
 
 ## Astronaut — two shots, one exchange
 
-[![Three actual astronaut frame pairs](assets/showcase/astronaut-frames.png)](assets/showcase/astronaut-comparison.mp4)
+[![Three actual astronaut frame pairs](assets/showcase/astronaut-frames.png)](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34)
 
 - Length: 5.12 seconds, first two reference-conditioned shots only.
 - Before: native timing from the selected GPT GIF takes.
@@ -15,14 +15,14 @@ separately so the examples can be assessed fairly.
 - Frame samples: 1.04, 3.28 and 4.72 seconds, chosen between native pose times.
 - The third shot is excluded because its finished ending was deliberately retimed.
 
-[Watch comparison](assets/showcase/astronaut-comparison.mp4). The runnable
+[Watch comparison](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34). The runnable
 [three-shot script](../examples/film.json) assembles the included native GIFs into
 7.68 seconds without API requests; it does not apply the private interpolation step.
-[Watch that exact public-toolkit export](assets/showcase/astronaut-native-film.mp4).
+[Watch that exact public-toolkit export](https://github.com/user-attachments/assets/c4dc8c9b-1e97-4f1a-9632-e285d9b969e0).
 
 ## Dog — the same four takes
 
-[![Three actual dog-and-ball frame pairs](assets/showcase/dog-frames.png)](assets/showcase/dog-comparison.mp4)
+[![Three actual dog-and-ball frame pairs](assets/showcase/dog-frames.png)](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638)
 
 - Length: 10.24 seconds; the same four selected takes in both panels.
 - Before: native GIF timing, 16 generated drawings per take.
@@ -30,13 +30,13 @@ separately so the examples can be assessed fairly.
 - Frame samples: 1.20, 4.08 and 8.24 seconds.
 - 50 fps is the comparison's presentation grid, not native model output cadence.
 
-[Watch comparison](assets/showcase/dog-comparison.mp4). The displayed source action
+[Watch comparison](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638). The displayed source action
 still has limitations. Intermediate frames do not repair a disappearing prop,
 incorrect contact or a malformed paw; those require review and a different take.
 
 ## Cat — walk, jump, curl up
 
-[![Three actual cat frame pairs](assets/showcase/cat-frames.png)](assets/showcase/cat-comparison.mp4)
+[![Three actual cat frame pairs](assets/showcase/cat-frames.png)](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5)
 
 - Length: 7.68 seconds; the same three generated WALK, JUMP and CURL takes.
 - Before: original native GIF sequence, 16 drawings at 160 ms per scene.
@@ -45,8 +45,8 @@ incorrect contact or a malformed paw; those require review and a different take.
 - Fixed framing and background compositing account for visible scale/room changes;
   those are not solely an interpolation improvement.
 
-[Watch comparison](assets/showcase/cat-comparison.mp4) or the
-[complete 57.2-second silent cat film](assets/showcase/cat-film.mp4).
+[Watch comparison](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) or the
+[complete 57.2-second silent cat film](https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456).
 Selected contact intervals retain native pose cadence. Other beats also retain
 stepped source drawings, and small matte/shading differences remain.
 

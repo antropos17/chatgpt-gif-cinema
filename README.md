@@ -17,33 +17,35 @@ The public toolkit runs locally with Codex or Claude Code and your own OpenAI AP
 
 ### An astronaut gets an answer
 
-[![Astronaut: native GIF timing on the left, local interpolation on the right](docs/assets/showcase/astronaut-preview.gif)](docs/assets/showcase/astronaut-comparison.mp4)
+[![Astronaut: native GIF timing on the left, local interpolation on the right](docs/assets/showcase/astronaut-preview.gif)](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34)
 
 Two separately generated shots, the same takes on both sides. Left: native GIF timing.
 Right: locally interpolated motion. This 5.12-second comparison covers the first two
 shots; it makes the difference between a held drawing and an intermediate pose visible.
 
-[Watch comparison](docs/assets/showcase/astronaut-comparison.mp4) · [Inspect three frame pairs](docs/assets/showcase/astronaut-frames.png) · [Run the native three-shot example](examples/film.json)
+[Watch comparison](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34) · [Inspect three frame pairs](docs/assets/showcase/astronaut-frames.png) · [Run the native three-shot example](examples/film.json)
 
 ### A dog and a ball
 
-[![Dog and ball: native timing compared with local interpolation](docs/assets/showcase/dog-preview.gif)](docs/assets/showcase/dog-comparison.mp4)
+[![Dog and ball: native timing compared with local interpolation](docs/assets/showcase/dog-preview.gif)](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638)
 
 Four selected takes, compared over 10.24 seconds. Local interpolation fills time between
 existing drawings. It can also reveal trails or prop errors; a smoother playback does
 not establish that every generated action is correct.
 
-[Watch comparison](docs/assets/showcase/dog-comparison.mp4) · [Inspect three frame pairs](docs/assets/showcase/dog-frames.png)
+[Watch comparison](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638) · [Inspect three frame pairs](docs/assets/showcase/dog-frames.png)
 
 ### A cat finds the windowsill
 
-[![Cat: original generated takes compared with local framing, compositing and motion finishing](docs/assets/showcase/cat-preview.gif)](docs/assets/showcase/cat-comparison.mp4)
+[![Cat: original generated takes compared with local framing, compositing and motion finishing](docs/assets/showcase/cat-preview.gif)](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5)
 
 Walk, jump, curl up. The 7.68-second comparison uses the same three generated takes.
 The finished side combines framing corrections, compositing and selective interpolation.
 The complete silent cat edit runs **57.2 seconds**.
 
-[Watch comparison](docs/assets/showcase/cat-comparison.mp4) · [Inspect three frame pairs](docs/assets/showcase/cat-frames.png) · [Watch the full cat film](docs/assets/showcase/cat-film.mp4)
+[Watch comparison](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Inspect three frame pairs](docs/assets/showcase/cat-frames.png) · [Watch the full cat film](https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456)
+
+https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456
 
 **What ships:** the public skill and CLI generate reference-conditioned GIF shots,
 review endpoints, handle explicit retakes and assemble MP4. The comparison films also
@@ -74,6 +76,10 @@ Open `output/my-first-film/film.mp4`. Three committed GPT GIFs become a **7.68-s
 H.264 MP4 at 512×512. The source has **16 generated drawings per shot**; 25 export fps
 preserves playback timing rather than generating extra motion. Repeat the last command
 to reuse the verified result. This example needs **zero paid API calls**.
+
+The exact public-toolkit output:
+
+https://github.com/user-attachments/assets/c4dc8c9b-1e97-4f1a-9632-e285d9b969e0
 
 You also get first/last PNGs, a contact sheet, separate SRT captions, a continuity
 report and a resumable manifest. The older 5.4-second assembly experiment is retained
