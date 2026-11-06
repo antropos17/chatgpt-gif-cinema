@@ -3,6 +3,7 @@
 [![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml)
 [![Agent skill](https://img.shields.io/badge/agent_skill-0.1.1-e9a67c)](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1)
 [![License](https://img.shields.io/badge/license-source--available-9bbfaf)](LICENSE)
+[![Follow on Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-follow_GIF_Cinema-FFDD00)](https://buymeacoffee.com/gifcinema)
 
 ![GIF Cinema — real frames from the astronaut, dog and cat experiments](docs/assets/showcase/cover.png)
 
@@ -138,6 +139,13 @@ Historical authenticated generation is documented separately. Offline tests do n
 prove current access on every account, guaranteed character continuity, or a finished
 long film from one prompt. Native GIF drawings, repeated export frames and locally
 interpolated frames are different things.
+
+## Support the experiments
+
+[Follow GIF Cinema on Buy Me a Coffee](https://buymeacoffee.com/gifcinema).
+The creator page is live; payments are not enabled yet while payout setup is pending.
+Future support will help fund generation experiments and improvements to motion and
+continuity. Support does not grant a commercial license or a feature entitlement.
 
 ## License
 
