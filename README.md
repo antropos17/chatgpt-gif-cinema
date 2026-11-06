@@ -6,6 +6,26 @@ Generate animated GIF shots with OpenAI GPT Image 2.6, inspect first/last frames
 
 > Status: native GPT GIF generation is verified. Version 0.5 adds resumable script-to-film assembly. Character identity and seamless motion across independently generated scenes still require visual acceptance.
 
+## Install the agent skill
+
+The [GIF Cinema skill](.agents/skills/gif-cinema/SKILL.md) gives Codex or Claude Code
+a workflow for planning short shots, generating GIFs with explicit request budgets,
+reusing still-image references, reviewing both cuts around a retake, and exporting MP4.
+It contains its own instructions and offline verification helper; the CLI source and
+license are included in this repository. Python 3.10+, Git, FFmpeg and ffprobe are
+required. New generation uses your own OpenAI API key and account access.
+
+Copy `.agents/skills/gif-cinema` to `~/.codex/skills/gif-cinema` for Codex or
+`~/.claude/skills/gif-cinema` for Claude Code, then follow its setup instructions.
+Ask the agent to use `gif-cinema` to assemble two existing GIFs without paid calls
+before authorizing generation. The helper uses synthetic images and checks the
+installed CLI; it does not contact a provider.
+
+The public skill covers generation and assembly. The separate private Studio editor
+and its motion processing are not included. A film made with those additional tools
+is not a one-click reproduction claim for this skill. Export FPS does not measure
+newly generated motion. The source-available evaluation license remains unchanged.
+
 ## Script to film (v0.5)
 
 Plan a three-shot film without a key, network calls or output writes:
@@ -120,6 +140,8 @@ output FPS precision; changing FPS does not create new AI motion frames.
 
 ## Included
 
+- Resumable script-to-film rendering with per-run request budgets and receipts
+- Still-image references for generated script shots through image edits
 - GPT Image GIF generator CLI
 - First/last frame inspection and continuity checks
 - FFmpeg GIF-to-MP4 assembler
@@ -146,11 +168,15 @@ character continuity. Paid generation workflows are manual only.
 
 ### Current scope
 
-The CLI generates individual shots, inspects frames, and assembles supplied GIFs.
-The three-shot example was scripted separately. Automatic story-to-film rendering,
-a visual editor, photo input, and Character Lock are not implemented. Pixel
-similarity is a review aid, not an identity or narrative continuity guarantee.
-`CODEX_TASK.md` describes future work; its proposed `examples/film.json` format is
-not an existing implemented contract.
+The CLI generates shots, inspects endpoints, and renders the implemented v1 JSON
+script into an MP4 with local-source reuse, explicit request budgets, resumable
+manifests and receipts. Generated script shots accept local PNG/JPEG/WebP references
+through image edits. See [the script contract](docs/SCRIPT-FORMAT.md).
+Passing a reviewed last frame to the next shot is an explicit workflow; references
+must exist before that script is validated. A visual editor, automatic take ranking,
+automatic reference dependency graph and guaranteed Character Lock are not included.
+Pixel similarity supports human review; it does not prove identity or narrative
+continuity. Historical live outputs establish those runs, not current access on every
+account. New live calls are separate from offline verification.
 
 [OpenAI Image Generation guide](https://developers.openai.com/api/docs/guides/image-generation)

@@ -1,5 +1,6 @@
 """Script-driven rendering. Planning is offline; execution is explicitly opted in."""
 import argparse
+import base64
 import hashlib
 import io
 import json
@@ -83,7 +84,7 @@ def load_script(path, args):
         raise ValueError("shots must contain 1..64 entries")
     seen = set()
     for shot in shots:
-        fields(shot, {"id", "prompt", "source", "frames", "duration_ms", "transition", "first_frame_target", "last_frame_target", "audio_notes", "caption", "model", "size", "quality", "complexity"}, "shot")
+        fields(shot, {"id", "prompt", "source", "frames", "duration_ms", "transition", "first_frame_target", "last_frame_target", "audio_notes", "caption", "model", "size", "quality", "complexity", "references"}, "shot")
         sid = shot.get("id")
         if not isinstance(sid, str) or not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_-]{0,39}", sid) or sid.lower() in seen:
             raise ValueError("Shot IDs must be unique safe identifiers (case-insensitive)")
@@ -99,7 +100,7 @@ def load_script(path, args):
             raise ValueError("Each shot needs exactly one of source or prompt")
         shot["transition"] = "cut"
         if "source" in shot:
-            if set(shot) & {"frames", "duration_ms", "model", "size", "quality", "complexity"}:
+            if set(shot) & {"frames", "duration_ms", "model", "size", "quality", "complexity", "references"}:
                 raise ValueError("Imported shots use their actual timing, not generation parameters")
             source = (path.parent / text(shot["source"], "source")).resolve()
             frames, durations, _ = cli.validate_gif(source)
@@ -123,8 +124,45 @@ def load_script(path, args):
             shot["payload"] = cli.make_payload(full_prompt, shot.get("model", "gpt-image-2.6-flare"), count, duration, shot.get("size", "auto"), quality, complexity)
             shot["expected_ms"] = count * duration
             basis = shot["payload"]
+            if "references" in shot:
+                names = shot["references"]
+                if not isinstance(names, list) or not 1 <= len(names) <= 16:
+                    raise ValueError("references must contain 1..16 local still images")
+                inputs, total = [], 0
+                for name in names:
+                    reference = (path.parent / text(name, "reference")).resolve()
+                    total += reference.stat().st_size
+                    if total > 20 * 1024 * 1024:
+                        raise ValueError("Shot references exceed 20 MiB combined")
+                    raw = reference.read_bytes()
+                    with Image.open(io.BytesIO(raw)) as im:
+                        if im.format not in {"PNG", "JPEG", "WEBP"} or getattr(im, "n_frames", 1) != 1:
+                            raise ValueError("References must be still PNG, JPEG or WebP images")
+                        im.load()
+                        mime = Image.MIME[im.format]
+                    inputs.append({"path": reference, "file": name, "sha256": digest(raw), "mime": mime})
+                shot["reference_inputs"] = inputs
+                basis = {"parameters": shot["payload"], "references": reference_receipt(shot)}
         shot["fingerprint"] = digest(encoded(basis))
     return script
+
+
+def reference_receipt(shot):
+    """Record provenance without embedding image bytes or absolute paths."""
+    return [{k: ref[k] for k in ("file", "sha256", "mime")} for ref in shot.get("reference_inputs", [])]
+
+
+def request_payload(shot):
+    payload = dict(shot["payload"])
+    if "reference_inputs" in shot:
+        images = []
+        for ref in shot["reference_inputs"]:
+            raw = ref["path"].read_bytes()
+            if digest(raw) != ref["sha256"]:
+                raise ValueError("Reference image changed since planning; no request sent")
+            images.append({"image_url": f"data:{ref['mime']};base64," + base64.b64encode(raw).decode("ascii")})
+        payload["images"] = images
+    return payload
 
 
 def local_path(root, name):
@@ -272,13 +310,19 @@ def run(args):
                     for retry in range(args.retries + 1):
                         if run_record["api_calls"] >= args.max_api_calls:
                             raise RuntimeError("API call budget exhausted; completed shots are saved")
+                        payload = request_payload(shot)
                         attempt = {"shot": sid, "status": "started", "model": shot["payload"]["model"], "parameters": shot["payload"], "prompt_sha256": digest(shot["payload"]["prompt"].encode())}
+                        if "reference_inputs" in shot:
+                            attempt.update(endpoint="/v1/images/edits", references=reference_receipt(shot))
                         manifest["attempts"].append(attempt)
                         run_record["api_calls"] += 1
                         save(manifest_path, manifest)  # Count BEFORE sending, including retries.
                         start = time.monotonic()
                         try:
-                            raw, usage = cli.request_gif(shot["payload"], os.environ["OPENAI_API_KEY"])
+                            if "reference_inputs" in shot:
+                                raw, usage = cli.request_gif(payload, os.environ["OPENAI_API_KEY"], endpoint="https://api.openai.com/v1/images/edits")
+                            else:
+                                raw, usage = cli.request_gif(payload, os.environ["OPENAI_API_KEY"])
                             usage = safe_usage(usage)
                             cli.validate_gif(io.BytesIO(raw))
                         except Exception as exc:
@@ -306,6 +350,8 @@ def run(args):
                           "usage": usage, "origin": "imported" if action == "import" else "generated", "status": "verified-gif"}
                 if action == "generate":
                     record["parameters"] = shot["payload"]
+                    if "reference_inputs" in shot:
+                        record.update(endpoint="/v1/images/edits", references=reference_receipt(shot))
                     attempt.update(status="succeeded", seconds=seconds, usage=usage, output=filename)
                 else:
                     record["source_sha256"] = shot["source_sha256"]

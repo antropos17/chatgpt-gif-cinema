@@ -11,8 +11,8 @@ python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out
 ```
 
 The committed `film.json` uses three existing GPT-generated GIFs. It makes no new API
-calls. `consistent-film.proposed.json` is a separate, unrendered proposal with the same
-astronaut, camera, screen position and explicit pose targets across three shots.
+calls. `consistent-film.proposed.json` was tested in run 41982718167; both joins failed
+visual continuity despite matching textual identity and pose targets.
 Independent model outputs may still differ; prompt wording does not establish identity.
 
 ## Fields
@@ -33,6 +33,7 @@ Independent model outputs may still differ; prompt wording does not establish id
 | Shot | `caption`, `audio_notes` | Optional text; captions produce a separate SRT |
 | Generated shot | `frames`, `duration_ms` | Default 9 and 200; 2..16 frames, 20..2000 ms in steps of 10 |
 | Generated shot | `model`, `size`, `quality`, `complexity` | Same conservative generator settings as `generate` |
+| Generated shot | `references` | Optional 1..16 local still PNG/JPEG/WebP paths relative to the script, combined limit 20 MiB; uses `/v1/images/edits` |
 
 Imported shots retain actual frame delays; generation parameters are rejected on
 imports. Script captions do not burn text into source GIFs. Width/height/FPS CLI
@@ -91,3 +92,22 @@ Disposable downloaded tool archives should be removed after successful extractio
 verification; reusable binaries can remain in `output/tools` for this task. No automatic
 global cleanup is installed. Before another large batch, check free space and these exact
 directories; do not recursively clear system temporary directories or other projects.
+
+## Reference-conditioned GIF scenes
+
+Live run 41984076055 confirmed that `gpt-image-2.6-flare` accepts a still image
+and returns a native animated GIF through `/v1/images/edits`. The endpoint reference
+includes GIF output even though the image-generation guide says edits are unsupported.
+This evidence is scoped to the tested model/account and November 5, 2026.
+
+For each new scene, supply the original character reference plus the reviewed last
+frame of the previous scene, and describe which image controls identity versus pose.
+Example generated-shot field: `"references": ["previous-last.png", "character.png"]`.
+All references are decoded before any paid call. Their hashes affect cache identity;
+changes require explicit regeneration. Images are checked again before transmission.
+The manifest stores relative filenames, MIME types and hashes, never base64 images.
+
+This version uses explicit local references, not an automatic last-frame dependency
+graph. Review a scene before exporting its last frame for the next request. The same
+call budget and resume protections apply. References improve control but do not
+guarantee identity or correct action: inspect every output and join.

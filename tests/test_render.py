@@ -1,5 +1,6 @@
 """Behavioral script-render tests. The real network is forbidden throughout."""
 import contextlib
+import base64
 import io
 import json
 import os
@@ -8,6 +9,7 @@ import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
+from PIL import Image
 
 from gif_cinema import cli, render
 from test_reliability import animation
@@ -63,6 +65,47 @@ class RenderTests(unittest.TestCase):
                 self.assertEqual(plan["minimum_new_api_calls"], 3)
                 request.assert_not_called()
                 self.assertFalse(self.out.exists())
+
+    def test_references_use_edit_endpoint_and_resume_without_exposing_image_bytes(self):
+        reference = self.root / "hero.png"
+        Image.new("RGB", (16, 16), "green").save(reference)
+        self.data["shots"] = [{**self.shot("01"), "references": ["hero.png"]}]
+        with self.execution() as request:
+            render.run(self.args("--execute", "--retries", "0"))
+            sent = request.call_args
+            self.assertEqual(sent.kwargs["endpoint"], "https://api.openai.com/v1/images/edits")
+            image_url = sent.args[0]["images"][0]["image_url"]
+            self.assertEqual(base64.b64decode(image_url.split(",", 1)[1]), reference.read_bytes())
+        manifest = self.manifest()
+        self.assertEqual(manifest["shots"]["01"]["references"][0]["sha256"], render.digest(reference.read_bytes()))
+        self.assertNotIn("data:image", json.dumps(manifest))
+        with self.execution() as request:
+            render.run(self.args("--execute", "--max-api-calls", "0"))
+            request.assert_not_called()
+        Image.new("RGB", (16, 16), "blue").save(reference)
+        with self.execution() as request, self.assertRaisesRegex(ValueError, "force-shot"):
+            render.run(self.args("--execute"))
+        request.assert_not_called()
+
+    def test_invalid_reference_in_last_shot_prevents_all_spending(self):
+        self.data["shots"][-1]["references"] = ["invalid.png"]
+        (self.root / "invalid.png").write_bytes(b"not an image")
+        with self.execution() as request, self.assertRaises(OSError):
+            render.run(self.args("--execute"))
+        request.assert_not_called()
+        self.assertFalse(self.out.exists())
+
+    def test_reference_change_during_run_stops_before_second_request(self):
+        reference = self.root / "hero.png"
+        Image.new("RGB", (16, 16), "green").save(reference)
+        self.data["shots"] = [self.shot("01"), {**self.shot("02"), "references": ["hero.png"]}]
+        def first_request(*args, **kwargs):
+            Image.new("RGB", (16, 16), "red").save(reference)
+            return animation(), None
+        with self.execution(first_request) as request, self.assertRaisesRegex(ValueError, "Reference image changed"):
+            render.run(self.args("--execute"))
+        self.assertEqual(request.call_count, 1)
+        self.assertEqual(self.manifest()["runs"][-1]["api_calls"], 1)
 
     def test_entire_script_validated_before_any_request(self):
         for change in ({"id": "../evil"}, {"id": "01"}, {"transition": "dissolve"}, {"frames": True}, {"duration_ms": 201}, {"unexpected": 1}):
