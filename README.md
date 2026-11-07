@@ -6,7 +6,7 @@ An agent skill and local CLI for **Codex** and **Claude Code**. Generate short t
 still-image references, inspect how they cut together, reshoot a single moment, and
 export an MP4. Start with the included footage and make a film without an API key.
 
-[**Download the skill**](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) · [**Run the no-key demo**](#try-it-without-an-api-key) · [Filmmaking tips](docs/TIPS.md)
+[**Download the skill**](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) · [**Run the no-key demo**](#try-it-without-an-api-key) · [Watch the full cat film](#full-cat-film) · [Filmmaking tips](docs/TIPS.md)
 
 [![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml) [![Agent skill 0.1.1](https://img.shields.io/badge/agent_skill-0.1.1-e9a67c)](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) [![Source-available evaluation license](https://img.shields.io/badge/license-source--available-9bbfaf)](LICENSE)
 
@@ -18,12 +18,20 @@ export an MP4. Start with the included footage and make a film without an API ke
 7.68-second comparison uses the same three generated takes on both sides. The
 finished side combines framing corrections, compositing, and selective interpolation.
 
-[**Watch the 57-second cat film**](https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456) · [Play the before/after](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Compare still frames](docs/assets/showcase/cat-frames.png)
+[Play the before/after](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Compare still frames](docs/assets/showcase/cat-frames.png)
 
 The public toolkit covers GIF generation, still references, shot review, targeted
 retakes, and MP4 assembly. The finished showcase uses additional local
 postproduction. The no-key demo below shows the exact public-toolkit output.
 [Showcase methods and frame samples](docs/SHOWCASE.md).
+
+## Full cat film
+
+**57.2 seconds · Silent short.** GPT-generated GIF shots, assembled and finished locally.
+
+https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456
+
+[Open the MP4 file](docs/assets/showcase/cat-film.mp4)
 
 ## Try it without an API key
 
