@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased — audio preflight before generation
+
+- Snapshot bounded local audio and strictly decode it before any paid render
+  request; reject corrupt/truncated audio before creating a project or spending.
+  Keep dry-run FFmpeg-free and explicitly mark audio decode validation as pending.
+- Bound encoded audio size, duration, channels, sample rate, probing and decode
+  time. Reject playlists/network protocols and preserve the exact validated bytes
+  through assembly, with hash-bound audio facts in the manifest.
+- Verify requested final AAC audio, strict decoding and video-duration coverage
+  with packet-rounding tolerance; report audio verification in receipts. Silent
+  films keep their existing verification contract.
+- Add offline corruption, timeout, resource-limit, snapshot, missing-track,
+  resume and 54-second/6-fps audio timeline regressions. No provider requests.
+
 ## Unreleased — experimental source-only independent layers
 
 - Give both halves of the asset-free example card rotation explicit smootherstep

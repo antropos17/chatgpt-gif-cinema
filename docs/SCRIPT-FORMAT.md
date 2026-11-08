@@ -100,11 +100,37 @@ confirming the owning process has stopped.
 Execution checks runnable FFmpeg/ffprobe, the `libx264` encoder and all assembly
 filters before any paid call. Scripts with audio also require AAC and `apad`.
 Offline planning still needs no FFmpeg and performs none of these process checks.
-Assembly, probe and complete decode subprocesses have a 300-second deadline each
+For audio, the plan explicitly reports that decode validation is still pending.
+
+Before execution looks up a key, creates the render project or dispatches a paid
+request, it snapshots the audio and probes and strictly decodes the complete first
+audio stream. A valid container header alone is not enough: corrupt or truncated
+audio fails before generation rather than being silently replaced by padding.
+Assembly uses those exact validated snapshot bytes even if the original changes
+while shots are generated. The manifest records the audio hash, encoded size,
+codec, sample rate, channels and decoded duration; the snapshot is removed after
+the run. Existing audio/films are never changed by a failed preflight.
+
+Audio input is limited to a regular local file of 128 MiB, one hour, eight channels
+and 192 kHz. Films with audio are limited to one hour. Supported containers are WAV,
+MP3, FLAC, Ogg, AAC, AIFF, M4A/MP4 and Matroska/WebM. Playlists, device inputs and
+network protocols are rejected. Probe and strict audio decode each have a
+30-second deadline, closed stdin, one decoder thread, an 8 MiB probe budget,
+ten seconds of stream analysis and a 64 MiB maximum individual allocation.
+Diagnostic reads are capped at 64 KiB; raw decoder error payloads are not printed.
+
+Film assembly, video probe and full video decode have a 300-second deadline each
 and cannot wait on standard input. A timeout fails the run, cleans staging/locks
 and preserves an existing accepted movie; completed shots remain reusable.
 Output is staged,
 checked for H.264, dimensions, decoded frame count and duration, then fully decoded.
+When audio was requested, verification also requires an AAC track and a strict
+audio decode, with start/duration coverage checked against the video. A tolerance
+of two 1,024-sample AAC packets plus one millisecond allows codec padding and muxer
+rounding; it does not accept a missing or substantially shorter track. Audio
+verification details are included in the inspection report and receipt. Silent
+scripts retain their existing video-only contract. These are technical checks,
+not a judgment of the soundtrack's content or artistic synchronization.
 Each shot's output frame count is its duration multiplied by FPS, rounded to the
 nearest integer (ties to even), with a minimum of one frame. Final-frame holds are
 preserved; captions follow the same quantized timeline. Previously cached exports
