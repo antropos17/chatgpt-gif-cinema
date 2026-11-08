@@ -2,6 +2,10 @@
 
 ## Unreleased — source-only backend hardening
 
+- Validate GIF extension framing before decoding, including fixed headers and
+  NETSCAPE loop payloads. Reject malformed/unknown extensions that can make a
+  permissive decoder interpret hidden oversized disposal images differently from
+  preflight; keep standard comments and application metadata supported.
 - Bound shared GIF reads, decoded frame count, per-frame pixels and total pixels;
   reject oversized imports during planning before any billable request.
 - Check runnable FFmpeg/ffprobe, H.264 and assembly filters before execution;

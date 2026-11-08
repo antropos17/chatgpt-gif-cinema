@@ -87,6 +87,68 @@ class GIFBudgetTests(unittest.TestCase):
             with self.subTest(length=len(raw)), self.assertRaisesRegex(ValueError, 'truncated'):
                 cli.validate_gif(io.BytesIO(raw))
 
+    def extension_before_frames(self, extension):
+        table = (3 << ((self.raw[10] & 7) + 1)) if self.raw[10] & 128 else 0
+        start = 13 + table
+        return self.raw[:start] + extension + self.raw[start:]
+
+    def hidden_descriptor(self, extension):
+        """Regression for an extension that makes Pillow skip one block too far."""
+        def single(size):
+            out = io.BytesIO()
+            Image.new('RGB', size, 'red').save(out, format='GIF', duration=200, disposal=2)
+            raw = out.getvalue()
+            start = 13 + ((3 << ((raw[10] & 7) + 1)) if raw[10] & 128 else 0)
+            return raw[:start], raw[start:-1]
+        header, small_body = single((32, 32))
+        _, inner = single((64, 64))
+        inner = bytearray(inner)
+        descriptor = inner.index(b',')
+        inner[descriptor + 5:descriptor + 9] = (4097).to_bytes(2, 'little') + (4096).to_bytes(2, 'little')
+        outer = bytearray(b',' + b'\0\0\0\0\x20\0\x20\0\0' + b'\x02\xff' + b'X' * 255 + b'\0')
+        # Pillow treats the outer ',' as length 44, then resumes at the hidden
+        # descriptor. A generic block scanner only sees the harmless 32x32 outer.
+        outer[45] = 0
+        outer[46:46 + len(inner)] = inner
+        return header + extension + outer + small_body + b';'
+
+    def test_hidden_disposal_descriptor_after_empty_extension_is_rejected_before_open(self):
+        extensions = (b'!\x01\0', b'!\xf9\0', b'!\xff\0', b'!\x02\0',
+                      b'!\xff\x0bNETSCAPE2.0\0')
+        for extension in extensions:
+            raw = self.hidden_descriptor(extension)
+            with self.subTest(extension=extension), patch('PIL.Image.open') as decoder:
+                with self.assertRaisesRegex(ValueError, 'extension'):
+                    cli.validate_gif(io.BytesIO(raw))
+                decoder.assert_not_called()
+
+    def test_malformed_extension_headers_and_loop_payloads_are_rejected(self):
+        extensions = (b'!\xf9\x03\0\x14\0\0', b'!\xf9\x05\0\x14\0\0\0\0',
+                      b'!\xf9\x04\0\x14\0\0\x01x\0',
+                      b'!\x01\x0b' + b'\0' * 12, b'!\xff\x0a0123456789\0',
+                      b'!\x02\x01x\0', b'!\xff\x0bNETSCAPE2.0\x01\x01\0',
+                      b'!\xff\x0bNETSCAPE2.0\x03\x02\0\0\0',
+                      b'!\xff\x0bNETSCAPE2.0\x03\x01\0\0\x01x\0')
+        for extension in extensions:
+            raw = self.extension_before_frames(extension)
+            with self.subTest(extension=extension), patch('PIL.Image.open') as decoder:
+                with self.assertRaisesRegex(ValueError, 'extension'):
+                    cli.validate_gif(io.BytesIO(raw))
+                decoder.assert_not_called()
+
+    def test_standard_comments_plaintext_and_application_metadata_remain_supported(self):
+        extensions = (b'!\xfe\0', b'!\xfe\x03abc\x02!,\0',
+                      b'!\x01\x0c' + b'\0' * 12 + b'\0',
+                      b'!\xff\x0bMYAPP0010.0\0',
+                      b'!\xff\x0bMYAPP0010.0\x02!,\x03abc\0',
+                      b'!\xff\x0bNETSCAPE2.0\x03\x01\x02\0\0')
+        for extension in extensions:
+            with self.subTest(extension=extension):
+                frames, delays, _ = cli.validate_gif(io.BytesIO(self.extension_before_frames(extension)))
+                self.assertEqual(len(frames), 2)
+                self.assertEqual(delays, [200, 400])
+                self.assertEqual(frames[-1].getpixel((0, 0)), (0, 0, 255))
+
     def test_exact_frame_and_pixel_budgets_are_accepted(self):
         with patch.object(cli, 'MAX_GIF_FRAMES', 2), \
                 patch.object(cli, 'MAX_GIF_FRAME_PIXELS', 32 * 32), \

@@ -80,8 +80,36 @@ def check_gif_limits(raw):
         offset += 1
         if marker == 0x3B:  # Trailer.
             return
-        if marker == 0x21:  # Extension label followed by data sub-blocks.
-            offset = skip_blocks(offset + 1)
+        if marker == 0x21:
+            if offset + 2 > len(raw):
+                raise ValueError("Invalid or truncated GIF extension")
+            label, size = raw[offset], raw[offset + 1]
+            offset += 2
+            if label == 0xFE:  # Comments may have an empty first data block.
+                offset = skip_blocks(offset - 1)
+                continue
+            # Pillow consumes the first extension block separately, then more
+            # blocks. An empty non-comment header can make it eat the following
+            # image marker as a block length and expose hidden image descriptors.
+            required = {0xF9: 4, 0x01: 12, 0xFF: 11}.get(label)
+            if required is None or size != required or offset + size >= len(raw):
+                raise ValueError("Invalid or unsupported GIF extension header")
+            header = raw[offset:offset + size]
+            offset += size
+            if label == 0xF9:
+                if raw[offset] != 0:
+                    raise ValueError("Invalid GIF graphic control extension terminator")
+                offset += 1
+            elif label == 0xFF and header == b"NETSCAPE2.0":
+                # Pillow also reads Netscape's loop block separately. Require
+                # its complete fixed layout, including the single terminator,
+                # so an empty loop block cannot desynchronize the decoder.
+                if (offset + 5 > len(raw) or raw[offset:offset + 2] != b"\x03\x01"
+                        or raw[offset + 4] != 0):
+                    raise ValueError("Invalid GIF NETSCAPE loop extension")
+                offset += 5
+            else:
+                offset = skip_blocks(offset)
             continue
         if marker != 0x2C or offset + 9 > len(raw):
             raise ValueError("Invalid or truncated GIF image descriptor")

@@ -47,6 +47,10 @@ composited drawing, not just changed rectangles. Reads are bounded even if a fil
 grows; GIF descriptors are scanned before decoding, so disposal frames and later
 canvas expansion cannot bypass the pixel limit. Oversized footage fails explicitly
 rather than being silently resized or truncated.
+Extension framing is checked before decoding as well: standard graphic control,
+comment, plain-text and application extensions are supported, with fixed headers
+and a complete NETSCAPE loop payload. Malformed or unknown extensions are rejected
+instead of relying on permissive decoder recovery that could hide image descriptors.
 
 ## Execution and accounting
 
