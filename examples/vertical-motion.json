@@ -1,7 +1,7 @@
 {
   "format": "gif-cinema-layered-scene",
   "schema_version": 1,
-  "title": "Vertical study: Движение / Hərəkət",
+  "title": "Vertical study: Layered motion",
   "width": 540,
   "height": 960,
   "fps": 50,
@@ -217,9 +217,9 @@
       ]
     },
     {
-      "id": "russian_title",
+      "id": "title_line_1",
       "type": "text",
-      "text": "Движение",
+      "text": "Layered",
       "font_id": "noto-sans-regular-2.004",
       "font_size": 46,
       "fill": "#F4F4EC",
@@ -239,9 +239,9 @@
       ]
     },
     {
-      "id": "azerbaijani_title",
+      "id": "title_line_2",
       "type": "text",
-      "text": "Hərəkət",
+      "text": "Motion",
       "font_id": "noto-sans-regular-2.004",
       "font_size": 42,
       "fill": "#65DDD0",
@@ -263,7 +263,7 @@
     {
       "id": "layer_caption",
       "type": "text",
-      "text": "Слои · Mətn · Ritm",
+      "text": "Layers · Text · Rhythm",
       "font_id": "noto-sans-regular-2.004",
       "font_size": 22,
       "fill": "#F4F4EC",
@@ -285,7 +285,7 @@
     {
       "id": "format_caption",
       "type": "text",
-      "text": "RU / AZ   ·   9:16",
+      "text": "540 × 960   ·   9:16",
       "font_id": "noto-sans-regular-2.004",
       "font_size": 18,
       "fill": "#BBCAD1",

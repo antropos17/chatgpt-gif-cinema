@@ -1,9 +1,12 @@
 # Vertical layered motion example
 
-`examples/vertical-motion-ru-az.json` is a 5.4 KiB, asset-free 9:16 scene for the
+`examples/vertical-motion.json` is a small, asset-free 9:16 scene for the
 existing offline layers renderer. It contains 12 independent layers: background,
 five moving graphics, a static accent rule and five editable text layers.
-The text includes Russian **Движение** and Azerbaijani **Hərəkət / Mətn**.
+The public-facing copy is English: **Layered / Motion** and
+**Layers · Text · Rhythm**. Russian and Azerbaijani support remains covered by
+`tests/test_text_fonts.py` and the separate `examples/layered-unicode.json` fixture.
+The example is a short composition study, not a long-form GIF-film workflow.
 No images, fonts or other assets are downloaded and no provider/API call is used.
 
 ## Resolution and scope
@@ -43,11 +46,11 @@ and at a 360×640 display size. Representative conservative delivery bounds:
 
 | Element | Bounds (left, top, right, bottom) |
 | --- | --- |
-| Russian title | (140, 420, 624, 522) |
-| Azerbaijani title | (140, 544, 470, 628) |
+| First title line | (140, 416, 502, 526) |
+| Second title line | (140, 544, 438, 626) |
 | Moving ring, union over all samples | (186, 680, 786, 1278) |
-| Main caption | (140, 1346, 538, 1398) |
-| Small format label | (140, 1446, 418, 1492) |
+| Main caption | (140, 1342, 612, 1404) |
+| Small format label | (140, 1446, 456, 1492) |
 
 Titles use native sizes 46 and 42, the main caption 22, and auxiliary labels 18.
 At a 360-pixel-wide display their nominal sizes are about 31, 28, 15 and 12 pixels.
@@ -80,9 +83,9 @@ The saved scene records the font/Pillow/FreeType environment for reopening.
 All output paths must be new. These commands create only local files:
 
 ```sh
-python -m gif_cinema.layers render examples/vertical-motion-ru-az.json \
+python -m gif_cinema.layers render examples/vertical-motion.json \
   --out output/vertical-native --dry-run
-python -m gif_cinema.layers render examples/vertical-motion-ru-az.json \
+python -m gif_cinema.layers render examples/vertical-motion.json \
   --out output/vertical-native
 python tools/verify_layered_scene.py output/vertical-native \
   --report output/native-reopen-verification.json

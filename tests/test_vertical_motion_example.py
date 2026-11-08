@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from gif_cinema import layers
 
-EXAMPLE = Path(__file__).resolve().parents[1] / 'examples' / 'vertical-motion-ru-az.json'
+EXAMPLE = Path(__file__).resolve().parents[1] / 'examples' / 'vertical-motion.json'
 # Author-chosen margins, not an official or universal platform safe-area spec.
 SAFE_RECT = (54, 120, 454, 750)
 
@@ -54,11 +54,19 @@ class VerticalExampleTests(unittest.TestCase):
         self.assertEqual({layer['type'] for layer in self.scene['layers']}, {'text', 'rect', 'ellipse'})
         self.assertLess(layers.raster_budget(self.scene)['raster_pixel_frames_upper_bound'], layers.MAX_RASTER_PIXEL_FRAMES)
 
-    def test_pinned_unicode_text_and_nominal_reading_sizes(self):
+    def test_english_demo_copy_pinned_font_and_nominal_reading_sizes(self):
         text = [layer for layer in self.scene['layers'] if layer['type'] == 'text']
         self.assertEqual(len(text), 5)
-        self.assertIn('Движение', [layer['text'] for layer in text])
-        self.assertIn('Hərəkət', [layer['text'] for layer in text])
+        self.assertEqual(self.scene['title'], 'Vertical study: Layered motion')
+        self.assertEqual({layer['id']: layer['text'] for layer in text}, {
+            'study_label': 'MOTION / 01',
+            'title_line_1': 'Layered',
+            'title_line_2': 'Motion',
+            'layer_caption': 'Layers · Text · Rhythm',
+            'format_caption': '540 × 960   ·   9:16',
+        })
+        # Russian/Azerbaijani glyph and export regressions live in test_text_fonts.py;
+        # they do not determine the language of this public-facing example.
         for layer in text:
             self.assertEqual(layer['font_id'], 'noto-sans-regular-2.004')
             self.assertGreaterEqual(layer['font_size'], 18)
@@ -66,8 +74,8 @@ class VerticalExampleTests(unittest.TestCase):
             self.assertGreaterEqual(layer['font_size'] * 360 / self.scene['width'], 12)
             self.assertIsNotNone(self.prepared['rasters'][layer['id']].getbbox())
         titles = {layer['id']: layer for layer in text}
-        self.assertGreaterEqual(titles['russian_title']['font_size'], 40)
-        self.assertGreaterEqual(titles['azerbaijani_title']['font_size'], 40)
+        self.assertGreaterEqual(titles['title_line_1']['font_size'], 40)
+        self.assertGreaterEqual(titles['title_line_2']['font_size'], 40)
 
     def test_every_export_sample_fits_declared_safe_area(self):
         left, top, right, bottom = SAFE_RECT
