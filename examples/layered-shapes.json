@@ -1,0 +1,104 @@
+{
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "title": "Independent shapes: source-only PoC",
+  "width": 320,
+  "height": 180,
+  "fps": 25,
+  "duration_ms": 1000,
+  "loop": true,
+  "matte": "#12121c",
+  "layers": [
+    {
+      "id": "background",
+      "type": "rect",
+      "size": [
+        320,
+        180
+      ],
+      "fill": "#12121c"
+    },
+    {
+      "id": "card",
+      "type": "rect",
+      "size": [
+        200,
+        90
+      ],
+      "radius": 16,
+      "fill": "#4b405f",
+      "keyframes": [
+        {
+          "at": 0,
+          "rotation": -3
+        },
+        {
+          "at": 0.5,
+          "rotation": 3,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1,
+          "rotation": -3
+        }
+      ]
+    },
+    {
+      "id": "dot",
+      "type": "ellipse",
+      "size": [
+        20,
+        20
+      ],
+      "fill": "#edc7b5",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.25,
+          "y": 0.38,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.5,
+          "x": 0.75,
+          "y": 0.38,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1,
+          "x": 0.25,
+          "y": 0.38
+        }
+      ]
+    },
+    {
+      "id": "label",
+      "type": "text",
+      "text": "Independent layers",
+      "font_size": 18,
+      "fill": "#fff5ec",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.5,
+          "y": 0.65,
+          "opacity": 0.7,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.5,
+          "x": 0.5,
+          "y": 0.6,
+          "opacity": 1,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1,
+          "x": 0.5,
+          "y": 0.65,
+          "opacity": 0.7
+        }
+      ]
+    }
+  ]
+}

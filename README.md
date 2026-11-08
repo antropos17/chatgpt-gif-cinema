@@ -29,6 +29,14 @@ python -m gif_cinema motion poster.png --preset push-in --out output/poster
 The source stays unchanged. Review the full-color MP4 and the separately quantized
 GIF; technical verification does not automatically accept the result.
 
+## Experimental independent layers
+
+A separate source-only PoC animates local image, text, rectangle and ellipse layers
+independently, with editable keyframes and portable save/reopen verification.
+It is **not Lottie-compatible** and does not load expressions, web fonts or plugins.
+The [layered-scene guide](docs/MULTILAYER-POC.md) includes an asset-free JSON example
+and explicit format, memory and timing limits. No showcase media are bundled.
+
 ## See the difference
 
 ![A cat walks toward the window. The left panel shows the source GIF timing and the right shows the same take after local finishing.](docs/assets/showcase/cat-preview.gif)
