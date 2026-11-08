@@ -1,0 +1,4 @@
+interface:
+  display_name: "GIF Cinema"
+  short_description: "Build multi-scene GIF stories and motion-design edits"
+  default_prompt: "Use $gif-cinema to turn my idea into a multi-scene animated story with distinct actions, consistent characters, and verified GIF and MP4 exports."

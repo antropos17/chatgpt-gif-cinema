@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "title": "A Reply from the Stars",
+  "premise": "An astronaut sends a greeting into an apparently empty sky and receives a reply.",
+  "ending": "The astronaut acknowledges the answering light.",
+  "style_bible": "Preserve the existing astronaut artwork and source drawing cadence. The local title uses dark navy, cream lettering and an amber rule.",
+  "characters": [
+    {
+      "id": "astronaut",
+      "description": "The astronaut visible in the supplied reference-conditioned GIFs; preserve the suit, helmet and proportions. Identity and contact still require review."
+    }
+  ],
+  "props": [
+    {
+      "id": "light",
+      "description": "One small answering light in the sky.",
+      "initial_state": "Not yet the focus of attention."
+    }
+  ],
+  "width": 512,
+  "height": 512,
+  "fps": 25,
+  "shots": [
+    {
+      "id": "00-title",
+      "beat": "Introduce the exchange",
+      "action": "The title enters once and settles with a growing accent rule.",
+      "start": "Navy title card.",
+      "end": "The title and subtitle are fully readable.",
+      "camera": "Fixed graphic composition.",
+      "title": {
+        "text": "A REPLY FROM THE STARS",
+        "subtitle": "A short exchange",
+        "duration_ms": 2000
+      }
+    },
+    {
+      "id": "01-signal",
+      "beat": "A signal into the dark.",
+      "action": "Raise a hand toward the sky.",
+      "start": "The astronaut stands on the lunar surface.",
+      "end": "The astronaut raises one hand toward the sky.",
+      "camera": "Use the supplied GIF framing; review framing changes across the cut.",
+      "state": "Keep the same astronaut recognizable; inspect the real outgoing and incoming poses.",
+      "source": "shot-01.gif",
+      "caption": "A signal into the dark."
+    },
+    {
+      "id": "02-answer",
+      "beat": "Something answers.",
+      "action": "A small light responds to the greeting.",
+      "start": "The same astronaut keeps the greeting pose.",
+      "end": "A small light answers the raised hand.",
+      "camera": "Use the supplied GIF framing; review framing changes across the cut.",
+      "state": "Keep the same astronaut recognizable; inspect the real outgoing and incoming poses.",
+      "source": "shot-02.gif",
+      "caption": "Something answers."
+    },
+    {
+      "id": "03-recognition",
+      "beat": "He is not alone.",
+      "action": "Bring a hand toward the chest in acknowledgment.",
+      "start": "The astronaut reacts to the reply.",
+      "end": "The astronaut acknowledges the light.",
+      "camera": "Use the supplied GIF framing; review framing changes across the cut.",
+      "state": "Keep the same astronaut recognizable; inspect the real outgoing and incoming poses.",
+      "source": "shot-03.gif",
+      "caption": "He is not alone."
+    }
+  ]
+}

@@ -18,6 +18,20 @@ examples. No new media, packaged `demo`, editing/motion commands or standalone
 generation receipts are included. It is not a new versioned release.
 [Render limits and recovery](docs/SCRIPT-FORMAT.md).
 
+## Multi-scene stories and motion design
+
+The current repository skill now includes **story beats, a character/prop bible,
+per-shot generation inputs, local animated titles, and GIF + MP4 export**. Build a
+longer story from distinct actions rather than stretching one loop.
+
+[**Use the storytelling skill**](docs/STORYTELLING-SKILL.md) · [Read the skill](.agents/skills/gif-cinema/SKILL.md)
+
+The no-key story edit is 9.68 seconds from three existing GIFs plus a title. A separate
+14-action, 35.84-second example is an **unrendered production plan**, not a finished
+cartoon. New character animation requires available model access and authorized
+requests; title animation and local assembly do not. The published `skill-v0.1.1`
+ZIP predates this workflow; the guide shows how to package the current skill.
+
 ## See the difference
 
 ![A cat walks toward the window. The left panel shows the source GIF timing and the right shows the same take after local finishing.](docs/assets/showcase/cat-preview.gif)
