@@ -150,6 +150,7 @@ class FilmTests(unittest.TestCase):
         p.write_bytes(animation((400, 800)))
         return build_parser().parse_args(["film", str(p), str(p), "--width", "32", "--height", "32", "--fps", "25", "-o", str(self.root / "film.mp4"), *extra])
 
+    @unittest.skipUnless(shutil.which("ffprobe"), "ffprobe required for films with audio")
     def test_audio_never_truncates_video_and_last_frame_survives(self):
         for audio_length in (None, 0.2, 4.0):
             with self.subTest(audio_length=audio_length):

@@ -148,6 +148,31 @@ The first acceptance film must preserve one recognizable character and aligned p
 and action across cuts. If existing GIFs fail that criterion, report the failure and
 prepare a bounded replacement plan; do not disguise it with dissolves or new claims.
 
+## Standalone film audio compatibility
+
+`gif-cinema film clip.gif --audio soundtrack.wav -o film.mp4` uses the same bounded
+audio snapshot, supported formats, strict input decode and final AAC coverage
+checks described above. These checks run before the MP4 is published, including
+with `--force`. An empty or corrupt audio file is rejected instead of being silently
+padded into a successful-looking soundtrack. A failed preflight does not create
+the destination directory; encoding/verification failures clean temporary files
+and locks while preserving the previously accepted MP4.
+
+Audio-enabled standalone assembly now requires working ffprobe as well as FFmpeg.
+Its audio input and film duration have the same one-hour limit as script render.
+These deliberate restrictions can reject files that older standalone versions
+accepted permissively. Valid short tracks are still padded, long tracks trimmed,
+and per-shot frame rounding and final poses are unchanged. Input GIF/audio files
+are not modified. Silent `film` remains FFmpeg-only and does not acquire audio
+limits or verification work.
+
+The standalone CLI still produces just the requested MP4 with the same success
+message and `--force`/no-clobber behavior; it does not create script manifests or
+audio sidecars. It makes no provider calls. Script render retains its pre-generation
+audio check and its own receipts, and the assembly step rechecks its private
+snapshot before publishing. The additional local probe/decode work is bounded by
+the existing deadlines. Technical validation does not establish artistic quality.
+
 ## Local artifact retention
 
 Keep accepted GIFs, films, manifests and verification receipts. Temporary test directories
