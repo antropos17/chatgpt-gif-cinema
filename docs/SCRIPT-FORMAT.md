@@ -45,14 +45,24 @@ contain a valid render manifest. Keep scripts and imported originals outside it.
 `--execute` explicitly permits generation, subject to `--max-api-calls` (default 3).
 Use zero for guaranteed import/reuse-only operation. The printed plan lists the minimum
 new calls; the cap includes retries, which can exhaust the allowance before every shot
-is finished. Only HTTP 429 and 5xx are retried, at most twice by default, with bounded
-backoff. Timeouts, authentication and invalid outputs are not retried automatically.
+is finished. Only HTTP 429 rate-limit rejections are retried, at most twice by default,
+with bounded backoff. Timeouts, HTTP 408/5xx, invalid responses and other unknown
+outcomes are not retried, either automatically or by simply restarting the command.
+Authentication and other definitive 4xx rejections are not retried in the same run.
 Each invocation gets its own cap; attempts and invocation counts remain in the manifest.
 
-The attempt is saved before the request. If the process disappears during a request,
-its cost/outcome is unknown. The next run stops rather than silently paying again.
-An explicit `--force-shot ID` permits another attempt after review. No exact-once
-billing guarantee is possible across an interrupted network request.
+The attempt is saved as `started` before the request. A network failure, server error
+or unreadable result is saved as `unknown`, because the provider may already have
+generated and charged for the shot. A crash leaves `started` durable. Both states
+block another generation on the next run rather than silently paying again. Older
+`failed` records are treated the same way unless they show a definitive 4xx rejection
+(excluding HTTP 408). Accepted, hash-verified footage can still be reused for free.
+
+Review the provider's request/billing history before retrying an unknown outcome.
+An explicit `--force-shot ID` (or `--force` for all generated shots) permits another
+attempt after review and may create another charge; the original attempt remains in
+the manifest. No exact-once billing guarantee is possible across an interrupted
+network request. Do not use a new output directory to bypass this review.
 
 Model, effective prompt, parameters, checksum, timing, numeric usage, safe error status
 and outcome are recorded. No API key, bearer header or raw server error body is stored.
@@ -71,7 +81,11 @@ confirming the owning process has stopped.
 
 Execution requires both FFmpeg and ffprobe before any paid call. Output is staged,
 checked for H.264, dimensions, decoded frame count and duration, then fully decoded.
-Timing may round by approximately one output frame per shot. A contact sheet, individual
+Each shot's output frame count is its duration multiplied by FPS, rounded to the
+nearest integer (ties to even), with a minimum of one frame. Final-frame holds are
+preserved; captions follow the same quantized timeline. Previously cached exports
+are rebuilt locally once with this timing correction, retaining the old MP4 archive.
+A contact sheet, individual
 first/last PNGs, continuity report, SRT, inspection JSON, manifest and receipt are written.
 Derived reports in this dedicated project directory are refreshed on resume.
 

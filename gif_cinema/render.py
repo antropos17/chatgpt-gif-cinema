@@ -18,6 +18,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageStat
 from . import cli
 
 VERSION = 1
+ASSEMBLY_VERSION = 2  # Invalidate older exports that could lose the final frame.
 
 
 def digest(value):
@@ -189,7 +190,8 @@ def probe(path, width, height, expected_seconds, fps, shots):
     actual = float(info["duration"])
     count = int(info["nb_read_frames"])
     if (info["codec_name"] != "h264" or info["width"] != width or info["height"] != height
-            or count < 1 or not math.isfinite(actual) or abs(actual - expected_seconds) > (shots + 1) / fps):
+            or count != round(expected_seconds * fps) or not math.isfinite(actual)
+            or abs(actual - expected_seconds) > 0.5 / fps):
         raise RuntimeError("Encoded film failed codec, dimensions or duration verification")
     # Decode all frames, not just the container metadata.
     subprocess.run(["ffmpeg", "-v", "error", "-xerror", "-i", str(path), "-map", "0:v:0", "-f", "null", "-"], check=True, capture_output=True)
@@ -226,6 +228,26 @@ def safe_error(exc):
     if isinstance(exc, cli.APIError):
         return f"API HTTP {exc.status}"
     return {ValueError: "Validation failed", OSError: "Local file operation failed"}.get(type(exc), "Operation failed; provider and process details omitted")
+
+
+def confirmed_rejection(status):
+    """A timeout or server error does not prove that generation never happened."""
+    return type(status) is int and 400 <= status < 500 and status != 408
+
+
+def attempt_needs_review(attempt):
+    if attempt.get("status") in {"started", "unknown"}:
+        return True
+    if attempt.get("status") != "failed":
+        return False
+    # Older manifests marked every exception as failed, including timeouts and
+    # malformed responses after a potentially billable request. Fail closed when
+    # migrating those records; preserve them for accounting rather than rewriting.
+    status = attempt.get("http_status")
+    if status is None:
+        match = re.fullmatch(r"API HTTP ([0-9]{3})", str(attempt.get("error", "")))
+        status = int(match[1]) if match else None
+    return not confirmed_rejection(status)
 
 
 def safe_usage(usage):
@@ -267,8 +289,8 @@ def run(args):
             raise ValueError(f"Shot {shot['id']} changed; explicitly use --force-shot {shot['id']} or a new directory")
         if "source_path" in shot and shot["source_path"].is_relative_to(root):
             raise ValueError("Imported sources must live outside the render output directory")
-        if not reuse and "payload" in shot and not force and any(a.get("shot") == shot["id"] and a.get("status") == "started" for a in manifest["attempts"]):
-            raise ValueError(f"Shot {shot['id']} has an interrupted request of unknown cost; review before using --force-shot")
+        if not reuse and "payload" in shot and not force and any(a.get("shot") == shot["id"] and attempt_needs_review(a) for a in manifest["attempts"]):
+            raise ValueError(f"Shot {shot['id']} has an uncertain or interrupted request of unknown cost; review provider history before using --force-shot {shot['id']}")
         actions.append("reuse" if reuse else "import" if "source" in shot else "generate")
     plan = {"title": script["title"], "mode": "execute" if args.execute else "dry-run", "minimum_new_api_calls": actions.count("generate"),
             "max_api_calls_including_retries": args.max_api_calls, "cost": "unknown; usage is not a currency quote",
@@ -326,11 +348,19 @@ def run(args):
                             usage = safe_usage(usage)
                             cli.validate_gif(io.BytesIO(raw))
                         except Exception as exc:
-                            attempt.update(status="failed", error=safe_error(exc), seconds=round(time.monotonic() - start, 3))
+                            status = exc.status if isinstance(exc, cli.APIError) else None
+                            uncertain = not confirmed_rejection(status)
+                            attempt.update(status="unknown" if uncertain else "failed", error=safe_error(exc), seconds=round(time.monotonic() - start, 3))
+                            if status is not None:
+                                attempt["http_status"] = status
                             save(manifest_path, manifest)
-                            transient = isinstance(exc, cli.APIError) and (exc.status == 429 or 500 <= exc.status < 600)
+                            # Only a rate-limit rejection is safe to retry here.
+                            # No idempotency/reconciliation contract is available
+                            # for 5xx, timeouts or unreadable success responses.
+                            transient = status == 429
                             if not transient or retry == args.retries or run_record["api_calls"] >= args.max_api_calls:
-                                raise RuntimeError(f"Shot {sid}: {safe_error(exc)}; completed shots are saved") from None
+                                review = f"; outcome/cost unknown, review provider history before --force-shot {sid}" if uncertain else ""
+                                raise RuntimeError(f"Shot {sid}: {safe_error(exc)}{review}; completed shots are saved") from None
                             time.sleep(min(2 ** retry, 8))
                             continue
                         seconds = round(time.monotonic() - start, 3)
@@ -360,10 +390,11 @@ def run(args):
                 save(manifest_path, manifest)
                 records.append(record)
             diagnostics(root, script, records)
-            movie_fingerprint = digest(encoded({"shots": [r["sha256"] for r in records], "width": script["width"], "height": script["height"], "fps": script["fps"], "audio": digest(script["audio_path"].read_bytes()) if script.get("audio_path") else None}))
+            movie_fingerprint = digest(encoded({"assembly_version": ASSEMBLY_VERSION, "shots": [r["sha256"] for r in records], "width": script["width"], "height": script["height"], "fps": script["fps"], "audio": digest(script["audio_path"].read_bytes()) if script.get("audio_path") else None}))
             old_film = manifest.get("film", {})
             film_path = root / "film.mp4"
-            expected = sum(r["duration_ms"] for r in records) / 1000
+            expected_frames = sum(max(1, round(r["duration_ms"] * script["fps"] / 1000)) for r in records)
+            expected = expected_frames / script["fps"]
             if old_film.get("fingerprint") == movie_fingerprint and film_path.exists() and digest(film_path.read_bytes()) == old_film.get("sha256"):
                 info = probe(film_path, script["width"], script["height"], expected, script["fps"], len(records))
             else:
@@ -388,7 +419,7 @@ def run(args):
             def stamp(ms):
                 return f"{ms // 3600000:02}:{ms // 60000 % 60:02}:{ms // 1000 % 60:02},{ms % 1000:03}"
             for shot, record in zip(script["shots"], records):
-                end = clock + round(record["duration_ms"] * script["fps"] / 1000) * 1000 / script["fps"]
+                end = clock + max(1, round(record["duration_ms"] * script["fps"] / 1000)) * 1000 / script["fps"]
                 if shot.get("caption"):
                     subtitles.append(f"{len(subtitles)+1}\n{stamp(round(clock))} --> {stamp(round(end))}\n{shot['caption']}\n")
                 clock = end
@@ -414,7 +445,7 @@ def add_parser(sub):
     mode.add_argument("--dry-run", action="store_true", help="Offline plan (default); no writes or API calls")
     mode.add_argument("--execute", action="store_true", help="Execute imports and explicitly allow bounded API generation")
     parser.add_argument("--max-api-calls", type=int, default=3)
-    parser.add_argument("--retries", type=int, default=2, help="Only retry HTTP 429/5xx, within total call cap")
+    parser.add_argument("--retries", type=int, default=2, help="Only retry HTTP 429, within total call cap; unknown outcomes require review")
     parser.add_argument("--force", action="store_true", help="Regenerate ALL prompt-based shots; may incur charges")
     parser.add_argument("--force-shot", action="append", default=[], help="Regenerate one named shot; retain other accepted shots")
     parser.add_argument("--width", type=int)

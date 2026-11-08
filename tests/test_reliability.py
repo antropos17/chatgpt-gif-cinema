@@ -169,6 +169,26 @@ class FilmTests(unittest.TestCase):
                 self.assertLess(r, 30)
                 self.assertLess(g, 30)
 
+    def test_fractional_durations_have_explicit_per_shot_frame_counts(self):
+        for durations, fps, expected in (((40, 60), 25, 4),
+                                         ((60, 80), 25, 8),
+                                         ((20, 20), 1, 2)):
+            with self.subTest(durations=durations, fps=fps):
+                source = self.root / "fractional.gif"
+                raw = animation(durations)
+                source.write_bytes(raw)
+                output = self.root / "fractional.mp4"
+                args = build_parser().parse_args([
+                    "film", str(source), str(source), "--width", "32", "--height", "32",
+                    "--fps", str(fps), "-o", str(output), "--force"])
+                film(args)
+                decoded = subprocess.run([
+                    "ffmpeg", "-v", "error", "-i", str(output), "-map", "0:v:0",
+                    "-vf", "scale=1:1", "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1"
+                ], capture_output=True, check=True)
+                self.assertEqual(len(decoded.stdout) // 3, expected)
+                self.assertEqual(source.read_bytes(), raw)
+
     def test_existing_movie_and_failed_force_are_preserved(self):
         args = self.film_args()
         out = Path(args.output)

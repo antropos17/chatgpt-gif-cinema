@@ -9,6 +9,7 @@ import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
+from urllib.error import URLError
 from PIL import Image
 
 from gif_cinema import cli, render
@@ -137,7 +138,7 @@ class RenderTests(unittest.TestCase):
         self.assertTrue(all(j["status"] == "human-review-required" for j in report["joins"]))
 
     def test_retry_cap_counts_failed_attempts(self):
-        with self.execution([cli.APIError(429), cli.APIError(503)]) as request, patch("time.sleep"), self.assertRaises(RuntimeError):
+        with self.execution([cli.APIError(429), cli.APIError(429)]) as request, patch("time.sleep"), self.assertRaises(RuntimeError):
             render.run(self.args("--execute", "--max-api-calls", "2"))
         self.assertEqual(request.call_count, 2)
         self.assertEqual(len(self.manifest()["attempts"]), 2)
@@ -145,7 +146,7 @@ class RenderTests(unittest.TestCase):
 
     def test_transient_retry_can_succeed_and_auth_never_retries(self):
         self.data["shots"] = [self.shot("01")]
-        with self.execution([cli.APIError(503), (animation(), None)]) as request, patch("time.sleep"):
+        with self.execution([cli.APIError(429), (animation(), None)]) as request, patch("time.sleep"):
             receipt = render.run(self.args("--execute", "--max-api-calls", "2"))
             self.assertEqual(receipt["api_calls"], 2)
         self.out = self.root / "auth-failure"
@@ -161,6 +162,108 @@ class RenderTests(unittest.TestCase):
             self.assertEqual(request.call_count, 1)
             self.assertNotIn("secret-fixture", str(caught.exception))
             self.assertNotIn("secret-fixture", (self.out / "render-manifest.json").read_text())
+
+    def test_uncertain_request_blocks_restart_until_explicit_review(self):
+        self.data["shots"] = [self.shot("01")]
+        for index, value in enumerate((TimeoutError("secret-fixture"),
+                                       URLError("secret-fixture"),
+                                       RuntimeError("secret-fixture"),
+                                       (b"GIF89a", None), cli.APIError(408), cli.APIError(503))):
+            with self.subTest(value=type(value).__name__):
+                self.out = self.root / f"uncertain-{index}"
+                with self.execution([value]) as request, patch("time.sleep"), self.assertRaises(RuntimeError):
+                    render.run(self.args("--execute"))
+                self.assertEqual(request.call_count, 1)
+                self.assertEqual(self.manifest()["attempts"][-1]["status"], "unknown")
+                before = (self.out / "render-manifest.json").read_bytes()
+                for flags in (("--execute",), ("--dry-run",)):
+                    with self.execution() as request, self.assertRaisesRegex(ValueError, "unknown cost"):
+                        render.run(self.args(*flags))
+                    request.assert_not_called()
+                self.assertEqual((self.out / "render-manifest.json").read_bytes(), before)
+                with self.execution() as request:
+                    render.run(self.args("--execute", "--force-shot", "01", "--max-api-calls", "1"))
+                self.assertEqual(request.call_count, 1)
+                with self.execution() as request:
+                    render.run(self.args("--execute", "--max-api-calls", "0"))
+                request.assert_not_called()
+
+    def test_real_client_timeout_cannot_be_paid_again_on_restart(self):
+        self.data["shots"] = [self.shot("01")]
+        client = cli.request_gif
+        def timeout(*args, **kwargs):
+            raise TimeoutError("secret-fixture")
+        def request_with_timeout(payload, key):
+            return client(payload, key, transport=timeout)
+        with self.execution(request_with_timeout) as request, self.assertRaises(RuntimeError):
+            render.run(self.args("--execute"))
+        self.assertEqual(request.call_count, 1)
+        with self.execution() as request, self.assertRaisesRegex(ValueError, "unknown cost"):
+            render.run(self.args("--execute"))
+        request.assert_not_called()
+        self.assertNotIn("secret-fixture", (self.out / "render-manifest.json").read_text())
+
+    def test_legacy_failed_attempts_require_review_unless_definitely_rejected(self):
+        self.data["shots"] = [self.shot("01")]
+        errors = ("Operation failed; provider and process details omitted", "Validation failed",
+                  "API HTTP 408", "API HTTP 503", "API HTTP 401", "API HTTP 429")
+        for index, error in enumerate(errors):
+            with self.subTest(error=error):
+                self.out = self.root / f"legacy-{index}"
+                self.out.mkdir()
+                manifest = {"schema_version": 1, "shots": {}, "runs": [],
+                            "attempts": [{"shot": "01", "status": "failed", "error": error}]}
+                (self.out / "render-manifest.json").write_text(json.dumps(manifest))
+                if error in {"API HTTP 401", "API HTTP 429"}:
+                    with self.execution() as request:
+                        render.run(self.args("--execute", "--max-api-calls", "1"))
+                    self.assertEqual(request.call_count, 1)
+                else:
+                    with self.execution() as request, self.assertRaisesRegex(ValueError, "unknown cost"):
+                        render.run(self.args("--execute"))
+                    request.assert_not_called()
+                self.assertEqual(self.manifest()["attempts"][0], manifest["attempts"][0])
+
+    def test_definitively_rejected_request_can_restart_without_force(self):
+        self.data["shots"] = [self.shot("01")]
+        with self.execution([cli.APIError(401)]) as request, self.assertRaises(RuntimeError):
+            render.run(self.args("--execute"))
+        self.assertEqual(request.call_count, 1)
+        self.assertEqual(self.manifest()["attempts"][-1]["status"], "failed")
+        self.assertEqual(self.manifest()["attempts"][-1]["http_status"], 401)
+        with self.execution() as request:
+            render.run(self.args("--execute", "--max-api-calls", "1"))
+        self.assertEqual(request.call_count, 1)
+
+    def test_failed_retake_preserves_and_reuses_accepted_footage(self):
+        with self.execution():
+            render.run(self.args("--execute"))
+        before = self.manifest()["shots"]
+        film = (self.out / "film.mp4").read_bytes()
+        with self.execution([TimeoutError()]) as request, self.assertRaises(RuntimeError):
+            render.run(self.args("--execute", "--force-shot", "02", "--max-api-calls", "1"))
+        self.assertEqual(request.call_count, 1)
+        self.assertEqual(self.manifest()["shots"], before)
+        self.assertEqual((self.out / "film.mp4").read_bytes(), film)
+        with self.execution() as request:
+            receipt = render.run(self.args("--execute", "--max-api-calls", "0"))
+        request.assert_not_called()
+        self.assertEqual(receipt["skipped"], 3)
+
+    def test_local_publication_failure_keeps_request_unresolved(self):
+        self.data["shots"] = [self.shot("01")]
+        write = cli.write_result
+        def fail_gif(path, *args, **kwargs):
+            if path.suffix == ".gif":
+                raise OSError("fixture disk failure")
+            return write(path, *args, **kwargs)
+        with self.execution() as request, patch("gif_cinema.cli.write_result", side_effect=fail_gif), self.assertRaises(OSError):
+            render.run(self.args("--execute"))
+        self.assertEqual(request.call_count, 1)
+        self.assertEqual(self.manifest()["attempts"][-1]["status"], "started")
+        with self.execution() as request, self.assertRaisesRegex(ValueError, "unknown cost"):
+            render.run(self.args("--execute"))
+        request.assert_not_called()
 
     def test_imports_zero_requests_and_invalid_input_preflight(self):
         self.imports()
@@ -247,6 +350,42 @@ class RenderTests(unittest.TestCase):
             render.run(self.args("--execute"))
         self.assertEqual(self.manifest()["shots"]["01"]["usage"], {"total_tokens": 42})
         self.assertNotIn("secret-fixture", (self.out / "render-manifest.json").read_text())
+
+    def test_older_export_is_rebuilt_locally_without_new_generation(self):
+        with self.execution():
+            render.run(self.args("--execute"))
+        manifest = self.manifest()
+        old_movie = (self.out / "film.mp4").read_bytes()
+        manifest["film"]["fingerprint"] = render.digest(render.encoded({
+            "shots": [r["sha256"] for r in manifest["shots"].values()],
+            "width": 32, "height": 32, "fps": 25, "audio": None}))
+        (self.out / "render-manifest.json").write_text(json.dumps(manifest))
+        with self.execution() as request, patch("gif_cinema.cli.film") as encode:
+            encode.side_effect = lambda args: Path(args.output).write_bytes(b"updated offline film")
+            render.run(self.args("--execute", "--max-api-calls", "0"))
+        request.assert_not_called()
+        encode.assert_called_once()
+        archive = self.out / f"film-{render.digest(old_movie)[:16]}.mp4"
+        self.assertEqual(archive.read_bytes(), old_movie)
+
+    def test_probe_rejects_decodable_movie_with_a_missing_frame(self):
+        info = {"codec_name": "h264", "width": 32, "height": 32,
+                "duration": "1.76", "nb_read_frames": "44"}
+        with patch("gif_cinema.render.subprocess.run") as run, self.assertRaisesRegex(RuntimeError, "verification"):
+            run.return_value.stdout = json.dumps({"streams": [info]}).encode()
+            render.probe(self.root / "film.mp4", 32, 32, 1.8, 25, 3)
+
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "FFmpeg and ffprobe required")
+    def test_short_shot_caption_matches_minimum_one_frame(self):
+        self.imports()
+        self.data["fps"] = 1
+        self.data["shots"] = self.data["shots"][:1]
+        (self.root / "source0.gif").write_bytes(animation((20, 20)))
+        with patch("gif_cinema.cli.request_gif") as request:
+            receipt = render.run(self.args("--execute", "--max-api-calls", "0"))
+        request.assert_not_called()
+        self.assertEqual(receipt["film_seconds"], 1.0)
+        self.assertIn("00:00:00,000 --> 00:00:01,000", (self.out / "captions.srt").read_text())
 
 
 if __name__ == "__main__":
