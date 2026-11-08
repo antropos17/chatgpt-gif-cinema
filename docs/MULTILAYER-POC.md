@@ -55,9 +55,12 @@ Types:
   Images fit within that box without changing aspect ratio. Animated sources are
   deliberately rejected in this first experiment. Source EXIF display orientation
   is normalized before compositing. Portable saves include a verified `sha256`.
-- `text`: editable single-line `text`, `font_size`, `fill`. Uses Pillow's bundled
-  default font. Font files and web fonts are not loaded. Font appearance and glyph
-  coverage depend on the installed Pillow version; the included example uses ASCII text.
+- `text`: editable single-line `text`, `font_size`, `fill`, and optional `font_id`.
+  The default `pillow-default` preserves the known bundled Aileron font. Explicit
+  `noto-sans-regular-2.004` loads the packaged OFL font for Russian/Azerbaijani.
+  Font bytes and glyph-coverage manifests are hash-pinned. No arbitrary font paths,
+  web-font downloads or automatic fallback are allowed. Saves record `font_sha256`
+  and the Pillow/FreeType environment; unsupported glyphs fail preflight.
 - `rect`: `size`, `fill`, optional `radius`, `stroke` and integer `stroke_width`.
 - `ellipse`: `size`, `fill`, optional `stroke` and integer `stroke_width`.
 
@@ -167,3 +170,11 @@ keyframed easing, not an imported dependency or executed artifact. This PoC's
 field names and time model are its own. No spec conformance, browser runtime,
 cross-player parity or expression support is claimed. The reference page was
 not fetched during this offline task.
+
+## Explicit Unicode text fonts
+
+Text layers may set `font_id: "noto-sans-regular-2.004"` for packaged Noto Sans.
+Legacy layers without this field keep Pillow's known bundled Aileron font.
+Missing glyphs are rejected before export, not substituted with boxes. Saves
+record font hashes and Pillow/FreeType versions. See [Unicode text](UNICODE-TEXT.md)
+for the supported scope, wheel licensing and deliberate migration procedure.

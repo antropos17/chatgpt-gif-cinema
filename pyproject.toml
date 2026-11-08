@@ -10,6 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["Pillow>=10.1"]
 license = "LicenseRef-GifCinema-Evaluation-1.0"
+license-files = ["LICENSE", "THIRD-PARTY-NOTICES.md", "gif_cinema/assets/fonts/OFL.txt"]
 authors = [{name = "GIF Cinema Contributors"}]
 keywords = ["openai", "gif", "animation", "film", "codex", "skill"]
 
@@ -21,3 +22,6 @@ gif-cinema = "gif_cinema.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["gif_cinema*"]
+
+[tool.setuptools.package-data]
+gif_cinema = ["assets/fonts/*.ttf", "assets/fonts/*.json", "assets/fonts/OFL.txt"]

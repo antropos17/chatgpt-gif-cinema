@@ -19,7 +19,7 @@ import stat
 import subprocess
 import tempfile
 
-from . import motion
+from . import motion, text_fonts
 from .motion import run_command
 
 FORMAT = 'gif-cinema-layered-scene'
@@ -125,7 +125,7 @@ def normalize_keyframes(keys):
 
 def normalize_scene(value):
     require_fields(value, ['format', 'schema_version', 'title', 'width', 'height', 'fps',
-                           'duration_ms', 'loop', 'matte', 'layers'],
+                           'duration_ms', 'loop', 'matte', 'layers', 'text_renderer'],
                    ['format', 'schema_version', 'width', 'height', 'duration_ms', 'layers'], 'Scene')
     scene = {'title': 'Untitled scene', 'fps': 50, 'loop': True, 'matte': '#101018', **copy.deepcopy(value)}
     if scene['format'] != FORMAT:
@@ -158,7 +158,7 @@ def normalize_scene(value):
     common = ['id', 'type', 'name', 'keyframes', 'in_ms', 'out_ms', 'anchor']
     special = {'rect': ['size', 'fill', 'stroke', 'stroke_width', 'radius'],
                'ellipse': ['size', 'fill', 'stroke', 'stroke_width'],
-               'text': ['text', 'font_size', 'fill'], 'image': ['source', 'size', 'sha256']}
+               'text': ['text', 'font_size', 'fill', 'font_id', 'font_sha256'], 'image': ['source', 'size', 'sha256']}
     for layer in layers:
         if not isinstance(layer, dict) or not isinstance(layer.get('type'), str) or layer['type'] not in special:
             raise ValueError('Layer type must be rect, ellipse, text or image')
@@ -193,6 +193,8 @@ def normalize_scene(value):
             row.setdefault('font_size', 32)
             motion.number(row['font_size'], 'font_size', 8, 160, True)
             row['fill'] = color(row.get('fill', '#ffffff'), 'text fill')
+            from .text_fonts import normalize_text_layer
+            row.update(normalize_text_layer(row))
         elif kind in ('rect', 'ellipse'):
             row['fill'] = color(row.get('fill', '#ffffff'), 'fill')
             row['stroke'] = color(row.get('stroke', '#00000000'), 'stroke')
@@ -207,16 +209,15 @@ def normalize_scene(value):
                 raise ValueError('Asset sha256 must be a lowercase SHA-256 digest')
         normalized.append(row)
     scene['layers'] = normalized
+    from .text_fonts import bind_renderer
+    bind_renderer(scene)
     raster_budget(scene)
     return scene
 
 
 def text_layout(layer):
-    from PIL import ImageFont
-    try:
-        font = ImageFont.load_default(size=layer['font_size'] * SUPERSAMPLE)
-    except TypeError as exc:
-        raise ValueError('Editable text requires Pillow 10.1 or newer with its bundled font') from exc
+    from .text_fonts import load_font
+    font = load_font(layer['font_id'], layer['font_size'] * SUPERSAMPLE)
     bounds = font.getbbox(layer['text'])
     width, height = bounds[2] - bounds[0], bounds[3] - bounds[1]
     if width > 4096 * SUPERSAMPLE or height > 512 * SUPERSAMPLE:
@@ -473,6 +474,8 @@ def render_scene(path, out, dry_run=False):
             'width': scene['width'], 'height': scene['height'], 'layer_count': len(scene['layers']),
             'loop': scene['loop'], 'scene_sha256': prepared['source_sha256'],
             'raster_budget': raster_budget(scene),
+            'text_renderer': scene.get('text_renderer'),
+            'font_assets': text_fonts.font_receipt(scene),
             'asset_sha256': {name: asset['sha256'] for name, asset in prepared['assets'].items()},
             'sampling': 'frame i at i/fps; endpoint at duration is diagnostic and is not exported twice'}
     if dry_run:
@@ -605,10 +608,10 @@ def render_scene(path, out, dry_run=False):
             'pillow': PIL.__version__, 'probe': probe, 'commands': commands, 'samples': samples, 'outputs': outputs,
             'limitations': ['Experimental GIF Cinema format, not Lottie-compatible.',
                 'Still image, text, ellipse and rounded rectangle layers only; no articulated animation.',
-                'No expressions, scripts, URLs, external fonts, parenting, masks, blend modes or Lottie import/export.',
+                'No expressions, scripts, URLs, font paths/downloads, parenting, masks, blend modes or Lottie import/export.',
                 'Layer order is back to front; opacity uses source-over alpha compositing.',
                 'GIF and MP4 are flattened against matte; PNG frames and isolated layers retain alpha.',
-                'Built-in Pillow text font is version-dependent; use the same Pillow version for pixel reproducibility.',
+                'Text font bytes are hash-pinned; saved text scenes require their recorded Pillow and FreeType versions.',
                 'MP4 has no inherent loop playback flag; enable repeat in the player.',
                 'Technical verification does not establish visual acceptance.']}
         receipt_raw = (json.dumps(receipt, ensure_ascii=False, indent=2, allow_nan=False) + '\n').encode('utf-8')

@@ -31,6 +31,11 @@ GIF; technical verification does not automatically accept the result.
 
 ## Experimental independent layers
 
+Unicode text can opt into the packaged, hash-pinned Noto Sans font for Russian
+and Azerbaijani. Missing glyphs fail preflight instead of rendering as boxes.
+Legacy text keeps its existing font and layout. [Unicode text and reproducibility](docs/UNICODE-TEXT.md).
+
+
 A separate source-only PoC animates local image, text, rectangle and ellipse layers
 independently, with editable keyframes and portable save/reopen verification.
 It is **not Lottie-compatible** and does not load expressions, web fonts or plugins.
@@ -145,5 +150,7 @@ The dry-run counts requests. Dollar cost depends on actual usage.
   resume. Authenticated generation evidence is documented separately. [Status and receipts](STATUS.md).
 - **License.** Personal non-commercial evaluation and research are permitted.
   Commercial use, redistribution, and hosting require permission. GIF Cinema is an
-  independent project. [Source-available evaluation license](LICENSE).
+  independent project. [Source-available evaluation license](LICENSE). The bundled
+  Noto font has its separate OFL 1.1 license, not these evaluation restrictions;
+  see [third-party notices](THIRD-PARTY-NOTICES.md).
 - **Support.** Follow the experiments on [Buy Me a Coffee](https://buymeacoffee.com/gifcinema).
