@@ -21,8 +21,11 @@ generation receipts are included. It is not a new versioned release.
 ## Multi-scene stories and motion design
 
 The current repository skill now includes **story beats, a character/prop bible,
-per-shot generation inputs, local animated titles, and GIF + MP4 export**. Build a
-longer story from distinct actions rather than stretching one loop.
+per-shot generation inputs, hash-verified take selection, local animated titles,
+and GIF + MP4 export**. Build a
+longer story from distinct actions rather than stretching one loop. Fill missing
+shots progressively with reviewed GIFs; portable project versions preserve earlier
+footage and use each selected take's actual timing.
 
 [**Use the storytelling skill**](docs/STORYTELLING-SKILL.md) · [Read the skill](.agents/skills/gif-cinema/SKILL.md)
 

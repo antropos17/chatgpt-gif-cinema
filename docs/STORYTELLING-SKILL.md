@@ -3,7 +3,7 @@
 [Back to GIF Cinema](../README.md) · [Skill instructions](../.agents/skills/gif-cinema/SKILL.md)
 
 GIF Cinema's current repository skill can plan a longer animated story, prepare
-individual generation inputs, assemble accepted GIF takes, add local animated title
+individual generation inputs, select hash-verified GIF takes, add local animated title
 cards, and export MP4 and GIF. It is a production workflow with executable helpers,
 not a new animation model or a promise of automatically smooth character motion.
 
@@ -65,9 +65,21 @@ not the generic planner or a newly generated long cartoon.
 4. **Review and accept takes.** Inspect identity, contacts, incoming/outgoing poses,
    and cause/effect. A clean reference and an accepted last frame can guide another
    shot; they do not guarantee continuity.
-5. **Edit and deliver.** Replace planned shots with accepted source paths, compile a
-   new source-only project, assemble the MP4 with a zero-call cap, then export the GIF.
-   Review the final encoded files, not just the source frames.
+5. **Select and preserve.** Record reviewed GIF paths, SHA-256 hashes and notes in a
+   takes manifest. `compile --takes` fills generated slots, verifies those exact bytes,
+   keeps original requests and replaces planned timing with actual source delays.
+   Partial selection is supported; missing actions stay explicit.
+6. **Edit and deliver.** Continue from the portable `storyboard.json` into a new project,
+   preserving earlier sources and title GIFs byte-for-byte. Once all actions exist,
+   assemble the MP4 with a zero-call cap, then export the GIF. Review final encoded
+   files, not just source frames. Caller review notes do not prove visual acceptance.
+
+The bundled `storyboard.pending.json` and `takes.example.json` exercise the entire
+plan-to-selected-media workflow using the same three existing astronaut GIFs, with
+zero requests. See [the selection format and commands](../.agents/skills/gif-cinema/references/story-project.md#select-reviewed-takes).
+Each generated slot can receive a different reviewed action, so longer stories can
+be completed progressively without replacing earlier shots. The 14-action plan still
+requires its own footage; this update does not generate or claim a completed long cartoon.
 
 The title renderer supplies a once-only text entrance and animated accent rule, with
 an editable hold. It does not provide layered prop animation, generated poses,

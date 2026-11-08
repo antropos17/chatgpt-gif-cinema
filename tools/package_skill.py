@@ -17,6 +17,7 @@ def package(target):
         'references/generation.md', 'references/review.md',
         'references/storytelling.md', 'references/story-project.md',
         'assets/example/film.json', 'assets/example/storyboard.json',
+        'assets/example/storyboard.pending.json', 'assets/example/takes.example.json',
         'assets/example/long-story.plan.json', 'assets/example/shot-01.gif',
         'assets/example/shot-02.gif', 'assets/example/shot-03.gif',
     ]
