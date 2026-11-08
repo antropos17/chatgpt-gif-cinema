@@ -10,6 +10,10 @@ editable text, together with FFmpeg and ffprobe for media export.
 
 The included scene uses only editable shapes and text, with independent layer
 motion. No media download, bundled artwork or API key is needed.
+The card uses explicit `smootherstep` on both outgoing segments, so its angular
+velocity and acceleration reach zero at the midpoint turn and loop seam. The
+example tests check near-boundary angular speed and symmetric rendered card poses;
+these checks do not replace visual review of the encoded loop.
 
 ```sh
 python -m gif_cinema.layers render examples/layered-shapes.json --out output/layers-plan --dry-run

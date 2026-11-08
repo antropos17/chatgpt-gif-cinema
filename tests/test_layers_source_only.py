@@ -43,6 +43,45 @@ class SourceOnlyLayerTests(unittest.TestCase):
         self.assertNotEqual(first.tobytes(), middle.tobytes())
         self.assertEqual(path.read_bytes(), original)
 
+    def test_example_card_rotation_stops_smoothly_at_turn_and_loop(self):
+        path = Path(__file__).resolve().parents[1] / 'examples' / 'layered-shapes.json'
+        scene = layers.load_scene(path)
+        card = next(row for row in scene['layers'] if row['id'] == 'card')
+        duration = scene['duration_ms'] / 1000
+
+        def angle(seconds):
+            return layers.layer_transform(scene, card, seconds * 1000)['rotation']
+
+        turn, epsilon = duration / 2, duration * 1e-4
+        velocities = {
+            'before turn': (angle(turn) - angle(turn - epsilon)) / epsilon,
+            'after turn': (angle(turn + epsilon) - angle(turn)) / epsilon,
+            'before seam': (angle(duration) - angle(duration - epsilon)) / epsilon,
+            'after seam': (angle(epsilon) - angle(0)) / epsilon,
+        }
+        self.assertEqual(angle(0), angle(duration))
+        self.assertNotEqual(angle(0), angle(turn))
+        for label, velocity in velocities.items():
+            with self.subTest(boundary=label):
+                # Quintic easing tends to zero angular speed on both sides.
+                # A missing outgoing easing yields 12 degrees/second here.
+                self.assertLess(abs(velocity), 1e-3)
+
+    def test_example_card_rendered_motion_is_symmetric_at_turn_and_loop(self):
+        path = Path(__file__).resolve().parents[1] / 'examples' / 'layered-shapes.json'
+        prepared = layers.prepare_scene(path)
+        duration = prepared['scene']['duration_ms']
+        first, _ = layers.render_at(prepared, 0, only_layer='card')
+        middle, _ = layers.render_at(prepared, duration / 2, only_layer='card')
+        self.assertNotEqual(first.tobytes(), middle.tobytes())
+        # Check actual rasterized positions around the seam and direction change,
+        # not just keyframe names or the conceptual closing position.
+        for progress in (0, .04, .46, .48):
+            with self.subTest(progress=progress):
+                left, _ = layers.render_at(prepared, duration * progress, only_layer='card')
+                right, _ = layers.render_at(prepared, duration * (1 - progress), only_layer='card')
+                self.assertEqual(layers.digest(left.tobytes()), layers.digest(right.tobytes()))
+
 
 if __name__ == '__main__':
     unittest.main()

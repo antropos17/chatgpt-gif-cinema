@@ -30,7 +30,8 @@
       "keyframes": [
         {
           "at": 0,
-          "rotation": -3
+          "rotation": -3,
+          "easing": "smootherstep"
         },
         {
           "at": 0.5,

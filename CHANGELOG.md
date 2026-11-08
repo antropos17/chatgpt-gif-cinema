@@ -2,6 +2,8 @@
 
 ## Unreleased — experimental source-only independent layers
 
+- Give both halves of the asset-free example card rotation explicit smootherstep
+  easing; test the angular speed at the turn and loop seam and symmetric rendered poses.
 - Add a separate `python -m gif_cinema.layers` proof of concept for independent
   still-image, text, rectangle and ellipse layers, local timelines, anchors,
   source-over alpha and keyframed easing. This is not Lottie-compatible.
