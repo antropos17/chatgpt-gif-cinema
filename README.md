@@ -10,6 +10,14 @@ export an MP4. Start with the included footage and make a film without an API ke
 
 [![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml) [![Agent skill 0.1.1](https://img.shields.io/badge/agent_skill-0.1.1-e9a67c)](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) [![Source-available evaluation license](https://img.shields.io/badge/license-source--available-9bbfaf)](LICENSE)
 
+## Source-only reliability preview
+
+This branch adds bounded GIF decoding, FFmpeg capability checks, media-process
+timeouts and durable render manifests. It keeps the existing CLI and checkout
+examples. No new media, packaged `demo`, editing/motion commands or standalone
+generation receipts are included. It is not a new versioned release.
+[Render limits and recovery](docs/SCRIPT-FORMAT.md).
+
 ## See the difference
 
 ![A cat walks toward the window. The left panel shows the source GIF timing and the right shows the same take after local finishing.](docs/assets/showcase/cat-preview.gif)

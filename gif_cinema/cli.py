@@ -17,6 +17,13 @@ from urllib.request import Request, urlopen
 
 API_URL = "https://api.openai.com/v1/images/generations"
 MODELS = ("gpt-image-2.6-flare", "gpt-image-2.6-sunburst")
+# Shared ingestion limits cover imported footage and decoded provider results.
+# The pixel budget counts every retained, fully composited RGB drawing.
+MAX_GIF_BYTES = 128 * 1024 * 1024
+MAX_GIF_FRAME_PIXELS = 16 * 1024 * 1024
+MAX_GIF_FRAMES = 1500
+MAX_GIF_PIXEL_FRAMES = 160 * 1024 * 1024
+MEDIA_TIMEOUT_SECONDS = 300
 
 
 class APIError(RuntimeError):
@@ -25,26 +32,151 @@ class APIError(RuntimeError):
         self.status = status
         super().__init__(f"OpenAI API HTTP {status}; response body omitted to protect credentials")
 
+def read_gif_bytes(source):
+    """Bound actual reads, including streams and files that grow during reading."""
+    if hasattr(source, "read"):
+        try:
+            source.seek(0)
+        except (AttributeError, io.UnsupportedOperation):
+            pass  # Non-seekable streams are consumed from their current position.
+        raw = source.read(MAX_GIF_BYTES + 1)
+    else:
+        with open(source, "rb") as stream:
+            raw = stream.read(MAX_GIF_BYTES + 1)
+    if len(raw) > MAX_GIF_BYTES:
+        raise ValueError("GIF exceeds the 128 MiB input limit")
+    return raw
+
+
+def check_gif_limits(raw):
+    """Scan GIF block sizes before Pillow can allocate disposal/composite images.
+
+    This is a resource preflight, not a substitute for decoding every frame.
+    In particular, a later image descriptor can grow a tiny logical screen.
+    """
+    if raw[:6] not in (b"GIF87a", b"GIF89a"):
+        raise ValueError("not a GIF")
+    if len(raw) < 13:
+        raise ValueError("Invalid or truncated GIF")
+    width, height = int.from_bytes(raw[6:8], 'little'), int.from_bytes(raw[8:10], 'little')
+    if not width or not height:
+        raise ValueError("Invalid GIF dimensions")
+    if width * height > MAX_GIF_FRAME_PIXELS:
+        raise ValueError("GIF frame exceeds the 16 megapixel limit")
+    offset = 13 + ((3 << ((raw[10] & 7) + 1)) if raw[10] & 128 else 0)
+    count, pixels = 0, 0
+
+    def skip_blocks(position):
+        while position < len(raw):
+            size = raw[position]
+            position += 1
+            if size == 0:
+                return position
+            position += size
+        raise ValueError("Invalid or truncated GIF data blocks")
+
+    while offset < len(raw):
+        marker = raw[offset]
+        offset += 1
+        if marker == 0x3B:  # Trailer.
+            return
+        if marker == 0x21:
+            if offset + 2 > len(raw):
+                raise ValueError("Invalid or truncated GIF extension")
+            label, size = raw[offset], raw[offset + 1]
+            offset += 2
+            if label == 0xFE:  # Comments may have an empty first data block.
+                offset = skip_blocks(offset - 1)
+                continue
+            # Pillow consumes the first extension block separately, then more
+            # blocks. An empty non-comment header can make it eat the following
+            # image marker as a block length and expose hidden image descriptors.
+            required = {0xF9: 4, 0x01: 12, 0xFF: 11}.get(label)
+            if required is None or size != required or offset + size >= len(raw):
+                raise ValueError("Invalid or unsupported GIF extension header")
+            header = raw[offset:offset + size]
+            offset += size
+            if label == 0xF9:
+                if raw[offset] != 0:
+                    raise ValueError("Invalid GIF graphic control extension terminator")
+                offset += 1
+            elif label == 0xFF and header == b"NETSCAPE2.0":
+                # Pillow also reads Netscape's loop block separately. Require
+                # its complete fixed layout, including the single terminator,
+                # so an empty loop block cannot desynchronize the decoder.
+                if (offset + 5 > len(raw) or raw[offset:offset + 2] != b"\x03\x01"
+                        or raw[offset + 4] != 0):
+                    raise ValueError("Invalid GIF NETSCAPE loop extension")
+                offset += 5
+            else:
+                offset = skip_blocks(offset)
+            continue
+        if marker != 0x2C or offset + 9 > len(raw):
+            raise ValueError("Invalid or truncated GIF image descriptor")
+        x, y, w, h = (int.from_bytes(raw[position:position + 2], 'little')
+                      for position in range(offset, offset + 8, 2))
+        if not w or not h:
+            raise ValueError("Invalid GIF frame dimensions")
+        width, height = max(width, x + w), max(height, y + h)
+        if width * height > MAX_GIF_FRAME_PIXELS:
+            raise ValueError("GIF frame exceeds the 16 megapixel limit")
+        count += 1
+        pixels += width * height
+        if count > MAX_GIF_FRAMES:
+            raise ValueError("GIF exceeds the 1500 frame limit")
+        if pixels > MAX_GIF_PIXEL_FRAMES:
+            raise ValueError("GIF exceeds the decoded pixel budget (160 megapixels across frames)")
+        flags = raw[offset + 8]
+        offset += 9 + ((3 << ((flags & 7) + 1)) if flags & 128 else 0)
+        offset = skip_blocks(offset + 1)  # Skip the LZW code size, then image data.
+    raise ValueError("Invalid or truncated GIF; missing trailer")
+
+
 def validate_gif(source):
-    """Decode every frame before accepting an animated GIF."""
+    """Decode every accepted frame within explicit file, frame and pixel budgets."""
     from PIL import Image, ImageSequence
     try:
-        with Image.open(source) as im:
+        raw = read_gif_bytes(source)
+        check_gif_limits(raw)
+        with Image.open(io.BytesIO(raw)) as im:
             if im.format != "GIF":
                 raise ValueError("not a GIF")
             frames, durations = [], []
+            pixels = 0
             loop = im.info.get("loop")
             for frame in ImageSequence.Iterator(im):
+                # Check before convert/load allocates this composited drawing.
+                # Later GIF descriptors can expand the logical canvas.
+                frame_pixels = frame.width * frame.height
+                if frame_pixels > MAX_GIF_FRAME_PIXELS:
+                    raise ValueError("GIF frame exceeds the 16 megapixel limit")
+                if len(frames) >= MAX_GIF_FRAMES:
+                    raise ValueError("GIF exceeds the 1500 frame limit")
+                if pixels + frame_pixels > MAX_GIF_PIXEL_FRAMES:
+                    raise ValueError("GIF exceeds the decoded pixel budget (160 megapixels across frames)")
                 duration = int(frame.info.get("duration", 0))
                 if duration < 20:
                     raise ValueError("GIF frames must have a duration of at least 20 ms")
                 frames.append(frame.convert("RGB").copy())
                 durations.append(duration)
+                pixels += frame_pixels
             if len(frames) < 2:
                 raise ValueError("GIF must contain at least two frames")
             return frames, durations, loop
+    except Image.DecompressionBombError as exc:
+        raise ValueError("GIF exceeds the decoder's safe image dimensions") from exc
     except (OSError, EOFError) as exc:
         raise ValueError("Invalid or truncated GIF") from exc
+
+
+def run_media(command):
+    """Bound encoder/probe work and never allow subprocesses to wait for stdin."""
+    try:
+        return subprocess.run(command, check=True, capture_output=True,
+                              stdin=subprocess.DEVNULL, timeout=MEDIA_TIMEOUT_SECONDS)
+    except subprocess.TimeoutExpired:
+        tool = Path(command[0]).name
+        raise RuntimeError(f"{tool} timed out after {MEDIA_TIMEOUT_SECONDS} seconds; output was not published") from None
 
 @contextmanager
 def output_lock(path):
@@ -127,7 +259,7 @@ def generate(args):
             if getattr(args, "resume", False):
                 if not out.is_file() or not meta.is_file():
                     raise ValueError("Cannot resume: GIF and metadata are both required")
-                raw = out.read_bytes()
+                raw = read_gif_bytes(out)
                 saved = json.loads(meta.read_text(encoding="utf-8"))
                 validate_gif(io.BytesIO(raw))
                 if not isinstance(saved, dict) or saved.get("parameters") != payload or saved.get("sha256") != hashlib.sha256(raw).hexdigest():
@@ -153,6 +285,7 @@ def generate(args):
         print(f"Created {out} ({len(raw):,} bytes)")
 
 def film(args):
+    from .doctor import require_film_capabilities
     if not shutil.which("ffmpeg"):
         raise RuntimeError("ffmpeg is required: https://ffmpeg.org/download.html")
     if args.width <= 0 or args.height <= 0 or args.width % 2 or args.height % 2 or args.fps <= 0:
@@ -170,6 +303,7 @@ def film(args):
     force = getattr(args, "force", False)
     if out.exists() and (not force or not out.is_file()):
         raise ValueError("Film output already exists; use --force to replace it")
+    require_film_capabilities(audio=bool(args.audio))
     command=["ffmpeg","-hide_banner","-loglevel","error","-nostdin","-y"]
     for clip in clips:
         command+=["-ignore_loop","1","-i",str(clip)]
@@ -190,7 +324,7 @@ def film(args):
         staged = Path(name)
         try:
             command+=["-r",str(args.fps),"-c:v","libx264","-pix_fmt","yuv420p","-movflags","+faststart",str(staged)]
-            subprocess.run(command,check=True)
+            run_media(command)
             if staged.stat().st_size == 0:
                 raise RuntimeError("FFmpeg produced an empty movie")
             publish_file(staged, out, force)
@@ -268,6 +402,6 @@ def build_parser():
 def main():
     args=build_parser().parse_args()
     try:args.func(args)
-    except (RuntimeError,ValueError,OSError,subprocess.CalledProcessError) as exc:
+    except (RuntimeError,ValueError,OSError,subprocess.SubprocessError) as exc:
         print(f"Error: {exc}",file=sys.stderr)
         raise SystemExit(1) from exc

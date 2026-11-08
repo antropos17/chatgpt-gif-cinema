@@ -40,6 +40,18 @@ imports. Script captions do not burn text into source GIFs. Width/height/FPS CLI
 overrides are validated before execution. The output directory must be new/empty or
 contain a valid render manifest. Keep scripts and imported originals outside it.
 
+All shared GIF ingestion, including imports, cached footage and decoded provider
+results, is bounded to 128 MiB of encoded bytes, 1,500 frames, 16,777,216 pixels per
+frame and 167,772,160 decoded pixels across all frames. Pixel limits count the full
+composited drawing, not just changed rectangles. Reads are bounded even if a file
+grows; GIF descriptors are scanned before decoding, so disposal frames and later
+canvas expansion cannot bypass the pixel limit. Oversized footage fails explicitly
+rather than being silently resized or truncated.
+Extension framing is checked before decoding as well: standard graphic control,
+comment, plain-text and application extensions are supported, with fixed headers
+and a complete NETSCAPE loop payload. Malformed or unknown extensions are rejected
+instead of relying on permissive decoder recovery that could hide image descriptors.
+
 ## Execution and accounting
 
 `--execute` explicitly permits generation, subject to `--max-api-calls` (default 3).
@@ -51,7 +63,13 @@ outcomes are not retried, either automatically or by simply restarting the comma
 Authentication and other definitive 4xx rejections are not retried in the same run.
 Each invocation gets its own cap; attempts and invocation counts remain in the manifest.
 
-The attempt is saved as `started` before the request. A network failure, server error
+The attempt is saved as `started` before the request, using a flushed and fsynced
+temporary file, atomic replacement and directory sync where supported. Newly created
+project directory entries are synced before requests. Real sync failures stop dispatch.
+Directory sync is best-effort when unsupported on POSIX and is unavailable through
+Python's OS API on Windows; file fsync remains mandatory. These measures improve
+local crash recovery, not provider-side exactly-once billing.
+A network failure, server error
 or unreadable result is saved as `unknown`, because the provider may already have
 generated and charged for the shot. A crash leaves `started` durable. Both states
 block another generation on the next run rather than silently paying again. Older
@@ -79,7 +97,13 @@ An encoder/probe failure preserves the accepted movie. Do not manually edit gene
 project files; changed hashes stop execution. After a crash, remove a lock only after
 confirming the owning process has stopped.
 
-Execution requires both FFmpeg and ffprobe before any paid call. Output is staged,
+Execution checks runnable FFmpeg/ffprobe, the `libx264` encoder and all assembly
+filters before any paid call. Scripts with audio also require AAC and `apad`.
+Offline planning still needs no FFmpeg and performs none of these process checks.
+Assembly, probe and complete decode subprocesses have a 300-second deadline each
+and cannot wait on standard input. A timeout fails the run, cleans staging/locks
+and preserves an existing accepted movie; completed shots remain reusable.
+Output is staged,
 checked for H.264, dimensions, decoded frame count and duration, then fully decoded.
 Each shot's output frame count is its duration multiplied by FPS, rounded to the
 nearest integer (ties to even), with a minimum of one frame. Final-frame holds are

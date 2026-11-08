@@ -13,6 +13,7 @@ from urllib.error import URLError
 from PIL import Image
 
 from gif_cinema import cli, render
+from gif_cinema import durability
 from test_reliability import animation
 
 
@@ -51,6 +52,8 @@ class RenderTests(unittest.TestCase):
             Path(args.output).write_bytes(b"offline film fixture")
         with patch.dict(os.environ, {"OPENAI_API_KEY": "secret-fixture"}), \
                 patch("gif_cinema.render.shutil.which", return_value="fixture"), \
+                patch("gif_cinema.doctor.require_film_capabilities"), \
+                patch("gif_cinema.doctor.inspect_tool", return_value={"available": True}), \
                 patch("gif_cinema.cli.request_gif", side_effect=responses, return_value=(animation((200, 200)), {"total_tokens": 10})) as request, \
                 patch("gif_cinema.cli.film", side_effect=encode), \
                 patch("gif_cinema.render.probe", return_value={"duration": "1.2", "codec_name": "h264"}):
@@ -305,6 +308,129 @@ class RenderTests(unittest.TestCase):
             render.run(self.args("--execute"))
         request.assert_not_called()
 
+    def test_missing_encoder_or_filters_blocks_before_key_lookup_or_output(self):
+        environment_get = os.environ.get
+        def no_key(name, *args):
+            if name == 'OPENAI_API_KEY':
+                raise AssertionError('Key lookup forbidden')
+            return environment_get(name, *args)
+        for capability in ('h264_encoder', 'core_filters'):
+            caps = {'h264_encoder': True, 'core_filters': True}
+            caps[capability] = False
+            with self.subTest(capability=capability), \
+                    patch('gif_cinema.render.shutil.which', return_value='fixture'), \
+                    patch('gif_cinema.doctor.inspect_ffmpeg_capabilities', return_value=caps), \
+                    patch('os.environ.get', side_effect=no_key), \
+                    patch('gif_cinema.cli.request_gif') as request, self.assertRaisesRegex(RuntimeError, 'FFmpeg'):
+                render.run(self.args('--execute'))
+            request.assert_not_called()
+            self.assertFalse(self.out.exists())
+
+    def test_unusable_ffprobe_blocks_requests_and_output_creation(self):
+        with patch('gif_cinema.render.shutil.which', return_value='fixture'), \
+                patch('gif_cinema.doctor.require_film_capabilities'), \
+                patch('gif_cinema.doctor.inspect_tool', return_value={'available': False}), \
+                patch('gif_cinema.cli.request_gif') as request, self.assertRaisesRegex(RuntimeError, 'ffprobe could not run'):
+            render.run(self.args('--execute'))
+        request.assert_not_called()
+        self.assertFalse(self.out.exists())
+
+    def test_audio_capabilities_are_checked_before_paid_calls(self):
+        (self.root / 'audio.wav').write_bytes(b'local audio fixture')
+        self.data['audio'] = 'audio.wav'
+        caps = {'h264_encoder': True, 'core_filters': True, 'aac_encoder': False, 'audio_padding': True}
+        with patch('gif_cinema.render.shutil.which', return_value='fixture'), \
+                patch('gif_cinema.doctor.inspect_ffmpeg_capabilities', return_value=caps), \
+                patch('gif_cinema.cli.request_gif') as request, self.assertRaisesRegex(RuntimeError, 'AAC encoder'):
+            render.run(self.args('--execute'))
+        request.assert_not_called()
+        self.assertFalse(self.out.exists())
+
+    def test_dry_run_never_probes_local_tools(self):
+        with patch('gif_cinema.doctor.inspect_ffmpeg_capabilities') as capabilities, \
+                patch('gif_cinema.doctor.inspect_tool') as tool:
+            render.run(self.args('--dry-run'))
+        capabilities.assert_not_called()
+        tool.assert_not_called()
+        self.assertFalse(self.out.exists())
+
+    def test_render_attempt_is_file_and_directory_synced_before_dispatch(self):
+        self.data['shots'] = [self.shot('01')]
+        events = []
+        real_fsync = os.fsync
+        real_write = durability.durable_write
+        def fsync(fd):
+            real_fsync(fd)
+            events.append('fsync')
+        def write(path, raw):
+            before = len(events)
+            real_write(path, raw)
+            if path.name == 'render-manifest.json' and json.loads(raw).get('attempts'):
+                self.assertGreater(len(events), before)
+                events.append('synced attempt')
+        def request(*args, **kwargs):
+            self.assertEqual(events[-1], 'synced attempt')
+            self.assertEqual(self.manifest()['attempts'][-1]['status'], 'started')
+            return animation(), None
+        with self.execution(request), patch.object(render, 'durable_write', side_effect=write), \
+                patch('gif_cinema.durability.os.fsync', side_effect=fsync):
+            render.run(self.args('--execute', '--max-api-calls', '1'))
+
+    def test_pre_request_file_sync_failure_prevents_dispatch(self):
+        real_write = durability.durable_write
+        def fail_attempt(path, raw):
+            if path.name == 'render-manifest.json' and json.loads(raw).get('attempts'):
+                with patch('gif_cinema.durability.os.fsync', side_effect=OSError('file fsync failed')):
+                    return real_write(path, raw)
+            return real_write(path, raw)
+        with self.execution() as request, patch.object(render, 'durable_write', side_effect=fail_attempt):
+            with self.assertRaisesRegex(OSError, 'file fsync failed'):
+                render.run(self.args('--execute'))
+        request.assert_not_called()
+        self.assertEqual(self.manifest()['attempts'], [])
+        self.assertFalse(list(self.out.glob('*.tmp')))
+        self.assertFalse(list(self.out.glob('*.lock')))
+
+    def test_pre_request_directory_sync_failure_keeps_started_attempt_blocked(self):
+        real_write = durability.durable_write
+        def fail_attempt(path, raw):
+            if path.name == 'render-manifest.json' and json.loads(raw).get('attempts'):
+                with patch('gif_cinema.durability.sync_directory', side_effect=OSError('directory fsync failed')):
+                    return real_write(path, raw)
+            return real_write(path, raw)
+        with self.execution() as request, patch.object(render, 'durable_write', side_effect=fail_attempt):
+            with self.assertRaisesRegex(OSError, 'directory fsync failed'):
+                render.run(self.args('--execute'))
+        request.assert_not_called()
+        self.assertEqual(self.manifest()['attempts'][-1]['status'], 'started')
+        with self.execution() as request, self.assertRaisesRegex(ValueError, 'unknown cost'):
+            render.run(self.args('--execute'))
+        request.assert_not_called()
+
+    def test_new_project_directory_sync_failure_prevents_dispatch(self):
+        with self.execution() as request, patch.object(render, 'sync_directory', side_effect=OSError('directory fsync failed')):
+            with self.assertRaisesRegex(OSError, 'directory fsync failed'):
+                render.run(self.args('--execute'))
+        request.assert_not_called()
+        self.assertFalse((self.out / 'render-manifest.json').exists())
+
+    def test_nested_project_directory_entries_are_synced(self):
+        self.out = self.root / 'new' / 'nested' / 'project'
+        with patch.object(render, 'sync_directory') as sync:
+            render.create_project_directory(self.out)
+        self.assertEqual([call.args[0] for call in sync.call_args_list],
+                         [self.out.parent, self.out.parent.parent, self.root])
+
+    def test_oversized_import_in_last_shot_prevents_all_requests(self):
+        self.data['shots'][-1] = {'id': '03', 'source': 'large.gif',
+                                   'first_frame_target': 'red', 'last_frame_target': 'blue'}
+        (self.root / 'large.gif').write_bytes(animation())
+        with patch.object(cli, 'MAX_GIF_PIXEL_FRAMES', 1), self.execution() as request:
+            with self.assertRaisesRegex(ValueError, 'pixel budget'):
+                render.run(self.args('--execute'))
+        request.assert_not_called()
+        self.assertFalse(self.out.exists())
+
     def test_ffprobe_missing_invalid_fps_and_foreign_output_block_requests(self):
         with patch("gif_cinema.render.shutil.which", side_effect=lambda name: "ffmpeg" if name == "ffmpeg" else None), patch("gif_cinema.cli.request_gif") as request, self.assertRaisesRegex(RuntimeError, "ffprobe"):
             render.run(self.args("--execute"))
@@ -371,7 +497,7 @@ class RenderTests(unittest.TestCase):
     def test_probe_rejects_decodable_movie_with_a_missing_frame(self):
         info = {"codec_name": "h264", "width": 32, "height": 32,
                 "duration": "1.76", "nb_read_frames": "44"}
-        with patch("gif_cinema.render.subprocess.run") as run, self.assertRaisesRegex(RuntimeError, "verification"):
+        with patch("gif_cinema.cli.subprocess.run") as run, self.assertRaisesRegex(RuntimeError, "verification"):
             run.return_value.stdout = json.dumps({"streams": [info]}).encode()
             render.probe(self.root / "film.mp4", 32, 32, 1.8, 25, 3)
 
