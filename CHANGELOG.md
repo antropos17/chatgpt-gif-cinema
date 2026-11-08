@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — source-only motion recipes
+
+- Add standalone offline `motion` for keyframed pan, zoom, rotation and opacity,
+  source trimming/retiming, repeat/reverse/ping-pong playback, PNG frames, GIF,
+  verified MP4 and optional bounded spritesheets.
+- Preserve full-resolution small color accents in the shared GIF palette, honor
+  EXIF still-image orientation and sample rational timing boundaries exactly.
+- Reuse corrected GIF extension preflight with stricter motion input budgets;
+  reject expanding GIF canvases before decoding. Search feasible atlas grids.
+- Include motion source, generic recipe and offline regressions only. No new
+  media, demo resources, editor or separate finishing feature is added.
+
 ## Unreleased — source-only backend hardening
 
 - Validate GIF extension framing before decoding, including fixed headers and

@@ -53,12 +53,15 @@ def check_gif_limits(raw):
 
     This is a resource preflight, not a substitute for decoding every frame.
     In particular, a later image descriptor can grow a tiny logical screen.
+    Return allocation statistics so callers can enforce stricter limits before
+    opening the decoder; existing shared ingestion limits still apply here.
     """
     if raw[:6] not in (b"GIF87a", b"GIF89a"):
         raise ValueError("not a GIF")
     if len(raw) < 13:
         raise ValueError("Invalid or truncated GIF")
     width, height = int.from_bytes(raw[6:8], 'little'), int.from_bytes(raw[8:10], 'little')
+    initial_size = (width, height)
     if not width or not height:
         raise ValueError("Invalid GIF dimensions")
     if width * height > MAX_GIF_FRAME_PIXELS:
@@ -79,7 +82,8 @@ def check_gif_limits(raw):
         marker = raw[offset]
         offset += 1
         if marker == 0x3B:  # Trailer.
-            return
+            return {'frames': count, 'pixel_frames': pixels, 'width': width, 'height': height,
+                    'canvas_expanded': (width, height) != initial_size}
         if marker == 0x21:
             if offset + 2 > len(raw):
                 raise ValueError("Invalid or truncated GIF extension")
@@ -379,6 +383,8 @@ def build_parser():
     sub=p.add_subparsers(dest="command",required=True)
     from .render import add_parser
     add_parser(sub)
+    from .motion import add_parser as add_motion_parser
+    add_motion_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")

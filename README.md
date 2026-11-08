@@ -14,9 +14,20 @@ export an MP4. Start with the included footage and make a film without an API ke
 
 This branch adds bounded GIF decoding, FFmpeg capability checks, media-process
 timeouts and durable render manifests. It keeps the existing CLI and checkout
-examples. No new media, packaged `demo`, editing/motion commands or standalone
-generation receipts are included. It is not a new versioned release.
+examples. A standalone offline `motion` command now adds keyframed transforms,
+retiming and verified exports for your own local image or footage. No new media,
+packaged `demo`, editor, separate finishing command or standalone generation
+receipts are included. It is not a new versioned release.
 [Render limits and recovery](docs/SCRIPT-FORMAT.md).
+[Motion recipes and limits](docs/MOTION-DESIGN.md).
+
+```bash
+python -m gif_cinema motion poster.png --preset push-in --out output/poster --dry-run
+python -m gif_cinema motion poster.png --preset push-in --out output/poster
+```
+
+The source stays unchanged. Review the full-color MP4 and the separately quantized
+GIF; technical verification does not automatically accept the result.
 
 ## See the difference
 
