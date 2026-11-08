@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased — experimental source-only independent layers
+
+- Give both halves of the asset-free example card rotation explicit smootherstep
+  easing; test the angular speed at the turn and loop seam and symmetric rendered poses.
+- Add a separate `python -m gif_cinema.layers` proof of concept for independent
+  still-image, text, rectangle and ellipse layers, local timelines, anchors,
+  source-over alpha and keyframed easing. This is not Lottie-compatible.
+- Add portable scene save/reopen, verified GIF/MP4/PNG export and a verifier that
+  rerenders every saved frame and checks receipt hashes.
+- Retain reviewed raster budgets, regular-file/FIFO defenses, shared 16 MiB
+  receipt limits and bounded normalized scene serialization.
+- Reuse the published bounded media runner; include only source, documentation,
+  tests and an asset-free shapes/text JSON example. No showcase/demo media or
+  artwork generator is included. Editable text requires Pillow 10.1 or newer.
+
 ## Unreleased — source-only motion recipes
 
 - Add standalone offline `motion` for keyframed pan, zoom, rotation and opacity,
