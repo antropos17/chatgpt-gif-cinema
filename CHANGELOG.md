@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — safe resume and exact export timing
+
+- Keep timeout, HTTP 408/5xx and unreadable-response outcomes unresolved across
+  render restarts, including ambiguous failures from older manifests. Only rate
+  limit rejections retry automatically; explicit review is needed before a new
+  attempt with an unknown cost.
+- Preserve the final GIF hold and use an explicit frame count/output rate for
+  each shot. Check the exact exported frame count and keep captions on the same
+  timeline. Rebuild older cached MP4s locally while retaining their archives.
+- Add offline regressions for real-client timeouts, safe/unsafe resume, failed
+  retakes, publication failures, legacy records, fractional timing and short shots.
+
 ## Skill 0.1.1 — verified showcase
 
 - Add matched before/after footage for the astronaut, dog and cat, with varied

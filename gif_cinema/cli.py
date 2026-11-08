@@ -158,8 +158,10 @@ def film(args):
     if args.width <= 0 or args.height <= 0 or args.width % 2 or args.height % 2 or args.fps <= 0:
         raise ValueError("Film dimensions must be positive even integers and FPS must be positive")
     clips=[Path(p).resolve() for p in args.clips]
+    clip_frames = []
     for clip in clips:
-        validate_gif(clip)
+        _, durations, _ = validate_gif(clip)
+        clip_frames.append(max(1, round(sum(durations) * args.fps / 1000)))
     out=Path(args.output).resolve();out.parent.mkdir(parents=True,exist_ok=True)
     if out.suffix.lower() != ".mp4":
         raise ValueError("Film output must have a .mp4 extension")
@@ -176,7 +178,9 @@ def film(args):
         command+=["-i",str(Path(args.audio).resolve())]
     filters=[]
     for i in range(len(clips)):
-        filters.append(f"[{i}:v]fps={args.fps},scale={args.width}:{args.height}:force_original_aspect_ratio=decrease,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setpts=PTS-STARTPTS[v{i}]")
+        # Pad before resampling so FFmpeg cannot drop the final GIF delay.
+        # Trim to an explicit nearest-frame duration (ties to even), at least one.
+        filters.append(f"[{i}:v]tpad=stop_mode=clone:stop=-1,fps={args.fps},trim=end_frame={clip_frames[i]},scale={args.width}:{args.height}:force_original_aspect_ratio=decrease,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setpts=PTS-STARTPTS[v{i}]")
     filters.append("".join(f"[v{i}]" for i in range(len(clips)))+f"concat=n={len(clips)}:v=1:a=0[outv]")
     command+=["-filter_complex",";".join(filters),"-map","[outv]"]
     if args.audio:command+=["-map",f"{len(clips)}:a:0","-af","apad","-shortest","-c:a","aac"]
@@ -185,7 +189,7 @@ def film(args):
         os.close(fd)
         staged = Path(name)
         try:
-            command+=["-c:v","libx264","-pix_fmt","yuv420p","-movflags","+faststart",str(staged)]
+            command+=["-r",str(args.fps),"-c:v","libx264","-pix_fmt","yuv420p","-movflags","+faststart",str(staged)]
             subprocess.run(command,check=True)
             if staged.stat().st_size == 0:
                 raise RuntimeError("FFmpeg produced an empty movie")
