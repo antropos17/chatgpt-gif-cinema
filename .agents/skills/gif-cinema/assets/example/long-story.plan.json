@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "title": "The Lantern Delivery",
+  "premise": "A small fox carries one lantern across a stream to welcome a lost moth home.",
+  "ending": "The moth settles beside the glowing lantern while the fox waves goodbye.",
+  "style_bible": "Soft cut-paper illustration, deep indigo dusk, warm amber lantern, restrained cream highlights. Stable shapes and visible contact. Do not introduce text or extra props.",
+  "characters": [
+    {
+      "id": "fox",
+      "description": "Small cream fox with triangular ears, a single teal scarf, dark oval eyes and one cream tail. Scarf knot on the left.",
+      "initial_state": "Standing to the left of a closed wooden crate."
+    },
+    {
+      "id": "moth",
+      "description": "One small amber moth with two rounded patterned wings.",
+      "initial_state": "Absent until the light is switched on."
+    }
+  ],
+  "props": [
+    {
+      "id": "lantern",
+      "description": "One small brass lantern with an arched handle and one warm bulb.",
+      "initial_state": "Inside one wooden crate."
+    },
+    {
+      "id": "crate",
+      "description": "One plain wooden crate with a hinged lid.",
+      "initial_state": "Closed on the ground."
+    }
+  ],
+  "width": 512,
+  "height": 512,
+  "fps": 25,
+  "shots": [
+    {
+      "id": "01-discover",
+      "beat": "Setup",
+      "action": "Fox notices a wooden crate and bends toward it.",
+      "start": "Fox stands beside the closed crate.",
+      "end": "Fox crouches with both paws near the lid.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "One closed crate on the ground.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "02-open",
+      "beat": "Reveal",
+      "action": "Fox lifts the crate lid once.",
+      "start": "Paws touch the closed lid.",
+      "end": "Lid is open and one unlit lantern is visible.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Lantern stays inside the crate.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "03-lift",
+      "beat": "Commit",
+      "action": "Fox grips the handle and lifts out the lantern.",
+      "start": "Lantern rests inside the open crate.",
+      "end": "Fox stands holding the unlit lantern at waist height.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "One lantern, both paws on its handle.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "04-light",
+      "beat": "Trigger",
+      "action": "Fox steadies the lantern and presses its switch.",
+      "start": "Lantern is off in the fox paws.",
+      "end": "The same lantern glows amber.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "One paw steadies the handle; the other touches the switch.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "05-arrival",
+      "beat": "Response",
+      "action": "A moth flies into view and circles the light once.",
+      "start": "Fox holds the glowing lantern.",
+      "end": "Moth hovers above the lantern.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "One moth, one lantern, fox remains still.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "06-point",
+      "beat": "Want",
+      "action": "Moth turns toward the far bank and fox follows its gaze.",
+      "start": "Moth hovers near the lantern.",
+      "end": "Both face the stream to screen right.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Lantern remains held; crate stays behind.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "07-approach",
+      "beat": "Attempt",
+      "action": "Fox takes a few careful steps toward the stream.",
+      "start": "Fox faces screen right with lantern.",
+      "end": "Fox stops at the near bank.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Do not swap the lantern between paws during the walk.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "08-test",
+      "beat": "Obstacle",
+      "action": "Fox tests a stepping stone with one foot.",
+      "start": "Fox stands at the bank.",
+      "end": "One foot rests on the near stepping stone.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Lantern held clear of water; planted foot remains on bank.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "09-cross",
+      "beat": "Progress",
+      "action": "Fox shifts weight and steps fully onto the stone.",
+      "start": "One foot is on the stone.",
+      "end": "Both feet balance on the stone.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Lantern stays upright; show foot contact.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "10-reach",
+      "beat": "Resolve",
+      "action": "Fox steps from the stone onto the far bank.",
+      "start": "Both feet are on the stone.",
+      "end": "Fox stands safely on the far bank.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "One lantern remains held; moth follows.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "11-place",
+      "beat": "Payoff setup",
+      "action": "Fox lowers the lantern beside a hollow tree.",
+      "start": "Fox stands holding the lantern near the tree.",
+      "end": "Lantern rests on the ground; paws release its handle.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "One lantern grounded beside the tree opening.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "12-settle",
+      "beat": "Payoff",
+      "action": "Moth descends and lands beside the warm lantern.",
+      "start": "Moth hovers above the grounded lantern.",
+      "end": "Moth rests at the tree opening.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Fox watches without taking the lantern back.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "13-wave",
+      "beat": "Response",
+      "action": "Fox lifts one paw in a small farewell wave.",
+      "start": "Fox stands near the lantern and settled moth.",
+      "end": "Fox lowers the paw after one wave.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Lantern and moth stay grounded.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "14-leave",
+      "beat": "Ending",
+      "action": "Fox turns and walks out of frame while the lantern lights the home.",
+      "start": "Fox faces the tree.",
+      "end": "Fox has left; moth rests beside the glowing lantern.",
+      "camera": "Locked medium three-quarter view for this action; preserve left-to-right geography. Design deliberate camera changes between locations.",
+      "state": "Lantern stays at the tree; no return to the opening pose.",
+      "generate": {
+        "frames": 16,
+        "duration_ms": 160,
+        "quality": "low",
+        "complexity": "low"
+      }
+    }
+  ]
+}

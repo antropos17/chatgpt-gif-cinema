@@ -10,3 +10,9 @@ character, screen position, props and camera across related shots, with explicit
 and action handoffs. `examples/consistent-film.proposed.json` was tested and failed
 visual continuity at both joins; describe it as an experiment, not a character-lock
 recipe. No paid requests without authorization.
+
+For multi-scene mini cartoons and longer motion-design edits, use the root skill's
+`references/storytelling.md` and `references/story-project.md`. Write distinct causal
+beats and an explicit character/prop state ledger, then compile the storyboard with
+its offline helper. The 14-action lantern example is a plan, not generated footage.
+Do not pad a short loop with captions and call it a longer story.

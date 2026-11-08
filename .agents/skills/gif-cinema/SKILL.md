@@ -1,115 +1,133 @@
 ---
 name: gif-cinema
-description: Generate short GPT GIF shots, review their continuity, choose retakes, and assemble them into a film using the public GIF Cinema CLI.
+description: Make multi-scene animated stories, mini cartoons, and motion-design GIFs or MP4s with story beats, character references, short generated takes, local animated titles, and continuity review. Use for longer narrative edits, not just extending a short loop.
 ---
 
 # GIF Cinema
 
-Create a small film from individually reviewable animated shots. This skill runs a
-public, source-available CLI; it is not the private Studio application. It requires
-Python 3.10+, Git, Pillow, and FFmpeg. Script execution also requires ffprobe. New GIF
-generation requires the user's own OpenAI API key, billing and model access.
+Turn a brief into **different visible actions with cause and effect**, then assemble
+reviewed shots into a longer story. Separate appearance, character action, graphic
+motion, and delivery format. Keep the user's chosen art style and approved footage.
+This is an author-guided workflow, not an autonomous animation model.
 
-## Set up and verify
+## Choose a real production route
 
-Use an isolated environment and the pinned reference-enabled public runtime:
+- **Existing GIFs:** inspect what each take actually shows; build the story around
+  those actions. The bundled example tests this route without an API key.
+- **New character action:** plan one main action per short generated GIF. Use only
+  an available, authorized generation tool/API. Inspect and accept each result before
+  extending its state into another scene. See [generation.md](references/generation.md).
+- **Motion design:** use the included local animated-title renderer for typography
+  and accent-rule entrances. For layered characters, movable props, masks, or rigged
+  action, use a compositor actually available in the environment and preserve its
+  editable sources. This package does not contain a general layered animation engine.
 
-```text
+Do not count camera drift, an overlay, reversed footage, another caption on the same
+clip, or longer holds as a new character action. A long cartoon needs additional
+story events. If those drawings are missing and generation is unavailable, deliver
+an honest animatic or production plan, not a claimed finished cartoon.
+
+## Runtime and a no-key check
+
+Requires Python 3.10+, Pillow, Git, FFmpeg and ffprobe. Use an isolated environment.
+The skill's helpers work with this reviewed, immutable public runtime:
+
+```bash
 python -m venv .venv
-```
-
-Activate that environment using the current shell's normal activation command, then:
-
-```text
-python -m pip install --upgrade pip "setuptools>=77" wheel
-python -m pip install --no-build-isolation "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@41c06dd09ebe5b40c8e5173abd4a2e5fd8a1eb70"
+# Activate .venv with the command for your shell, then:
+python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@fa82b13366a9ae94a4ece730ec6b2d065cd9a060"
 python -m gif_cinema --help
 ffmpeg -version
 ffprobe -version
 ```
 
-Keep the runtime's [evaluation license](https://github.com/antropos17/chatgpt-gif-cinema/blob/41c06dd09ebe5b40c8e5173abd4a2e5fd8a1eb70/LICENSE): personal non-commercial evaluation/research is permitted; commercial use, redistribution and hosting require permission. The included LICENSE preserves those terms.
+An existing checkout of that revision or a tested compatible newer runtime is also
+usable. Do not downgrade a working project automatically. The runtime uses the
+included source-available [evaluation license](LICENSE). GIF Factory's attributed
+workflow influence has its own MIT notice in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Run this skill's `scripts/smoke_test.py --out NEW_DIRECTORY` with that environment's
-Python (resolve the helper path relative to this skill directory, not the current
-project) to verify synthetic GIF inspection, endpoint extraction, continuity reporting,
-MP4 assembly and unchanged source hashes without a key. When real ffprobe is present,
-the same check also executes and resumes a zero-call film script. The helper creates
-a new dedicated output directory and refuses to overwrite an existing one.
+Resolve helper and asset paths relative to **this skill folder**. The examples below
+assume the shell is in that folder. From elsewhere, use absolute paths to the helpers
+and input JSON; keep outputs in the user's project, never in the installed skill.
 
-## Direct the film
-
-Translate the user's idea into a few short actions with a beginning, response and
-payoff. Describe each shot's first/last pose, camera, subject scale, horizon and motion
-direction. Keep identity details stable while allowing deliberate camera changes.
-Read the pinned runtime's [script schema](https://github.com/antropos17/chatgpt-gif-cinema/blob/41c06dd09ebe5b40c8e5173abd4a2e5fd8a1eb70/docs/SCRIPT-FORMAT.md)
-before authoring a JSON script. Source paths and still-image references resolve
-relative to that script, not the shell directory.
-
-The skill includes a real three-shot astronaut example in `assets/example/`: three
-16-frame GPT GIFs plus `film.json`. From this skill's folder, run:
-
-```text
-python -m gif_cinema render assets/example/film.json --dry-run
-python -m gif_cinema render assets/example/film.json --execute --max-api-calls 0 --out output/first-film
+```bash
+python scripts/story_project.py compile assets/example/storyboard.json --out output/story-project
+python -m gif_cinema render output/story-project/film.json --dry-run --max-api-calls 0
+python -m gif_cinema render output/story-project/film.json --execute --max-api-calls 0 --out output/story-render
+python scripts/story_project.py export-gif output/story-render/film.mp4 --out output/story.gif
 ```
 
-From another project, resolve the script to its absolute path and put output in that
-project's own new directory. This produces a 7.68-second silent MP4 without a key.
-It preserves native drawing cadence; the showcased private smoothing is separate.
+This is a **9.68-second source edit**, not a new long cartoon: a 2-second locally
+animated title followed by three existing 2.56-second astronaut actions. The MP4 uses
+25 fps; the source characters have 16 drawings per take, not 25 new drawings per
+second. GIF export defaults to 320 px wide, 10 fps, silent, play-once. `--repeat`
+loops the entire result. Some viewers override GIF loop behavior.
 
-Plan first, without a key or paid request:
+For the core CLI regression check, run `scripts/smoke_test.py --out NEW_DIRECTORY`.
+Neither helper needs a key. The story helper never makes provider calls and refuses
+an existing output project. [story-project.md](references/story-project.md) documents
+its exact schema, commands, timing, and limits.
 
-```text
-python -m gif_cinema render film.json --dry-run
-```
+## Direct before generating
 
-For a source-only montage:
+For a new story or a substantial extension, read [storytelling.md](references/storytelling.md).
+Produce an editable storyboard with:
 
-```text
-python -m gif_cinema render film.json --execute --max-api-calls 0 --out output/edit-01
-```
+1. The premise and ending; audience, target duration, aspect ratio, language and
+   sound requirements when relevant. Infer low-risk defaults instead of asking again.
+2. A compact visual bible: recognizable character anchors, palette/material,
+   costume, prop counts, ownership, scale, geography, and camera conventions.
+3. A beat/shot list: **state before → visible action → state after**, camera,
+   expected duration, and purpose in the story. Track hands/props/contact at each cut.
+4. A source/generation map: which actions already exist, which need new drawings,
+   which are local graphics. Mark unrendered shots as unrendered.
 
-For authorized generation, use the agreed call cap and `--retries 0` initially.
-Read OPENAI_API_KEY from the user's environment without displaying or saving it.
-Account/model support is checked by the actual request; a model label in this
-historical runtime is not a promise of current access. Unsupported input, permission
-errors and uncertain delivery need review before another paid attempt.
+Scale the story by adding meaningful actions and consequences, not repeating footage
+until a timer reaches the brief. The long-story example in
+`assets/example/long-story.plan.json` is an **unrendered 14-action production plan**.
+Compiling it prepares 14 one-shot generation inputs; it does not render those actions.
 
-## Chain and replace shots
+## Generate and join deliberately
 
-Use `endpoints SHOT.gif -o UNIQUE_PREFIX` to obtain `UNIQUE_PREFIX-last.png`.
-For the next generated shot, the JSON `references` field accepts local still PNG,
-JPEG or WebP files. Use the clean identity reference plus the reviewed previous last
-frame; explain which controls identity and which controls composition. This runtime
-supports explicit references in `render`, not in the simple `generate` command.
-Its supported frame range is 2–16; longer frame delays extend playback rather than
-creating additional motion. Review each shot before passing its endpoint onward.
-Render dependent shots in separate small scripts/output directories as their
-references become available; preflight rejects missing future reference files.
-Then assemble accepted GIFs as `source` entries in a final import-only script.
-Keep each source entry mapped to its generating script and output directory.
+Compile the storyboard with `scripts/story_project.py compile ...`. A source-only
+project has an executable `film.json`. A project with missing/generated shots has
+separate `generation/ID.json` inputs and a deliberately incomplete
+`assembly-template.json`. No paid batch is executed by the compiler.
 
-For a retake, retain the original generating script and render directory, revise only
-the target shot, then dry-run again. Execute with `--force-shot SHOT_ID`, an explicit call cap
-and `--retries 0`. Accepted unchanged neighbors are reused by hash. The runtime
-preserves older shot files and archives the previous tracked movie on replacement;
-keep them for rollback. Multiple candidates use separate copied scripts/output
-directories. This public runtime has no automatic take ranking or graphical undo.
-Update the final montage's `source` only after choosing the reviewed replacement;
-retain the old montage script/export to undo that choice.
+Use one representative action to establish feasibility when the character/method is
+new. New generation needs the user's own API access and the agreed bounded call cap.
+For endpoint continuity, extract the accepted previous last frame, inspect it, then
+attach that **existing** still plus a clean identity reference to the next shot input.
+The compiler does not create future references or an automatic dependency graph.
 
-Watch a replacement inside the full montage and inspect **both** neighboring cuts:
-identity, costume/props, pose, scale, camera geography, lighting and action direction.
-Pixel MAE and successful decoding are technical evidence, not visual acceptance.
-Changing a middle shot does not automatically regenerate its neighbors.
+Keep separate take folders and a record of accepted/rejected candidates. A retake
+must be reviewed at both neighboring joins. After selection, change the storyboard
+shot from `generate` to `source` using its actual accepted GIF path and compile a new
+portable project. Accepted source footage is copied unchanged; it is never regenerated
+by offline assembly. Use zero-call render even when a key happens to be configured.
 
-## Deliver
+## Motion, timing, and export
 
-Verify the exact exported MP4 and playback before linking it. Report native GIF
-frames separately from export FPS. This public package does not include the private
-editor, RIFE smoothing, automatic last-frame dependency graph or generated sound.
-Use actual matching usage plus current official rates for a cost estimate; identify
-discarded takes and references, and distinguish an estimate from a billing charge.
-Describe remaining visual faults directly and keep private keys, prompts and
-unreviewed artifacts out of any public deliverable.
+Title cards are once-only text/line entrances followed by a hold. Lettering is local
+and editable in the storyboard, rather than entrusted to a generation prompt. Titles
+are **separate shots**, not overlays; runtime captions are a separate SRT, not burned
+into GIFs. Specify a licensed local font with `--font` if needed, and inspect its glyphs.
+
+Character timing comes from the decoded source GIF. Source retiming, transitions,
+interpolation, audio generation and automatic action synthesis are not supplied by
+this helper. The pinned runtime uses hard cuts and can import optional local audio
+through its film script. GIF has no audio. Follow current runtime help if using newer
+editing tools; do not imply the pinned package includes them.
+
+Export a verified MP4 first, then a smaller GIF or chapters. GIF palette conversion
+can damage gradients and fine outlines; review the actual final GIF too. High playback
+FPS does not create new motion. [review.md](references/review.md) gives the visual and
+technical acceptance checks.
+
+## Deliver the actual result
+
+Provide requested GIF/MP4 files with actual duration, dimensions, loop behavior,
+source drawing cadence versus export FPS, silent/audio status, and known visual
+faults. Include an editable project when requested. Review source names, prompts,
+references and licensing before sharing a project; do not publish private inputs.
+Distinguish technical verification, your visual review, and user acceptance.

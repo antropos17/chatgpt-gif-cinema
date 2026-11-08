@@ -1,6 +1,14 @@
 ---
 name: api-gif-generator
-description: Generate real animated GIF files with OpenAI GPT Image API and report raw settings and errors.
+description: Prepare and execute authorized short GIF generation requests with the public GIF Cinema adapter, and report actual output and account/model limitations.
 ---
 # API GIF Generator
-Use `gif-cinema generate "A candle flickers, locked camera" --frames 9 --duration 200 -o output/01.gif`. Require OPENAI_API_KEY in environment. Do not store credentials. Capture metadata and report if API rejects access, frames, size or model. Do not claim a successful live test without file verification.
+
+Read the root gif-cinema skill's `references/generation.md` for the actual runtime
+contract. Prefer `render` with a single-shot JSON when using still-image references.
+Check currently available account/model support; a historical model label is not a
+promise of access. Plan offline first, then use only the user's authorized bounded
+call cap and start with `--retries 0`. Read OPENAI_API_KEY from the environment without
+printing or saving it. Preserve unknown-outcome safety and do not create a new output
+folder to bypass a pending request. Inspect the returned GIF before claiming success.
+The story compiler prepares request inputs only; it never calls a provider itself.
