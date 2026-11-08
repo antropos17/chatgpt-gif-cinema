@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased — source-only backend hardening
+
+- Bound shared GIF reads, decoded frame count, per-frame pixels and total pixels;
+  reject oversized imports during planning before any billable request.
+- Check runnable FFmpeg/ffprobe, H.264 and assembly filters before execution;
+  audio scripts also check AAC and audio padding support.
+- Apply 300-second deadlines and closed standard input to film assembly and both
+  verification passes. Timeouts preserve accepted exports and remove staging/locks.
+- Persist render manifests with an fsynced atomic writer and sync new project
+  directory entries before dispatch. Sync failures stop requests; uncertain
+  outcomes still require review, with no exactly-once billing claim.
+- Backport only the required source helpers from the development preview. No new
+  media, packaged demo, editing/motion commands or standalone generation receipts
+  are included. The existing checkout examples remain available.
+
 ## Unreleased — safe resume and exact export timing
 
 - Keep timeout, HTTP 408/5xx and unreadable-response outcomes unresolved across

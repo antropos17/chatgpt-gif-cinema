@@ -196,7 +196,7 @@ class FilmTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             film(args)
         args.force = True
-        with patch("gif_cinema.cli.subprocess.run", side_effect=subprocess.CalledProcessError(1, "ffmpeg")), self.assertRaises(subprocess.CalledProcessError):
+        with patch("gif_cinema.cli.run_media", side_effect=subprocess.CalledProcessError(1, "ffmpeg")), self.assertRaises(subprocess.CalledProcessError):
             film(args)
         self.assertEqual(out.read_bytes(), b"old movie")
         self.assertFalse(list(self.root.glob("*.lock")))

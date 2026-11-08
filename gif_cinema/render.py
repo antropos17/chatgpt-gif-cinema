@@ -9,13 +9,13 @@ import os
 from pathlib import Path
 import re
 import shutil
-import subprocess
 import tempfile
 import time
 
 from PIL import Image, ImageChops, ImageDraw, ImageStat
 
 from . import cli
+from .durability import durable_write, sync_directory
 
 VERSION = 1
 ASSEMBLY_VERSION = 2  # Invalidate older exports that could lose the final frame.
@@ -30,7 +30,18 @@ def encoded(value):
 
 
 def save(path, value):
-    cli.write_result(path, encoded(value), force=True)
+    durable_write(path, encoded(value))
+
+
+def create_project_directory(root):
+    """Make new project ancestors durable before recording a billable attempt."""
+    missing, parent = [], root
+    while not parent.exists():
+        missing.append(parent)
+        parent = parent.parent
+    root.mkdir(parents=True, exist_ok=True)
+    for directory in missing:
+        sync_directory(directory.parent)
 
 
 def text(value, label):
@@ -104,9 +115,10 @@ def load_script(path, args):
             if set(shot) & {"frames", "duration_ms", "model", "size", "quality", "complexity", "references"}:
                 raise ValueError("Imported shots use their actual timing, not generation parameters")
             source = (path.parent / text(shot["source"], "source")).resolve()
-            frames, durations, _ = cli.validate_gif(source)
+            raw = cli.read_gif_bytes(source)
+            _, durations, _ = cli.validate_gif(io.BytesIO(raw))
             shot["source_path"] = source
-            shot["source_sha256"] = digest(source.read_bytes())
+            shot["source_sha256"] = digest(raw)
             shot["expected_ms"] = sum(durations)
             basis = {"source_sha256": shot["source_sha256"]}
         else:
@@ -177,15 +189,18 @@ def cached(root, record, shot):
     if not record or record.get("fingerprint") != shot["fingerprint"]:
         return False
     path = local_path(root, record["output"])
-    if not path.is_file() or digest(path.read_bytes()) != record.get("sha256"):
+    if not path.is_file():
         raise ValueError(f"Saved shot {shot['id']} is missing or changed; use a new project directory")
-    cli.validate_gif(path)
+    raw = cli.read_gif_bytes(path)
+    if digest(raw) != record.get("sha256"):
+        raise ValueError(f"Saved shot {shot['id']} is missing or changed; use a new project directory")
+    cli.validate_gif(io.BytesIO(raw))
     return True
 
 
 def probe(path, width, height, expected_seconds, fps, shots):
     command = ["ffprobe", "-v", "error", "-count_frames", "-select_streams", "v:0", "-show_entries", "stream=codec_name,width,height,duration,nb_read_frames", "-of", "json", str(path)]
-    result = subprocess.run(command, capture_output=True, check=True)
+    result = cli.run_media(command)
     info = json.loads(result.stdout)["streams"][0]
     actual = float(info["duration"])
     count = int(info["nb_read_frames"])
@@ -194,7 +209,7 @@ def probe(path, width, height, expected_seconds, fps, shots):
             or abs(actual - expected_seconds) > 0.5 / fps):
         raise RuntimeError("Encoded film failed codec, dimensions or duration verification")
     # Decode all frames, not just the container metadata.
-    subprocess.run(["ffmpeg", "-v", "error", "-xerror", "-i", str(path), "-map", "0:v:0", "-f", "null", "-"], check=True, capture_output=True)
+    cli.run_media(["ffmpeg", "-nostdin", "-v", "error", "-xerror", "-i", str(path), "-map", "0:v:0", "-f", "null", "-"])
     return info
 
 
@@ -218,6 +233,7 @@ def diagnostics(root, script, records):
                           "previous_end_target": script["shots"][index - 1]["last_frame_target"],
                           "next_start_target": shot["first_frame_target"], "status": "human-review-required"})
         previous = frames[-1]
+        del frames  # Retain only the endpoint, not the previous shot's entire decode.
     data = io.BytesIO(); sheet.save(data, format="PNG")
     cli.write_result(root / "contact-sheet.png", data.getvalue(), force=True)
     report = {"status": "human-review-required", "note": "Pixel MAE cannot measure identity, motion or narrative continuity. Targets are instructions, not verified observations.", "joins": joins}
@@ -301,11 +317,15 @@ def run(args):
     for tool in ("ffmpeg", "ffprobe"):
         if not shutil.which(tool):
             raise RuntimeError(f"{tool} is required before execution; no API requests made")
+    from .doctor import inspect_tool, require_film_capabilities
+    require_film_capabilities(audio=bool(script.get("audio_path")))
+    if not inspect_tool("ffprobe")["available"]:
+        raise RuntimeError("ffprobe could not run before execution; no API requests made")
     if actions.count("generate") and not os.environ.get("OPENAI_API_KEY"):
         raise RuntimeError("Set OPENAI_API_KEY to execute generated shots; imported shots do not require it")
     if script_path.is_relative_to(root):
         raise ValueError("Script must live outside the render output directory")
-    root.mkdir(parents=True, exist_ok=True)
+    create_project_directory(root)
     with cli.output_lock(manifest_path):
         # Do not execute a plan made against an older project revision.
         if manifest_path.exists() and json.loads(manifest_path.read_text(encoding="utf-8")) != manifest:
@@ -324,7 +344,7 @@ def run(args):
                     records.append(manifest["shots"][sid])
                     continue
                 if action == "import":
-                    raw = shot["source_path"].read_bytes()
+                    raw = cli.read_gif_bytes(shot["source_path"])
                     if digest(raw) != shot["source_sha256"]:
                         raise ValueError("Imported source changed during rendering")
                     usage, seconds = None, 0
@@ -378,6 +398,7 @@ def run(args):
                 record = {"fingerprint": shot["fingerprint"], "sha256": sha, "output": filename, "frames": len(frames),
                           "duration_ms": sum(durations), "frame_durations_ms": durations, "seconds": seconds,
                           "usage": usage, "origin": "imported" if action == "import" else "generated", "status": "verified-gif"}
+                del frames
                 if action == "generate":
                     record["parameters"] = shot["payload"]
                     if "reference_inputs" in shot:
