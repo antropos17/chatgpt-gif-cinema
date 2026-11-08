@@ -403,7 +403,7 @@ def layer_transform(scene, layer, time_ms):
     return evaluate(layer['keyframes'], progress)
 
 
-def render_at(prepared, time_ms, only_layer=None):
+def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
     from PIL import Image
     scene = prepared['scene']
     canvas = Image.new('RGBA', (scene['width'], scene['height']))
@@ -428,9 +428,54 @@ def render_at(prepared, time_ms, only_layer=None):
                         matrix, resample=Image.Resampling.BICUBIC).convert('RGBA')
         if state['opacity'] != 1:
             transformed.putalpha(transformed.getchannel('A').point(lambda alpha: round(alpha * state['opacity'])))
+        if _layer_previews is not None:
+            _collect_layer_preview(_layer_previews, scene, layer, time_ms, transformed)
         canvas.alpha_composite(transformed)
     canvas.info.clear()
     return canvas, states
+
+
+def _collect_layer_preview(candidates, scene, layer, time_ms, frame):
+    """Retain an existing transformed frame, with no second render or pixel copy."""
+    step = 1000 // scene['fps']
+    if (type(time_ms) is not int or time_ms % step or time_ms >= scene['duration_ms']
+            or not layer['in_ms'] <= time_ms < layer['out_ms']):
+        return
+    distance = abs(2 * time_ms - layer['in_ms'] - layer['out_ms'])
+    previous = candidates.get(layer['id'])
+    if previous is not None and (distance, time_ms) >= (previous['distance'], previous['time_ms']):
+        return
+    bbox = frame.getchannel('A').getbbox()
+    if bbox is not None:
+        # alpha_composite reads this source; it does not modify the retained image.
+        candidates[layer['id']] = {'image': frame, 'distance': distance,
+            'frame': time_ms // step, 'time_ms': time_ms, 'alpha_bbox': list(bbox)}
+
+
+def _write_layer_previews(candidates, scene, destination):
+    """Keep legacy PNG paths, and release retained images before GIF encoding."""
+    from PIL import Image
+    metadata = {}
+    for layer in scene['layers']:
+        chosen = candidates.pop(layer['id'], None)
+        if chosen is None:
+            frame = Image.new('RGBA', (scene['width'], scene['height']))
+            record = {'status': 'no-visible-export-frame', 'frame': None,
+                      'time_ms': None, 'alpha_bbox': None}
+        else:
+            source = chosen.pop('image')
+            # Match render_at(..., only_layer=...) even for RGB values hidden
+            # under zero alpha after opacity rounding. Normalize once per PNG.
+            frame = Image.new('RGBA', source.size)
+            frame.alpha_composite(source)
+            del source
+            record = {'status': 'visible', 'frame': chosen['frame'],
+                      'time_ms': chosen['time_ms'], 'alpha_bbox': chosen['alpha_bbox']}
+        filename = f"{layer['id']}.png"
+        frame.save(destination / filename)
+        metadata[layer['id']] = {'filename': f'layers/{filename}',
+            'in_ms': layer['in_ms'], 'out_ms': layer['out_ms'], **record}
+    return metadata
 
 
 def save_bundle(prepared, destination):
@@ -500,8 +545,9 @@ def render_scene(path, out, dry_run=False):
         sheet = Image.new('RGB', (224 * len(selected), 252), scene['matte'])
         samples, first, previous, last, adjacent = [], None, None, None, []
         reopen_verified = []
+        preview_candidates = {}
         for index in range(count):
-            frame, states = render_at(prepared, index * step)
+            frame, states = render_at(prepared, index * step, _layer_previews=preview_candidates)
             rgba_hash = digest(frame.tobytes())
             frame.save(frame_dir / f'{index:04}.png')
             preview = motion.flatten(frame, scene['matte'])
@@ -532,12 +578,10 @@ def render_scene(path, out, dry_run=False):
             seam.paste(frame, (column * scene['width'], 32))
             ImageDraw.Draw(seam).text((column * scene['width'] + 8, 10), label, fill='white')
         seam.save(stage / 'loop-seam.png')
-        # An isolation sheet demonstrates genuine independent alpha layers.
+        # Each isolated preview comes from a real visible export sample, not a
+        # global midpoint that may lie outside the layer's active interval.
         isolation = stage / 'layers'; isolation.mkdir()
-        middle = scene['duration_ms'] // 2
-        for layer in scene['layers']:
-            frame, _ = render_at(prepared, middle, only_layer=layer['id'])
-            frame.save(isolation / f'{layer["id"]}.png')
+        layer_previews = _write_layer_previews(preview_candidates, scene, isolation)
         palette = palettes.quantize(colors=256, method=Image.Quantize.MEDIANCUT)
         gif_frames = []
         for index in range(count):
@@ -604,6 +648,8 @@ def render_scene(path, out, dry_run=False):
         outputs = {str(p.relative_to(stage)): digest(p.read_bytes()) for p in sorted(stage.rglob('*')) if p.is_file()}
         receipt = {**plan, 'status': 'human-review-required', 'source_unchanged': True,
             'gif_drawings': len(delays), 'gif_delays_ms': delays, 'loop_review': loop_review,
+            'layer_previews': layer_previews,
+            'layer_preview_sampling': 'nearest visible export frame to each active interval midpoint; ties select the earlier frame; visible means nonzero isolated alpha on canvas',
             'reopen_verified_frames': reopen_verified, 'reopen_scope': 'five sampled frames, all sources snapshotted',
             'pillow': PIL.__version__, 'probe': probe, 'commands': commands, 'samples': samples, 'outputs': outputs,
             'limitations': ['Experimental GIF Cinema format, not Lottie-compatible.',

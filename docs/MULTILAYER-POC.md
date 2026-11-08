@@ -115,6 +115,39 @@ pixel errors plus adjacent-frame errors. These are diagnostics, not automatic
 visual acceptance. Matching positions need not imply matching velocity, and an
 arbitrary authored scene may intentionally cut at its loop boundary.
 
+## Isolated layer previews
+
+`layers/<id>.png` remains a canvas-sized RGBA image for every layer. Its sample is
+now the **visible exported frame nearest the midpoint of that layer's active
+interval**, with equal-distance ties choosing the earlier frame. Only actual
+export samples inside `[in_ms, out_ms)` qualify, never an unsampled time or the
+conceptual closing endpoint. This avoids empty previews for short early/late
+layers and skips transparent or off-canvas samples near the interval midpoint.
+
+Here, visible means that the isolated layer has at least one nonzero-alpha pixel
+on the canvas. It does not mean perceptual visibility or visibility through other
+layers. If no export sample qualifies (including fully transparent/off-canvas
+layers or motion visible only between samples), the PNG remains fully transparent.
+The receipt records `status: "no-visible-export-frame"` and null `frame`, `time_ms`
+and `alpha_bbox` instead of presenting that placeholder as a selected frame.
+
+The additive `layer_previews` receipt map records each layer's existing PNG
+`filename`, active `in_ms`/`out_ms`, `status`, zero-based `frame`, integer `time_ms`
+and Pillow-style exclusive-right/bottom `alpha_bbox`. Selected images have
+`status: "visible"`. `layer_preview_sampling` describes the selection rule.
+Existing receipt schema version, fields, output paths, playback samples and media
+timing are unchanged; old receipts without these extra fields remain verifiable.
+
+Candidates are retained during the existing compositing pass, not by rerendering
+each layer at every time. At most one existing canvas-sized RGBA image is retained
+per layer (at most 64 MiB under the scene limits), without an extra pixel copy.
+When writing each PNG, a blank canvas applies the same source-over composition
+as isolated rendering, including RGB values hidden under zero alpha. The explicit
+canvas is at most 4 MiB; Pillow's composite result adds another temporary RGBA
+buffer, up to 8 MiB combined beyond the retained candidates. These are pixel-buffer
+bounds, not total process memory. This happens once per layer, not on every
+timeline frame. All retained images are released before GIF frame buffering begins.
+
 ## Save and reopen
 
 `save` makes a new directory containing `scene.json` and content-addressed local
@@ -161,6 +194,11 @@ encoding. Network calls are explicitly forbidden in these tests.
 Regression tests also cover raster-budget rejection before allocation, cached
 premultiplication, large receipts, dense normalized scenes, failed saves, named
 pipes and a regular-file-to-FIFO replacement race.
+`test_layer_previews.py` covers short intervals, single-frame layers, midpoint
+ties at both frame rates, transparent/off-canvas samples, invisible layers,
+unsampled/closing-only visibility, unchanged composites, zero-alpha RGB parity,
+retained-image release,
+real export and historical receipt compatibility.
 
 ## Not a Lottie implementation
 
