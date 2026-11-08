@@ -100,11 +100,37 @@ confirming the owning process has stopped.
 Execution checks runnable FFmpeg/ffprobe, the `libx264` encoder and all assembly
 filters before any paid call. Scripts with audio also require AAC and `apad`.
 Offline planning still needs no FFmpeg and performs none of these process checks.
-Assembly, probe and complete decode subprocesses have a 300-second deadline each
+For audio, the plan explicitly reports that decode validation is still pending.
+
+Before execution looks up a key, creates the render project or dispatches a paid
+request, it snapshots the audio and probes and strictly decodes the complete first
+audio stream. A valid container header alone is not enough: corrupt or truncated
+audio fails before generation rather than being silently replaced by padding.
+Assembly uses those exact validated snapshot bytes even if the original changes
+while shots are generated. The manifest records the audio hash, encoded size,
+codec, sample rate, channels and decoded duration; the snapshot is removed after
+the run. Existing audio/films are never changed by a failed preflight.
+
+Audio input is limited to a regular local file of 128 MiB, one hour, eight channels
+and 192 kHz. Films with audio are limited to one hour. Supported containers are WAV,
+MP3, FLAC, Ogg, AAC, AIFF, M4A/MP4 and Matroska/WebM. Playlists, device inputs and
+network protocols are rejected. Probe and strict audio decode each have a
+30-second deadline, closed stdin, one decoder thread, an 8 MiB probe budget,
+ten seconds of stream analysis and a 64 MiB maximum individual allocation.
+Diagnostic reads are capped at 64 KiB; raw decoder error payloads are not printed.
+
+Film assembly, video probe and full video decode have a 300-second deadline each
 and cannot wait on standard input. A timeout fails the run, cleans staging/locks
 and preserves an existing accepted movie; completed shots remain reusable.
 Output is staged,
 checked for H.264, dimensions, decoded frame count and duration, then fully decoded.
+When audio was requested, verification also requires an AAC track and a strict
+audio decode, with start/duration coverage checked against the video. A tolerance
+of two 1,024-sample AAC packets plus one millisecond allows codec padding and muxer
+rounding; it does not accept a missing or substantially shorter track. Audio
+verification details are included in the inspection report and receipt. Silent
+scripts retain their existing video-only contract. These are technical checks,
+not a judgment of the soundtrack's content or artistic synchronization.
 Each shot's output frame count is its duration multiplied by FPS, rounded to the
 nearest integer (ties to even), with a minimum of one frame. Final-frame holds are
 preserved; captions follow the same quantized timeline. Previously cached exports
@@ -121,6 +147,31 @@ technical pass. It is not proof of a coherent story or a seamless performance.
 The first acceptance film must preserve one recognizable character and aligned poses
 and action across cuts. If existing GIFs fail that criterion, report the failure and
 prepare a bounded replacement plan; do not disguise it with dissolves or new claims.
+
+## Standalone film audio compatibility
+
+`gif-cinema film clip.gif --audio soundtrack.wav -o film.mp4` uses the same bounded
+audio snapshot, supported formats, strict input decode and final AAC coverage
+checks described above. These checks run before the MP4 is published, including
+with `--force`. An empty or corrupt audio file is rejected instead of being silently
+padded into a successful-looking soundtrack. A failed preflight does not create
+the destination directory; encoding/verification failures clean temporary files
+and locks while preserving the previously accepted MP4.
+
+Audio-enabled standalone assembly now requires working ffprobe as well as FFmpeg.
+Its audio input and film duration have the same one-hour limit as script render.
+These deliberate restrictions can reject files that older standalone versions
+accepted permissively. Valid short tracks are still padded, long tracks trimmed,
+and per-shot frame rounding and final poses are unchanged. Input GIF/audio files
+are not modified. Silent `film` remains FFmpeg-only and does not acquire audio
+limits or verification work.
+
+The standalone CLI still produces just the requested MP4 with the same success
+message and `--force`/no-clobber behavior; it does not create script manifests or
+audio sidecars. It makes no provider calls. Script render retains its pre-generation
+audio check and its own receipts, and the assembly step rechecks its private
+snapshot before publishing. The additional local probe/decode work is bounded by
+the existing deadlines. Technical validation does not establish artistic quality.
 
 ## Local artifact retention
 

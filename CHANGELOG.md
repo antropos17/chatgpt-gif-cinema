@@ -1,5 +1,31 @@
 # Changelog
 
+## Unreleased — standalone film audio validation
+
+- Apply the existing bounded audio snapshot and strict-decode preflight to
+  standalone `film --audio`, rejecting empty/corrupt inputs before encoding.
+- Verify expected AAC audio and duration coverage before atomic publication,
+  including `--force`; failed input or output checks preserve the previous MP4.
+- Audio-enabled standalone films now require working ffprobe and use the same
+  input/duration limits as script render. Silent film assembly keeps its existing
+  FFmpeg-only dependency and behavior. No new sidecar files or API calls.
+- Add standalone regressions for corrupt/empty WAVs, source changes, missing or
+  short output audio, timeout cleanup, no-clobber races and valid audio timing.
+
+## Unreleased — audio preflight before generation
+
+- Snapshot bounded local audio and strictly decode it before any paid render
+  request; reject corrupt/truncated audio before creating a project or spending.
+  Keep dry-run FFmpeg-free and explicitly mark audio decode validation as pending.
+- Bound encoded audio size, duration, channels, sample rate, probing and decode
+  time. Reject playlists/network protocols and preserve the exact validated bytes
+  through assembly, with hash-bound audio facts in the manifest.
+- Verify requested final AAC audio, strict decoding and video-duration coverage
+  with packet-rounding tolerance; report audio verification in receipts. Silent
+  films keep their existing verification contract.
+- Add offline corruption, timeout, resource-limit, snapshot, missing-track,
+  resume and 54-second/6-fps audio timeline regressions. No provider requests.
+
 ## Unreleased — experimental source-only independent layers
 
 - Give both halves of the asset-free example card rotation explicit smootherstep

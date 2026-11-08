@@ -19,6 +19,10 @@ retiming and verified exports for your own local image or footage. No new media,
 packaged `demo`, editor, separate finishing command or standalone generation
 receipts are included. It is not a new versioned release.
 [Render limits and recovery](docs/SCRIPT-FORMAT.md).
+
+Standalone `film --audio` also validates a bounded audio snapshot and checks the
+final AAC track before publishing, including with `--force`. It requires ffprobe;
+silent `film` remains FFmpeg-only. See [audio compatibility and limits](docs/SCRIPT-FORMAT.md#standalone-film-audio-compatibility).
 [Motion recipes and limits](docs/MOTION-DESIGN.md).
 
 ```bash
