@@ -101,10 +101,20 @@ attach that **existing** still plus a clean identity reference to the next shot 
 The compiler does not create future references or an automatic dependency graph.
 
 Keep separate take folders and a record of accepted/rejected candidates. A retake
-must be reviewed at both neighboring joins. After selection, change the storyboard
-shot from `generate` to `source` using its actual accepted GIF path and compile a new
-portable project. Accepted source footage is copied unchanged; it is never regenerated
-by offline assembly. Use zero-call render even when a key happens to be configured.
+must be reviewed at both neighboring joins. Record each selected GIF's shot ID,
+path, SHA-256 and review notes in a takes manifest. Compile with `--takes takes.json`
+to fill generated slots without manually changing their modes. The helper checks
+those exact bytes, measures their actual delays and keeps the original request.
+It can apply a partial selection; missing actions stay explicitly unrendered.
+
+Each project includes a portable `storyboard.json`. Continue from that file with a
+new takes manifest and a new output directory. Existing sources and rendered titles
+are hash-pinned and cannot be replaced by the manifest. For an intentional retake,
+create an edited copy of the original storyboard and select the new take there;
+keep the earlier project and review both neighboring cuts again. Keep project
+versions with their review records. Caller notes are not automatic visual acceptance.
+See [the exact selection format and no-key example](references/story-project.md#select-reviewed-takes).
+Use zero-call render even when a key happens to be configured.
 
 ## Motion, timing, and export
 

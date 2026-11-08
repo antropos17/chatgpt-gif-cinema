@@ -3,6 +3,7 @@
 No provider requests, credential reads, interpolation, or invented character poses.
 """
 import argparse
+import copy
 import hashlib
 import io
 import json
@@ -104,11 +105,44 @@ def title_frames(spec, width, height, font_path=None):
     return result, [100] * count
 
 
-def compile_story(path, out, font_path=None):
+def check_sha256(value, label):
+    if not isinstance(value, str) or not re.fullmatch(r'[0-9a-f]{64}', value):
+        raise ValueError(f'{label} must be a lowercase SHA-256 digest')
+    return value
+
+
+def load_takes(path):
+    """Read explicit caller-reviewed selections; never choose a candidate."""
+    data = read_json(path)
+    only(data, {'schema_version', 'takes'}, 'takes manifest')
+    if type(data.get('schema_version')) is not int or data['schema_version'] != 1:
+        raise ValueError('takes schema_version must be 1')
+    values = data.get('takes')
+    if not isinstance(values, list) or not 1 <= len(values) <= 64:
+        raise ValueError('takes must contain 1..64 entries')
+    result = {}
+    for entry in values:
+        only(entry, {'shot_id', 'source', 'sha256', 'review_notes'}, 'take')
+        sid = check_text(entry.get('shot_id'), 'take.shot_id', 40)
+        if not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_-]{0,39}', sid):
+            raise ValueError('Take shot ids must be safe ASCII identifiers')
+        if sid.lower() in {key.lower() for key in result}:
+            raise ValueError('Duplicate take shot id')
+        check_text(entry.get('source'), 'take.source')
+        check_text(entry.get('review_notes'), 'take.review_notes')
+        check_sha256(entry.get('sha256'), 'take.sha256')
+        result[sid] = entry
+    return result
+
+
+def compile_story(path, out, font_path=None, takes_path=None):
     path, out = path.resolve(), out.resolve()
     if out.exists():
         raise ValueError('Output must be a new directory; previous projects are never overwritten')
     data = read_json(path)
+    takes_path = Path(takes_path).resolve() if takes_path else None
+    takes = load_takes(takes_path) if takes_path else {}
+    portable = copy.deepcopy(data)
     only(data, {'schema_version', 'title', 'premise', 'ending', 'style_bible', 'characters',
                 'props', 'width', 'height', 'fps', 'shots'}, 'story')
     if type(data.get('schema_version')) is not int or data['schema_version'] != 1:
@@ -142,6 +176,12 @@ def compile_story(path, out, font_path=None):
     shots = data.get('shots')
     if not isinstance(shots, list) or not 1 <= len(shots) <= 64:
         raise ValueError('shots must contain 1..64 entries')
+    for sid in takes:
+        matches = [shot for shot in shots if isinstance(shot, dict) and shot.get('id') == sid]
+        if not matches:
+            raise ValueError(f'Take references an unknown shot id: {sid}; ids are case-sensitive')
+        if len(matches) != 1 or set(matches[0]) & {'source', 'generate', 'title'} != {'generate'}:
+            raise ValueError(f'{sid}: takes can fill generated shots only; existing sources and titles are preserved')
     base = {'schema_version': 1, 'title': data['title'], 'style_bible': bible,
             'ratio': f'{width // divisor}:{height // divisor}', 'width': width, 'height': height, 'fps': fps}
     # Stage only in a new project-specific directory. Failure cannot alter an existing project.
@@ -150,7 +190,7 @@ def compile_story(path, out, font_path=None):
         root = Path(temporary)
         for folder in ('media', 'generation', 'references'):
             (root / folder).mkdir()
-        assembled, timeline, warnings, generation = [], [], [], []
+        assembled, timeline, warnings, generation, selections = [], [], [], [], []
         seen, hashes, total_bytes, cursor = set(), {}, 0, 0.
         def copy_input(source, target, limit):
             nonlocal total_bytes
@@ -163,9 +203,9 @@ def compile_story(path, out, font_path=None):
                 raise ValueError('Project exceeds 512 MiB of copied inputs')
             target.write_bytes(raw)
             return raw
-        for shot in shots:
+        for shot, portable_shot in zip(shots, portable['shots']):
             only(shot, {'id', 'beat', 'action', 'start', 'end', 'camera', 'state', 'source',
-                        'generate', 'title', 'caption'}, 'shot')
+                        'generate', 'title', 'caption', 'source_sha256'}, 'shot')
             sid = shot.get('id')
             if (not isinstance(sid, str) or not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9_-]{0,39}', sid)
                     or sid.lower() in seen):
@@ -180,21 +220,29 @@ def compile_story(path, out, font_path=None):
             if len(kinds) != 1:
                 raise ValueError('Every shot needs exactly one of source, generate, title')
             kind = next(iter(kinds))
+            if 'source_sha256' in shot:
+                if kind != 'source':
+                    raise ValueError('source_sha256 is only valid for a source shot')
+                check_sha256(shot['source_sha256'], f'{sid}.source_sha256')
             compiled = {'id': sid, 'first_frame_target': shot['start'], 'last_frame_target': shot['end'], 'transition': 'cut'}
             if 'caption' in shot:
                 compiled['caption'] = shot['caption']
             status = 'visual-review-required'
             source_hash = None
+            requested_ms = None
             if kind == 'source':
                 name = check_text(shot['source'], 'source')
                 raw = copy_input(path.parent / name, root / 'media' / f'{sid}.gif', cli.MAX_GIF_BYTES)
                 frames, delays, _ = cli.validate_gif(io.BytesIO(raw))
                 source_hash = hashlib.sha256(raw).hexdigest()
+                if 'source_sha256' in shot and source_hash != shot['source_sha256']:
+                    raise ValueError(f'{sid}: source SHA-256 mismatch; reviewed media changed')
                 if source_hash in hashes:
                     warnings.append(f'{sid}: same footage as {hashes[source_hash]}; repetition is not a new story action')
                 hashes[source_hash] = sid
                 duration = sum(delays)
                 compiled['source'] = f'media/{sid}.gif'
+                portable_shot['source'] = compiled['source']
                 if max(delays) > 1000:
                     warnings.append(f'{sid}: contains a drawing held over 1 second; inspect pacing')
                 drawing_count = len(frames)
@@ -207,7 +255,10 @@ def compile_story(path, out, font_path=None):
                 if sum(saved_delays) != sum(delays):
                     raise ValueError('Title encoding changed its duration')
                 duration, drawing_count = sum(saved_delays), len(decoded)
+                source_hash = hashlib.sha256(destination.read_bytes()).hexdigest()
                 compiled['source'] = f'media/{sid}.gif'
+                portable_shot.pop('title')
+                portable_shot['source'] = compiled['source']
                 del frames, decoded
             else:
                 settings = shot['generate']
@@ -228,18 +279,48 @@ def compile_story(path, out, font_path=None):
                         copy_input(source, root / 'references' / name, 20 * 1024 * 1024)
                         references.append(f'../references/{name}')
                     generated['references'] = references
+                    portable_shot['generate']['references'] = [name.removeprefix('../') for name in references]
                 candidate = root / 'generation' / f'{sid}.json'
                 write_json(candidate, {**base, 'shots': [generated]})
                 validated = render.load_script(candidate, argparse.Namespace(width=None, height=None, fps=None))
                 duration = validated['shots'][0]['expected_ms']
                 drawing_count = generated.get('frames', 9)
-                generation.append(f'generation/{sid}.json')
-                compiled['source'] = f'accepted/{sid}.gif'
-                status = 'not-generated'
+                if sid in takes:
+                    selection = takes[sid]
+                    raw = copy_input(takes_path.parent / selection['source'],
+                                     root / 'media' / f'{sid}.gif', cli.MAX_GIF_BYTES)
+                    source_hash = hashlib.sha256(raw).hexdigest()
+                    if source_hash != selection['sha256']:
+                        raise ValueError(f'{sid}: selected take SHA-256 mismatch; review the actual file again')
+                    frames, delays, _ = cli.validate_gif(io.BytesIO(raw))
+                    requested_ms, duration, drawing_count = duration, sum(delays), len(frames)
+                    del frames
+                    if source_hash in hashes:
+                        warnings.append(f'{sid}: same footage as {hashes[source_hash]}; repetition is not a new story action')
+                    hashes[source_hash] = sid
+                    if max(delays) > 1000:
+                        warnings.append(f'{sid}: contains a drawing held over 1 second; inspect pacing')
+                    if duration != requested_ms:
+                        warnings.append(f'{sid}: selected take is {duration} ms, planned {requested_ms} ms; timeline uses actual timing')
+                    compiled['source'] = f'media/{sid}.gif'
+                    portable_shot.pop('generate')
+                    portable_shot['source'] = compiled['source']
+                    kind, status = 'selected-take', 'caller-review-recorded'
+                    selections.append({'shot_id': sid, 'source': compiled['source'],
+                                       'sha256': source_hash, 'review_notes': selection['review_notes'],
+                                       'generation_script': f'generation/{sid}.json',
+                                       'requested_duration_ms': requested_ms, 'source_duration_ms': duration})
+                else:
+                    generation.append(f'generation/{sid}.json')
+                    compiled['source'] = f'accepted/{sid}.gif'
+                    status = 'not-generated'
+            if source_hash is not None:
+                portable_shot['source_sha256'] = source_hash
             playback_ms = max(1, round(duration / 1000 * fps)) / fps * 1000
             timeline.append({'id': sid, 'kind': kind, 'beat': shot['beat'], 'action': shot['action'],
                              'state': shot.get('state', ''), 'start_ms': cursor, 'end_ms': cursor + playback_ms,
-                             'source_duration_ms': duration, 'drawings': drawing_count,
+                             'source_duration_ms': duration, 'requested_duration_ms': requested_ms,
+                             'drawings': drawing_count,
                              'source_sha256': source_hash, 'status': status})
             cursor += playback_ms
             assembled.append(compiled)
@@ -250,6 +331,10 @@ def compile_story(path, out, font_path=None):
         # Retain the author's editable source document. Paths still refer to original inputs;
         # the compiled film and generation scripts use copied, portable project inputs.
         write_json(root / 'storyboard.original.json', data)
+        write_json(root / 'storyboard.json', portable)
+        if selections:
+            write_json(root / 'take-selections.json', {'schema_version': 1, 'takes': selections,
+                       'visual_acceptance': 'Caller review notes are recorded, not independently verified.'})
         notes = [f"# {data['title']}", '', data['premise'], '', f"Ending: {data['ending']}", '',
                  '## Visual bible', bible, '', '## Shots and handoffs']
         for collection in ('characters', 'props'):
@@ -263,9 +348,10 @@ def compile_story(path, out, font_path=None):
         (root / 'storyboard.md').write_text('\n'.join(notes) + '\n', encoding='utf-8')
         report = {'provider_calls': 0, 'ready_to_assemble': not generation, 'assembly_script': filename,
                   'generation_scripts': generation, 'minimum_new_requests_for_missing_shots': len(generation),
+                  'selected_take_count': len(selections),
                   'planned_playback_ms': cursor, 'timeline': timeline, 'warnings': warnings,
                   'visual_acceptance': 'not-established',
-                  'scope': 'Planning, source copying and local title animation only. Generated durations are targets, not observations.'}
+                  'scope': 'Offline planning, caller-selected source copying and local title animation only. Missing generated durations are targets, not observations.'}
         write_json(root / 'story-report.json', report)
         # rename refuses a competing nonempty directory; do not merge into old projects.
         if out.exists():
@@ -314,6 +400,7 @@ def main():
     build = sub.add_parser('compile', help='Prepare storyboard, prompts and portable montage inputs; no network calls')
     build.add_argument('story', type=Path)
     build.add_argument('--out', required=True, type=Path)
+    build.add_argument('--takes', type=Path, help='Manifest of reviewed GIF takes, hashes and notes for generated slots')
     build.add_argument('--font', type=Path, help='Optional local licensed font for title cards')
     export = sub.add_parser('export-gif', help='Convert a verified local MP4 to a bounded silent GIF')
     export.add_argument('source', type=Path)
@@ -323,7 +410,7 @@ def main():
     export.add_argument('--repeat', action='store_true', help='Loop the whole story forever; default plays once')
     args = parser.parse_args()
     try:
-        result = (compile_story(args.story, args.out, args.font) if args.command == 'compile'
+        result = (compile_story(args.story, args.out, args.font, args.takes) if args.command == 'compile'
                   else export_gif(args.source, args.out, args.width, args.fps, args.repeat))
         print(json.dumps(result, ensure_ascii=False, indent=2))
     except (ValueError, OSError, RuntimeError, KeyError, IndexError) as error:

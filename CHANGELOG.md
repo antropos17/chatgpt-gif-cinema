@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — reviewed story takes
+
+- Fill generated storyboard slots with explicit local GIF selections, SHA-256 hashes
+  and caller review notes through `compile --takes`. No provider requests are made.
+- Preserve original generation scripts, measure selected GIF timing and flag duration
+  changes or repeated footage. Partial selection keeps missing actions explicit.
+- Emit portable storyboards with hash-pinned media and rebased references, allowing
+  a longer story to continue in a new project without replacing prior sources/titles.
+- Include a no-key selection example and offline regressions. This is a workflow
+  improvement, not newly generated animation or a new published release.
+
 ## Unreleased — source-only backend hardening
 
 - Validate GIF extension framing before decoding, including fixed headers and

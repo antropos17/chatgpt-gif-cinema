@@ -1,6 +1,6 @@
 # Story project helper
 
-`python scripts/story_project.py compile STORY.json --out NEW_DIRECTORY [--font FONT]`
+`python scripts/story_project.py compile STORY.json --out NEW_DIRECTORY [--font FONT] [--takes TAKES.json]`
 
 Compile is entirely offline: it validates the author-written storyboard, copies
 existing inputs, creates local title GIFs, and writes strict runtime inputs. It does
@@ -31,6 +31,9 @@ Choose exactly one asset mode:
 1. `source: "relative/path.gif"`: original delays and bytes are preserved. Inputs
    resolve relative to the storyboard, not the shell working directory. The same
    source can recur deliberately, but the report warns about duplicate hashes.
+   Optional `source_sha256` pins the exact bytes; mismatches fail before publication.
+   Compiled portable storyboards include this pin for every copied/rendered source.
+   A source hash is invalid on a `generate` or `title` shot.
 2. `generate: {"frames": 16, "duration_ms": 160}`: prepares an unexecuted one-shot
    runtime script. Optional `model`, `size`, `quality`, `complexity`, `references`
    follow the runtime's strict contract. Reference paths must already exist and are
@@ -45,20 +48,97 @@ Choose exactly one asset mode:
    10.0 has a fixed-size bitmap fallback, so provide `--font` for larger/readable
    type in that environment; no system font is required merely to run the helper.
 
+## Select reviewed takes
+
+After inspecting character identity, the visible action and both neighboring joins,
+write a UTF-8 JSON manifest (maximum 1 MiB). It records the caller's selection, not
+an automatic visual verdict. For example:
+
+```json
+{
+  "schema_version": 1,
+  "takes": [
+    {
+      "shot_id": "01-signal",
+      "source": "takes/signal-take-02.gif",
+      "sha256": "REPLACE_WITH_THE_ACTUAL_64_CHARACTER_LOWERCASE_SHA256",
+      "review_notes": "Describe identity, action, incoming and outgoing cut review, and any remaining faults."
+    }
+  ]
+}
+```
+
+The placeholder hash above is deliberately invalid. Calculate the actual file hash
+only after reviewing that file. `shot_id` must exactly match a generated slot;
+unknown or duplicate IDs fail, including case-only duplicates. `source` resolves
+relative to the manifest, independently of the storyboard's location. `sha256`
+contains 64 lowercase hexadecimal characters. `review_notes` is required nonempty
+text, at most 4,000 characters. Unknown fields fail. Supply 1–64 selections.
+
+```bash
+python scripts/story_project.py compile story.json --takes takes.json --out output/selected-v1
+```
+
+The helper reads the GIF once into a bounded buffer and hashes, validates and copies
+those same bytes. It never chooses candidates, generates shots or spends API calls.
+A duration mismatch produces a warning and uses measured timing, not the request's
+target. Repeated footage is still flagged; selection does not create a new action.
+Existing `source` and `title` shots cannot be replaced through the manifest.
+
+Partial selection is supported. Continue with the **portable** storyboard and a
+manifest containing only the next missing shots:
+
+```bash
+python scripts/story_project.py compile output/selected-v1/storyboard.json \
+  --takes next-takes.json --out output/selected-v2
+```
+
+The previous project and original media remain unchanged. The whole project folder
+can move before this step: media and remaining references use project-relative
+paths. Previously compiled titles are now pinned source GIFs, so continuing a project
+does not redraw typography or need its original font. Their editable title settings
+remain in the earlier `storyboard.original.json`. Keep previous project versions for
+their original prompts and selection receipts; those records are not merged into a
+cumulative audit history. Editing a pinned source requires a deliberate new storyboard
+and another review, not silently changing the copied file.
+
+Try the full selection workflow without generating anything:
+
+```bash
+python scripts/story_project.py compile assets/example/storyboard.pending.json \
+  --takes assets/example/takes.example.json --out output/selected-example
+python -m gif_cinema render output/selected-example/film.json --execute \
+  --max-api-calls 0 --out output/selected-render
+```
+
+This maps the **same three bundled astronaut GIFs** into pending slots and adds the
+existing local title. It is the same 9.68-second source edit, not new character
+animation or a rendered version of the separate 14-action long-story plan. The
+example review notes explicitly record a technical workflow check, not visual approval.
+
 ## Output and timing
 
+- `storyboard.json`: portable continuation document. Source paths and remaining
+  reference paths point into this project. Rendered titles and selected takes become
+  hash-pinned sources; unfilled generated slots remain generated.
 - `storyboard.original.json`: original editable planning document. Its original input
   paths remain provenance, not guaranteed portable dependencies. Recompile it where
   those inputs are available or update its paths to the copied media.
 - `storyboard.md`: readable bible, shot actions and handoffs.
 - `media/`: copied source GIFs and locally rendered title cards.
 - `references/` and `generation/`: copied stills and validated one-shot API inputs.
+  The generation input for a selected take remains as provenance; it is no longer
+  listed as a missing request in the report.
+- `take-selections.json` (when `--takes` is used): selected media hashes, caller review
+  notes, original request links, requested and measured durations. This is an output
+  receipt, not an input takes manifest. It describes this compile only.
 - `film.json`: executable only when every shot has local media.
 - `assembly-template.json`: created instead when any shot still needs generation;
   `accepted/ID.gif` deliberately marks the absent assets. Do not execute it until
-  real accepted GIFs exist. Prefer updating the storyboard and recompiling.
+  real accepted GIFs exist. Prefer selecting reviewed takes and recompiling.
 - `story-report.json`: source timings, drawing counts, source checksums, missing-shot
-  request count, planned quantized timeline, repetition warnings and review status.
+  request count, selection count, quantized timeline, repetition warnings and review status.
+  `visual_acceptance` remains `not-established`, including when review notes are recorded.
 
 A generated shot's time is a target; source/title time is measured. Per-shot MP4 time
 is `max(1, round(seconds * fps)) / fps`, matching the runtime's frame rounding. Title
