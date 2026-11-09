@@ -28,7 +28,9 @@ All examples occupy one column. This follow-up keeps the original identity and
 recipes, adds watch/make/inspect entry routes, and makes all three existing animated
 finishing studies visible before the setup instructions. Their shared private-tool
 scope appears above the first preview; individual captions explain the method and
-link to full videos and actual frame pairs. There is no side-by-side table that
+link to full videos and actual frame pairs. Previews are plain image embeds with
+separate watch links: GitHub turns a thumbnail wrapped in an attachment-video link
+into a full video player, losing the intended looping GIF. There is no side-by-side table that
 squeezes characters and labels on a phone. Earlier watch/demo/install anchors are
 preserved so existing links keep working.
 

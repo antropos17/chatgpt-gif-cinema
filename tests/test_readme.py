@@ -84,6 +84,7 @@ class ReadmeTests(unittest.TestCase):
             path = f'docs/assets/showcase/{subject}-preview.gif'
             with self.subTest(subject=subject):
                 self.assertEqual(source.count(path), 1)
+                self.assertNotIn(f']({path})](', source)
                 self.assertLess(visible.index(path), setup)
                 self.assertIn(f'docs/assets/showcase/{subject}-frames.png', visible)
         self.assertIn('not included in the\npublic CLI', visible)

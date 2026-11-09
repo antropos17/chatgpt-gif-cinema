@@ -77,7 +77,7 @@ shows what the public source actually exports.
 
 ### Cat / Walk, jump, curl up
 
-[![A 2.24-second cat-walk excerpt. Left: native timing. Right: existing compositing, framing cleanup and selective interpolation.](docs/assets/showcase/cat-preview.gif)](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5)
+![A 2.24-second cat-walk excerpt. Left: native timing. Right: existing compositing, framing cleanup and selective interpolation.](docs/assets/showcase/cat-preview.gif)
 
 **Three actions · 7.68-second comparison · Silent**
 
@@ -89,7 +89,7 @@ as motion. Those differences should not all be credited to interpolation.
 
 ### Dog / Follow the ball
 
-[![A 2.24-second excerpt of an illustrated dog and red ball, before and after local interpolation.](docs/assets/showcase/dog-preview.gif)](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638)
+![A 2.24-second excerpt of an illustrated dog and red ball, before and after local interpolation.](docs/assets/showcase/dog-preview.gif)
 
 **Four takes · 10.24-second comparison · Silent**
 
@@ -100,7 +100,7 @@ soften a hold; they cannot fix a disappearing object or an incorrect paw.
 
 ### Astronaut / A signal, an answer
 
-[![A 2.24-second excerpt of the astronaut greeting, at native drawing cadence and with existing local interpolation.](docs/assets/showcase/astronaut-preview.gif)](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34)
+![A 2.24-second excerpt of the astronaut greeting, at native drawing cadence and with existing local interpolation.](docs/assets/showcase/astronaut-preview.gif)
 
 **Two takes · 5.12-second comparison · Silent**
 
