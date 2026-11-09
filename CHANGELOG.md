@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — shot-aligned GIF chapters
+
+- Export a completed film into ordered GIF chapters that keep whole shots together,
+  with configurable duration, dimensions and FPS and bounded media budgets.
+- Verify the exact script, completed render manifest, saved-shot timing/hashes and
+  movie hash. Dry-run makes no media-process calls or output writes.
+- Snapshot and decode the H.264 master, trim by source-frame boundaries, verify every
+  encoded GIF, and publish a new chapter folder with timing and checksum receipts.
+- Keep the MP4 and earlier outputs unchanged. Chapters are silent, play once by
+  default, and round their final hold up to one GIF frame. This is local delivery
+  of existing actions, not new generated motion or a new versioned release.
+
 ## Unreleased — reviewed story takes
 
 - Fill generated storyboard slots with explicit local GIF selections, SHA-256 hashes

@@ -13,7 +13,7 @@ def package(target):
         raise ValueError('Package target already exists')
     names = [
         'SKILL.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'agents/openai.yaml',
-        'scripts/smoke_test.py', 'scripts/story_project.py',
+        'scripts/smoke_test.py', 'scripts/story_project.py', 'scripts/story_chapters.py',
         'references/generation.md', 'references/review.md',
         'references/storytelling.md', 'references/story-project.md',
         'assets/example/film.json', 'assets/example/storyboard.json',

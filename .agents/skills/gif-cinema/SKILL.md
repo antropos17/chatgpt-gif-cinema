@@ -129,7 +129,14 @@ this helper. The pinned runtime uses hard cuts and can import optional local aud
 through its film script. GIF has no audio. Follow current runtime help if using newer
 editing tools; do not imply the pinned package includes them.
 
-Export a verified MP4 first, then a smaller GIF or chapters. GIF palette conversion
+Export a verified MP4 first, then a smaller GIF or whole-shot chapters. Use
+`scripts/story_chapters.py PROJECT/film.json --render RENDER --out NEW_DIRECTORY
+--max-seconds 15` to group completed shots within GIF limits. Add `--dry-run` first
+to inspect the plan without encoding or writes. Keep the completed manifest and
+saved render GIFs; the helper verifies their timing/hashes and the movie. Chapters
+are source-frame-aligned, silent and play once unless `--repeat` is requested.
+They preserve shot order and never split an action to satisfy a duration limit.
+See [chapter limits and timing](references/story-project.md#export-whole-shot-gif-chapters). GIF palette conversion
 can damage gradients and fine outlines; review the actual final GIF too. High playback
 FPS does not create new motion. [review.md](references/review.md) gives the visual and
 technical acceptance checks.
