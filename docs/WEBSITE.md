@@ -3,8 +3,7 @@
 `docs/index.html`, `docs/site.css` and `docs/site.js` are the source of the new
 static, English-language website. It has no backend, account system, analytics,
 external fonts, generator, or paid API calls. The Python filmmaking runtime is
-unchanged. The user's newer request for a website supersedes the older no-website
-milestone text in `AGENTS.md` for this presentation-only work.
+unchanged.
 
 ## Build
 
@@ -14,18 +13,28 @@ No Node dependencies or build framework are required. The host must support
 normal byte-range requests for seeking video. This branch does not enable
 GitHub Pages or change repository access/settings.
 
-## What is interactive
+## Design and interaction
 
-- Three animated character posters open full films/comparisons in a keyboard-
-  dismissible, focus-restoring dialog.
-- A global motion toggle pauses the decorative ticker, rotating marks and
-  poster loops. Reduced-motion preference starts them paused. Explicitly played
-  films remain user-controlled.
-- Offscreen/background-tab poster videos pause to avoid unnecessary playback.
-- Three storyboard buttons seek the public 7.68-second film to 0, 2.56 and 5.12s.
-- Cat, astronaut and dog tabs switch the comparison video, explanatory note
-  and actual frame-pair link together.
-- The demo command is copyable, with a visible success or fallback message.
+The warm paper, charcoal and restrained brown interface follows the existing
+footage's palette. Full 1:1 previews are displayed without masks, rotation,
+recoloring or text over the characters. Playback controls sit below the images.
+The earlier saturated poster panels, marquee, spinning marks, repeated film
+section and decorative shapes have been removed rather than hidden.
+
+- The complete preview card is a keyboard-accessible film/comparison button.
+- The film dialog closes with Escape, its close button or an outside click, then
+  restores focus. Story-beat buttons in the astronaut dialog seek to 0, 2.56 and 5.12s.
+- The global preview toggle and reduced-motion preference control automatic
+  previews. There are no other decorative animations.
+- Offscreen previews pause. Opening a dialog or playing a comparison pauses
+  previews, including after tab switching. Media pauses when the document is hidden.
+- Comparison tabs switch the video, description, heading and frame-pair link together.
+- Mobile navigation stays visible. Metadata is larger and controls stay outside footage.
+- macOS/Linux and Windows tabs provide usable no-key demo commands. Windows calls
+  the virtual-environment executable directly, without changing execution policy.
+- Copying has a visible success or fallback message. Paid-generation caveats live
+  in a compact disclosure beside the starter, not a repeated marketing section.
+
 
 ## Media truth and provenance
 
@@ -46,9 +55,9 @@ The three public comparison files retain their embedded labels and frame rates.
 `assets/site/provenance.json` records source/output hashes, media facts and the
 exact teaser extraction operations. The JPEG posters are single decoded frames
 from those source or teaser videos. Web titles are editorial names, not new films.
-Original artwork may contain green objects; the site's design palette is cream,
-ink, vermillion, lavender and gold. No original footage is recolored.
+Original artwork may contain green objects; the interface uses warm paper, charcoal
+and brown. No original footage is recolored.
 
-GIF Factory's gallery-first structure, bold poster typography and independent
-character palettes informed the presentation. No GIF Factory artwork, fonts or
+GIF Factory's gallery-first structure informed the presentation. The current
+film-first design gives the original footage room instead of overlaying poster art. No GIF Factory artwork, fonts or
 code are copied. The existing source-available evaluation license is unchanged.
