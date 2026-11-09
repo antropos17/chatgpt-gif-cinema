@@ -1,4 +1,7 @@
 """Read-only FFmpeg capability checks used before film execution."""
+import json
+import os
+import platform
 import shutil
 import subprocess
 
@@ -43,3 +46,44 @@ def require_film_capabilities(audio=False):
     if missing:
         raise RuntimeError("FFmpeg cannot provide " + ", ".join(missing)
                            + "; install a compatible FFmpeg build")
+
+
+def environment_report():
+    """Summarize local readiness without printing secrets or sending requests."""
+    from .cli import default_model
+    try:
+        from PIL import __version__ as pillow
+    except ImportError:
+        pillow = None
+    try:
+        model = {"value": default_model(), "ok": True}
+    except ValueError as exc:
+        model = {"value": os.environ.get("GIF_CINEMA_MODEL"), "ok": False, "error": str(exc)}
+    tools = {name: inspect_tool(name) for name in ("ffmpeg", "ffprobe")}
+    capabilities = inspect_ffmpeg_capabilities() if tools["ffmpeg"]["available"] else {}
+    film_ready = (tools["ffmpeg"]["available"] and tools["ffprobe"]["available"]
+                  and capabilities.get("h264_encoder", False) and capabilities.get("core_filters", False))
+    return {
+        "python": platform.python_version(),
+        "pillow": pillow,
+        "tools": tools,
+        "ffmpeg_capabilities": capabilities,
+        "default_model": model,
+        "openai_api_key_set": bool(os.environ.get("OPENAI_API_KEY")),
+        "ready": {
+            "offline_film": bool(film_ready and pillow),
+            "generation": bool(film_ready and pillow and model["ok"] and os.environ.get("OPENAI_API_KEY")),
+        },
+    }
+
+
+def doctor(args):
+    report = environment_report()
+    print(json.dumps(report, indent=2))
+    if not report["ready"]["offline_film"]:
+        raise RuntimeError("Local film assembly is not ready; see the report above")
+
+
+def add_parser(sub):
+    parser = sub.add_parser("doctor", help="Check Python, Pillow, FFmpeg and API settings; sends no requests")
+    parser.set_defaults(func=doctor)
