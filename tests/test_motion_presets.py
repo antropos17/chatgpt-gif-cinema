@@ -36,7 +36,7 @@ class MotionPresetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary, patch('socket.create_connection', side_effect=AssertionError('Network forbidden')):
             for name in presets.NAMES:
                 with self.subTest(name=name):
-                    path = presets.save_preset(name, Path(temporary) / name)
+                    path = presets.save_preset(name, Path(temporary).resolve() / name)
                     original = path.read_bytes()
                     prepared = layers.prepare_scene(path)
                     self.assertEqual(prepared['assets'], {})
@@ -46,7 +46,7 @@ class MotionPresetTests(unittest.TestCase):
                     self.assertEqual(first.tobytes(), closing.tobytes())
                     middle = layers.render_at(prepared, 1600)[0]
                     self.assertNotEqual(first.tobytes(), middle.tobytes())
-                    bundle = layers.save_bundle(prepared, Path(temporary) / (name + '-bundle'))
+                    bundle = layers.save_bundle(prepared, Path(temporary).resolve() / (name + '-bundle'))
                     reopened = layers.prepare_scene(bundle)
                     for timestamp in (0, 480, 1600, 3160):
                         self.assertEqual(layers.render_at(prepared, timestamp)[0].tobytes(),
@@ -56,7 +56,7 @@ class MotionPresetTests(unittest.TestCase):
     def test_reading_hold_text_fits_canvas_and_orbit_interior(self):
         with tempfile.TemporaryDirectory() as temporary:
             for name in presets.NAMES:
-                prepared = layers.prepare_scene(presets.save_preset(name, Path(temporary) / name))
+                prepared = layers.prepare_scene(presets.save_preset(name, Path(temporary).resolve() / name))
                 for layer in prepared['scene']['layers']:
                     if layer['type'] != 'text':
                         continue
@@ -80,7 +80,7 @@ class MotionPresetTests(unittest.TestCase):
 
     def test_bad_copy_fails_before_writing_and_existing_output_is_immutable(self):
         with tempfile.TemporaryDirectory() as temporary:
-            destination = Path(temporary) / 'new'
+            destination = Path(temporary).resolve() / 'new'
             for options in ({'headline': 'X' * 100}, {'caption': '😀'}, {'accent': '#ffffff00'}, {'headline': ''}):
                 with self.subTest(options=options), self.assertRaises(ValueError):
                     presets.save_preset('orbit-badge', destination, **options)
