@@ -7,6 +7,7 @@ import hashlib
 import io
 import json
 import math
+import os
 from pathlib import Path
 import stat
 import tempfile
@@ -35,7 +36,13 @@ def pair(value, label, low, high):
 
 
 def read_bytes(path, limit):
-    with Path(path).open('rb') as stream:
+    # Nonblocking open lets us reject a FIFO before waiting for its writer.
+    # O_BINARY is required on Windows when opening through os.open.
+    flags = os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0) | getattr(os, 'O_BINARY', 0)
+    fd = os.open(path, flags)
+    with os.fdopen(fd, 'rb') as stream:
+        if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+            raise ValueError('Input must be a regular local file')
         raw = stream.read(limit + 1)
     if len(raw) > limit:
         raise ValueError(f"Input exceeds the {limit} byte limit")
@@ -286,6 +293,8 @@ def export(frames, delays, loop, source, options, out, *, dry_run=False):
             atlas.paste(frame, tuple(rect[:2]))
         atlas.save(stage / 'atlas.png')
         report['preview'] = write_preview(frames, delays, loop, stage / 'animation.gif')
+        if report['preview']['decoded_frames'] < 2:
+            report['warnings'].append('Preview is static; film imports require at least two decoded GIF frames.')
         report['files_sha256'] = {p.relative_to(stage).as_posix(): digest(p.read_bytes())
                                   for p in sorted(stage.rglob('*')) if p.is_file()}
         (stage / 'manifest.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')

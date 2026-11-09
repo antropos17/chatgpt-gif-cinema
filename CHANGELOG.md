@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — safe motion stack integration
+
+- Integrate standalone motion, experimental layers and audio validation with the
+  current doctor, script inspector and story workflow. Keep their commands distinct.
+- Reject nonregular motion sources and recipes before opening; use nonblocking
+  descriptor checks to prevent FIFO hangs, including during dry-run.
+- Preserve the archived Chrome study separately from standalone motion documentation.
+
 ## Unreleased — CLI conveniences and cross-platform CI
 
 - Add `gif-cinema doctor`: a no-request readiness report for Python, Pillow,
@@ -33,6 +41,59 @@
   a longer story to continue in a new project without replacing prior sources/titles.
 - Include a no-key selection example and offline regressions. This is a workflow
   improvement, not newly generated animation or a new published release.
+
+## Unreleased — standalone film audio validation
+
+- Apply the existing bounded audio snapshot and strict-decode preflight to
+  standalone `film --audio`, rejecting empty/corrupt inputs before encoding.
+- Verify expected AAC audio and duration coverage before atomic publication,
+  including `--force`; failed input or output checks preserve the previous MP4.
+- Audio-enabled standalone films now require working ffprobe and use the same
+  input/duration limits as script render. Silent film assembly keeps its existing
+  FFmpeg-only dependency and behavior. No new sidecar files or API calls.
+- Add standalone regressions for corrupt/empty WAVs, source changes, missing or
+  short output audio, timeout cleanup, no-clobber races and valid audio timing.
+
+## Unreleased — audio preflight before generation
+
+- Snapshot bounded local audio and strictly decode it before any paid render
+  request; reject corrupt/truncated audio before creating a project or spending.
+  Keep dry-run FFmpeg-free and explicitly mark audio decode validation as pending.
+- Bound encoded audio size, duration, channels, sample rate, probing and decode
+  time. Reject playlists/network protocols and preserve the exact validated bytes
+  through assembly, with hash-bound audio facts in the manifest.
+- Verify requested final AAC audio, strict decoding and video-duration coverage
+  with packet-rounding tolerance; report audio verification in receipts. Silent
+  films keep their existing verification contract.
+- Add offline corruption, timeout, resource-limit, snapshot, missing-track,
+  resume and 54-second/6-fps audio timeline regressions. No provider requests.
+
+## Unreleased — experimental source-only independent layers
+
+- Give both halves of the asset-free example card rotation explicit smootherstep
+  easing; test the angular speed at the turn and loop seam and symmetric rendered poses.
+- Add a separate `python -m gif_cinema.layers` proof of concept for independent
+  still-image, text, rectangle and ellipse layers, local timelines, anchors,
+  source-over alpha and keyframed easing. This is not Lottie-compatible.
+- Add portable scene save/reopen, verified GIF/MP4/PNG export and a verifier that
+  rerenders every saved frame and checks receipt hashes.
+- Retain reviewed raster budgets, regular-file/FIFO defenses, shared 16 MiB
+  receipt limits and bounded normalized scene serialization.
+- Reuse the published bounded media runner; include only source, documentation,
+  tests and an asset-free shapes/text JSON example. No showcase/demo media or
+  artwork generator is included. Editable text requires Pillow 10.1 or newer.
+
+## Unreleased — source-only motion recipes
+
+- Add standalone offline `motion` for keyframed pan, zoom, rotation and opacity,
+  source trimming/retiming, repeat/reverse/ping-pong playback, PNG frames, GIF,
+  verified MP4 and optional bounded spritesheets.
+- Preserve full-resolution small color accents in the shared GIF palette, honor
+  EXIF still-image orientation and sample rational timing boundaries exactly.
+- Reuse corrected GIF extension preflight with stricter motion input budgets;
+  reject expanding GIF canvases before decoding. Search feasible atlas grids.
+- Include motion source, generic recipe and offline regressions only. No new
+  media, demo resources, editor or separate finishing feature is added.
 
 ## Unreleased — source-only backend hardening
 

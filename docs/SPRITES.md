@@ -26,7 +26,9 @@ Execution requires a **new** output directory. There is no overwrite switch.
   padding. PNGs preserve the decoded pixels, including partial alpha.
 - `animation.gif`: a **lossy preview**, with one shared 255-color palette plus a
   transparent palette entry. Alpha below 128 becomes transparent; other alpha
-  becomes opaque. It is suitable as a film-script source after visual review.
+  becomes opaque. An animated preview can be a film-script source after visual
+  review. Single-pose or fully merged previews are static and cannot be imported
+  by the film renderer, which requires at least two decoded GIF frames.
 - `manifest.json`: versioned runtime coordinates, individual delays, loop metadata,
   source checksum, crop/scale, RGBA pixel checksums, output file checksums, warnings
   and actual preview timing. Published last as the completion marker.
@@ -131,7 +133,9 @@ does not create extra action drawings; duplicated poses remain holds.
 ## Import into a film
 
 After reviewing `animation.gif`, use it as a local `source` in a normal v1 film
-script. Preserve `first_frame_target` and `last_frame_target` descriptions and check
+script if it contains at least two decoded frames. A single pose still exports
+useful PNG assets, but does not count as an animated film source. Preserve
+`first_frame_target` and `last_frame_target` descriptions and check
 the neighboring cuts. Use `render ... --execute --max-api-calls 0` for a guaranteed
 source-only film. See [the script contract](SCRIPT-FORMAT.md).
 
@@ -149,6 +153,8 @@ them and choose the background explicitly there.
 - 16 megapixels and 16384 pixels per dimension in the packed output atlas.
 - GIF input must stay inside its fixed logical canvas. Existing GIF block-framing
   preflight runs before decoding; malformed extensions or oversized descriptors fail.
+- Inputs must be regular local files. Devices and FIFOs are rejected without
+  waiting for a writer; Windows reads explicitly preserve binary control bytes.
 
 The limits apply before the corresponding bulk frame or atlas allocation. Exceeding
 one fails explicitly; the tool does not silently downsample, truncate or discard poses.

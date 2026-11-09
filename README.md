@@ -272,3 +272,16 @@ evaluation and research are permitted; commercial use, redistribution and hostin
 require permission. [Read the license](LICENSE).
 
 [Support the workshop on Buy Me a Coffee ↗](https://buymeacoffee.com/gifcinema)
+
+## Offline motion and audio tools
+
+Animate a local still or retime/reframe an existing GIF with the standalone
+[`motion` command](docs/STANDALONE-MOTION.md). It writes a new reviewed candidate,
+not new character actions, and leaves the source unchanged. For experimental
+independent image, text and shape layers, see the [source-only compositor](docs/MULTILAYER-POC.md)
+and [Unicode font support](docs/UNICODE-TEXT.md). These local tools make no provider calls.
+
+Local audio is snapshotted and strictly decoded before script generation or
+standalone film assembly. Corrupt audio cannot trigger generation spending;
+final audio tracks are verified before publication. Dry-run reports decode
+validation as pending and does not run FFmpeg.

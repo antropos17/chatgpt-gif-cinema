@@ -1,7 +1,11 @@
 """Offline sprite contracts: timing, alpha, shared geometry and bounded IO."""
 import io
 import json
+import os
 from pathlib import Path
+import stat
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -202,6 +206,12 @@ class SpriteTests(unittest.TestCase):
         self.assertTrue(any('completely transparent' in warning for warning in report['warnings']))
         self.assertEqual(report['preview']['duration_ms'], 360)
 
+    def test_single_pose_explicitly_reports_static_film_import_limit(self):
+        report = self.export({'cells': [[0, 0]], 'duration_ms': 100})
+        self.assertEqual(report['preview']['decoded_frames'], 1)
+        self.assertTrue(any('film imports require at least two' in warning for warning in report['warnings']))
+        self.assertTrue((self.root / 'out/frames/0000.png').is_file())
+
     def test_gif_alpha_and_finite_loop_survive_unpack(self):
         frames, _, _, _, _ = self.load()
         path = self.root / 'source.gif'
@@ -263,6 +273,28 @@ class SpriteTests(unittest.TestCase):
             convert.assert_not_called()
         with patch.object(sprites, 'MAX_PIXEL_FRAMES', 200), self.assertRaisesRegex(ValueError, 'pixel budget'):
             self.load()
+
+    def test_read_preserves_all_binary_bytes_and_control_characters(self):
+        raw = bytes(range(256)) + b'\r\n\x1a\r\n'
+        path = self.root / 'binary.dat'
+        path.write_bytes(raw)
+        self.assertEqual(sprites.read_bytes(path, len(raw)), raw)
+
+    def test_nonregular_input_is_rejected_before_read(self):
+        with patch('gif_cinema.sprites.os.fstat') as info:
+            info.return_value.st_mode = stat.S_IFCHR
+            with self.assertRaisesRegex(ValueError, 'regular local file'):
+                sprites.read_bytes(self.root / 'sheet.png', 1000)
+
+    @unittest.skipUnless(hasattr(os, 'mkfifo'), 'FIFO creation is unavailable')
+    def test_fifo_input_is_rejected_without_waiting_for_a_writer(self):
+        path = self.root / 'waiting.fifo'
+        os.mkfifo(path)
+        result = subprocess.run([sys.executable, '-c',
+            'from gif_cinema.sprites import read_bytes; import sys; read_bytes(sys.argv[1], 100)', str(path)],
+            cwd=Path(__file__).resolve().parents[1], capture_output=True, text=True, timeout=5)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('regular local file', result.stderr)
 
     def test_output_bounds_and_timing_cap(self):
         with patch.object(sprites, 'MAX_SHEET_PIXELS', 300), self.assertRaisesRegex(ValueError, 'Packed atlas'):
