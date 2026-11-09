@@ -1,0 +1,50 @@
+{
+  "new_provider_calls": 0,
+  "note": "Existing public footage repackaged for web previews, not new character generation. Full media unchanged.",
+  "derived": [
+    {
+      "file": "cat-preview.mp4",
+      "source": "docs/assets/showcase/cat-film.mp4",
+      "source_sha256": "b2cd08b602210af08568aff5f560a44c7ef8602d55555d3927a99e31eb199c3e",
+      "sha256": "4b53b1d88fc1a70f3b52da687734aca600a00dd45f85ff6fbd7425a303d62ad3",
+      "processing": "Five-second excerpt starting at 3 seconds, 512x512, re-encoded H.264 CRF24.",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 512,
+            "height": 512,
+            "nb_frames": "125"
+          }
+        ],
+        "format": {
+          "duration": "5.000000"
+        }
+      }
+    },
+    {
+      "file": "dog-preview.mp4",
+      "source": "docs/assets/showcase/dog-comparison.mp4",
+      "source_sha256": "a00e96de77ef51027765ac1587b8314c0bb18f36e041c6ba0d646ac37930522f",
+      "sha256": "eaa600fe70c61935b2878435b5c0bed2060a469d0d551856bd07fd77c49fe5a8",
+      "processing": "First 5.12 seconds of native left panel; crop=512:512:0:64, H.264 CRF24.",
+      "ffprobe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 512,
+            "height": 512,
+            "nb_frames": "256"
+          }
+        ],
+        "format": {
+          "duration": "5.120000"
+        }
+      }
+    }
+  ]
+}
