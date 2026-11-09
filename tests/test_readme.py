@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from PIL import Image, ImageSequence
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ('README.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md')
+DOCS = ('README.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md')
 
 
 class Links(HTMLParser):
@@ -83,10 +83,11 @@ class ReadmeTests(unittest.TestCase):
         for subject in ('cat', 'dog', 'astronaut'):
             path = f'docs/assets/showcase/{subject}-preview.gif'
             with self.subTest(subject=subject):
-                self.assertEqual(source.count(path), 1)
+                embedded = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
+                self.assertEqual(embedded.count(path), 2 if subject == 'cat' else 1)
                 self.assertNotIn(f']({path})](', source)
                 self.assertLess(visible.index(path), setup)
-                self.assertIn(f'docs/assets/showcase/{subject}-frames.png', visible)
+                self.assertIn('docs/SHOWCASE.md', visible)
         self.assertIn('not included in the\npublic CLI', visible)
         self.assertIn('2.24-second excerpt', visible)
         self.assertTrue({'see-it-in-motion', 'try-it-without-an-api-key',
@@ -122,6 +123,66 @@ class ReadmeTests(unittest.TestCase):
         manifest = json.loads((base / 'manifest.json').read_text(encoding='utf-8'))
         self.assertTrue(manifest['typography']['outlined'])
         self.assertEqual(manifest['typography']['family'], 'Open Sans')
+
+    def test_catalog_puts_real_motion_before_explanation(self):
+        source = (ROOT / 'README.md').read_text(encoding='utf-8')
+        visible = re.sub(r'<details\b.*?</details>', '', source, flags=re.S)
+        first_image = visible.index('<img ')
+        self.assertLess(first_image, visible.index('## Character stories'))
+        self.assertLess(len(visible[:first_image].split()), 80)
+        self.assertNotIn('assets/identity/cover', visible)
+        self.assertNotRegex(visible, r'<img\b[^>]*height=')
+        urls = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
+        self.assertGreaterEqual(len(urls), 12)
+        self.assertGreaterEqual(len({u for u in urls if u.endswith('.gif')}), 8)
+        self.assertGreaterEqual(visible.count('<table>'), 5)
+        self.assertNotIn('width="33%"', visible)
+        self.assertIn('docs/SPRITES.md', visible)
+        self.assertIn('docs/GIF-REVIEW.md', visible)
+
+    def test_catalog_local_outputs_match_their_sources_and_facts(self):
+        def git_blob(data):
+            return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+        manifest = json.loads((ROOT / 'docs/assets/catalog/manifest.json').read_text(encoding='utf-8'))
+        self.assertEqual(manifest['new_provider_calls'], 0)
+        for asset in manifest['assets']:
+            path = ROOT / 'docs/assets/catalog' / asset['file']
+            with self.subTest(asset=asset['file']):
+                self.assertEqual(git_blob(path.read_bytes()), asset['git_blob_sha1'])
+                # Git identities use repository LF text, independent of Windows checkout CRLF.
+                source_text = (ROOT / asset['source']).read_text(encoding='utf-8').encode('utf-8')
+                self.assertEqual(git_blob(source_text), asset['source_git_blob_sha1'])
+                self.assertEqual(path.stat().st_size, asset['bytes'])
+                self.assertEqual(asset['api_calls'], 0)
+                with Image.open(path) as im:
+                    self.assertEqual(im.size, (asset['width'], asset['height']))
+                    self.assertEqual(im.n_frames, asset['frames'])
+                    self.assertEqual(im.info.get('loop'), asset['loop'])
+                    self.assertEqual(sum(f.info['duration'] for f in ImageSequence.Iterator(im)), asset['duration_ms'])
+
+    def test_table_gifs_use_responsive_picture_wrappers(self):
+        class Media(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.tables = self.pictures = 0
+                self.bare = []
+            def handle_starttag(self, tag, attrs):
+                if tag == 'table':
+                    self.tables += 1
+                if tag == 'picture':
+                    self.pictures += 1
+                if tag == 'img' and self.tables and not self.pictures:
+                    src = dict(attrs).get('src', '')
+                    if src.endswith('.gif'):
+                        self.bare.append(src)
+            def handle_endtag(self, tag):
+                if tag == 'table':
+                    self.tables -= 1
+                if tag == 'picture':
+                    self.pictures -= 1
+        parser = Media()
+        parser.feed((ROOT / 'README.md').read_text(encoding='utf-8'))
+        self.assertEqual(parser.bare, [])
 
     def test_cover_text_colors_have_readable_contrast(self):
         def luminance(color):
