@@ -457,6 +457,8 @@ def build_parser():
     add_sprites_parser(sub)
     from .motion import add_parser as add_motion_parser
     add_motion_parser(sub)
+    from .story_state import add_parser as add_story_state_parser
+    add_story_state_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")

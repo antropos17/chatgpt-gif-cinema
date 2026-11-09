@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "story_sha256": "a70efe42dc3f38d5671228b896af365b349fe004c80041a848eeb83cb2290dd0",
+  "source_hashes": {},
+  "facts": [
+    {
+      "id": "fox.scarf",
+      "initial": "single teal scarf with knot on left",
+      "fixed": true
+    },
+    {
+      "id": "fox.location",
+      "initial": "crate clearing"
+    },
+    {
+      "id": "fox.pose",
+      "initial": "standing"
+    },
+    {
+      "id": "lantern.count",
+      "initial": "one",
+      "fixed": true
+    },
+    {
+      "id": "lantern.holder",
+      "initial": "crate"
+    },
+    {
+      "id": "lantern.light",
+      "initial": "off"
+    },
+    {
+      "id": "crate.lid",
+      "initial": "closed"
+    },
+    {
+      "id": "moth.state",
+      "initial": "not present"
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "01-discover",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.pose": "standing",
+        "crate.lid": "closed"
+      },
+      "changes": [
+        {
+          "fact": "fox.pose",
+          "from": "standing",
+          "to": "crouching",
+          "reason": "Fox bends toward the lid."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "02-open",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.pose": "crouching",
+        "crate.lid": "closed",
+        "lantern.holder": "crate"
+      },
+      "changes": [
+        {
+          "fact": "crate.lid",
+          "from": "closed",
+          "to": "open",
+          "reason": "Fox lifts the lid."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "03-lift",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "crate.lid": "open",
+        "lantern.holder": "crate",
+        "lantern.light": "off"
+      },
+      "changes": [
+        {
+          "fact": "lantern.holder",
+          "from": "crate",
+          "to": "fox",
+          "reason": "Fox grips the handle and lifts the lantern."
+        },
+        {
+          "fact": "fox.pose",
+          "from": "crouching",
+          "to": "standing",
+          "reason": "Fox stands after lifting the lantern."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "04-light",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "lantern.holder": "fox",
+        "lantern.light": "off"
+      },
+      "changes": [
+        {
+          "fact": "lantern.light",
+          "from": "off",
+          "to": "on",
+          "reason": "Fox presses the switch."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "05-arrival",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "lantern.light": "on",
+        "moth.state": "not present"
+      },
+      "changes": [
+        {
+          "fact": "moth.state",
+          "from": "not present",
+          "to": "hovering",
+          "reason": "The moth flies into view."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "06-point",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "lantern.holder": "fox",
+        "moth.state": "hovering"
+      },
+      "changes": [],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "07-approach",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.location": "crate clearing",
+        "lantern.holder": "fox"
+      },
+      "changes": [
+        {
+          "fact": "fox.location",
+          "from": "crate clearing",
+          "to": "near bank",
+          "reason": "Fox walks toward the stream."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "08-test",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.location": "near bank",
+        "fox.pose": "standing"
+      },
+      "changes": [
+        {
+          "fact": "fox.pose",
+          "from": "standing",
+          "to": "one foot on stone",
+          "reason": "Fox tests the stepping stone."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "09-cross",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.pose": "one foot on stone",
+        "lantern.holder": "fox"
+      },
+      "changes": [
+        {
+          "fact": "fox.pose",
+          "from": "one foot on stone",
+          "to": "both feet on stone",
+          "reason": "Fox shifts weight onto the stone."
+        },
+        {
+          "fact": "fox.location",
+          "from": "near bank",
+          "to": "stepping stone",
+          "reason": "Both feet are now on the stone."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "10-reach",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.location": "stepping stone",
+        "lantern.holder": "fox"
+      },
+      "changes": [
+        {
+          "fact": "fox.location",
+          "from": "stepping stone",
+          "to": "far bank",
+          "reason": "Fox steps safely onto the far bank."
+        },
+        {
+          "fact": "fox.pose",
+          "from": "both feet on stone",
+          "to": "standing",
+          "reason": "Fox stands on the bank."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "11-place",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.location": "far bank",
+        "lantern.holder": "fox"
+      },
+      "changes": [
+        {
+          "fact": "lantern.holder",
+          "from": "fox",
+          "to": "ground by tree",
+          "reason": "Fox lowers the lantern and releases the handle."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "12-settle",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "lantern.holder": "ground by tree",
+        "moth.state": "hovering"
+      },
+      "changes": [
+        {
+          "fact": "moth.state",
+          "from": "hovering",
+          "to": "settled by tree",
+          "reason": "The moth lands beside the lantern."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "13-wave",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "lantern.holder": "ground by tree",
+        "moth.state": "settled by tree"
+      },
+      "changes": [],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "14-leave",
+      "requires": {
+        "fox.scarf": "single teal scarf with knot on left",
+        "lantern.count": "one",
+        "fox.location": "far bank",
+        "lantern.holder": "ground by tree",
+        "moth.state": "settled by tree",
+        "lantern.light": "on"
+      },
+      "changes": [
+        {
+          "fact": "fox.location",
+          "from": "far bank",
+          "to": "out of frame",
+          "reason": "Fox walks away while the lantern stays at the tree."
+        }
+      ],
+      "handoff_changes": []
+    }
+  ]
+}
