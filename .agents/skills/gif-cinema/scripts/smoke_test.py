@@ -17,10 +17,16 @@ def main():
     parser.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
     root = args.out.resolve()
+    skill = Path(__file__).resolve().parents[1]
+    if root.is_relative_to(skill):
+        raise ValueError("Smoke output belongs outside the installed skill directory")
     root.mkdir(parents=True, exist_ok=False)
     env = os.environ.copy()
     env.pop("OPENAI_API_KEY", None)
     env.update(TEMP=str(root), TMP=str(root), PYTHONDONTWRITEBYTECODE="1")
+    subprocess.run([sys.executable, str(skill / "scripts/smoke_media.py"),
+                    "--out", str(root / "media")], cwd=root, env=env, check=True,
+                   capture_output=True, text=True, timeout=60)
     calls = []
 
     def run(*parts):
@@ -96,7 +102,7 @@ def main():
                "inspection": inspections, "film_sha256": sha(root / "film.mp4"),
                "sources_unchanged": True, "render_and_resume_checked": render_checked,
                "render_sha256": render_sha, "plan": plan, "commands": calls,
-               "reference_preflight_checked": True,
+               "reference_preflight_checked": True, "packaged_review_and_sprites_checked": True,
                "scope": "CLI offline behavior; no live generation or artistic acceptance."}
     (root / "verification.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
     print(json.dumps({k: receipt[k] for k in ("status", "provider_calls", "sources_unchanged",

@@ -61,3 +61,26 @@ jobs:
           path: output/ci-story/
           retention-days: 7
           if-no-files-found: error
+
+      - name: Package the installable skill
+        if: matrix.artifact
+        run: |
+          python tools/package_skill.py --out output/gif-cinema-skill-0.2.0.zip
+          python tools/package_skill.py --out output/gif-cinema-skill-repeat.zip
+          python - <<'PYCODE'
+          import hashlib
+          from pathlib import Path
+          first = Path('output/gif-cinema-skill-0.2.0.zip')
+          assert first.read_bytes() == Path('output/gif-cinema-skill-repeat.zip').read_bytes()
+          Path('output/gif-cinema-skill-0.2.0.sha256').write_text(
+              hashlib.sha256(first.read_bytes()).hexdigest() + '  ' + first.name + '\n', encoding='utf-8')
+          PYCODE
+      - if: matrix.artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gif-cinema-skill-0.2.0
+          path: |
+            output/gif-cinema-skill-0.2.0.zip
+            output/gif-cinema-skill-0.2.0.sha256
+          retention-days: 14
+          if-no-files-found: error

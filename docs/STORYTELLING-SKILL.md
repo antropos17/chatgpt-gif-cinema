@@ -123,8 +123,18 @@ python tools/package_skill.py --out dist/gif-cinema-story-skill.zip
 python -m unittest discover -s tests -p 'test_story*.py' -v
 ```
 
-The ZIP is deterministic, has a single `gif-cinema/` root, and contains only an
-explicit resource allowlist. Extract it into the agent's skill folder. Follow its
+The source-built skill version is 0.2.0, separate from the runtime's 0.5.0 version.
+It adds full-frame review and offline sprite workflows to the maintained story
+helpers. `runtime.json` pins the immutable runtime commit containing their required
+interfaces. No release tag or release asset is created by the packaging command.
+
+The ZIP is byte-reproducible, has a single `gif-cinema/` root, and contains only an
+explicit resource allowlist. Stored ZIP entries avoid zlib-version differences;
+timestamps, order and permissions are fixed. `package-manifest.json` records the
+size/SHA-256 of every resource. Hashes are revision checks, not publisher signatures.
+The CLI/runtime, Python, Pillow and FFmpeg are **not** bundled. Git/network access is
+needed for the documented runtime install; no provider access is required for local
+review, sprites or source-only film assembly. Extract it into the agent's skill folder. Follow its
 runtime setup, then use the same compile/render/export sequence. The pinned runtime
 is immutable; no API access or model availability is implied by a successful install.
 
@@ -140,3 +150,27 @@ Compose existing GIF actions with editable headings and body text, in landscape 
 portrait, using the [offline story-page helper](STORY-PAGES.md). It preserves actual
 source cadence, exports play-once GIF pages and a portable project, and emits a
 zero-call film script. No new artwork or poses are generated.
+
+
+### Check the actual extracted installation
+
+From the extracted skill folder, follow its pinned-runtime installation, then:
+
+```bash
+python scripts/check_install.py
+python scripts/smoke_media.py --out ../project/media-smoke
+# With FFmpeg and ffprobe installed:
+python scripts/smoke_test.py --out ../project/full-smoke
+```
+
+Use new output paths outside the installed skill. `check_install.py --files-only`
+needs only Python and verifies packaged resource hashes. A source checkout without
+a generated manifest is reported as such, not claimed hash-verified.
+The media smoke test blocks network, checks both sprite commands and decoded
+full-frame review, and leaves review/acceptance pending. The full smoke test also
+checks film assembly and zero-call render/resume. These are synthetic behavioral
+checks, not proof of generated character quality or human visual acceptance.
+
+The Linux/Python 3.12 CI job also builds the ZIP twice, compares its bytes and
+uploads the ZIP plus SHA-256 as the `gif-cinema-skill-0.2.0` workflow artifact
+(retained for 14 days). An Actions artifact is not a permanent GitHub Release.

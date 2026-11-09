@@ -243,7 +243,9 @@ Extract the ZIP's single `gif-cinema` folder into:
 - Claude Code: `~/.claude/skills/gif-cinema`
 
 Back up any existing installation before replacing it. Follow the packaged skill's
-runtime setup; installing the skill alone does not install Python or FFmpeg. Its
+runtime setup; installing the skill alone does not install the CLI, Python or FFmpeg.
+Run its `scripts/check_install.py` and no-key `scripts/smoke_media.py` to check the
+actual extracted review/sprite installation. Its
 helpers use paths relative to the skill folder, and project outputs belong outside
 that installed folder. The older `skill-v0.1.1` release predates the current story
 planner and chapter helpers. [Packaging details](STORYTELLING-SKILL.md#package-and-verify-the-skill).

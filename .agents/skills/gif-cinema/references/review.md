@@ -10,8 +10,11 @@ as delivered duration. Titles are counted separately from character animation.
 
 ## 2. Character and contact
 
-For each actual take, inspect first/middle/last frames, contact frames and full-speed
-playback. Check face/markings/costume, limb count, held props, ground contact, shadows,
+For each actual take, inspect every decoded frame, contact transitions and full-speed
+playback. Use `scripts/review_gif.py extract TAKE.gif NEW_DIRECTORY` for native PNGs,
+optional focus crops and a local frame player. See [the exact review workflow](full-frame-review.md).
+The generated record remains pending until inspection; `check` refuses incomplete
+or changed packs and does not authenticate the reviewer or obtain user approval. Check face/markings/costume, limb count, held props, ground contact, shadows,
 occlusion and intended motion. At each join inspect outgoing and incoming frames
 side by side: scale, horizon, camera geography, light, gaze and motion direction.
 Pay special attention to a retake's entrance **and** exit. Keep reviews separate from

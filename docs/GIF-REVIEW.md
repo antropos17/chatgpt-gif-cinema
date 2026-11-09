@@ -4,8 +4,9 @@ The local review helper closes a practical gap between endpoint inspection and
 accepting an animation. It extracts the **final decoded GIF**, not an earlier atlas,
 and never calls a model, edits the source or marks a frame visually approved.
 
-This is a repository helper. It is not yet included in the downloadable skill ZIP;
-use a checkout with the public runtime installed:
+This helper is included in the current source-built skill 0.2.0 package, alongside
+its guide and hash manifest. The older published skill-v0.1.1 ZIP does not include it.
+From a checkout with the public runtime installed:
 
 ```bash
 python -m pip install -e .

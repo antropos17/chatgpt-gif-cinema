@@ -1,6 +1,6 @@
 ---
 name: gif-cinema
-description: Make multi-scene animated stories, mini cartoons, and motion-design GIFs or MP4s with story beats, character references, short generated takes, local animated titles, and continuity review. Use for longer narrative edits, not just extending a short loop.
+description: Make multi-scene animated stories, mini cartoons, and motion-design GIFs or MP4s with story beats, character references, short generated takes, local animated titles, offline sprite atlases, and full-frame review. Use for longer narrative edits, not just extending a short loop.
 ---
 
 # GIF Cinema
@@ -17,10 +17,15 @@ This is an author-guided workflow, not an autonomous animation model.
 - **New character action:** plan one main action per short generated GIF. Use only
   an available, authorized generation tool/API. Inspect and accept each result before
   extending its state into another scene. See [generation.md](references/generation.md).
-- **Motion design:** use the included local animated-title renderer for typography
-  and accent-rule entrances. For layered characters, movable props, masks, or rigged
-  action, use a compositor actually available in the environment and preserve its
-  editable sources. This package does not contain a general layered animation engine.
+- **Imported sprites:** pack an existing GIF or slice a reviewed regular PNG grid.
+  Shared crop/scale preserves pose coordinates, source delays and RGBA PNG assets.
+  This creates neither new action drawings nor transparent backgrounds. See
+  [sprites.md](references/sprites.md).
+- **Motion design:** use the included local animated-title renderer for separate
+  typography shots. The pinned runtime also supplies whole-image motion presets and
+  an experimental editable text/shape/still-image layer renderer. Neither is a rigged
+  character animator. See its [motion guide](https://github.com/antropos17/chatgpt-gif-cinema/blob/d3c39b29704f50c2cf6891d91b7750efa52a9915/docs/STANDALONE-MOTION.md)
+  and [layer contract](https://github.com/antropos17/chatgpt-gif-cinema/blob/d3c39b29704f50c2cf6891d91b7750efa52a9915/docs/MULTILAYER-POC.md).
 
 Do not count camera drift, an overlay, reversed footage, another caption on the same
 clip, or longer holds as a new character action. A long cartoon needs additional
@@ -29,20 +34,25 @@ an honest animatic or production plan, not a claimed finished cartoon.
 
 ## Runtime and a no-key check
 
-Requires Python 3.10+, Pillow, Git, FFmpeg and ffprobe. Use an isolated environment.
-The skill's helpers work with this reviewed, immutable public runtime:
+Skill package **0.2.0** contains helpers, guides and examples. The Python runtime is
+installed separately. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
+film/chapter export also needs FFmpeg and ffprobe. Git/network access is needed only
+for the installation command below. Use an isolated environment.
+`runtime.json` records the exact tested commit (runtime version 0.5.0 is a separate
+version number and by itself is not a compatibility guarantee):
 
 ```bash
 python -m venv .venv
 # Activate .venv with the command for your shell, then:
-python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@fa82b13366a9ae94a4ece730ec6b2d065cd9a060"
+python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@d3c39b29704f50c2cf6891d91b7750efa52a9915"
 python -m gif_cinema --help
-ffmpeg -version
-ffprobe -version
 ```
 
 An existing checkout of that revision or a tested compatible newer runtime is also
-usable. Do not downgrade a working project automatically. The runtime uses the
+usable. Do not downgrade a working project automatically. Run
+`python scripts/check_install.py` to check required interfaces and packaged hashes.
+A local checkout may have no VCS install metadata; run the behavioral smoke checks
+below as well. Install checks do not prove visual quality or provider access. The runtime uses the
 included source-available [evaluation license](LICENSE). GIF Factory's attributed
 workflow influence has its own MIT notice in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
@@ -51,10 +61,10 @@ assume the shell is in that folder. From elsewhere, use absolute paths to the he
 and input JSON; keep outputs in the user's project, never in the installed skill.
 
 ```bash
-python scripts/story_project.py compile assets/example/storyboard.json --out output/story-project
-python -m gif_cinema render output/story-project/film.json --dry-run --max-api-calls 0
-python -m gif_cinema render output/story-project/film.json --execute --max-api-calls 0 --out output/story-render
-python scripts/story_project.py export-gif output/story-render/film.mp4 --out output/story.gif
+python scripts/story_project.py compile assets/example/storyboard.json --out ../project/story-project
+python -m gif_cinema render ../project/story-project/film.json --dry-run --max-api-calls 0
+python -m gif_cinema render ../project/story-project/film.json --execute --max-api-calls 0 --out ../project/story-render
+python scripts/story_project.py export-gif ../project/story-render/film.mp4 --out ../project/story.gif
 ```
 
 This is a **9.68-second source edit**, not a new long cartoon: a 2-second locally
@@ -63,9 +73,14 @@ animated title followed by three existing 2.56-second astronaut actions. The MP4
 second. GIF export defaults to 320 px wide, 10 fps, silent, play-once. `--repeat`
 loops the entire result. Some viewers override GIF loop behavior.
 
-For the core CLI regression check, run `scripts/smoke_test.py --out NEW_DIRECTORY`.
-Neither helper needs a key. The story helper never makes provider calls and refuses
-an existing output project. [story-project.md](references/story-project.md) documents
+For a review/sprite check without FFmpeg, run
+`python scripts/smoke_media.py --out ../project/media-smoke`.
+For the complete CLI/film check, first confirm `ffmpeg -version` and
+`ffprobe -version`, then run `python scripts/smoke_test.py --out ../project/full-smoke`.
+Both output directories must be new and outside the installed skill. Neither test
+needs a key. The media test blocks network and leaves visual review/user acceptance
+pending; synthetic fixtures are not an artwork-quality demonstration.
+The story helper never makes provider calls and refuses an existing output project. [story-project.md](references/story-project.md) documents
 its exact schema, commands, timing, and limits.
 
 ## Direct before generating
@@ -125,9 +140,9 @@ into GIFs. Specify a licensed local font with `--font` if needed, and inspect it
 
 Character timing comes from the decoded source GIF. Source retiming, transitions,
 interpolation, audio generation and automatic action synthesis are not supplied by
-this helper. The pinned runtime uses hard cuts and can import optional local audio
-through its film script. GIF has no audio. Follow current runtime help if using newer
-editing tools; do not imply the pinned package includes them.
+this story helper. The pinned runtime uses hard cuts and can import optional local
+audio through its film script. Its separate motion command can retime existing
+artwork, but cannot create intermediate character poses. GIF has no audio.
 
 Export a verified MP4 first, then a smaller GIF or whole-shot chapters. Use
 `scripts/story_chapters.py PROJECT/film.json --render RENDER --out NEW_DIRECTORY
@@ -152,6 +167,38 @@ exports actual play-once GIF pages and a portable hash-pinned project, and emits
 The included `assets/example/storybook.json` reuses three astronaut takes; it does
 not generate new poses or add reading holds. Review actual playback and every cut.
 See [commands, schema, timing and limits](references/story-pages.md).
+
+## Review every frame and reuse sprites
+
+After exporting a GIF, inspect those exact delivered bytes:
+
+```bash
+python scripts/review_gif.py extract ../project/story.gif ../project/review-story
+python scripts/review_gif.py check ../project/review-story --gif ../project/story.gif
+```
+
+Open the generated `index.html`, step through native frames and watch real playback.
+The second command initially fails because review is deliberately pending. Record
+only inspection actually performed; technical metrics cannot approve anatomy,
+character identity, contact, motion or user acceptance. Optional `--focus` crops and
+`--purpose sticker` have distinct uses. See
+[the full review workflow](references/full-frame-review.md).
+
+To turn an existing take into a runtime sprite atlas:
+
+```bash
+python -m gif_cinema sprites pack assets/example/shot-01.gif --columns 8 --out ../project/sprites --dry-run
+python -m gif_cinema sprites pack assets/example/shot-01.gif --columns 8 --out ../project/sprites
+python scripts/review_gif.py extract ../project/sprites/animation.gif ../project/review-sprites
+```
+
+The atlas and per-frame PNGs retain decoded RGBA. The GIF preview has limited colors
+and binary alpha, and identical drawings may merge. A one-drawing preview is valid
+sprite output but is not an animated film source. `sprites slice SPEC.json --out
+NEW_DIRECTORY` accepts a deliberately prepared equal-cell PNG grid. Read
+[the complete spec, limits and rights](references/sprites.md) before slicing.
+No automatic background removal, new poses, state generation, loop repair or
+engine-specific import/export is provided. Source files remain unchanged.
 
 ## Deliver the actual result
 
