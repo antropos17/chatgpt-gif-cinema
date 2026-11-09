@@ -148,7 +148,9 @@ class ReadmeTests(unittest.TestCase):
             path = ROOT / 'docs/assets/catalog' / asset['file']
             with self.subTest(asset=asset['file']):
                 self.assertEqual(git_blob(path.read_bytes()), asset['git_blob_sha1'])
-                self.assertEqual(git_blob((ROOT / asset['source']).read_bytes()), asset['source_git_blob_sha1'])
+                # Git identities use repository LF text, independent of Windows checkout CRLF.
+                source_text = (ROOT / asset['source']).read_text(encoding='utf-8').encode('utf-8')
+                self.assertEqual(git_blob(source_text), asset['source_git_blob_sha1'])
                 self.assertEqual(path.stat().st_size, asset['bytes'])
                 self.assertEqual(asset['api_calls'], 0)
                 with Image.open(path) as im:
