@@ -379,6 +379,8 @@ def build_parser():
     sub=p.add_subparsers(dest="command",required=True)
     from .render import add_parser
     add_parser(sub)
+    from .motion import configure_parser
+    configure_parser(sub.add_parser("motion", help="Prepare native motion GIF presets offline and inspect returned GIFs"))
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")
