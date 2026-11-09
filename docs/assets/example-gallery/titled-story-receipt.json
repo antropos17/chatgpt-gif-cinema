@@ -1,0 +1,36 @@
+{
+  "provider_calls": 0,
+  "width": 320,
+  "height": 320,
+  "frames": 97,
+  "duration_ms": 9700,
+  "loop": null,
+  "gif_sha256": "60034f963844ce5d8caae6f7b1b715ba6251368440a37f185f1eae20b8f6adf5",
+  "note": "Same three existing generated actions plus a 2-second local title; GIF timing quantized to 100 ms. No new generation. Framing/hand/suit discontinuities remain.",
+  "title": "A Reply from the Stars \u2014 titled source edit",
+  "kind": "existing-generated-shots-with-local-title",
+  "native_action_ms": 7680,
+  "local_title_ms": 2000,
+  "mp4_duration_ms": 9680,
+  "new_character_drawings": 0,
+  "subject_interpolation": false,
+  "source_takes_play_once": true,
+  "visual_acceptance": "human-review-required",
+  "sources": [
+    {
+      "path": ".agents/skills/gif-cinema/assets/example/shot-01.gif",
+      "sha256": "5599c7b0ccad2dd4fcaf2b86235cc12e3689a8da323311845b724c352d3d6dac"
+    },
+    {
+      "path": ".agents/skills/gif-cinema/assets/example/shot-02.gif",
+      "sha256": "0f6366ad5da2ad949ecb399dfdfe10fd33416f542a573316ee4a319f669f8d13"
+    },
+    {
+      "path": ".agents/skills/gif-cinema/assets/example/shot-03.gif",
+      "sha256": "461a37f8e813549b8b0ee70ad1f04cf3b64b7d17c7eb458bd5f163ef0380bb28"
+    }
+  ],
+  "recipe": "docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share",
+  "pillow_version": "13.0.0",
+  "ffmpeg_version": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers"
+}
