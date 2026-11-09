@@ -1,72 +1,88 @@
 # GIF Cinema
 
-**Turn short GPT GIFs into a film, one shot at a time.**
+**Direct the moment. Build the story.**
 
-An agent skill and local CLI for **Codex** and **Claude Code**. Generate short takes with
-still-image references, inspect how they cut together, reshoot a single moment, and
-export an MP4. Start with the included footage and make a film without an API key.
+A wave becomes a reply. A cat finds a windowsill. Short GIFs become scenes you can
+choose, cut, and keep.
 
-[**Download the skill**](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) · [**Run the no-key demo**](#try-it-without-an-api-key) · [Watch the full cat film](#full-cat-film) · [Filmmaking tips](docs/TIPS.md)
+GIF Cinema is an **agent skill + local filmmaking CLI for Codex and Claude Code**.
+Plan character-led stories, generate short takes with still-image references, review
+the cuts, add animated titles, and export MP4 or GIF. **Start with the included
+footage: no API key needed.**
 
-[![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml) [![Agent skill 0.1.1](https://img.shields.io/badge/agent_skill-0.1.1-e9a67c)](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1) [![Source-available evaluation license](https://img.shields.io/badge/license-source--available-9bbfaf)](LICENSE)
+[**Explore the films**](#see-it-in-motion) · [**Try the no-key demo**](#try-it-without-an-api-key) · [**Install the skill**](#give-the-skill-to-your-agent) · [Story workflow](docs/STORYTELLING-SKILL.md)
 
-## Source-only reliability preview
+[![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml) [![Agents: Codex and Claude Code](https://img.shields.io/badge/agents-Codex_%2B_Claude_Code-bbe5d3)](.agents/skills/gif-cinema/SKILL.md) [![Source-available evaluation license](https://img.shields.io/badge/license-source--available-e9a67c)](LICENSE)
 
-This branch adds bounded GIF decoding, FFmpeg capability checks, media-process
-timeouts and durable render manifests. It keeps the existing CLI and checkout
-examples. No new media, packaged `demo`, editing/motion commands or standalone
-generation receipts are included. It is not a new versioned release.
-[Render limits and recovery](docs/SCRIPT-FORMAT.md).
+## See it in motion
 
-## Multi-scene stories and motion design
+### A window, a jump, a nap
 
-The current repository skill now includes **story beats, a character/prop bible,
-per-shot generation inputs, hash-verified take selection, local animated titles,
-and GIF + MP4 export**. Build a
-longer story from distinct actions rather than stretching one loop. Fill missing
-shots progressively with reviewed GIFs; portable project versions preserve earlier
-footage and use each selected take's actual timing.
+[![Cat comparison: original GIF timing on the left, local framing, compositing and selective interpolation on the right.](docs/assets/showcase/cat-preview.gif)](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5)
 
-[**Use the storytelling skill**](docs/STORYTELLING-SKILL.md) · [Read the skill](.agents/skills/gif-cinema/SKILL.md)
+Walk across the room. Jump to the windowsill. Curl into a ball. **Three takes,
+7.68 seconds of action.** The comparison follows the same selected footage from
+native GIF timing to a locally finished edit.
 
-The no-key story edit is 9.68 seconds from three existing GIFs plus a title. A separate
-14-action, 35.84-second example is an **unrendered production plan**, not a finished
-cartoon. New character animation requires available model access and authorized
-requests; title animation and local assembly do not. The published `skill-v0.1.1`
-ZIP predates this workflow; the guide shows how to package the current skill.
+*2.24-second preview of the 7.68-second comparison. The finished side uses additional
+local tools not included in the public CLI.*
 
-## See the difference
+[**Watch the full comparison**](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Inspect the frame pairs](docs/assets/showcase/cat-frames.png) · [How it was made](docs/SHOWCASE.md#cat--walk-jump-curl-up)
 
-![A cat walks toward the window. The left panel shows the source GIF timing and the right shows the same take after local finishing.](docs/assets/showcase/cat-preview.gif)
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34"><img src="docs/assets/showcase/astronaut-preview.gif" alt="A paper-textured astronaut raises a hand: native GIF timing beside locally interpolated motion." width="380"></a>
+<br><strong>A signal. An answer.</strong>
+<br>A small gesture in a quiet universe. Two astronaut shots, 5.12 seconds, with native and locally interpolated motion side by side.
+<br><a href="https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34">Watch comparison</a> · <a href="docs/assets/showcase/astronaut-frames.png">Frame pairs</a>
+</td>
+<td width="50%" valign="top">
+<a href="https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638"><img src="docs/assets/showcase/dog-preview.gif" alt="An illustrated dog follows a red ball: the same source takes before and after local interpolation." width="380"></a>
+<br><strong>One dog. One red ball.</strong>
+<br>Four takes, 10.24 seconds. Follow the ball, paws, and contact points through the native and locally interpolated versions.
+<br><a href="https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638">Watch comparison</a> · <a href="docs/assets/showcase/dog-frames.png">Frame pairs</a>
+</td>
+</tr>
+</table>
 
-**A cat finds the windowsill.** Walk across the room, jump up, curl into a ball. The
-7.68-second comparison uses the same three generated takes on both sides. The
-finished side combines framing corrections, compositing, and selective interpolation.
+**About these previews:** each animated thumbnail loops a 2.24-second excerpt;
+linked videos contain the full comparisons. Their finished panels use additional
+local postproduction, including interpolation and, for the cat, compositing and
+framing cleanup. Those finishing tools are not included in the public toolkit.
+The [no-key demo below](#try-it-without-an-api-key) shows the exact public CLI output.
 
-[Play the before/after](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Compare still frames](docs/assets/showcase/cat-frames.png)
+### Full cat film
 
-The public toolkit covers GIF generation, still references, shot review, targeted
-retakes, and MP4 assembly. The finished showcase uses additional local
-postproduction. The no-key demo below shows the exact public-toolkit output.
-[Showcase methods and frame samples](docs/SHOWCASE.md).
-
-## Full cat film
-
-**57.2 seconds · Silent short.** GPT-generated GIF shots, assembled and finished locally.
+**57.2 seconds · Silent short · Short generated takes, assembled and finished locally.**
 
 https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456
 
-[Open the MP4 file](docs/assets/showcase/cat-film.mp4)
+[Open the MP4 file](docs/assets/showcase/cat-film.mp4) · [Production notes and limitations](docs/SHOWCASE.md)
+
+## Choose your starting point
+
+| You have… | Make this | Start here |
+| --- | --- | --- |
+| **A few GIFs** | A short edit with reviewed cuts, an MP4, and a contact sheet. | [No-key film demo](#try-it-without-an-api-key) |
+| **A character and a story** | Story beats, a character/prop bible, per-shot generation inputs, and a growing collection of reviewed takes. | [Storytelling skill](docs/STORYTELLING-SKILL.md) |
+| **Footage that needs an introduction** | An editable animated title, followed by your selected scenes. | [9.68-second title + story example](docs/STORYTELLING-SKILL.md#try-the-current-repository-skill) |
+| **A completed longer edit** | A verified MP4 master plus smaller GIF chapters that keep whole shots together. | [Chapter export](docs/STORYTELLING-SKILL.md#deliver-longer-stories-as-gif-chapters) |
+
+The current source includes these story helpers. **New character action needs new
+footage** and, when generating it, supported model access and authorized requests.
+The included 14-action *Lantern Delivery* example is a **35.84-second unrendered
+production plan**, ready to fill with reviewed takes, not a finished cartoon.
 
 ## Try it without an API key
 
 **Three bundled GIFs → a 7.68-second astronaut film.** An astronaut waves into
 space, a star answers, and the astronaut brings a hand to his chest.
 
-[**Watch the exact CLI export**](https://github.com/user-attachments/assets/c4dc8c9b-1e97-4f1a-9632-e285d9b969e0) · [View the film script](examples/film.json)
+[**Watch the exact CLI export**](https://github.com/user-attachments/assets/c4dc8c9b-1e97-4f1a-9632-e285d9b969e0) · [Read the film script](examples/film.json)
 
-Install **Python 3.10+, Git, FFmpeg and ffprobe**. Make sure both video tools are
-on your PATH. [FFmpeg downloads](https://ffmpeg.org/download.html).
+You need **Python 3.10+, Git, FFmpeg, and ffprobe**. Both video tools must be on your
+PATH. [Get FFmpeg](https://ffmpeg.org/download.html).
 
 ```bash
 git clone https://github.com/antropos17/chatgpt-gif-cinema.git
@@ -74,8 +90,8 @@ cd chatgpt-gif-cinema
 python -m venv .venv
 ```
 
-Activate the environment with `source .venv/bin/activate` on macOS/Linux or
-`.\.venv\Scripts\Activate.ps1` in Windows PowerShell.
+Activate with `source .venv/bin/activate` on macOS/Linux or
+`.\.venv\Scripts\Activate.ps1` in Windows PowerShell, then:
 
 ```bash
 python -m pip install .
@@ -83,65 +99,105 @@ python -m gif_cinema render examples/film.json --dry-run --max-api-calls 0
 python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/my-first-film
 ```
 
-Open `output/my-first-film/film.mp4`. The same folder contains a contact sheet,
-first and last frame PNGs, SRT captions, a continuity report, and a resumable
-manifest. Repeating the last command reuses the verified result.
+Open **`output/my-first-film/film.mp4`**. Your edit also comes with:
 
-The export is 512 × 512 at 25 fps. Each source GIF has 16 generated drawings
-with 160 ms holds. The export preserves those holds across its playback frames.
-[Verification and timing evidence](STATUS.md).
+- A contact sheet and the first/last frame of every shot.
+- A continuity report and SRT captions.
+- A resumable manifest. Run the same command again to reuse the verified result.
+
+The film is 512 × 512 at 25 fps. Each source GIF has 16 drawings held for 160 ms;
+exporting at 25 fps preserves those holds rather than creating new character poses.
+[Timing and verification evidence](STATUS.md).
+
+**Want a title and a GIF too?** Follow the [zero-call story walkthrough](docs/STORYTELLING-SKILL.md#try-the-current-repository-skill)
+to turn the same footage into a 9.68-second MP4 with a local animated title, then
+export a smaller GIF or whole-shot chapters.
 
 ## Give the skill to your agent
 
-Extract the `gif-cinema` folder from the [skill ZIP](https://github.com/antropos17/chatgpt-gif-cinema/releases/download/skill-v0.1.1/gif-cinema-skill-0.1.1.zip)
-into the skill directory for your agent.
+From the checkout above, package the **current storytelling skill**:
+
+```bash
+python tools/package_skill.py --out dist/gif-cinema-story-skill.zip
+```
+
+Extract its single `gif-cinema` folder into your agent's skill directory:
 
 | Agent | Installed folder |
 | --- | --- |
 | Codex | `~/.codex/skills/gif-cinema` |
 | Claude Code | `~/.claude/skills/gif-cinema` |
 
-Then ask your agent:
+Then ask:
 
-> Use the gif-cinema skill to assemble the included astronaut example with zero
-> API calls. Show me the MP4 and the frames on either side of both cuts.
+> Use the gif-cinema skill to assemble the included astronaut story with an
+> animated title and zero API calls. Show me the MP4, a small GIF, and the frames
+> on either side of each cut.
 
-The package includes the three GIFs, the film script, setup steps for the pinned
-runtime, and an offline smoke test. [Read the skill instructions](.agents/skills/gif-cinema/SKILL.md).
+Or bring an idea:
+
+> Use the gif-cinema skill to plan a short illustrated story about a courier
+> delivering a lantern. Keep the character, lantern, and direction of travel
+> consistent. Prepare one action per shot and show me the plan before generation.
+
+The skill includes examples, helper scripts, review guidance, and setup for a pinned
+runtime. [Read the skill](.agents/skills/gif-cinema/SKILL.md) · [Package and verification details](docs/STORYTELLING-SKILL.md#package-and-verify-the-skill).
+
+<details>
+<summary>Looking for the earlier downloadable release?</summary>
+
+The [published skill-v0.1.1 ZIP](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.1.1)
+contains the older core assembly workflow and bundled astronaut footage. It predates
+the story planner, take selection, and chapter export above. Use the current source
+package for those features; the README refresh is not a new versioned release.
+
+</details>
 
 ## Make a shot, keep a take
 
-| Step | What you control |
-| --- | --- |
-| **Direct** | Define the action, camera, and opening and closing poses in a JSON script. |
-| **Generate** | Dry-run the script, review the request count, and authorize a bounded run. |
-| **Match** | Use a clean identity reference and a reviewed endpoint to guide the next shot. |
-| **Inspect** | Compare the character, props, framing, and direction at each cut. |
-| **Reshoot** | Target one shot with `--force-shot SHOT_ID`. Unchanged accepted shots can be reused. |
-| **Export** | Assemble the chosen GIFs into MP4 and keep the review artifacts with the edit. |
+**Brief → story beats → short takes → reviewed cuts → film**
 
-**The cut is the test.** Review the last frame of a shot before passing it forward
-as a reference. When you replace the middle shot, check its entrance and exit
-before accepting the take. Continuity is a visual decision made by the author.
+1. **Direct.** Give each scene a clear action and a visible change: state before,
+   action, state after. Keep the character, props, palette, and camera intentional.
+2. **Generate deliberately.** Use still references where appropriate. Dry-run first,
+   inspect the request count, then authorize a bounded run with supported model access.
+3. **Review the cut.** Compare the outgoing and incoming poses, character identity,
+   prop ownership, scale, and direction. Look at the actual frames.
+4. **Keep what works.** Select reviewed GIFs by SHA-256 in a takes manifest. Fill
+   missing scenes progressively while preserving earlier source footage.
+5. **Reshoot the weak moment.** Target a runtime shot with `--force-shot SHOT_ID`.
+   Unchanged accepted shots can be reused; review both neighboring cuts again.
+6. **Export and inspect.** Assemble the MP4, then export a GIF or whole-shot chapters.
+   Keep the storyboard, source timings, and review artifacts with the edit.
+
+**The cut is the test.** A reference image guides the next take; it does not guarantee
+continuity. Higher playback FPS does not fix an extra paw, a missing prop, or an action
+that never happened. Those need a better take.
 
 New generation uses your own OpenAI API key, billing, and supported model access.
-The dry-run counts requests. Dollar cost depends on actual usage.
-[Production guide](docs/PRODUCTION.md) · [Script format](docs/SCRIPT-FORMAT.md) · [Practical tips](docs/TIPS.md)
+Dry-run reports request counts, not a dollar quote. GIF exports are silent; the
+runtime can import optional local audio into MP4. Music generation, automatic
+continuity approval, a general layered animation engine, and the private Studio UI
+are not included.
 
-## Two more editing experiments
+## Go further
 
-| Astronaut | Dog and ball |
-| --- | --- |
-| ![Astronaut comparison, native timing and locally interpolated motion](docs/assets/showcase/astronaut-poster.png) | ![Dog and ball comparison, the same selected takes before and after interpolation](docs/assets/showcase/dog-poster.png) |
-| **5.12 s · Two shots.** Look at the movement between the held drawings as the astronaut raises a hand. | **10.24 s · Four takes.** Watch the ball and paw through the faster motion. Prop and contact errors can survive interpolation. |
-| [Watch before/after](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34) · [Frame pairs](docs/assets/showcase/astronaut-frames.png) | [Watch before/after](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638) · [Frame pairs](docs/assets/showcase/dog-frames.png) |
+- [**Storytelling guide**](docs/STORYTELLING-SKILL.md): plan scenes, select takes, add titles, export chapters.
+- [**Production guide**](docs/PRODUCTION.md): references, retakes, and a controlled generation workflow.
+- [**Script format**](docs/SCRIPT-FORMAT.md): JSON fields, request limits, render safety, and recovery.
+- [**Filmmaking tips**](docs/TIPS.md): practical ways to make short takes cut together.
+- [**Showcase methods**](docs/SHOWCASE.md): what was generated, what was finished locally, and what remains imperfect.
+- [**Verification status**](STATUS.md): dated checks and account/model-specific generation evidence. Current source checks run in [CI](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml).
 
-## Verification, license, and support
+## Credits, license, and support
 
-- **Verification.** The public release was checked with 40 offline tests and a fresh
-  install, including real GIF assembly, endpoint extraction, full video decode, and
-  resume. Authenticated generation evidence is documented separately. [Status and receipts](STATUS.md).
-- **License.** Personal non-commercial evaluation and research are permitted.
-  Commercial use, redistribution, and hosting require permission. GIF Cinema is an
-  independent project. [Source-available evaluation license](LICENSE).
-- **Support.** Follow the experiments on [Buy Me a Coffee](https://buymeacoffee.com/gifcinema).
+The story workflow is informed by [GIF Factory](https://github.com/WoYun520/gif-factory),
+especially its separation of appearance, movement, and purpose. Its influence and
+MIT notice are recorded in [third-party notices](.agents/skills/gif-cinema/THIRD_PARTY_NOTICES.md).
+No GIF Factory artwork, fonts, or exporter code are bundled.
+
+GIF Cinema is an independent, **source-available** project. Personal non-commercial
+evaluation and research are permitted; commercial use, redistribution, and hosting
+require permission. Read the [evaluation license](LICENSE).
+
+If these experiments help your own, [support GIF Cinema on Buy Me a Coffee](https://buymeacoffee.com/gifcinema).
