@@ -440,8 +440,10 @@ def build_parser():
     sub=p.add_subparsers(dest="command",required=True)
     from .render import add_parser
     from .doctor import add_parser as add_doctor_parser
+    from .sprites import add_parser as add_sprites_parser
     add_parser(sub)
     add_doctor_parser(sub)
+    add_sprites_parser(sub)
     from .motion import add_parser as add_motion_parser
     add_motion_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
