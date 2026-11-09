@@ -95,6 +95,21 @@ class ChapterTests(unittest.TestCase):
             plan = self.plan(max_seconds=15)
         self.assertEqual(len(plan['chapters']), 3)
 
+    def test_review_frame_capacity_splits_whole_shots(self):
+        self.data['shots'].clear()
+        self.records.clear()
+        self.add_shot(0, 15000)
+        self.add_shot(1, 15000)
+        self.save()
+        plan = self.plan(fps=10, max_seconds=120)
+        self.assertEqual([item['shot_ids'] for item in plan['chapters']], [['shot-00'], ['shot-01']])
+        self.assertEqual([item['playback_frames'] for item in plan['chapters']], [300, 300])
+
+    def test_review_pixel_capacity_splits_before_runtime_capacity(self):
+        with patch.object(chapters, 'MAX_REVIEW_PIXELS', 64 * 64 * 11):
+            plan = self.plan(max_seconds=15)
+        self.assertEqual(len(plan['chapters']), 3)
+
     def test_single_shot_over_budget_rejected_not_cut(self):
         with patch.object(cli, 'MAX_GIF_FRAMES', 5):
             with self.assertRaisesRegex(ValueError, 'whole shot'):
