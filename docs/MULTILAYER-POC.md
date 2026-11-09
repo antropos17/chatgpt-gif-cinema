@@ -63,10 +63,13 @@ Types:
   and the Pillow/FreeType environment; unsupported glyphs fail preflight.
 - `rect`: `size`, `fill`, optional `radius`, `stroke` and integer `stroke_width`.
 - `ellipse`: `size`, `fill`, optional `stroke` and integer `stroke_width`.
+- `stroke`: `size`, authored polyline `points`, `stroke`, integer `stroke_width`,
+  and keyframed `reveal` by geometric distance. See [draw-on motion](STROKE-REVEAL.md)
+  for bounds, original example, timing and additional dynamic-work budgets.
 
 Layer colors accept `#RRGGBB` or `#RRGGBBAA`. Opacity is multiplied with source
 alpha. Compositing is ordinary source-over. There are no masks, groups, parenting,
-blend modes, shape paths, repeaters, arbitrary attributes, expressions or plugins.
+blend modes, general SVG paths, repeaters, arbitrary attributes, expressions or plugins.
 Supersampled text/shapes and premultiplied-alpha transforms reduce edge fringes.
 
 Example keyframes:
@@ -84,6 +87,8 @@ Times are strictly increasing and must include both endpoints. Missing transform
 properties inherit the preceding keyframe, initially center position, zoom 1,
 rotation 0 and opacity 1. `easing` does not inherit: the default for each segment
 is linear. Easing belongs to the **left** keyframe of each segment.
+Stroke layers additionally inherit `reveal`, initially 1. Other layer types reject
+that property; existing scenes and their transform defaults are unchanged.
 
 Position is a fraction of scene dimensions. Zoom is a uniform factor relative to
 the layer's declared raster size. Rotation is clockwise in degrees. The anchor

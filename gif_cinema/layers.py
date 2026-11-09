@@ -19,7 +19,7 @@ import stat
 import subprocess
 import tempfile
 
-from . import motion, text_fonts
+from . import motion, strokes, text_fonts
 from .motion import run_command
 
 FORMAT = 'gif-cinema-layered-scene'
@@ -101,19 +101,20 @@ def easing_value(value):
     if isinstance(value, str) and value in motion.EASINGS:
         return value
     if isinstance(value, list) and len(value) == 4:
-        # Bounded temporal easing only; no spatial paths or executable expressions.
+        # Temporal easing only; these four numbers are not spatial path points.
         for component in value:
             motion.number(component, 'cubic-bezier control point', 0, 1)
         return list(value)
     raise ValueError('Easing must be a supported name or four cubic-bezier values in 0..1')
 
 
-def normalize_keyframes(keys):
+def normalize_keyframes(keys, *, stroke=False):
     if not isinstance(keys, list) or not 2 <= len(keys) <= 32:
         raise ValueError('Each layer needs 2..32 keyframes')
-    result, previous = [], dict(DEFAULTS)
+    defaults = {**DEFAULTS, **({'reveal': 1} if stroke else {})}
+    result, previous = [], dict(defaults)
     for key in keys:
-        require_fields(key, [*DEFAULTS, 'at', 'easing'], ['at'], 'Keyframe')
+        require_fields(key, [*defaults, 'at', 'easing'], ['at'], 'Keyframe')
         motion.number(key['at'], 'keyframe.at', 0, 1)
         if result and key['at'] <= result[-1]['at']:
             raise ValueError('Keyframe times must strictly increase')
@@ -121,8 +122,10 @@ def normalize_keyframes(keys):
         for name, lo, hi in (('x', -2, 3), ('y', -2, 3), ('zoom', .05, 8),
                              ('rotation', -3600, 3600), ('opacity', 0, 1)):
             motion.number(row[name], f'keyframe.{name}', lo, hi)
+        if stroke:
+            motion.number(row['reveal'], 'keyframe.reveal', 0, 1)
         result.append(row)
-        previous = {name: row[name] for name in DEFAULTS}
+        previous = {name: row[name] for name in defaults}
     if result[0]['at'] != 0 or result[-1]['at'] != 1:
         raise ValueError('Keyframes must include 0 and 1 endpoints')
     return result
@@ -163,10 +166,11 @@ def normalize_scene(value):
     common = ['id', 'type', 'name', 'keyframes', 'in_ms', 'out_ms', 'anchor']
     special = {'rect': ['size', 'fill', 'stroke', 'stroke_width', 'radius'],
                'ellipse': ['size', 'fill', 'stroke', 'stroke_width'],
+               'stroke': ['size', 'points', 'stroke', 'stroke_width'],
                'text': ['text', 'font_size', 'fill', 'font_id', 'font_sha256'], 'image': ['source', 'size', 'sha256']}
     for layer in layers:
         if not isinstance(layer, dict) or not isinstance(layer.get('type'), str) or layer['type'] not in special:
-            raise ValueError('Layer type must be rect, ellipse, text or image')
+            raise ValueError('Layer type must be rect, ellipse, stroke, text or image')
         kind = layer['type']
         require_fields(layer, common + special[kind], ['id', 'type'], 'Layer')
         name = layer['id']
@@ -187,7 +191,7 @@ def normalize_scene(value):
             raise ValueError('Layer anchor must be a normalized pair')
         for component in row['anchor']:
             motion.number(component, 'anchor', 0, 1)
-        row['keyframes'] = normalize_keyframes(row['keyframes'])
+        row['keyframes'] = normalize_keyframes(row['keyframes'], stroke=kind == 'stroke')
         if kind != 'text':
             if not isinstance(row.get('size'), list) or len(row['size']) != 2:
                 raise ValueError('Layer size must be a width/height pixel pair')
@@ -208,6 +212,11 @@ def normalize_scene(value):
             if kind == 'rect':
                 row.setdefault('radius', 0)
                 motion.number(row['radius'], 'radius', 0, min(row['size']) / 2)
+        elif kind == 'stroke':
+            strokes.validate_points(row.get('points'), row['size'])
+            row['stroke'] = color(row.get('stroke', '#ffffff'), 'stroke')
+            row.setdefault('stroke_width', 3)
+            motion.number(row['stroke_width'], 'stroke_width', 1, 128, True)
         else:
             row['source'] = source_name(row.get('source'))
             if 'sha256' in row and (not isinstance(row['sha256'], str) or not re.fullmatch(r'[0-9a-f]{64}', row['sha256'])):
@@ -239,6 +248,7 @@ def raster_budget(scene):
     allocating a pixel surface. All limits precede asset decoding/rasterization.
     """
     total, pixel_frames, peak_supersampled = 0, 0, 0
+    stroke_pixels, stroke_segments = 0, 0
     period = 1000 // scene['fps']
     for layer in scene['layers']:
         if layer['type'] == 'text':
@@ -253,12 +263,21 @@ def raster_budget(scene):
         total += area
         pixel_frames += area * ((layer['out_ms'] - layer['in_ms']) // period)
         peak_supersampled = max(peak_supersampled, supersampled)
+        if layer['type'] == 'stroke':
+            active_frames = (layer['out_ms'] - layer['in_ms']) // period
+            stroke_pixels += supersampled * active_frames
+            stroke_segments += (len(layer['points']) - 1) * active_frames
+            if stroke_pixels > strokes.MAX_RASTER_PIXEL_FRAMES:
+                raise ValueError('Scene exceeds dynamic stroke raster pixel-frame budget')
+            if stroke_segments > strokes.MAX_SEGMENT_FRAMES:
+                raise ValueError('Scene exceeds dynamic stroke segment-frame budget')
         if total > MAX_TOTAL_RASTER_PIXELS:
             raise ValueError('Scene exceeds total layer raster pixel budget')
         if pixel_frames > MAX_RASTER_PIXEL_FRAMES:
             raise ValueError('Scene exceeds layer raster pixel-frame budget')
     return {'total_raster_pixels_upper_bound': total, 'raster_pixel_frames_upper_bound': pixel_frames,
-            'peak_supersampled_pixels': peak_supersampled}
+            'peak_supersampled_pixels': peak_supersampled,
+            'stroke_supersampled_pixel_frames': stroke_pixels, 'stroke_segment_frames': stroke_segments}
 
 
 def parse_scene(raw):
@@ -321,11 +340,12 @@ def evaluate(keyframes, progress):
     motion.number(progress, 'progress', 0, 1)
     index = max(0, bisect.bisect_right([k['at'] for k in keyframes], progress) - 1)
     left = keyframes[index]
+    properties = (*DEFAULTS, 'reveal') if 'reveal' in left else DEFAULTS
     if index == len(keyframes) - 1:
-        return {name: left[name] for name in DEFAULTS}
+        return {name: left[name] for name in properties}
     right = keyframes[index + 1]
     t = ease((progress - left['at']) / (right['at'] - left['at']), left['easing'])
-    return {name: left[name] + t * (right[name] - left[name]) for name in DEFAULTS}
+    return {name: left[name] + t * (right[name] - left[name]) for name in properties}
 
 
 def read_assets(scene, base):
@@ -362,6 +382,8 @@ def read_assets(scene, base):
 def rasterize(layer, assets):
     from PIL import Image, ImageDraw
     kind = layer['type']
+    if kind == 'stroke':
+        return strokes.rasterize(layer, strokes.prepare_path(layer['points']), 1, SUPERSAMPLE)
     if kind == 'image':
         source = assets[layer['source']]['rgba'].copy()
         source.thumbnail(tuple(layer['size']), Image.Resampling.LANCZOS)
@@ -394,7 +416,10 @@ def prepare_scene(path):
     assets = read_assets(scene, path.parent)
     # Cache premultiplication once, not a conversion of the full source on each frame.
     rasters = {layer['id']: rasterize(layer, assets).convert('RGBa') for layer in scene['layers']}
+    paths = {layer['id']: strokes.prepare_path(layer['points'])
+             for layer in scene['layers'] if layer['type'] == 'stroke'}
     return {'scene': scene, 'assets': assets, 'rasters': rasters,
+            'stroke_paths': paths,
             'source_path': path, 'source_sha256': digest(raw)}
 
 
@@ -423,6 +448,11 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
         if state is None or state['opacity'] <= 0:
             continue
         raster = prepared['rasters'][layer['id']]
+        if layer['type'] == 'stroke' and state['reveal'] != 1:
+            if state['reveal'] == 0:
+                continue
+            raster = strokes.rasterize(layer, prepared['stroke_paths'][layer['id']],
+                                       state['reveal'], SUPERSAMPLE).convert('RGBa')
         angle = math.radians(state['rotation'])
         a, b = math.cos(angle) / state['zoom'], math.sin(angle) / state['zoom']
         d, e = -b, a
@@ -658,7 +688,8 @@ def render_scene(path, out, dry_run=False):
             'reopen_verified_frames': reopen_verified, 'reopen_scope': 'five sampled frames, all sources snapshotted',
             'pillow': PIL.__version__, 'probe': probe, 'commands': commands, 'samples': samples, 'outputs': outputs,
             'limitations': ['Experimental GIF Cinema format, not Lottie-compatible.',
-                'Still image, text, ellipse and rounded rectangle layers only; no articulated animation.',
+                'Still image, text, ellipse, rounded rectangle and authored polyline stroke layers; no articulated animation.',
+                'Stroke reveal follows authored point order and arc length; no handwriting generation, tracing or SVG import.',
                 'No expressions, scripts, URLs, font paths/downloads, parenting, masks, blend modes or Lottie import/export.',
                 'Layer order is back to front; opacity uses source-over alpha compositing.',
                 'GIF and MP4 are flattened against matte; PNG frames and isolated layers retain alpha.',
