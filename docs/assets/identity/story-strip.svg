@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="270" viewBox="0 0 1000 270" role="img" aria-labelledby="title desc">
+  <title id="title">A signal. An answer. A connection.</title>
+  <desc id="desc">A static three-beat diagram of the bundled astronaut film, not frames from the movie. Each source take lasts 2.56 seconds.</desc>
+  <rect width="1000" height="270" rx="16" fill="#eae9df"/>
+  <path d="M333 28V242M667 28V242" stroke="#b6b9ae"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#202b2b">
+    <text x="32" y="49" font-size="32">01</text><text x="367" y="49" font-size="32">02</text><text x="700" y="49" font-size="32">03</text>
+    <text x="32" y="231" font-size="42" font-weight="700">SIGNAL</text><text x="367" y="231" font-size="42" font-weight="700">ANSWER</text><text x="700" y="231" font-size="42" font-weight="700">CONNECT</text>
+  </g>
+  <g fill="none" stroke="#263a38" stroke-width="5" stroke-linecap="round">
+    <circle cx="159" cy="124" r="37"/><path d="M103 151A65 65 0 0 1 103 97M90 161A84 84 0 0 1 90 86"/>
+    <path d="M500 80V177M451 129H549M466 95L534 163M466 163L534 95"/>
+    <circle cx="803" cy="128" r="41"/><circle cx="852" cy="128" r="41"/>
+  </g>
+  <circle cx="201" cy="91" r="10" fill="#e65d3e"/><circle cx="500" cy="129" r="12" fill="#e65d3e"/><circle cx="828" cy="128" r="10" fill="#e65d3e"/>
+</svg>

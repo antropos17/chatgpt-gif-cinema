@@ -55,8 +55,9 @@ python tools/inspect_example_sources.py --out output/example-review
 ```
 
 The inspector works from any working directory when invoked by its absolute path.
-It refuses changed source facts, missing files, symlinked inputs, and existing
-output directories. It does not certify artistic acceptance. PNG pixels can vary
+It checks the source hash and raw GIF frame/canvas budgets before decoding, and
+reads each input into a bounded immutable byte snapshot. It refuses canvas growth,
+changed source facts, missing files, symlinked inputs, and existing output directories. It does not certify artistic acceptance. PNG pixels can vary
 with Pillow/font versions; source GIF hashes identify the same footage regardless.
 
 ## 1. Plain film: preserve the source timing

@@ -48,12 +48,20 @@ def read_gif_bytes(source):
     return raw
 
 
-def check_gif_limits(raw):
+def check_gif_limits(raw, *, max_frames=None, max_pixel_frames=None, fixed_canvas=False):
     """Scan GIF block sizes before Pillow can allocate disposal/composite images.
 
     This is a resource preflight, not a substitute for decoding every frame.
     In particular, a later image descriptor can grow a tiny logical screen.
+    Callers may request tighter limits and reject canvas growth. The shared
+    ingestion ceilings remain the upper bounds and defaults remain unchanged.
     """
+    for name, value in (("max_frames", max_frames), ("max_pixel_frames", max_pixel_frames)):
+        if value is not None and (type(value) is not int or value <= 0):
+            raise ValueError(f"{name} must be a positive integer")
+    frame_limit = MAX_GIF_FRAMES if max_frames is None else min(max_frames, MAX_GIF_FRAMES)
+    pixel_limit = (MAX_GIF_PIXEL_FRAMES if max_pixel_frames is None
+                   else min(max_pixel_frames, MAX_GIF_PIXEL_FRAMES))
     if raw[:6] not in (b"GIF87a", b"GIF89a"):
         raise ValueError("not a GIF")
     if len(raw) < 13:
@@ -63,6 +71,7 @@ def check_gif_limits(raw):
         raise ValueError("Invalid GIF dimensions")
     if width * height > MAX_GIF_FRAME_PIXELS:
         raise ValueError("GIF frame exceeds the 16 megapixel limit")
+    canvas_width, canvas_height = width, height
     offset = 13 + ((3 << ((raw[10] & 7) + 1)) if raw[10] & 128 else 0)
     count, pixels = 0, 0
 
@@ -117,15 +126,17 @@ def check_gif_limits(raw):
                       for position in range(offset, offset + 8, 2))
         if not w or not h:
             raise ValueError("Invalid GIF frame dimensions")
+        if fixed_canvas and (x + w > canvas_width or y + h > canvas_height):
+            raise ValueError("GIF frame exceeds the fixed logical canvas")
         width, height = max(width, x + w), max(height, y + h)
         if width * height > MAX_GIF_FRAME_PIXELS:
             raise ValueError("GIF frame exceeds the 16 megapixel limit")
         count += 1
         pixels += width * height
-        if count > MAX_GIF_FRAMES:
-            raise ValueError("GIF exceeds the 1500 frame limit")
-        if pixels > MAX_GIF_PIXEL_FRAMES:
-            raise ValueError("GIF exceeds the decoded pixel budget (160 megapixels across frames)")
+        if count > frame_limit:
+            raise ValueError(f"GIF exceeds the {frame_limit} frame limit")
+        if pixels > pixel_limit:
+            raise ValueError(f"GIF exceeds the decoded pixel budget ({pixel_limit} pixels across frames)")
         flags = raw[offset + 8]
         offset += 9 + ((3 << ((flags & 7) + 1)) if flags & 128 else 0)
         offset = skip_blocks(offset + 1)  # Skip the LZW code size, then image data.

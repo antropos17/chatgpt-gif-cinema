@@ -8,13 +8,21 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 from pathlib import Path
 import tempfile
+import sys
 
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from gif_cinema.cli import check_gif_limits
+
+MAX_EXAMPLE_BYTES = 10 * 1024 * 1024
+MAX_EXAMPLE_FRAMES = 256
+MAX_EXAMPLE_PIXEL_FRAMES = 64 * 1024 * 1024
 CATALOG = ROOT / "examples/asset-catalog.json"
 FACTS = ("sha256", "bytes", "width", "height", "frames", "unique_frames",
          "durations_ms", "total_duration_ms", "loop")
@@ -36,20 +44,37 @@ def safe_source(root: Path, relative: str) -> Path:
     return candidate
 
 
-def source_facts(path: Path) -> dict:
-    if path.stat().st_size > 10 * 1024 * 1024:
+def read_source_bytes(path: Path, expected_sha: str | None = None) -> bytes:
+    # Bound the actual read, even if a file grows after its directory entry is read.
+    with path.open("rb") as source:
+        data = source.read(MAX_EXAMPLE_BYTES + 1)
+    if len(data) > MAX_EXAMPLE_BYTES:
         raise ValueError("Example source exceeds the 10 MiB inspection budget")
-    data = path.read_bytes()
-    with Image.open(path) as image:
-        if image.format != "GIF" or not 1 < image.n_frames <= 256:
+    if expected_sha is not None and hashlib.sha256(data).hexdigest() != expected_sha:
+        raise ValueError("Example source sha256 differs from the catalog")
+    # Scan every raw descriptor before Pillow can allocate disposal/composite
+    # frames. Gallery facts require one fixed canvas; normal local GIF rectangles
+    # within that canvas remain valid. Never reopen the file after this preflight.
+    check_gif_limits(data, max_frames=MAX_EXAMPLE_FRAMES,
+                     max_pixel_frames=MAX_EXAMPLE_PIXEL_FRAMES, fixed_canvas=True)
+    return data
+
+
+def source_facts(path: Path, expected_sha: str | None = None) -> dict:
+    data = read_source_bytes(path, expected_sha)
+    with Image.open(io.BytesIO(data)) as image:
+        if image.format != "GIF" or not 1 < image.n_frames <= MAX_EXAMPLE_FRAMES:
             raise ValueError("Example source must be a 2-256 frame GIF")
         width, height = image.size
-        if width * height * image.n_frames > 64 * 1024 * 1024:
-            raise ValueError("Example source exceeds the decoded pixel budget")
         loop = image.info.get("loop")
-        durations, unique = [], set()
+        durations, unique, pixels = [], set(), 0
         for frame in range(image.n_frames):
             image.seek(frame)
+            if image.size != (width, height):
+                raise ValueError("Example source changed its decoded canvas")
+            pixels += image.width * image.height
+            if pixels > MAX_EXAMPLE_PIXEL_FRAMES:
+                raise ValueError("Example source exceeds the decoded pixel budget")
             delay = image.info.get("duration")
             if type(delay) is not int or delay <= 0:
                 raise ValueError("Example source has missing or invalid frame timing")
@@ -80,7 +105,7 @@ def verify_catalog(catalog: dict, root: Path = ROOT) -> dict:
         if relative in paths:
             raise ValueError("Catalog cannot count the same source twice")
         paths.add(relative)
-        facts = source_facts(path)
+        facts = source_facts(path, source.get("sha256", ""))
         for name in FACTS:
             if name not in source or source[name] != facts[name]:
                 raise ValueError(f"{identifier}: {name} differs from the catalog")
@@ -114,7 +139,8 @@ def storyboard(catalog: dict, root: Path = ROOT) -> tuple[Image.Image, list[dict
         draw.line((28, y, 1012, y), fill="#37434a")
         draw.text((28, y + 14), source["label"], font=font(18), fill=ink)
         draw.text((28, y + 41), source["action"], font=font(13), fill=muted)
-        with Image.open(safe_source(root, source["path"])) as gif:
+        raw = read_source_bytes(safe_source(root, source["path"]), source["sha256"])
+        with Image.open(io.BytesIO(raw)) as gif:
             indices = (0, gif.n_frames // 2, gif.n_frames - 1)
             for col, (name, index) in enumerate(zip(("FIRST", "MIDDLE", "LAST"), indices)):
                 gif.seek(index)
