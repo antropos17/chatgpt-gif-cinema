@@ -12,9 +12,10 @@ import shutil
 import tempfile
 import time
 
-from PIL import Image, ImageChops, ImageDraw, ImageStat
+from PIL import Image, ImageDraw
 
 from . import cli
+from .continuity import cut_context, cut_sheet
 from .durability import durable_write, sync_directory
 from .audio import MAX_AUDIO_SECONDS, prepare_audio, verify_film_audio
 
@@ -219,9 +220,9 @@ def probe(path, width, height, expected_seconds, fps, shots, expected_audio=Fals
 def diagnostics(root, script, records):
     sheet = Image.new("RGB", (480, len(records) * 205), "#181818")
     draw = ImageDraw.Draw(sheet)
-    joins, previous = [], None
+    joins, previous, previous_delays, previous_offset = [], None, None, 0
     for index, (shot, record) in enumerate(zip(script["shots"], records)):
-        frames, _, _ = cli.validate_gif(local_path(root, record["output"]))
+        frames, delays, _ = cli.validate_gif(local_path(root, record["output"]))
         for label, frame, x in (("first", frames[0], 0), ("last", frames[-1], 240)):
             output = root / f"{shot['id']}-{label}.png"
             data = io.BytesIO(); frame.save(data, format="PNG")
@@ -230,13 +231,21 @@ def diagnostics(root, script, records):
             sheet.paste(thumbnail, (x, index * 205))
             draw.text((x + 4, index * 205 + 183), f"{shot['id']} {label}", fill="white")
         if previous is not None:
-            diff = ImageChops.difference(previous.resize((128, 128)), frames[0].resize((128, 128)))
+            context = cut_context(previous, previous_delays, frames, delays, previous_offset)
+            strip_name = f"join-{index:02}.png"
+            data = io.BytesIO()
+            cut_sheet(previous, frames, context).save(data, format="PNG")
+            cli.write_result(root / strip_name, data.getvalue(), force=True)
             joins.append({"previous": script["shots"][index - 1]["id"], "next": shot["id"],
-                          "pixel_mae_0_255": round(sum(ImageStat.Stat(diff).mean) / 3, 3),
+                          "pixel_mae_0_255": round(context["cut_pixel_mae_0_255"], 3),
+                          "cut_context": context, "context_sheet": strip_name,
                           "previous_end_target": script["shots"][index - 1]["last_frame_target"],
                           "next_start_target": shot["first_frame_target"], "status": "human-review-required"})
-        previous = frames[-1]
-        del frames  # Retain only the endpoint, not the previous shot's entire decode.
+        # Retain only the final three drawings and their timing between decodes.
+        previous_offset = max(0, len(frames) - 3)
+        previous = frames[-3:]
+        previous_delays = delays[-3:]
+        del frames
     data = io.BytesIO(); sheet.save(data, format="PNG")
     cli.write_result(root / "contact-sheet.png", data.getvalue(), force=True)
     report = {"status": "human-review-required", "note": "Pixel MAE cannot measure identity, motion or narrative continuity. Targets are instructions, not verified observations.", "joins": joins}

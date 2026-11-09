@@ -424,13 +424,13 @@ def endpoints(args):
         write_result(path, data.getvalue(), force)
 
 def continuity(args):
-    from PIL import ImageChops,ImageStat
-    a,_,_=gif_frames(args.previous);b,_,_=gif_frames(args.next)
-    diff=ImageChops.difference(a[-1].resize((128,128)),b[0].resize((128,128)))
-    mae=sum(ImageStat.Stat(diff).mean)/3
+    from .continuity import cut_context
+    a,ad,_=gif_frames(args.previous);b,bd,_=gif_frames(args.next)
+    context = cut_context(a, ad, b, bd)
+    mae = context["cut_pixel_mae_0_255"]
     report={"previous":str(args.previous),"next":str(args.next),"pixel_mae_0_255":round(mae,3),
             "threshold":args.threshold,"status":"review-required" if mae>args.threshold else "pixel-similar-review-still-required",
-            "note":"Pixel MAE cannot measure identity or narrative continuity."}
+            "note":"Pixel MAE cannot measure identity or narrative continuity.", "cut_context":context}
     print(json.dumps(report,indent=2))
     if args.output:
         save_report(args.output, report, [args.previous, args.next], getattr(args, "force", False))
