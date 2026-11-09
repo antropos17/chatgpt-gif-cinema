@@ -1,5 +1,8 @@
 # Creating short films from GPT-generated GIFs
 
+New here? Follow [Getting started](GETTING-STARTED.md) for installation, a zero-call
+film export, and a bounded first OpenAI GIF request.
+
 For practical advice on framing, native motion, references and retakes, read
 [Tips: make short GIFs feel like a scene](TIPS.md).
 
