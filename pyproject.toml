@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "gif-cinema"
 version = "0.5.0"
-description = "Turn prompts into GPT Image 2.6 GIFs, then assemble short films."
+description = "Direct short GIF takes into animated stories: plan scenes, review cuts, add titles, and export MP4 or GIF."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["Pillow>=10"]
