@@ -43,7 +43,9 @@ class ExportVerificationTests(unittest.TestCase):
     def setUpClass(cls):
         cls.temporary = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.temporary.cleanup)
-        cls.root = Path(cls.temporary.name)
+        # macOS exposes its temporary directory through /var -> /private/var.
+        # Use the canonical directory; the renderer intentionally rejects symlink parents.
+        cls.root = Path(cls.temporary.name).resolve()
         Image.new('RGBA', (8, 8), '#ff8844').save(cls.root / 'sprite.png')
         value = scene(layers=[{'id': name, 'type': 'image', 'source': 'sprite.png',
             'size': [8, 8], 'keyframes': [{'at': 0, 'x': .25}, {'at': 1, 'x': .75}]}
