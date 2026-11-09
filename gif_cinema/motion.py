@@ -46,7 +46,7 @@ PRESETS = {
 }
 FIRST = "Initial phase of a continuous periodic cycle."
 LAST = "Next phase flows naturally back into the first; visual review required."
-ROUTES = ("openai-direct-16", "higgsfield-tool-64")
+ROUTES = ("openai-direct-16",)
 
 
 def canonical(value):
@@ -63,19 +63,12 @@ def compile_request(preset, route):
     if not isinstance(preset, str) or preset not in PRESETS:
         raise ValueError("Unknown preset")
     prompt = COMMON + PRESETS[preset]["direction"]
-    if route == "openai-direct-16":
-        effective = (f"Style and character bible: {COMMON}\nShot {preset}: {prompt}\n"
-                     f"Start: {FIRST}\nEnd: {LAST}\nOne continuous shot. No captions or text.")
-        parameters = make_payload(effective, frames=16, duration=200, size="512x512", quality="max", complexity="high")
-        dispatch = {"kind": "existing-gif-cinema-render", "endpoint": "https://api.openai.com/v1/images/generations"}
-    else:
-        parameters = {"prompt": prompt, "output_format": "gif", "quality": "max", "size": "512x512", "frame_count": 64, "frame_duration_ms": 50}
-        parameters.update({"model": "gpt_image_2_6", "count": 1, "background": "opaque"})
-        dispatch = {"kind": "installed-higgsfield-tool", "tool": "higgsfield.generate_image", "schema_checked_on": "2026-11-09", "note": "Tool arguments only, not a direct OpenAI HTTP payload. Recheck the installed tool schema before paid execution."}
-    result = {"schema_version": 1, "preset": preset, "title": PRESETS[preset]["title"], "route": route, "status": "unrendered", "source_prompt": prompt, "dispatch": dispatch, "parameters": parameters, "parameters_sha256": sha(canonical(parameters))}
-    if route == "higgsfield-tool-64":
-        result["tool_arguments"] = {"params": parameters}
-    return result
+    effective = (f"Style and character bible: {COMMON}\nShot {preset}: {prompt}\n"
+                 f"Start: {FIRST}\nEnd: {LAST}\nOne continuous shot. No captions or text.")
+    parameters = make_payload(effective, frames=16, duration=200, size="512x512", quality="max", complexity="high")
+    dispatch = {"kind": "existing-gif-cinema-render", "endpoint": "https://api.openai.com/v1/images/generations"}
+    return {"schema_version": 1, "preset": preset, "title": PRESETS[preset]["title"], "route": route, "status": "unrendered", "source_prompt": prompt, "dispatch": dispatch, "parameters": parameters, "parameters_sha256": sha(canonical(parameters)), "artifact_requirements": {"background": "opaque"}}
+
 
 
 @contextmanager
@@ -158,8 +151,8 @@ def inspect_result(args):
         warnings.append("Decoded frame delays differ from requested delays.")
     if any(frame.size != (512, 512) for frame in frames):
         warnings.append("Decoded dimensions differ from requested 512x512.")
-    if p.get("background") == "opaque" and transparent_indices:
-        warnings.append("Composited GIF frames contain transparent pixels despite requested opaque background.")
+    if request["artifact_requirements"]["background"] == "opaque" and transparent_indices:
+        warnings.append("Composited GIF frames contain transparent pixels despite the opaque artifact requirement.")
     if loop != 0:
         warnings.append("GIF does not declare infinite looping.")
     if len(set(hashes)) < 2:
@@ -186,7 +179,7 @@ def configure_parser(parser):
     listing.set_defaults(func=lambda args: print(json.dumps(PRESETS, indent=2)))
     compile_cmd = sub.add_parser("compile", help="Prepare requests offline; never generates media")
     compile_cmd.add_argument("--preset", choices=["all", *PRESETS], default="all")
-    compile_cmd.add_argument("--route", choices=ROUTES, required=True)
+    compile_cmd.add_argument("--route", choices=ROUTES, default=ROUTES[0])
     compile_cmd.add_argument("--out", required=True)
     compile_cmd.set_defaults(func=compile_project)
     inspect_cmd = sub.add_parser("inspect", help="Inspect an actual returned GIF without modifying it")

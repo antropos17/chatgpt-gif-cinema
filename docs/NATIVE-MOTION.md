@@ -22,8 +22,8 @@ Run in a checkout with Python 3.10+ and Pillow installed:
 
 ```bash
 python -m gif_cinema motion list
-python -m gif_cinema motion compile --route higgsfield-tool-64 --out output/motion-plan
-# Or the existing direct API adapter, not the 64-frame tool profile:
+python -m gif_cinema motion compile --out output/motion-plan
+# Optional explicit spelling of the same, sole route:
 python -m gif_cinema motion compile --route openai-direct-16 --out output/direct-motion-plan
 ```
 
@@ -37,25 +37,28 @@ Request changes are explicit source edits followed by compilation into a new fol
 Keep the source revision with customized projects; inspection rejects requests that
 no longer match this runtime's presets rather than silently misattributing them.
 
-## Separate provider contracts
+## Direct OpenAI API contract
 
-Both profiles request 512×512, maximum quality and 3.2 seconds:
+The sole route, `openai-direct-16`, requests 512×512, maximum quality and
+16 × 200 ms (3.2 seconds) through the existing `gpt-image-2.6-flare` direct adapter.
+It generates one `.film.json` per preset compatible with the existing render CLI.
+The adapter retains its conservative 16-frame ceiling. Actual account/model access
+must be checked separately: offline tests do not establish live availability.
+The compiler does not add a third-party integration or a paid-execution command.
 
-- `openai-direct-16`: 16 × 200 ms, existing `gpt-image-2.6-flare` direct adapter.
-  Generates one `.film.json` per preset compatible with the existing render CLI.
-  The current adapter retains its conservative 16-frame ceiling. Its account/model
-  availability is not established by offline tests or access to another provider.
-- `higgsfield-tool-64`: 64 × 50 ms, installed `higgsfield.generate_image` tool with
-  `model: gpt_image_2_6`, `count: 1`, `background: opaque`. The exact tool call body
-  is the request file's `tool_arguments` value. Its schema was checked November 9,
-  2026, but must be rechecked before execution. There is no fabricated HTTP endpoint,
-  generic HTTP executor or promise that the tool will remain available.
+Requests also contain `artifact_requirements.background: opaque`, a local acceptance
+criterion. It is deliberately separate from API `parameters`: no unsupported
+background field is sent to the API. The inspector reports a warning if the returned
+GIF contains actual transparent pixels. A prompt or local requirement cannot
+force a provider to meet it.
 
-Higgsfield output format is `gif`; this is not image-to-video generation. Check live
-pricing and user preferences before a paid call. No price is baked into this package.
-Run one approved pilot before a larger paid batch. Record its job ID and returned
-receipt, wait for that job, and retrieve its actual GIF. An interrupted wait does not
-justify another paid submission. The compiler does not manage external jobs or billing.
+Direct execution requires `OPENAI_API_KEY` in the environment and explicit
+user authorization with a bounded call budget. Never print or save the key.
+Start with one approved pilot, retain the runtime receipt and original GIF, and
+resolve pending/unknown outcomes before any retry. No price is baked into this package.
+In ChatGPT, use native GIF generation only when the current chat's available tools
+actually support it and the user authorizes execution; text instructions do not
+establish that capability. This package does not automate the ChatGPT interface.
 
 For a separately authorized direct request, use the runtime's guarded execution:
 
@@ -87,8 +90,8 @@ composited-frame count, adjacent-frame pixel differences and the last-to-first
 pixel difference. The contact sheet includes start, quarter, half, three-quarter
 and final frames, with exact indices in the receipt. Infinite loop metadata is
 `0`; a missing extension or finite repeat count is flagged. Any frame with dimensions
-other than 512×512 is flagged, including later canvas expansion. For the opaque
-Higgsfield profile, actual transparent pixels in composited RGBA frames are flagged;
+other than 512×512 is flagged, including later canvas expansion. For the local opaque
+artifact requirement, actual transparent pixels in composited RGBA frames are flagged;
 an unused palette transparency index alone is not a mismatch. Alpha inspection
 streams one frame at a time after the shared bounded scanner and decoder accept
 the same immutable input bytes.

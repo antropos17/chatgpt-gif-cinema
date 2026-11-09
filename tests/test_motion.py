@@ -25,7 +25,7 @@ class MotionTests(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             args.func(args)
 
-    def compile(self, route="higgsfield-tool-64"):
+    def compile(self, route="openai-direct-16"):
         out = self.root / route
         self.run_cmd("compile", "--route", route, "--out", out)
         return out
@@ -33,17 +33,27 @@ class MotionTests(unittest.TestCase):
     def test_profiles_and_reproducibility(self):
         prompts = set()
         for name in motion.PRESETS:
-            a = motion.compile_request(name, "higgsfield-tool-64")
-            self.assertEqual(a, motion.compile_request(name, "higgsfield-tool-64"))
-            self.assertEqual(a["tool_arguments"], {"params": a["parameters"]})
-            self.assertEqual(a["parameters"]["model"], "gpt_image_2_6")
-            self.assertNotIn("endpoint", a["dispatch"])
+            a = motion.compile_request(name, "openai-direct-16")
+            self.assertEqual(a, motion.compile_request(name, "openai-direct-16"))
+            self.assertEqual(a["parameters"]["model"], "gpt-image-2.6-flare")
+            self.assertEqual(a["dispatch"]["endpoint"], cli.API_URL)
+            self.assertNotIn("background", a["parameters"])
+            self.assertEqual(a["artifact_requirements"], {"background": "opaque"})
             prompts.add(a["source_prompt"])
             for route in motion.ROUTES:
                 p = motion.compile_request(name, route)["parameters"]
                 self.assertEqual(p["frame_count"] * p["frame_duration_ms"], 3200)
-                self.assertEqual(p["frame_count"], 64 if route == "higgsfield-tool-64" else 16)
+                self.assertEqual(p["frame_count"], 16)
         self.assertEqual(len(prompts), 6)
+
+    def test_default_route_is_direct_and_other_routes_rejected(self):
+        out = self.root / "default-direct"
+        self.run_cmd("compile", "--out", out)
+        manifest = json.loads((out / "manifest.json").read_text())
+        self.assertEqual(manifest["route"], "openai-direct-16")
+        self.assertEqual(motion.ROUTES, ("openai-direct-16",))
+        with self.assertRaises(ValueError):
+            motion.compile_request("chrome-trefoil", "unsupported-third-party")
 
     def test_manifest_and_exact_direct_payloads(self):
         out = self.compile("openai-direct-16")
@@ -97,7 +107,7 @@ class MotionTests(unittest.TestCase):
         """Full requested profile with cheap flat-color synthetic drawings."""
         frames = []
         palette = [0, 0, 0, 230, 30, 100, 40, 80, 200] + [0] * (768 - 9)
-        for index in range(64):
+        for index in range(16):
             frame = Image.new("P", (512, 512), 1 + index % 2)
             frame.putpalette(palette)
             if transparent:
@@ -106,12 +116,12 @@ class MotionTests(unittest.TestCase):
         stream = io.BytesIO()
         options = {"transparency": 0} if transparent or unused_transparency else {}
         frames[0].save(stream, format="GIF", save_all=True,
-                       append_images=frames[1:], duration=50, loop=0,
+                       append_images=frames[1:], duration=200, loop=0,
                        optimize=False, disposal=2, **options)
         return stream.getvalue()
 
     def inspect_fixture(self, raw, name):
-        plan = self.root / "higgsfield-tool-64"
+        plan = self.root / "openai-direct-16"
         if not plan.exists():
             self.compile()
         source = self.root / (name + ".gif")
@@ -126,7 +136,7 @@ class MotionTests(unittest.TestCase):
         self.assertEqual(report["technical_status"], "decoded-with-warnings")
         self.assertEqual(report["visual_status"], "human-review-required")
         self.assertFalse(report["actual"]["all_frames_opaque"])
-        self.assertEqual(report["actual"]["transparent_frame_indices"], list(range(64)))
+        self.assertEqual(report["actual"]["transparent_frame_indices"], list(range(16)))
         self.assertEqual(len(report["warnings"]), 1)
         self.assertIn("transparent pixels", report["warnings"][0])
 
@@ -136,7 +146,7 @@ class MotionTests(unittest.TestCase):
         # one pixel without changing its compressed image or the logical screen.
         descriptor = b"\x2c\x00\x00\x00\x00\x00\x02\x00\x02"
         offsets = [i for i in range(len(raw)) if raw[i:i + len(descriptor)] == descriptor]
-        self.assertEqual(len(offsets), 64)
+        self.assertEqual(len(offsets), 16)
         raw[offsets[1] + 3] = 1
         report = self.inspect_fixture(bytes(raw), "expanded")
         self.assertEqual(report["actual"]["frame_dimensions"][0], [512, 512])
@@ -172,7 +182,7 @@ class MotionTests(unittest.TestCase):
             self.run_cmd("inspect", source, "--request", request, "--out", target)
         self.assertFalse(target.exists())
         data = json.loads(request.read_text())
-        data["parameters"]["frame_count"] = 16
+        data["parameters"]["frame_count"] = 8
         request.write_text(json.dumps(data))
         with self.assertRaisesRegex(ValueError, "differs"):
             motion.read_request(request)

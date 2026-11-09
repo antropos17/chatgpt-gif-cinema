@@ -145,20 +145,3 @@ The dry-run counts requests. Dollar cost depends on actual usage.
   Commercial use, redistribution, and hosting require permission. GIF Cinema is an
   independent project. [Source-available evaluation license](LICENSE).
 - **Support.** Follow the experiments on [Buy Me a Coffee](https://buymeacoffee.com/gifcinema).
-
-## Native abstract motion GIFs
-
-Prepare six distinct art-directed loop prompts directly for native GIF generation,
-without Blender or a video-to-GIF step:
-
-```bash
-python -m gif_cinema motion compile --route higgsfield-tool-64 --out output/motion-plan
-python -m gif_cinema motion inspect actual.gif --request output/motion-plan/chrome-trefoil.request.json --out output/chrome-review
-```
-
-Preparation is offline, not generation. Choose the installed Higgsfield tool profile
-(64 × 50 ms) or the existing direct adapter profile (16 × 200 ms); capabilities and
-paid execution stay separate. Includes exact request provenance, bounded GIF decoding,
-actual timing, loop diagnostics and first/last/phase images for human visual review.
-See [native motion workflow](docs/NATIVE-MOTION.md) and the reusable
-[native-motion-gif skill](.agents/skills/native-motion-gif/SKILL.md).
