@@ -23,10 +23,21 @@ README text and alternative text; the artwork is not the only way to read the pa
 ## What changed in the page
 
 The first screen has a new identity rather than the existing beige cat comparison.
-The main sequence is now **one direct GIF → one repeatable film → copyable recipes**.
-All examples occupy one column. Older before/after studies are kept under optional
-details sections, with their private finishing limitations immediately above them.
-There is no side-by-side table that squeezes characters and labels on a phone.
+The main sequence is **one direct GIF → one repeatable film → finishing studies → copyable recipes**.
+All examples occupy one column. This follow-up keeps the original identity and
+recipes, adds watch/make/inspect entry routes, and makes all three existing animated
+finishing studies visible before the setup instructions. Their shared private-tool
+scope appears above the first preview; individual captions explain the method and
+link to full videos and actual frame pairs. Previews are plain image embeds with
+separate watch links: GitHub turns a thumbnail wrapped in an attachment-video link
+into a full video player, losing the intended looping GIF. There is no side-by-side table that
+squeezes characters and labels on a phone. Earlier watch/demo/install anchors are
+preserved so existing links keep working.
+
+The identity and visible-gallery updates were developed as two reviewable changes.
+The gallery does not imply an additional native-generation sample or a publicly
+hosted website. Website source and its separate deployment scope are documented in
+[the screening-room guide](WEBSITE.md).
 
 ## Actual media
 
@@ -56,7 +67,9 @@ python -m compileall -q gif_cinema
 ```
 
 The README tests validate relative files and section anchors, manifest byte hashes,
-actual GIF dimensions/timing and SVG safety/sizing. They do not certify aesthetic
+actual GIF dimensions/timing, visible gallery placement and SVG safety/sizing. The
+three preview GIFs are also checked against their original showcase hashes and
+2.24-second timing. They do not certify aesthetic
 quality or remote media availability. To verify actual media, run the zero-call
 recipes, inspect their receipts, and watch the delivered files. To verify presentation,
 inspect GitHub's rendered README and the narrow-screen cover separately.

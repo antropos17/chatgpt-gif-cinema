@@ -13,9 +13,20 @@ An agent skill and Python CLI for **Codex and Claude Code**. Direct short shots 
 an API, inspect the actual frames, choose your takes, and assemble a film. Or start
 with the bundled footage, entirely offline.
 
-[**Make your first film →**](#make-your-first-film) · [Copy a prompt](#copy-a-prompt) · [Install the skill](#install-the-skill) · [Production guide](docs/PRODUCTION.md)
+[**Watch the films ↓**](#on-the-screen) · [Make your first film](#make-your-first-film) · [Copy a prompt](#copy-a-prompt) · [Install the skill](#install-the-skill)
 
 [![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml) [![Codex and Claude Code](https://img.shields.io/badge/Codex_%2B_Claude_Code-agent_skill-263a38)](.agents/skills/gif-cinema/SKILL.md) [![Source-available](https://img.shields.io/badge/license-source--available-e65d3e)](LICENSE)
+
+<a id="see-it-in-motion"></a>
+
+## On the screen
+
+**One direct GIF. One runnable film. Three finishing studies.**
+Every moving image below is existing footage. Choose a route by what you want to do:
+
+- **Watch:** [the cat's window-side story](#cat--walk-jump-curl-up), [a dog and a red ball](#dog--follow-the-ball), or [the astronaut exchange](#02--three-takes-a-complete-little-exchange).
+- **Make:** rebuild [the included three-shot film](#make-your-first-film) with zero API calls, then [add a title and export a GIF](docs/RECIPES.md#add-a-title-and-export-a-gif).
+- **Inspect:** open the [original request](docs/assets/first-live-render.json), [frame-pair sheets](docs/SHOWCASE.md), and [media hashes](docs/assets/showcase/asset-manifest.json).
 
 ## 01 / One prompt. One small performance.
 
@@ -25,17 +36,15 @@ with the bundled footage, entirely offline.
 
 **A wave from the Moon** · Direct API output · 1.80 s · 9 drawings · 512 × 512
 
-This is an existing, unaltered generated GIF, not the static silver artwork above.
-Its original prompt and parameters are preserved. The movement is visibly stepped;
-this is a reproducible request example, not a claim of smooth cinematic animation.
+An unaltered historical API result with its original prompt and parameters.
+Watch the small hand movement and the stepped drawing cadence.
 
 > A tiny paper-cut astronaut waves once on the Moon, locked camera, matte monochrome background, clear silhouette, smooth loop, no text
 
 [**Exact request + how to repeat it →**](docs/RECIPES.md#one-prompt-one-gif) · [Original request record](docs/assets/first-live-render.json) · [Decoded timing](docs/assets/first-live-render-inspect.json)
 
-A new generation needs your own supported model access and billing. The same prompt
-can produce a different result. The phrase “smooth loop” is a request, not a passed
-quality check.
+To make a new take, you need your own supported model access and billing.
+Results vary; “smooth loop” in the prompt is a request, not a quality guarantee.
 
 ## 02 / Three takes. A complete little exchange.
 
@@ -55,6 +64,55 @@ https://github.com/user-attachments/assets/c4dc8c9b-1e97-4f1a-9632-e285d9b969e0
 small GIF, or split the finished edit into whole-shot GIF chapters.
 [Copy the complete title + story recipe](docs/RECIPES.md#add-a-title-and-export-a-gif).
 These are new edits of the bundled footage, not new character actions.
+
+## 03 / From the cutting room
+
+**Finishing studies · Existing generated takes + additional local postproduction**
+
+Each preview loops a **2.24-second excerpt**. Open its full comparison to judge
+the complete action.
+The right-hand panels use private finishing tools that are **not included in the
+public CLI**. The [runnable film above](#02--three-takes-a-complete-little-exchange)
+shows what the public source actually exports.
+
+### Cat / Walk, jump, curl up
+
+![A 2.24-second cat-walk excerpt. Left: native timing. Right: existing compositing, framing cleanup and selective interpolation.](docs/assets/showcase/cat-preview.gif)
+
+**Three actions · 7.68-second comparison · Silent**
+
+A simple destination gives the sequence a shape: cross the room, reach the window,
+settle down. The existing finished version changes framing and compositing as well
+as motion. Those differences should not all be credited to interpolation.
+
+[**Watch the comparison →**](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Inspect frame pairs](docs/assets/showcase/cat-frames.png) · [Watch the 57.2-second assembled cat film](https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456)
+
+### Dog / Follow the ball
+
+![A 2.24-second excerpt of an illustrated dog and red ball, before and after local interpolation.](docs/assets/showcase/dog-preview.gif)
+
+**Four takes · 10.24-second comparison · Silent**
+
+Track the ball, the paws and the moment of contact. Intermediate playback frames can
+soften a hold; they cannot fix a disappearing object or an incorrect paw.
+
+[**Watch the comparison →**](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638) · [Inspect frame pairs](docs/assets/showcase/dog-frames.png) · [Read the method](docs/SHOWCASE.md#dog--the-same-four-takes)
+
+### Astronaut / A signal, an answer
+
+![A 2.24-second excerpt of the astronaut greeting, at native drawing cadence and with existing local interpolation.](docs/assets/showcase/astronaut-preview.gif)
+
+**Two takes · 5.12-second comparison · Silent**
+
+A greeting and a reply, shown at matching timeline positions. This comparison uses
+only the first two takes; the [public three-shot film](#02--three-takes-a-complete-little-exchange)
+keeps the original source timing and does not apply this finishing step.
+
+[**Watch the comparison →**](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34) · [Inspect frame pairs](docs/assets/showcase/astronaut-frames.png) · [Read the method](docs/SHOWCASE.md#astronaut--two-shots-one-exchange)
+
+[All methods, media provenance and known faults →](docs/SHOWCASE.md)
+
+<a id="try-it-without-an-api-key"></a>
 
 ## Make your first film
 
@@ -109,6 +167,8 @@ animated; the astronaut drawings are unchanged. [Exact commands](docs/RECIPES.md
 finished cartoon. The included *Lantern Delivery* plan has 14 intended actions and
 35.84 seconds of planned footage. [Plan, select takes, and continue](docs/STORYTELLING-SKILL.md).
 
+<a id="give-the-skill-to-your-agent"></a>
+
 ## Install the skill
 
 From the checkout, package the **current** source skill:
@@ -134,35 +194,16 @@ new versioned release.
 
 </details>
 
-## From the cutting room
+## A small production, kept editable
 
-**Existing finishing experiments, not a promise of the public CLI.** These comparisons
-use additional local interpolation and, for the cat, compositing and framing cleanup.
-Those finishing tools are not included here. Each thumbnail is a 2.24-second excerpt.
+**Brief → source takes → reviewed cuts → film → GIF chapters**
 
-<details>
-<summary><strong>Cat · Walk, jump, curl up</strong> — open the animated comparison</summary>
+1. **Direct one visible change.** Describe the state before, the action and the state after. Keep character, prop and camera choices explicit.
+2. **Keep the best take.** Inspect the actual drawings and the two sides of each cut. Record the selected source bytes before replacing anything.
+3. **Build the edit.** Add a local title, assemble the MP4, then export a smaller GIF or whole-shot chapters. Preserve the storyboard and review artifacts.
 
-![Existing cat before/after comparison excerpt.](docs/assets/showcase/cat-preview.gif)
-
-[Watch the 7.68-second comparison](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Inspect frame pairs](docs/assets/showcase/cat-frames.png) · [Watch the 57.2-second assembled cat film](https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456)
-
-</details>
-
-<details>
-<summary><strong>Astronaut + dog</strong> — open two more finishing studies</summary>
-
-![Existing astronaut before/after comparison excerpt.](docs/assets/showcase/astronaut-preview.gif)
-
-[Astronaut: full 5.12-second comparison](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34) · [Frame pairs](docs/assets/showcase/astronaut-frames.png)
-
-![Existing dog before/after comparison excerpt.](docs/assets/showcase/dog-preview.gif)
-
-[Dog: full 10.24-second comparison](https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638) · [Frame pairs](docs/assets/showcase/dog-frames.png)
-
-</details>
-
-[Methods, media provenance and known faults →](docs/SHOWCASE.md)
+A longer story needs more real actions. The bundled *Lantern Delivery* example is a
+14-action production plan, not rendered footage. [Plan it, select takes, and continue →](docs/STORYTELLING-SKILL.md)
 
 ## The cut is the test
 
