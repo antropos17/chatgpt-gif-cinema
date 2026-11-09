@@ -6,32 +6,56 @@ permissions:
   contents: read
 jobs:
   python:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: ubuntu-24.04, python: "3.10"}
+          - {os: ubuntu-24.04, python: "3.12", artifact: true}
+          - {os: ubuntu-24.04, python: "3.13"}
+          - {os: windows-2025, python: "3.12"}
+          - {os: macos-15, python: "3.12"}
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python }}
       - name: Ensure FFmpeg tools
         run: |
           if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
-            sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update -qq
-            sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install --no-install-recommends -y ffmpeg
+            case "$RUNNER_OS" in
+              Linux)
+                sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 update -qq
+                sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 install --no-install-recommends -y ffmpeg
+                ;;
+              macOS)
+                brew install ffmpeg
+                ;;
+              Windows)
+                choco install ffmpeg -y --no-progress
+                echo "C:\\ProgramData\\chocolatey\\bin" >> "$GITHUB_PATH"
+                ;;
+            esac
           fi
-          ffmpeg -version
-          ffprobe -version
+      - run: ffmpeg -version && ffprobe -version
       - run: python -m pip install -e ".[filmqa]"
       - run: python -m compileall -q gif_cinema
+      - run: python -m gif_cinema doctor
       - run: python -m unittest discover -s tests -v
       - run: python -m gif_cinema --help
       - name: Verify script planning and zero-call assembly
         run: |
-          ffprobe -version
           python -m gif_cinema render examples/film.json --dry-run
           python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/ci-story
           python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/ci-story
-      - uses: actions/upload-artifact@v4
+      - if: matrix.artifact
+        uses: actions/upload-artifact@v4
         with:
           name: offline-script-film
           path: output/ci-story/

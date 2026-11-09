@@ -50,10 +50,14 @@ Install and check the tools, from the repository root:
 
 ```bash
 python -m pip install .
+python -m gif_cinema doctor
 python -m gif_cinema --help
 ffmpeg -version
 ffprobe -version
 ```
+
+The doctor checks local Python, Pillow, FFmpeg and configuration without sending
+requests or printing the API key. It does not verify provider access or billing.
 
 These instructions install this checkout, not an assumed PyPI release. Keep the
 checkout: examples and standalone skill scripts are repository files, not commands
@@ -176,8 +180,10 @@ Remove-Variable secret
 ```
 
 The CLI reads `OPENAI_API_KEY` from the current process environment. **It does not
-load `.env` automatically.** Copying `.env.example` is not enough. It also does not
-read `GIF_CINEMA_MODEL`; choose the model in the script, or with `generate --model`.
+load `.env` automatically.** Copying `.env.example` is not enough. `GIF_CINEMA_MODEL`
+sets the default for `generate` and generated script shots without an explicit
+`model`. An explicit script model or `generate --model` takes precedence. The
+included first-shot example already selects its model explicitly.
 Do not paste a real key into a script, commit, issue, screenshot or shared terminal log.
 
 ### Execute only when you accept the charge
