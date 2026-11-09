@@ -6,20 +6,20 @@
     {
       "path": "docs/assets/identity/cover.svg",
       "role": "original static identity",
-      "bytes": 3379,
-      "sha256": "56217613bf53ff240e94099d47b913e99300cff30922c155a8f8ca5dc4e07faa"
+      "bytes": 38819,
+      "sha256": "ad7226d232b0465dd9a5eee96053dadbb6338be808a5bab617c8da3710cd27c4"
     },
     {
       "path": "docs/assets/identity/cover-mobile.svg",
       "role": "original static identity for narrow screens",
-      "bytes": 2593,
-      "sha256": "1fa80e872ea1935773d5fd628c845f845c2c2ddffa6d7ee11fa598f5838ddf7e"
+      "bytes": 23734,
+      "sha256": "bbb18c62773af5136480f58996a90d2df3ca14e4f961d8446def699970f89a44"
     },
     {
       "path": "docs/assets/identity/story-strip.svg",
       "role": "original static editorial diagram",
-      "bytes": 1357,
-      "sha256": "2c7575b94a1bab504c456126cbdaffaae350aaa2d9f3d8d3175e2a9d57f2c42d"
+      "bytes": 26500,
+      "sha256": "38c621a87447d4a66a76c574b11fc0cc9de0e51be6208a36f2f86477a27ef76b"
     },
     {
       "path": "docs/assets/first-live-render.gif",
@@ -136,5 +136,21 @@
       "bytes": 402028,
       "sha256": "75d9f230bf0b03a4aed6b511f7d6666692672f72cf889278ec3fc9667df40efd"
     }
-  ]
+  ],
+  "typography": {
+    "family": "Open Sans",
+    "version": "1.10",
+    "outlined": true,
+    "license": "Apache-2.0",
+    "source_fonts": [
+      {
+        "file": "OpenSans-Regular.ttf",
+        "sha256": "e64e508b2aa2880f907e470c4550980ec4c0694d103a43f36150ac3f93189bee"
+      },
+      {
+        "file": "OpenSans-Semibold.ttf",
+        "sha256": "aa3b0ef53db12e3d45094030cac0e69d384e44cc5978643dd4390041cad546e2"
+      }
+    ]
+  }
 }

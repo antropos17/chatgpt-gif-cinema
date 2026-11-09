@@ -108,9 +108,35 @@ class ReadmeTests(unittest.TestCase):
                     self.assertEqual(sum(delays), 2240)
                     self.assertEqual(im.info.get('loop'), 0)
 
+    def test_identity_typography_is_outlined_and_documented(self):
+        base = ROOT / 'docs/assets/identity'
+        for name in ('cover.svg', 'cover-mobile.svg', 'story-strip.svg'):
+            source = (base / name).read_text(encoding='utf-8')
+            with self.subTest(asset=name):
+                self.assertNotIn('<text', source)
+                self.assertNotIn('font-family', source)
+                self.assertIn('<path', source)
+                self.assertIn('#f1ece4', source)
+                self.assertIn('#282722', source)
+        self.assertIn('Apache License', (base / 'FONT-LICENSE.txt').read_text(encoding='utf-8'))
+        manifest = json.loads((base / 'manifest.json').read_text(encoding='utf-8'))
+        self.assertTrue(manifest['typography']['outlined'])
+        self.assertEqual(manifest['typography']['family'], 'Open Sans')
+
+    def test_cover_text_colors_have_readable_contrast(self):
+        def luminance(color):
+            values = [int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+            linear = [v / 12.92 if v <= .04045 else ((v + .055) / 1.055) ** 2.4
+                      for v in values]
+            return sum(v * w for v, w in zip(linear, (.2126, .7152, .0722)))
+        paper = luminance('#f1ece4')
+        for color in ('#282722', '#68645d', '#8a583b'):
+            with self.subTest(color=color):
+                self.assertGreaterEqual((paper + .05) / (luminance(color) + .05), 4.5)
+
     def test_identity_is_static_self_contained_and_accessible(self):
-        expected = {'cover.svg': ('1200', '610'), 'cover-mobile.svg': ('600', '710'),
-                    'story-strip.svg': ('1000', '270')}
+        expected = {'cover.svg': ('1200', '354'), 'cover-mobile.svg': ('600', '342'),
+                    'story-strip.svg': ('1000', '210')}
         allowed = {'svg', 'title', 'desc', 'defs', 'radialGradient', 'linearGradient',
                    'stop', 'rect', 'g', 'circle', 'ellipse', 'path', 'text'}
         for name, size in expected.items():

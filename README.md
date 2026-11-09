@@ -1,56 +1,62 @@
-<picture>
-  <source media="(max-width: 600px)" srcset="docs/assets/identity/cover-mobile.svg">
-  <img src="docs/assets/identity/cover.svg" alt="GIF Cinema. Small takes. Real stories. Direct, review, cut." width="1200">
-</picture>
-
-*Static identity artwork. The actual GIFs and films are below.*
-
 # GIF Cinema
 
-**Turn a moment into a GIF. Turn a few good takes into a story.**
+**Direct short takes. Review the cuts. Keep the story.**
 
-An agent skill and Python CLI for **Codex and Claude Code**. Direct short shots through
-an API, inspect the actual frames, choose your takes, and assemble a film. Or start
-with the bundled footage, entirely offline.
+An agent skill and local Python toolkit for **Codex and Claude Code**. Assemble a
+film from existing GIFs, add a title, and export MP4 or GIF. New shots use your own
+supported API access; the included film works entirely offline.
 
-[**Watch the films ↓**](#on-the-screen) · [Make your first film](#make-your-first-film) · [Copy a prompt](#copy-a-prompt) · [Install the skill](#install-the-skill)
+[**Try the no-key demo**](#make-your-first-film) · [Watch the work](#selected-work) · [Install the skill](#install-the-skill) · [Production guide](docs/PRODUCTION.md)
 
-[![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml) [![Codex and Claude Code](https://img.shields.io/badge/Codex_%2B_Claude_Code-agent_skill-263a38)](.agents/skills/gif-cinema/SKILL.md) [![Source-available](https://img.shields.io/badge/license-source--available-e65d3e)](LICENSE)
+[![Tests](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/antropos17/chatgpt-gif-cinema/actions/workflows/tests.yml) [![Source-available](https://img.shields.io/badge/license-source--available-8a583b)](LICENSE)
+
+<picture>
+  <source media="(max-width: 600px)" srcset="docs/assets/identity/cover-mobile.svg">
+  <img src="docs/assets/identity/cover.svg" alt="Small takes. Real stories. Direct, review, assemble. Static typography." width="1200">
+</picture>
+
+*Static cover. The motion examples below are actual existing footage.*
 
 <a id="see-it-in-motion"></a>
 
-## On the screen
+<a id="on-the-screen"></a>
 
-**One direct GIF. One runnable film. Three finishing studies.**
-Every moving image below is existing footage. Choose a route by what you want to do:
+## Selected work
 
-- **Watch:** [the cat's window-side story](#cat--walk-jump-curl-up), [a dog and a red ball](#dog--follow-the-ball), or [the astronaut exchange](#02--three-takes-a-complete-little-exchange).
-- **Make:** rebuild [the included three-shot film](#make-your-first-film) with zero API calls, then [add a title and export a GIF](docs/RECIPES.md#add-a-title-and-export-a-gif).
-- **Inspect:** open the [original request](docs/assets/first-live-render.json), [frame-pair sheets](docs/SHOWCASE.md), and [media hashes](docs/assets/showcase/asset-manifest.json).
+[**One GIF**](#a-wave-from-the-moon) · [**A three-shot film**](#a-reply-from-the-stars) · [**Finishing studies**](#finishing-studies)
 
-## 01 / One prompt. One small performance.
+The examples separate original API output, the public toolkit's exact export, and
+additional local finishing. Each has its source or method linked below.
+
+<a id="01--one-prompt-one-small-performance"></a>
+
+### A wave from the Moon
 
 <p align="center">
   <img src="docs/assets/first-live-render.gif" width="420" alt="The actual original direct-GIF sample: a paper-cut astronaut raising a hand on the Moon.">
 </p>
 
-**A wave from the Moon** · Direct API output · 1.80 s · 9 drawings · 512 × 512
+**Direct API output** · 1.80 s · 9 drawings · 512 × 512 · Silent
 
-An unaltered historical API result with its original prompt and parameters.
-Watch the small hand movement and the stepped drawing cadence.
+One small hand movement, shown at its original stepped cadence. This historical
+GIF is unaltered. A new take needs supported account access and billing; results vary.
+
+[Repeat the request](docs/RECIPES.md#one-prompt-one-gif) · [Original parameters](docs/assets/first-live-render.json) · [Decoded timing](docs/assets/first-live-render-inspect.json)
+
+<details>
+<summary>Read the original prompt</summary>
 
 > A tiny paper-cut astronaut waves once on the Moon, locked camera, matte monochrome background, clear silhouette, smooth loop, no text
 
-[**Exact request + how to repeat it →**](docs/RECIPES.md#one-prompt-one-gif) · [Original request record](docs/assets/first-live-render.json) · [Decoded timing](docs/assets/first-live-render-inspect.json)
+“Smooth loop” is a request in the prompt, not a passed quality check.
 
-To make a new take, you need your own supported model access and billing.
-Results vary; “smooth loop” in the prompt is a request, not a quality guarantee.
+</details>
 
-## 02 / Three takes. A complete little exchange.
+<a id="02--three-takes-a-complete-little-exchange"></a>
 
-![Three story beats: a hand rises, a light replies, he is not alone. Static editorial diagram.](docs/assets/identity/story-strip.svg)
+### A Reply from the Stars
 
-**A Reply from the Stars** · Runnable source edit · 7.68 s · 512 × 512 · Silent
+**Public toolkit export** · 7.68 s · 512 × 512 · Silent
 
 An astronaut waves into the dark. A light answers. A hand moves toward the chest.
 The three bundled source GIFs become one MP4, with a contact sheet and the frames
@@ -60,14 +66,22 @@ https://github.com/user-attachments/assets/c4dc8c9b-1e97-4f1a-9632-e285d9b969e0
 
 [**Make this exact edit →**](#make-your-first-film) · [Open the MP4](docs/assets/showcase/astronaut-native-film.mp4) · [Read the three-shot script](examples/film.json)
 
-**Next cut:** add the included animated title for a **9.68-second MP4**, export a
-small GIF, or split the finished edit into whole-shot GIF chapters.
-[Copy the complete title + story recipe](docs/RECIPES.md#add-a-title-and-export-a-gif).
-These are new edits of the bundled footage, not new character actions.
+**Next:** [add a title and export a GIF](docs/RECIPES.md#add-a-title-and-export-a-gif),
+or split a completed edit into whole-shot chapters. The title recipe makes a
+9.68-second MP4 from these same three actions.
 
-## 03 / From the cutting room
+<details>
+<summary>See the three-shot structure</summary>
 
-**Finishing studies · Existing generated takes + additional local postproduction**
+![Static diagram: a signal, a reply, a feeling. Each existing take lasts 2.56 seconds.](docs/assets/identity/story-strip.svg)
+
+</details>
+
+<a id="03--from-the-cutting-room"></a>
+
+## Finishing studies
+
+**Existing generated takes + additional local postproduction**
 
 Each preview loops a **2.24-second excerpt**. Open its full comparison to judge
 the complete action.
@@ -81,9 +95,8 @@ shows what the public source actually exports.
 
 **Three actions · 7.68-second comparison · Silent**
 
-A simple destination gives the sequence a shape: cross the room, reach the window,
-settle down. The existing finished version changes framing and compositing as well
-as motion. Those differences should not all be credited to interpolation.
+Cross the room, reach the window, settle down. The finished version changes framing
+and compositing as well as motion; the difference is not solely interpolation.
 
 [**Watch the comparison →**](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5) · [Inspect frame pairs](docs/assets/showcase/cat-frames.png) · [Watch the 57.2-second assembled cat film](https://github.com/user-attachments/assets/32e3381d-dbd7-4ff3-8356-1d379b2b7456)
 
@@ -104,9 +117,9 @@ soften a hold; they cannot fix a disappearing object or an incorrect paw.
 
 **Two takes · 5.12-second comparison · Silent**
 
-A greeting and a reply, shown at matching timeline positions. This comparison uses
-only the first two takes; the [public three-shot film](#02--three-takes-a-complete-little-exchange)
-keeps the original source timing and does not apply this finishing step.
+A greeting and a reply at matching timeline positions. This uses the first two
+takes. The [public three-shot film](#a-reply-from-the-stars) preserves original timing
+and does not apply this finishing step.
 
 [**Watch the comparison →**](https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34) · [Inspect frame pairs](docs/assets/showcase/astronaut-frames.png) · [Read the method](docs/SHOWCASE.md#astronaut--two-shots-one-exchange)
 
@@ -142,7 +155,9 @@ render command again to reuse the verified movie.
 The MP4 plays at 25 fps; each source GIF contains 16 drawings held for 160 ms.
 Export FPS does not create extra poses. [Verification and limits](STATUS.md).
 
-## Copy a prompt
+<a id="copy-a-prompt"></a>
+
+## Use it with your agent
 
 Give these briefs to your agent after [installing the skill](#install-the-skill).
 Each says what to make, what to preserve, and what to return.
@@ -153,20 +168,26 @@ Each says what to make, what to preserve, and what to return.
 
 **You get:** the runnable film shown above plus inspectable review artifacts.
 
-### Add a title, then make a GIF
+<details>
+<summary>Add a title, then make a GIF</summary>
 
 > Use the gif-cinema skill to compile the bundled storyboard.json, render it with zero API calls, and export a 320-pixel GIF at 10 fps. Keep the 2-second animated title and the three existing astronaut takes. Return the MP4, GIF, and editable project. Do not generate new footage.
 
 **You get:** a 9.68-second MP4 and a 9.70-second play-once GIF. The title is locally
 animated; the astronaut drawings are unchanged. [Exact commands](docs/RECIPES.md#add-a-title-and-export-a-gif).
 
-### Plan a story with genuinely new actions
+</details>
+
+<details>
+<summary>Plan a story with new actions</summary>
 
 > Use the gif-cinema skill to plan a short illustrated story about a courier delivering a lantern. Keep the character, lantern, palette, and direction of travel consistent. Give each shot one visible action with a clear state before and after. Show the storyboard and request count before generation. Mark all missing footage as unrendered.
 
 **You get:** an editable production plan and individual generation inputs, not a
 finished cartoon. The included *Lantern Delivery* plan has 14 intended actions and
 35.84 seconds of planned footage. [Plan, select takes, and continue](docs/STORYTELLING-SKILL.md).
+
+</details>
 
 <a id="give-the-skill-to-your-agent"></a>
 
@@ -195,35 +216,37 @@ new versioned release.
 
 </details>
 
-## A small production, kept editable
+<a id="a-small-production-kept-editable"></a>
 
-**Brief → source takes → reviewed cuts → film → GIF chapters**
+<a id="the-cut-is-the-test"></a>
 
-1. **Direct one visible change.** Describe the state before, the action and the state after. Keep character, prop and camera choices explicit.
-2. **Keep the best take.** Inspect the actual drawings and the two sides of each cut. Record the selected source bytes before replacing anything.
-3. **Build the edit.** Add a local title, assemble the MP4, then export a smaller GIF or whole-shot chapters. Preserve the storyboard and review artifacts.
+## Production workflow
 
-A longer story needs more real actions. The bundled *Lantern Delivery* example is a
-14-action production plan, not rendered footage. [Plan it, select takes, and continue →](docs/STORYTELLING-SKILL.md)
+1. **Direct one change.** Define the state before, the visible action and the state after. Keep character, prop and camera choices explicit.
+2. **Review the actual drawings.** Check both sides of every cut. A reference image or pixel score does not prove continuity; keep the accepted source bytes.
+3. **Assemble and inspect.** Add a local title, build the MP4, then export a smaller GIF or whole-shot chapters. Preserve the editable storyboard and review artifacts.
 
-## The cut is the test
+The public source includes bounded API generation, still references, endpoint
+inspection, MP4 assembly and GIF/chapter export. Private Studio, interpolation and
+compositing tools are not bundled. New story actions need new footage.
 
-Keep the character recognizable, the prop in the right hand, and the action readable
-on both sides of a cut. A reference image helps; it does not guarantee continuity.
-Extra playback frames cannot repair a missing prop or an action that never happened.
+Dry-run before generation and approve a bounded request count. Counts are not dollar
+quotes. GIFs are silent; MP4 can import optional local audio.
 
-- **Included:** API generation with supported access, still references, bounded script runs, inspected takes, local titles, MP4 assembly and GIF/chapter export.
-- **Not included:** the private Studio UI, a general layered animation engine, music generation, private interpolation/compositing tools or automatic visual approval.
-- **Generation safety:** dry-run a script, inspect the request count, then authorize a bounded run. Request counts are not dollar quotes. GIFs are silent; MP4 can use optional local audio.
+## Guides
 
-[Story guide](docs/STORYTELLING-SKILL.md) · [Production](docs/PRODUCTION.md) · [Script format](docs/SCRIPT-FORMAT.md) · [Filmmaking tips](docs/TIPS.md) · [Verification](STATUS.md)
+- [Recipes](docs/RECIPES.md): repeat a request, rebuild the film, or add a title.
+- [Story workflow](docs/STORYTELLING-SKILL.md): plan actions, choose takes and continue an edit.
+- [Script format](docs/SCRIPT-FORMAT.md): the exact project contract.
+- [Verification](STATUS.md): tested behavior and known limits.
+- [Website source](docs/WEBSITE.md): the separate screening-room presentation.
 
 ## Credits & license
 
 Inspired by [GIF Factory](https://github.com/WoYun520/gif-factory)'s separation of
 appearance, movement and purpose. [Attribution and MIT notice](.agents/skills/gif-cinema/THIRD_PARTY_NOTICES.md).
-No GIF Factory artwork, fonts or exporter code are bundled. The cover and story
-symbols are original static SVG artwork; [identity and media provenance](docs/README-DESIGN.md).
+No GIF Factory artwork, fonts or exporter code are bundled. The cover and story diagram are static typography using outlined Open Sans;
+[design and media provenance](docs/README-DESIGN.md), [font notice](docs/assets/identity/FONT-NOTICE.txt).
 
 GIF Cinema is an independent **source-available** project. Personal non-commercial
 evaluation and research are permitted; commercial use, redistribution and hosting
