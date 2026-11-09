@@ -189,7 +189,11 @@ class ChapterTests(unittest.TestCase):
         self.assertEqual((self.output / 'accepted.txt').read_text(), 'Keep')
         if hasattr(os, 'symlink'):
             target = self.root / 'dangling'
-            target.symlink_to(self.root / 'absent')
+            try:
+                target.symlink_to(self.root / 'absent')
+            except OSError as exc:
+                # Windows needs admin rights or Developer Mode for symlinks.
+                self.skipTest(f'symlinks unavailable: {exc}')
             with self.assertRaisesRegex(ValueError, 'new directory'):
                 chapters.export_chapters(self.script, self.movie, target)
             self.assertTrue(target.is_symlink())

@@ -134,7 +134,7 @@ def load_script(path, args):
             full_prompt = (f"Style and character bible: {script['style_bible']}\n"
                            f"Shot {sid}: {prompt}\nStart: {shot['first_frame_target']}\n"
                            f"End: {shot['last_frame_target']}\nOne continuous shot. No captions or text.")
-            shot["payload"] = cli.make_payload(full_prompt, shot.get("model", "gpt-image-2.6-flare"), count, duration, shot.get("size", "auto"), quality, complexity)
+            shot["payload"] = cli.make_payload(full_prompt, shot["model"] if "model" in shot else cli.default_model(), count, duration, shot.get("size", "auto"), quality, complexity)
             shot["expected_ms"] = count * duration
             basis = shot["payload"]
             if "references" in shot:

@@ -32,7 +32,7 @@ Independent model outputs may still differ; prompt wording does not establish id
 | Shot | `transition` | Only `cut` is supported; no generated interpolation or automatic dissolves |
 | Shot | `caption`, `audio_notes` | Optional text; captions produce a separate SRT |
 | Generated shot | `frames`, `duration_ms` | Default 9 and 200; 2..16 frames, 20..2000 ms in steps of 10 |
-| Generated shot | `model`, `size`, `quality`, `complexity` | Same conservative generator settings as `generate` |
+| Generated shot | `model`, `size`, `quality`, `complexity` | Same conservative generator settings as `generate`; `model` defaults to `$GIF_CINEMA_MODEL`, else `gpt-image-2.6-flare` |
 | Generated shot | `references` | Optional 1..16 local still PNG/JPEG/WebP paths relative to the script, combined limit 20 MiB; uses `/v1/images/edits` |
 
 Imported shots retain actual frame delays; generation parameters are rejected on
