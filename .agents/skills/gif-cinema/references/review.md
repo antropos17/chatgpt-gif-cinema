@@ -43,7 +43,8 @@ SRT, manifest and verified MP4. Inspect them, then watch the exact export. Check
 
 GIF export resamples existing motion and may merge identical drawings. It does not
 provide optical flow or new poses. For long stories prefer an MP4 master and smaller
-GIF chapters. The helper rejects exports exceeding the runtime's frame/pixel budget;
+GIF chapters. The story and chapter exporters reject outputs exceeding the reviewer's
+512-frame / 64-Mi-pixel / 32-MiB capacity;
 reduce width/FPS or split the story, rather than bypassing that safety limit.
 
 ## Delivery note

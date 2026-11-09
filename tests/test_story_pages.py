@@ -81,6 +81,17 @@ class StoryPageTests(unittest.TestCase):
         self.assertEqual(len(film['shots']), 1)
         self.assertEqual(film['fps'], 50)
 
+    def test_review_byte_limit_rejects_before_publishing_project(self):
+        with patch.object(pages, 'MAX_REVIEW_BYTES', 128), self.assertRaisesRegex(ValueError, 'review limit'):
+            self.export()
+        self.assertFalse(self.out.exists())
+        self.assertEqual(self.source.read_bytes(), self.before)
+
+    def test_review_frame_limit_rejects_during_dry_run(self):
+        with patch.object(pages, 'MAX_REVIEW_FRAMES', 2), self.assertRaisesRegex(ValueError, 'review budget'):
+            self.export(dry_run=True)
+        self.assertFalse(self.out.exists())
+
     def test_portrait_reflows_without_cropping(self):
         self.spec.update(layout='portrait', width=400, height=640)
         report = self.export()

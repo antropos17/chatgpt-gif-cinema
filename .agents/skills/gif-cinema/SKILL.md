@@ -34,7 +34,7 @@ an honest animatic or production plan, not a claimed finished cartoon.
 
 ## Runtime and a no-key check
 
-Skill package **0.2.0** contains helpers, guides and examples. The Python runtime is
+Skill package **0.2.1** contains helpers, guides and examples. The Python runtime is
 installed separately. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
 film/chapter export also needs FFmpeg and ffprobe. Git/network access is needed only
 for the installation command below. Use an isolated environment.
@@ -151,8 +151,10 @@ to inspect the plan without encoding or writes. Keep the completed manifest and
 saved render GIFs; the helper verifies their timing/hashes and the movie. Chapters
 are source-frame-aligned, silent and play once unless `--repeat` is requested.
 They preserve shot order and never split an action to satisfy a duration limit.
-See [chapter limits and timing](references/story-project.md#export-whole-shot-gif-chapters). GIF palette conversion
-can damage gradients and fine outlines; review the actual final GIF too. High playback
+See [chapter limits and timing](references/story-project.md#export-whole-shot-gif-chapters).
+Story, chapter and page exports stay within full-frame review limits (512 frames, 64 Mi pixels
+and 32 MiB per GIF); lower width/FPS or split at whole-shot boundaries when needed.
+GIF palette conversion can damage gradients and fine outlines; review the actual final GIF too. High playback
 FPS does not create new motion. [review.md](references/review.md) gives the visual and
 technical acceptance checks.
 

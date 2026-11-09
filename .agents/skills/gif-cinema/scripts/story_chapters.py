@@ -22,12 +22,15 @@ MAX_JSON_BYTES = 1024 * 1024
 MAX_MOVIE_BYTES = 512 * 1024 * 1024
 MAX_FILM_SECONDS = 3600
 MAX_EXPORT_BYTES = 512 * 1024 * 1024
+MAX_REVIEW_BYTES = 32 * 1024 * 1024
+MAX_REVIEW_FRAMES = 512
+MAX_REVIEW_PIXELS = 64 * 1024 * 1024
 
 
 @contextmanager
 def regular_input(path, limit):
     # O_NONBLOCK allows fstat to reject a FIFO without waiting for its writer.
-    descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0))
+    descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0) | getattr(os, 'O_BINARY', 0))
     with os.fdopen(descriptor, 'rb') as stream:
         info = os.fstat(stream.fileno())
         if not stat.S_ISREG(info.st_mode):
@@ -107,7 +110,8 @@ def plan_chapters(script_path, render_dir, width=320, fps=10, max_seconds=15, re
     if source_width % 2 or source_height % 2 or abs(source_width / source_height - rw / rh) > .01:
         raise ValueError('Film dimensions must be even and match its ratio')
     height = max(2, round(width * source_height / source_width / 2) * 2)
-    capacity = min(cli.MAX_GIF_FRAMES, cli.MAX_GIF_PIXEL_FRAMES // (width * height), max_seconds * fps)
+    capacity = min(cli.MAX_GIF_FRAMES, MAX_REVIEW_FRAMES,
+                   min(cli.MAX_GIF_PIXEL_FRAMES, MAX_REVIEW_PIXELS) // (width * height), max_seconds * fps)
     if capacity < 2 or width * height > cli.MAX_GIF_FRAME_PIXELS:
         raise ValueError('Chapter dimensions exceed the GIF budget; lower width')
     shots, records = script.get('shots'), manifest.get('shots')
@@ -141,7 +145,7 @@ def plan_chapters(script_path, render_dir, width=320, fps=10, max_seconds=15, re
         playback_frames = max(1, round(sum(delays) * source_fps / 1000))
         gif_frames = math.ceil(Fraction(playback_frames * fps, source_fps))
         if gif_frames > capacity:
-            raise ValueError(f'{sid}: one whole shot exceeds the chapter budget; lower width/FPS or increase --max-seconds')
+            raise ValueError(f'{sid}: one whole shot exceeds the chapter budget; lower width/FPS, or increase --max-seconds only within the full-frame review limits')
         timeline.append({'id': sid, 'start_frame': cursor, 'end_frame': cursor + playback_frames})
         cursor += playback_frames
         if cursor > MAX_FILM_SECONDS * source_fps:
@@ -217,15 +221,18 @@ def export_chapters(script_path, render_dir, out, width=320, fps=10, max_seconds
                        '[a]palettegen=stats_mode=full[p];[b][p]paletteuse=dither=sierra2_4a')
             cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-xerror', '-protocol_whitelist', 'file', '-f', 'mov',
                            '-i', str(source), '-filter_complex', filters, '-an', '-loop', '0' if repeat else '-1',
-                           '-fs', str(cli.MAX_GIF_BYTES + 1), str(target)])
+                           '-fs', str(MAX_REVIEW_BYTES + 1), str(target)])
             total_bytes += target.stat().st_size
             if total_bytes > MAX_EXPORT_BYTES:
                 raise ValueError('Combined GIF chapters exceed 512 MiB; lower width/FPS')
-            frames, delays, loop = cli.validate_gif(target)
+            raw = read_bytes(target, MAX_REVIEW_BYTES)
+            cli.check_gif_limits(raw, max_frames=MAX_REVIEW_FRAMES,
+                                 max_pixel_frames=MAX_REVIEW_PIXELS, fixed_canvas=True)
+            frames, delays, loop = cli.validate_gif(io.BytesIO(raw))
             if (any(frame.size != (width, plan['height']) for frame in frames)
                     or sum(delays) != chapter['duration_ms'] or loop != (0 if repeat else None)):
                 raise ValueError('Encoded chapter dimensions, timing or loop flag failed verification')
-            chapter.update(encoded_frames=len(frames), gif_sha256=hashlib.sha256(read_bytes(target, cli.MAX_GIF_BYTES)).hexdigest())
+            chapter.update(encoded_frames=len(frames), gif_sha256=hashlib.sha256(raw).hexdigest(), full_frame_review_compatible=True)
             del frames
         source.unlink()
         plan['verification'] = 'decoded-h264-and-all-gif-frames; visual-review-required'
