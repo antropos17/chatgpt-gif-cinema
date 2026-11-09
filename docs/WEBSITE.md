@@ -8,7 +8,7 @@ unchanged.
 ## Build
 
 Run `python tools/build_website.py` from the checkout. This copies the exact
-24-file site into `dist/website/`; serve that directory with any static host.
+26-file site into `dist/website/`; serve that directory with any static host.
 No Node dependencies or build framework are required. The host must support
 normal byte-range requests for seeking video. This branch does not enable
 GitHub Pages or change repository access/settings.
@@ -69,3 +69,12 @@ and brown. No original footage is recolored.
 GIF Factory's gallery-first structure informed the presentation. The current
 film-first design gives the original footage room instead of overlaying poster art. No GIF Factory artwork, fonts or
 code are copied. The existing source-available evaluation license is unchanged.
+
+## Archival 3D reference
+
+The separate Chrome Knot section presents one existing 3.2-second procedural
+Blender EEVEE loop, 512 × 512, 80 unique frames. It is not native API output,
+not six variations, and not part of the public CLI. The source asset and provenance
+are in `assets/motion-elements/`; the site copies only its MP4 and original poster.
+Its automatic preview uses the same global pause, visibility and reduced-motion
+controller as the character studies. Opening it pauses the background previews.

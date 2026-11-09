@@ -59,6 +59,25 @@ h1 { font-size: clamp(44px, 5.1vw, 72px); line-height: 1.12; font-weight: 600; l
 .film-tag { border: 1px solid var(--line); border-radius: 3px; padding: 6px 7px; color: #514b43; }
 .collection-note { font-size: 14px; line-height: 1.8; color: var(--muted); margin: 29px 0 55px; }
 .collection-note a { margin-left: 8px; color: var(--ink); white-space: nowrap; }
+.motion-study { padding-bottom: 56px; }
+.motion-study-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 64px; align-items: center; }
+.chrome-preview { background: #080b10; }
+.motion-study-copy>.eyebrow { color: var(--accent); font-weight: 600; }
+.motion-study-copy h3 { font-size: 36px; line-height: 1.2; letter-spacing: -.03em; margin: 16px 0 18px; font-weight: 600; }
+.motion-study-copy>p { font-size: 16px; line-height: 1.7; color: var(--muted); max-width: 500px; }
+.motion-study-copy dl { margin: 26px 0; border-top: 1px solid var(--line); }
+.motion-study-copy dl>div { display: flex; justify-content: space-between; gap: 20px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.motion-study-copy dt { color: var(--muted); }
+.motion-study-copy dd { margin: 0; text-align: right; }
+.motion-study-copy .reference-note { font-size: 14px; }
+@media (max-width: 900px) {
+  .motion-study-layout { gap: 32px; }
+}
+@media (max-width: 700px) {
+  .motion-study { padding-bottom: 40px; }
+  .motion-study-layout { grid-template-columns: 1fr; gap: 28px; }
+  .motion-study-copy h3 { font-size: 30px; }
+}
 .cutting-room { background: var(--dark); color: #efebe3; padding: 34px 0 58px; }
 .cutting-room .section-rule { border-color: #41413c; color: #a8a69d; padding-bottom: 0; }
 .cut-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 35px; padding-block: 34px 39px; }
