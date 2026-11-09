@@ -123,7 +123,7 @@ python tools/package_skill.py --out dist/gif-cinema-story-skill.zip
 python -m unittest discover -s tests -p 'test_story*.py' -v
 ```
 
-The source-built skill version is 0.2.0, separate from the runtime's 0.5.0 version.
+The source-built skill version is 0.2.1, separate from the runtime's 0.5.0 version.
 It adds full-frame review and offline sprite workflows to the maintained story
 helpers. `runtime.json` pins the immutable runtime commit containing their required
 interfaces. No release tag or release asset is created by the packaging command.
@@ -172,5 +172,14 @@ checks film assembly and zero-call render/resume. These are synthetic behavioral
 checks, not proof of generated character quality or human visual acceptance.
 
 The Linux/Python 3.12 CI job also builds the ZIP twice, compares its bytes and
-uploads the ZIP plus SHA-256 as the `gif-cinema-skill-0.2.0` workflow artifact
+uploads the ZIP plus SHA-256 as the `gif-cinema-skill-0.2.1` workflow artifact
 (retained for 14 days). An Actions artifact is not a permanent GitHub Release.
+
+### 0.2.1 workflow fixes
+
+Story/chapter/page GIF delivery now uses the same 512-frame, 64-Mi-pixel and 32-MiB
+limits as full-frame review, rather than publishing an export that the next required
+step cannot open. Direct MP4 export snapshots bounded regular local files, pins
+the input hash, forces MP4 decoding and disables external data references. Chapters
+and story-page readers explicitly preserve binary bytes on Windows. These are
+workflow/correctness fixes; the pinned runtime and generation behavior are unchanged.

@@ -8,6 +8,9 @@ import hashlib
 import io
 import json
 import math
+import os
+import stat
+import subprocess
 from pathlib import Path
 import re
 import tempfile
@@ -18,6 +21,11 @@ from gif_cinema import cli, render
 MAX_INPUT = 1024 * 1024
 MAX_PROJECT_BYTES = 512 * 1024 * 1024
 MAX_TITLE_PIXELS = 32 * 1024 * 1024
+MAX_MOVIE_BYTES = 512 * 1024 * 1024
+# Keep delivered GIFs within the packaged full-frame review contract.
+MAX_REVIEW_BYTES = 32 * 1024 * 1024
+MAX_REVIEW_FRAMES = 512
+MAX_REVIEW_PIXELS = 64 * 1024 * 1024
 
 
 def read_json(path):
@@ -360,37 +368,90 @@ def compile_story(path, out, font_path=None, takes_path=None):
     return report
 
 
+def snapshot_movie(source, destination):
+    """Copy bounded regular-file bytes once; never let FFmpeg reopen mutable input."""
+    flags = os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0) | getattr(os, 'O_BINARY', 0)
+    descriptor = os.open(source, flags)
+    digest, total = hashlib.sha256(), 0
+    with os.fdopen(descriptor, 'rb') as original:
+        before = os.fstat(original.fileno())
+        if not stat.S_ISREG(before.st_mode):
+            raise ValueError('Movie input must be a regular local file')
+        if before.st_size > MAX_MOVIE_BYTES:
+            raise ValueError('Movie exceeds the 512 MiB input limit')
+        with destination.open('xb') as copied:
+            while chunk := original.read(1024 * 1024):
+                total += len(chunk)
+                if total > MAX_MOVIE_BYTES:
+                    raise ValueError('Movie exceeds the 512 MiB input limit')
+                copied.write(chunk)
+                digest.update(chunk)
+        after = os.fstat(original.fileno())
+        if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
+            raise ValueError('Movie changed during snapshot; retry from a stable source')
+    return digest.hexdigest()
+
+
+def gif_export_plan(info, width, fps):
+    source_width = integer(info.get('width'), 'Movie width', 1, 16384)
+    source_height = integer(info.get('height'), 'Movie height', 1, 16384)
+    if source_width * source_height > cli.MAX_GIF_FRAME_PIXELS:
+        raise ValueError('Movie dimensions exceed the decode budget')
+    duration = float(info['duration'])
+    if not math.isfinite(duration) or duration <= 0:
+        raise ValueError('Movie duration must be finite and positive')
+    height = max(2, round(width * source_height / source_width / 2) * 2)
+    count = math.ceil(duration * fps)
+    if (count > min(cli.MAX_GIF_FRAMES, MAX_REVIEW_FRAMES) or
+            width * height > cli.MAX_GIF_FRAME_PIXELS or
+            width * height * count > min(cli.MAX_GIF_PIXEL_FRAMES, MAX_REVIEW_PIXELS)):
+        raise ValueError('GIF exceeds the full-frame review budget (512 frames / 64 Mi pixels); '
+                         'lower width/FPS or export whole-shot chapters')
+    return duration, height, count
+
+
 def export_gif(source, out, width=320, fps=10, repeat=False):
-    source, out = source.resolve(), out.resolve()
-    if out.suffix.lower() != '.gif' or out.exists():
+    source, out = Path(source).resolve(), Path(out).absolute()
+    if out.suffix.lower() != '.gif' or os.path.lexists(out):
         raise ValueError('Choose a new .gif output path')
     integer(width, 'GIF width', 64, 640)
-    if fps not in {5, 10, 20, 25}:
+    if type(fps) is not int or fps not in {5, 10, 20, 25}:
         raise ValueError('GIF fps must be 5, 10, 20 or 25 for exact 10 ms timing')
-    info = json.loads(cli.run_media(['ffprobe', '-v', 'error', '-select_streams', 'v:0',
-                                   '-show_entries', 'stream=width,height,duration', '-of', 'json', str(source)]).stdout)['streams'][0]
-    duration = float(info['duration'])
-    height = max(2, round(width * int(info['height']) / int(info['width']) / 2) * 2)
-    count = math.ceil(duration * fps)
-    if (not math.isfinite(duration) or duration <= 0 or count > cli.MAX_GIF_FRAMES
-            or width * height * count > cli.MAX_GIF_PIXEL_FRAMES):
-        raise ValueError('Long GIF exceeds decoded-media budget; lower width/FPS or export chapters')
-    out.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix='.gif-export-', dir=out.parent) as folder:
-        staged = Path(folder) / 'film.gif'
-        filters = (f'fps={fps},scale={width}:{height}:flags=lanczos,split[a][b];'
-                   '[a]palettegen=stats_mode=full[p];[b][p]paletteuse=dither=sierra2_4a')
-        cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(source), '-filter_complex', filters,
-                       '-an', '-loop', '0' if repeat else '-1', str(staged)])
-        frames, delays, loop = cli.validate_gif(staged)
-        if abs(sum(delays) / 1000 - duration) > 1 / fps + .001:
-            raise ValueError('Exported GIF timing does not match the MP4 within one GIF frame')
-        if (frames[0].size != (width, height) or (repeat and loop != 0) or (not repeat and loop is not None)):
-            raise ValueError('Exported GIF dimensions or loop flag do not match the request')
-        receipt = {'provider_calls': 0, 'width': width, 'height': height, 'frames': len(frames),
-                   'duration_ms': sum(delays), 'loop': loop, 'gif_sha256': hashlib.sha256(staged.read_bytes()).hexdigest(),
-                   'note': 'GIF is silent; output FPS resamples existing motion, not new character poses.'}
-        cli.publish_file(staged, out)
+    if type(repeat) is not bool:
+        raise ValueError('GIF repeat must be a boolean')
+    with tempfile.TemporaryDirectory(prefix='gif-cinema-movie-') as snapshot_directory:
+        movie = Path(snapshot_directory) / 'source.mp4'
+        source_sha256 = snapshot_movie(source, movie)
+        # Force the local MP4 demuxer. A renamed playlist cannot trigger HTTP reads;
+        # MP4 external data references stay disabled, including local references.
+        inputs = ['-protocol_whitelist', 'file', '-f', 'mov', '-enable_drefs', '0', '-i', str(movie)]
+        info = json.loads(cli.run_media(['ffprobe', '-v', 'error', *inputs, '-select_streams', 'v:0',
+                                       '-show_entries', 'stream=width,height,duration', '-of', 'json']).stdout)['streams'][0]
+        duration, height, count = gif_export_plan(info, width, fps)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='.gif-export-', dir=out.parent) as folder:
+            staged = Path(folder) / 'film.gif'
+            filters = (f'fps={fps},scale={width}:{height}:flags=lanczos,split[a][b];'
+                       '[a]palettegen=stats_mode=full[p];[b][p]paletteuse=dither=sierra2_4a')
+            cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-xerror', *inputs,
+                           '-filter_complex', filters, '-an', '-loop', '0' if repeat else '-1',
+                           '-fs', str(MAX_REVIEW_BYTES + 1), str(staged)])
+            if staged.stat().st_size > MAX_REVIEW_BYTES:
+                raise ValueError('GIF exceeds the 32 MiB full-frame review limit; lower width/FPS')
+            raw = staged.read_bytes()
+            cli.check_gif_limits(raw, max_frames=MAX_REVIEW_FRAMES,
+                                 max_pixel_frames=MAX_REVIEW_PIXELS, fixed_canvas=True)
+            frames, delays, loop = cli.validate_gif(io.BytesIO(raw))
+            if abs(sum(delays) / 1000 - duration) > 1 / fps + .001:
+                raise ValueError('Exported GIF timing does not match the MP4 within one GIF frame')
+            if (frames[0].size != (width, height) or (repeat and loop != 0) or (not repeat and loop is not None)):
+                raise ValueError('Exported GIF dimensions or loop flag do not match the request')
+            receipt = {'provider_calls': 0, 'width': width, 'height': height, 'frames': len(frames),
+                       'duration_ms': sum(delays), 'loop': loop, 'gif_sha256': hashlib.sha256(raw).hexdigest(),
+                       'source_sha256': source_sha256, 'full_frame_review_compatible': True,
+                       'note': 'GIF is silent; output FPS resamples existing motion, not new character poses. '
+                               'Review compatibility is technical capacity, not visual acceptance.'}
+            cli.publish_file(staged, out)
     return receipt
 
 
@@ -413,7 +474,7 @@ def main():
         result = (compile_story(args.story, args.out, args.font, args.takes) if args.command == 'compile'
                   else export_gif(args.source, args.out, args.width, args.fps, args.repeat))
         print(json.dumps(result, ensure_ascii=False, indent=2))
-    except (ValueError, OSError, RuntimeError, KeyError, IndexError) as error:
+    except (ValueError, OSError, RuntimeError, KeyError, IndexError, TypeError, subprocess.SubprocessError) as error:
         parser.exit(2, f'Error: {error}\n')
 
 

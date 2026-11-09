@@ -119,3 +119,8 @@ to 128 megapixels. Sources, font, output GIFs and endpoint PNGs together must fi
 256 MiB. A new project is refused if it exceeds a bound; no source is silently
 trimmed to make it fit. Long books can be built as several separately reviewed
 projects. This does not enable automatic paid batches.
+
+Delivered page GIFs are also checked against the full-frame review capacity:
+at most 512 frames, 64 Mi pixels across frames and 32 MiB per GIF. Existing page
+composition budgets may be tighter. A failure retains no published page project;
+use smaller dimensions or shorter existing actions rather than bypassing review.
