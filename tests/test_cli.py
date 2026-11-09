@@ -8,7 +8,7 @@ from unittest.mock import patch
 from urllib.error import HTTPError
 from PIL import Image
 from gif_cinema.cli import request_gif, generate
-from gif_cinema.cli import make_payload, build_parser
+from gif_cinema.cli import make_payload, build_parser, default_model
 
 class APIPayloadTests(unittest.TestCase):
     def test_gif_payload(self):
@@ -33,6 +33,15 @@ class APIPayloadTests(unittest.TestCase):
     def test_cli(self):
         args=build_parser().parse_args(["generate","A moving leaf","-o","output/a.gif"])
         self.assertEqual(args.output,"output/a.gif")
+
+    def test_default_model_reads_environment(self):
+        with patch.dict("os.environ", {"GIF_CINEMA_MODEL": "gpt-image-2.6-sunburst"}):
+            self.assertEqual(default_model(), "gpt-image-2.6-sunburst")
+        with patch.dict("os.environ", {"GIF_CINEMA_MODEL": ""}):
+            self.assertEqual(default_model(), "gpt-image-2.6-flare")
+        with patch.dict("os.environ", {"GIF_CINEMA_MODEL": "unknown-model"}):
+            with self.assertRaisesRegex(ValueError, "GIF_CINEMA_MODEL"):
+                default_model()
 
 
 

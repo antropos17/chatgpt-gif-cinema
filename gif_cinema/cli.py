@@ -24,6 +24,15 @@ MAX_GIF_FRAME_PIXELS = 16 * 1024 * 1024
 MAX_GIF_FRAMES = 1500
 MAX_GIF_PIXEL_FRAMES = 160 * 1024 * 1024
 MEDIA_TIMEOUT_SECONDS = 300
+MODEL_ENV = "GIF_CINEMA_MODEL"
+
+
+def default_model():
+    """Model used when none is given: $GIF_CINEMA_MODEL, else the first known model."""
+    model = os.environ.get(MODEL_ENV, "").strip() or MODELS[0]
+    if model not in MODELS:
+        raise ValueError(f"{MODEL_ENV}={model!r} is not supported; choose one of: {', '.join(MODELS)}")
+    return model
 
 
 class APIError(RuntimeError):
@@ -248,7 +257,7 @@ def request_gif(payload, key, endpoint=API_URL, transport=urlopen):
     return raw, body.get("usage")
 
 def generate(args):
-    payload = make_payload(args.prompt,args.model,args.frames,args.duration,args.size,args.quality,args.complexity)
+    payload = make_payload(args.prompt,args.model or default_model(),args.frames,args.duration,args.size,args.quality,args.complexity)
     out = Path(args.output); out.parent.mkdir(parents=True,exist_ok=True)
     if out.suffix.lower() != ".gif":
         raise ValueError("Output must have a .gif extension")
@@ -383,7 +392,7 @@ def build_parser():
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")
     reuse.add_argument("--force",action="store_true",help="Replace existing output; makes a new paid API request")
-    g.add_argument("--model",choices=MODELS,default=MODELS[0]);g.add_argument("--frames",type=int,default=9)
+    g.add_argument("--model",choices=MODELS,default=None,help=f"Default: ${MODEL_ENV} or {MODELS[0]}");g.add_argument("--frames",type=int,default=9)
     g.add_argument("--duration",type=int,default=200);g.add_argument("--size",default="auto")
     g.add_argument("--quality",choices=["auto","low","medium","high","xhigh","max"],default="low")
     g.add_argument("--complexity",choices=["low","medium","high"],default="low");g.set_defaults(func=generate)
