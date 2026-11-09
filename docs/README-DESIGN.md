@@ -34,9 +34,10 @@ into a full video player, losing the intended looping GIF. There is no side-by-s
 squeezes characters and labels on a phone. Earlier watch/demo/install anchors are
 preserved so existing links keep working.
 
-The earlier redesign remains a separate draft. This follow-up is stacked on that
-branch so it can be reviewed without duplicating or merging its work. No website
-capability or additional native-generation sample is implied by the README gallery.
+The identity and visible-gallery updates were developed as two reviewable changes.
+The gallery does not imply an additional native-generation sample or a publicly
+hosted website. Website source and its separate deployment scope are documented in
+[the screening-room guide](WEBSITE.md).
 
 ## Actual media
 
