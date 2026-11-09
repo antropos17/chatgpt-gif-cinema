@@ -2,13 +2,13 @@
 
 `docs/index.html`, `docs/site.css` and `docs/site.js` are the source of the new
 static, English-language website. It has no backend, account system, analytics,
-external fonts, generator, or paid API calls. The Python filmmaking runtime is
+external font requests, generator, or paid API calls. The Python filmmaking runtime is
 unchanged.
 
 ## Build
 
 Run `python tools/build_website.py` from the checkout. This copies the exact
-20-file site into `dist/website/`; serve that directory with any static host.
+24-file site into `dist/website/`; serve that directory with any static host.
 No Node dependencies or build framework are required. The host must support
 normal byte-range requests for seeking video. This branch does not enable
 GitHub Pages or change repository access/settings.
@@ -35,6 +35,14 @@ section and decorative shapes have been removed rather than hidden.
 - Copying has a visible success or fallback message. Paid-generation caveats live
   in a compact disclosure beside the starter, not a repeated marketing section.
 
+
+## Typography
+
+Open Sans is self-hosted in regular, semibold and bold. The Latin-and-punctuation
+WOFF subsets have no external font dependency. Their copyright, modification notice
+and Apache 2.0 license are in `assets/site/fonts/LICENSE.txt`. The interface uses one
+family with upright headings and a 12px minimum for compact metadata. Supporting
+copy is 14–16px. Monospace is reserved for terminal commands.
 
 ## Media truth and provenance
 

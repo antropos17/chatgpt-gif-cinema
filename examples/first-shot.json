@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "title": "A quiet hello",
+  "ratio": "1:1",
+  "width": 512,
+  "height": 512,
+  "fps": 25,
+  "style_bible": "Simple paper-cut illustration. One orange fox with a white chest, black paws and a teal scarf sits on a plain warm cream background. Fixed full-body camera, soft even light, consistent proportions. No text or additional characters.",
+  "audio_notes": "Silent. No soundtrack is requested.",
+  "shots": [
+    {
+      "id": "01-hello",
+      "prompt": "The seated fox raises its right forepaw once in a quiet greeting, then holds it up. Keep the body, camera and background still. One continuous action, no scene change.",
+      "model": "gpt-image-2.6-flare",
+      "frames": 16,
+      "duration_ms": 160,
+      "size": "512x512",
+      "quality": "low",
+      "complexity": "low",
+      "transition": "cut",
+      "first_frame_target": "The fox is seated, facing the camera, with both forepaws down.",
+      "last_frame_target": "The same fox holds its right forepaw up; the scarf and framing are unchanged."
+    }
+  ]
+}

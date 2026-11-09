@@ -23,10 +23,11 @@ supported API access; the included film works entirely offline.
 
 ## Selected work
 
-[**One GIF**](#a-wave-from-the-moon) · [**A three-shot film**](#a-reply-from-the-stars) · [**Finishing studies**](#finishing-studies)
+[**One GIF**](#a-wave-from-the-moon) · [**A three-shot film**](#a-reply-from-the-stars) · [**3D archive**](#archived-3d-study) · [**Finishing studies**](#finishing-studies)
 
 The examples separate original API output, the public toolkit's exact export, and
-additional local finishing. Each has its source or method linked below.
+additional local finishing. The separate 3D archive is an independently rendered
+Blender reference. Each example has its source or method linked below.
 
 <a id="01--one-prompt-one-small-performance"></a>
 
@@ -76,6 +77,23 @@ or split a completed edit into whole-shot chapters. The title recipe makes a
 ![Static diagram: a signal, a reply, a feeling. Each existing take lasts 2.56 seconds.](docs/assets/identity/story-strip.svg)
 
 </details>
+
+## Archived 3D study
+
+**Chrome Trefoil** · Blender EEVEE · 3.20 s · 80 unique frames · 512 × 512 · Silent
+
+<p align="center">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/motion-elements/poster.png">
+    <img src="docs/assets/motion-elements/chrome.gif" width="480" alt="Chrome Trefoil: the original archived Blender EEVEE rotation study.">
+  </picture>
+</p>
+
+This is the original completed Blender art study, **not native API output** and not
+a feature of the public generator. It is preserved here as a separate visual
+reference. The public API workflow does not require Blender. One loop is complete.
+
+[**Play the MP4**](docs/assets/motion-elements/chrome.mp4) · [Original GIF, 6.17 MB](docs/assets/motion-elements/chrome.gif) · [Decoded phases](docs/assets/motion-elements/decoded-phases.png) · [Provenance and source](docs/MOTION-DESIGN.md)
 
 <a id="03--from-the-cutting-room"></a>
 
@@ -235,6 +253,7 @@ quotes. GIFs are silent; MP4 can import optional local audio.
 
 ## Guides
 
+- [Example gallery](docs/EXAMPLES.md): source drawings, measured timing and reproducible outputs.
 - [Recipes](docs/RECIPES.md): repeat a request, rebuild the film, or add a title.
 - [Story workflow](docs/STORYTELLING-SKILL.md): plan actions, choose takes and continue an edit.
 - [Script format](docs/SCRIPT-FORMAT.md): the exact project contract.

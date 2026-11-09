@@ -42,10 +42,17 @@ python tools/build_readme_identity.py --font-dir /path/to/open-sans --check
 
 ## Actual motion
 
-This typography change adds no generated GIF, video, 3D scene or character action.
-Every existing direct GIF, source take, public-toolkit export and finishing study is
-preserved byte-for-byte. The cover and diagram are static; they must not be presented
-as Blender output, native model animation or proof of a 3D engine.
+The typography introduces no newly generated footage. Every existing direct GIF,
+source take, public-toolkit export and finishing study is preserved byte-for-byte.
+The original completed Chrome Trefoil is also archived unchanged in a separate
+visible section: it is Blender EEVEE artwork, not native API output or a core
+runtime feature. [Its provenance and source](MOTION-DESIGN.md) distinguish the
+art-production method from the public API workflow. The six requested variations
+are not presented as finished media.
+
+The 3D archive uses its original 6.17 MB GIF, with a still poster for viewers who
+prefer reduced motion and a separately linked pausable MP4. The cover and diagram
+remain static typography; they are not Blender renders or animation samples.
 
 The direct sample has 9 drawings at 200 ms each, totaling 1.80 seconds. The public
 film uses three different reference-conditioned sources, each 16 drawings at 160 ms.

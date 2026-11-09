@@ -64,6 +64,16 @@ class WebsiteTests(unittest.TestCase):
         self.assertEqual(comparison.get("preload"), "metadata")
     def test_starter_contrast_has_margin(self):
         self.assertIn('--muted: #625e57; --accent: #805033;', self.css)
+    def test_typography_is_self_hosted_and_readable(self):
+        import re
+        self.assertIn('font-family: "Open Sans"', self.css)
+        self.assertNotIn('Georgia', self.css)
+        self.assertNotIn('Courier New', self.css)
+        self.assertNotRegex(self.css, r'font-size: (8|9|10|11)px')
+        self.assertNotIn('<em>', self.html)
+        for url in re.findall(r'url\("([^"\)]+)"\)', self.css):
+            self.assertTrue((ROOT/'docs'/url).is_file(), url)
+        self.assertTrue((ROOT/'docs/assets/site/fonts/LICENSE.txt').is_file())
     def test_self_contained_assets_and_comparison_targets(self):
         self.assertNotIn('@import',self.css)
         self.assertNotIn('fonts.googleapis',self.html)
