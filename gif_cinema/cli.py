@@ -415,8 +415,16 @@ def endpoints(args):
     frames,_,_=gif_frames(args.gif)
     p=Path(args.output)
     outputs = [Path(str(p)+"-first.png"), Path(str(p)+"-last.png")]
-    if Path(args.gif).resolve() in [path.resolve() for path in outputs]:
+    source = Path(args.gif).resolve()
+    if source in [path.resolve() for path in outputs]:
         raise ValueError("Endpoint output must not replace an input file")
+    for path in outputs:
+        try:
+            # POSIX resolve preserves spelling on case-insensitive filesystems.
+            if path.samefile(source):
+                raise ValueError("Endpoint output must not replace an input file")
+        except FileNotFoundError:
+            pass  # A new endpoint cannot alias the existing source.
     force = getattr(args, "force", False)
     if not force and any(path.exists() for path in outputs):
         raise ValueError("Endpoint output already exists; use --force to replace it")

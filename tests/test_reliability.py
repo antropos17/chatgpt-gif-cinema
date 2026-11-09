@@ -155,6 +155,58 @@ class OfflineTests(unittest.TestCase):
                 self.assertEqual(source.read_bytes(), raw)
                 self.assertEqual(list(folder.iterdir()), [source])
 
+    def test_endpoint_force_rejects_case_aliases_on_case_insensitive_filesystems(self):
+        probe = self.root / "case-probe"
+        probe.write_bytes(b"probe")
+        if not (self.root / "CASE-PROBE").exists():
+            self.skipTest("case-insensitive filesystem required")
+        probe.unlink()
+        raw = animation()
+        for suffix in ("first", "last"):
+            with self.subTest(suffix=suffix):
+                folder = self.root / suffix
+                folder.mkdir()
+                source = folder / f"EDGE-{suffix.upper()}.PNG"
+                source.write_bytes(raw)
+                args = build_parser().parse_args([
+                    "endpoints", str(source), "-o", str(folder / "edge"), "--force"])
+                with self.assertRaisesRegex(ValueError, "must not replace an input"):
+                    args.func(args)
+                self.assertEqual(source.read_bytes(), raw)
+                self.assertEqual(list(folder.iterdir()), [source])
+
+    def test_endpoint_force_rejects_hardlink_aliases_before_writing(self):
+        raw = animation()
+        for suffix in ("first", "last"):
+            with self.subTest(suffix=suffix):
+                folder = self.root / suffix
+                folder.mkdir()
+                source = folder / "source.gif"
+                source.write_bytes(raw)
+                alias = folder / f"edge-{suffix}.png"
+                os.link(source, alias)
+                args = build_parser().parse_args([
+                    "endpoints", str(source), "-o", str(folder / "edge"), "--force"])
+                with self.assertRaisesRegex(ValueError, "must not replace an input"):
+                    args.func(args)
+                self.assertEqual(source.read_bytes(), raw)
+                self.assertEqual(alias.read_bytes(), raw)
+                self.assertEqual(set(folder.iterdir()), {source, alias})
+
+    def test_endpoint_identity_check_errors_fail_before_writes(self):
+        source = self.root / "source.gif"
+        raw = animation()
+        source.write_bytes(raw)
+        args = build_parser().parse_args([
+            "endpoints", str(source), "-o", str(self.root / "edge"), "--force"])
+        for error in (PermissionError("blocked"), OSError("stat failed")):
+            with self.subTest(error=type(error).__name__):
+                with patch.object(Path, "samefile", side_effect=error):
+                    with self.assertRaises(type(error)):
+                        args.func(args)
+                self.assertEqual(source.read_bytes(), raw)
+                self.assertEqual(list(self.root.iterdir()), [source])
+
 
 @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg required for integration tests")
 class FilmTests(unittest.TestCase):
