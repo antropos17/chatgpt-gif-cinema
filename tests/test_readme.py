@@ -131,6 +131,7 @@ class ReadmeTests(unittest.TestCase):
         self.assertLess(first_image, visible.index('## Character stories'))
         self.assertLess(len(visible[:first_image].split()), 80)
         self.assertNotIn('assets/identity/cover', visible)
+        self.assertNotRegex(visible, r'<img\b[^>]*height=')
         urls = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
         self.assertGreaterEqual(len(urls), 12)
         self.assertGreaterEqual(len({u for u in urls if u.endswith('.gif')}), 8)

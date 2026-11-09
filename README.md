@@ -8,9 +8,9 @@
 <a id="01--one-prompt-one-small-performance"></a>
 
 <p align="center">
-<a href="docs/SHOWCASE.md#cat--walk-jump-curl-up"><picture><img src="docs/assets/showcase/cat-preview.gif" height="150" alt="Cat: existing native and locally finished footage, side by side."></picture></a>
-<a href="docs/RECIPES.md#one-prompt-one-gif"><picture><img src="docs/assets/first-live-render.gif" height="150" alt="An actual original API GIF: a paper-cut astronaut raises a hand."></picture></a>
-<a href="docs/MOTION-DESIGN.md"><picture><img src="docs/assets/motion-elements/chrome.gif" height="150" alt="The original archived chrome rotation, rendered in Blender EEVEE."></picture></a>
+<a href="docs/SHOWCASE.md#cat--walk-jump-curl-up"><picture><img src="docs/assets/showcase/cat-preview.gif" width="267" alt="Cat: existing native and locally finished footage, side by side."></picture></a>
+<a href="docs/RECIPES.md#one-prompt-one-gif"><picture><img src="docs/assets/first-live-render.gif" width="150" alt="An actual original API GIF: a paper-cut astronaut raises a hand."></picture></a>
+<a href="docs/MOTION-DESIGN.md"><picture><img src="docs/assets/motion-elements/chrome.gif" width="150" alt="The original archived chrome rotation, rendered in Blender EEVEE."></picture></a>
 </p>
 
 *A native/finished comparison, an original API take, and an archived Blender render.* [Methods & recipes](docs/GALLERY.md) · [Try the no-key film](#make-your-first-film)
@@ -63,7 +63,7 @@ Real outputs from the public local renderer. Shapes, text and keyframes are edit
 <a href="docs/MULTILAYER-POC.md">Layer workflow</a> · <a href="examples/layered-shapes.json">Scene JSON</a>
 </td>
 <td width="50%" align="center" valign="top">
-<a href="docs/assets/catalog/vertical-motion.gif"><picture><img src="docs/assets/catalog/vertical-motion.gif" height="260" alt="The actual 9:16 layered motion study: moving shapes with static readable typography."></picture></a><br>
+<a href="docs/assets/catalog/vertical-motion.gif"><picture><img src="docs/assets/catalog/vertical-motion.gif" width="146" alt="The actual 9:16 layered motion study: moving shapes with static readable typography."></picture></a><br>
 <strong>Made for a vertical frame</strong><br>Twelve layers · 3.20 s · 50 fps<br>
 <a href="docs/VERTICAL-MOTION-EXAMPLE.md">Composition & margins</a> · <a href="examples/vertical-motion.json">Scene JSON</a>
 </td>
@@ -192,7 +192,7 @@ Open `output/my-first-film/film.mp4`, its contact sheet and cut endpoints. Repea
 
 ## Install the skill
 
-For Codex or Claude Code, build the current **current source skill** and extract its single `gif-cinema` folder into your agent's skill directory. The runtime is installed separately; follow the included setup/check instructions.
+For Codex or Claude Code, build the **current source skill** and extract its single `gif-cinema` folder into your agent's skill directory. The runtime is installed separately; follow the included setup/check instructions.
 
 ```bash
 python tools/package_skill.py --out dist/gif-cinema.skill.zip
