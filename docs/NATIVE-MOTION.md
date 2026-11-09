@@ -6,15 +6,33 @@ inspects media; it does not itself generate GIFs or call a paid provider.
 
 ## Six distinct directions
 
-- Chrome Trefoil: polished silver closed knot, rigid rotation and periodic tilt, black.
-- Copper Folded Ribbon: satin accordion ribbon, sequential hinge wave, warm off-white.
-- Pearl Gyroscopic Orbits: ceramic rings on three axes, pearlescent silver/ivory with pale lavender on indigo.
-- Cobalt Kinetic Bloom: twelve hinged rectangular tiles, radial unfolding wave, pale blue.
-- Amber Liquid Torus: glass volume, circulating bulge and breathing opening, warm ivory.
-- Coral Braided Helices: coral tubes, traveling corkscrew deformation, dark navy.
+- Chrome Trefoil: slender constant-section silver knot, rigid sway up to ±6°, black.
+- Copper Folded Ribbon: six satin pleats, small phase-offset hinge wave up to ±4°, warm off-white.
+- Pearl Gyroscopic Orbits: three ceramic rings, phase-offset rocking up to ±5°, silver/ivory/lavender on indigo.
+- Cobalt Kinetic Bloom: twelve constant-sized tiles, restrained hinge wave up to ±5°, pale blue.
+- Amber Liquid Torus: tiny traveling surface bulge up to 2% of tube radius, stable open hole, warm ivory.
+- Coral Braided Helices: two fixed-pitch strands swaying together rigidly up to ±4°, dark navy.
 
-All use a locked camera, broad softbox reflections, full-object framing, a periodic
-motion brief and no characters/text. Prompts are art direction, not quality guarantees.
+All use a locked camera, fixed broad softbox lights, stable center and scale,
+constant topology/count, generous framing and no green, characters or text.
+Angular bounds are excursions from the resting pose, not full spins. Copper and
+cobalt motion is confined to hinges; amber's very small surface motion is intentional.
+The other subjects retain rigid geometry. Loops request continuous forward phase
+progression, not reverse playback or a duplicated final endpoint.
+
+`motion_intent` records requested family, amplitude, unit and cycle count separately
+from API parameters. The amplitude is inserted into the actual prompt. Compilation
+rejects angular excursions above 6° and surface excursions above 2% of tube radius
+for this restrained preset set, so a full-turn request cannot enter through that
+structured setting. Free-form art direction still requires human review.
+These are requested model behaviors, **not measured amplitudes or guarantees**.
+The inspector does not estimate 3D movement or enforce geometric consistency.
+
+Timing stays **16 drawings × 200 ms = 3.2 seconds, or 5 drawings per second**.
+Smaller excursions aim to reduce pose jumps, but do not add temporal detail or make
+5 fps inherently smooth. Judge the actual GIF's pacing, silhouette, constant tube
+thickness, ring/strand separation and highlight stability at playback speed.
+Technical format matching is not aesthetic acceptance.
 
 ## Offline preparation
 

@@ -46,6 +46,39 @@ class MotionTests(unittest.TestCase):
                 self.assertEqual(p["frame_count"], 16)
         self.assertEqual(len(prompts), 6)
 
+    def test_motion_intent_drives_prompt_without_changing_api_contract(self):
+        families = set()
+        for name in motion.PRESETS:
+            request = motion.compile_request(name, motion.ROUTES[0])
+            intent = request["motion_intent"]
+            families.add(intent["family"])
+            self.assertEqual(intent["status"], "requested-not-measured")
+            self.assertEqual(intent["cycles"], 1)
+            self.assertIn(motion.motion_guidance(intent), request["source_prompt"])
+            self.assertNotIn("motion_intent", request["parameters"])
+            self.assertEqual(request["parameters"]["frame_duration_ms"], 200)
+        self.assertEqual(len(families), 6)
+        spec = motion.PRESETS["chrome-trefoil"]["motion"]
+        with patch.dict(spec, {"max_excursion": 3}):
+            altered = motion.compile_request("chrome-trefoil", motion.ROUTES[0])
+        original = motion.compile_request("chrome-trefoil", motion.ROUTES[0])
+        self.assertEqual(altered["motion_intent"]["max_excursion"], 3)
+        self.assertNotEqual(altered["parameters_sha256"], original["parameters_sha256"])
+
+    def test_full_turn_and_excessive_deformation_settings_rejected(self):
+        for name, changes in (
+            ("chrome-trefoil", {"max_excursion": 360}),
+            ("pearl-orbits", {"max_excursion": 90}),
+            ("amber-torus", {"max_excursion": 20}),
+            ("coral-helices", {"family": "full-rotation"}),
+            ("chrome-trefoil", {"unit": "turns"}),
+            ("chrome-trefoil", {"max_excursion": float("nan")}),
+        ):
+            with self.subTest(name=name, changes=changes):
+                with patch.dict(motion.PRESETS[name]["motion"], changes):
+                    with self.assertRaises(ValueError):
+                        motion.compile_request(name, motion.ROUTES[0])
+
     def test_default_route_is_direct_and_other_routes_rejected(self):
         out = self.root / "default-direct"
         self.run_cmd("compile", "--out", out)

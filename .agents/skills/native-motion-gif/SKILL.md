@@ -10,7 +10,10 @@ key or FFmpeg is needed for preparation or inspection. Keep the source license.
 
 1. Choose a preset with `python -m gif_cinema motion list`, or prepare all six.
 2. The sole route is `openai-direct-16`: the existing direct OpenAI API adapter,
-   requesting 16 frames at 200 ms. Check actual model/account access separately.
+   requesting 16 frames at 200 ms: 5 drawings per second, not inherently smooth.
+   Presets request small bounded excursions, fixed geometry/count and constant lights.
+   Requested amplitudes are not measured output guarantees. Check actual model/account
+   access separately.
    Do not invent endpoints, increase limits without evidence, or add third-party services.
 3. Compile into a NEW project folder:
    `python -m gif_cinema motion compile --out output/motion-plan`
