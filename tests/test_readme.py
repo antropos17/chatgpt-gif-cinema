@@ -41,7 +41,7 @@ class ReadmeTests(unittest.TestCase):
     def test_local_files_and_anchors_exist(self):
         for name in DOCS:
             path = ROOT / name
-            source = re.sub(r'```.*?```', '', path.read_text(), flags=re.S)
+            source = re.sub(r'```.*?```', '', path.read_text(encoding='utf-8'), flags=re.S)
             parser = Links()
             parser.feed(source)
             urls = parser.urls + re.findall(r'\]\(([^\s)]+)\)', source)
@@ -54,10 +54,10 @@ class ReadmeTests(unittest.TestCase):
                     self.assertTrue(target.is_relative_to(ROOT))
                     self.assertTrue(target.is_file(), str(target))
                     if parsed.fragment and target.suffix == '.md':
-                        self.assertIn(unquote(parsed.fragment), anchors(target.read_text()))
+                        self.assertIn(unquote(parsed.fragment), anchors(target.read_text(encoding='utf-8')))
 
     def test_manifest_hashes_and_actual_gif_timing(self):
-        manifest = json.loads((ROOT / 'docs/assets/identity/manifest.json').read_text())
+        manifest = json.loads((ROOT / 'docs/assets/identity/manifest.json').read_text(encoding='utf-8'))
         self.assertEqual(manifest['schema_version'], 1)
         self.assertEqual(len(manifest['assets']), 8)
         for asset in manifest['assets']:
@@ -75,7 +75,7 @@ class ReadmeTests(unittest.TestCase):
                         self.assertEqual(sum(delays), asset['duration_ms'])
 
     def test_finishing_previews_are_visible_before_setup(self):
-        source = (ROOT / 'README.md').read_text()
+        source = (ROOT / 'README.md').read_text(encoding='utf-8')
         # GitHub renders the source in order. Gallery media should not depend on
         # opening a disclosure or scrolling through the installation instructions.
         visible = re.sub(r'<details\b.*?</details>', '', source, flags=re.S)
@@ -94,7 +94,7 @@ class ReadmeTests(unittest.TestCase):
 
     def test_visible_previews_preserve_existing_media(self):
         base = ROOT / 'docs/assets/showcase'
-        manifest = json.loads((base / 'asset-manifest.json').read_text())
+        manifest = json.loads((base / 'asset-manifest.json').read_text(encoding='utf-8'))
         assets = {asset['file']: asset for asset in manifest['assets']}
         for subject in ('cat', 'dog', 'astronaut'):
             name = f'{subject}-preview.gif'

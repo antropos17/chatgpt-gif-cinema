@@ -130,6 +130,7 @@ Activate the environment: `source .venv/bin/activate` on macOS/Linux or
 
 ```bash
 python -m pip install .
+python -m gif_cinema doctor   # checks Python, Pillow and FFmpeg; sends no requests
 python -m gif_cinema render examples/film.json --dry-run --max-api-calls 0
 python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/my-first-film
 ```
