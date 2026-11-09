@@ -27,7 +27,7 @@ class Links(HTMLParser):
 
 def anchors(text):
     # These documents use plain Markdown headings, matching GitHub's slugs.
-    result = set()
+    result = set(re.findall(r'id="([a-z0-9-]+)"', text))
     duplicates = {}
     for heading in re.findall(r'^#{1,6}\s+(.+)$', text, re.M):
         slug = re.sub(r'[^\w\- ]', '', heading.lower()).replace(' ', '-')
@@ -73,6 +73,39 @@ class ReadmeTests(unittest.TestCase):
                         delays = [frame.info['duration'] for frame in ImageSequence.Iterator(im)]
                         self.assertEqual(delays, asset['frame_durations_ms'])
                         self.assertEqual(sum(delays), asset['duration_ms'])
+
+    def test_finishing_previews_are_visible_before_setup(self):
+        source = (ROOT / 'README.md').read_text()
+        # GitHub renders the source in order. Gallery media should not depend on
+        # opening a disclosure or scrolling through the installation instructions.
+        visible = re.sub(r'<details\b.*?</details>', '', source, flags=re.S)
+        setup = visible.index('## Make your first film')
+        for subject in ('cat', 'dog', 'astronaut'):
+            path = f'docs/assets/showcase/{subject}-preview.gif'
+            with self.subTest(subject=subject):
+                self.assertEqual(source.count(path), 1)
+                self.assertLess(visible.index(path), setup)
+                self.assertIn(f'docs/assets/showcase/{subject}-frames.png', visible)
+        self.assertIn('not included in the\npublic CLI', visible)
+        self.assertIn('2.24-second excerpt', visible)
+        self.assertTrue({'see-it-in-motion', 'try-it-without-an-api-key',
+                         'give-the-skill-to-your-agent'} <= anchors(source))
+
+    def test_visible_previews_preserve_existing_media(self):
+        base = ROOT / 'docs/assets/showcase'
+        manifest = json.loads((base / 'asset-manifest.json').read_text())
+        assets = {asset['file']: asset for asset in manifest['assets']}
+        for subject in ('cat', 'dog', 'astronaut'):
+            name = f'{subject}-preview.gif'
+            asset = assets[name]
+            path = base / name
+            with self.subTest(asset=name):
+                self.assertEqual(path.stat().st_size, asset['bytes'])
+                self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), asset['sha256'])
+                with Image.open(path) as im:
+                    delays = [frame.info['duration'] for frame in ImageSequence.Iterator(im)]
+                    self.assertEqual(sum(delays), 2240)
+                    self.assertEqual(im.info.get('loop'), 0)
 
     def test_identity_is_static_self_contained_and_accessible(self):
         expected = {'cover.svg': ('1200', '610'), 'cover-mobile.svg': ('600', '710'),
