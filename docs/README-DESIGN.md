@@ -1,79 +1,27 @@
-# README design and provenance
+# Catalog design and media provenance
 
-[Back to GIF Cinema](../README.md)
+[Visual homepage](../README.md) · [Methods and recipes](GALLERY.md)
 
-## Typography and hierarchy
+## Motion first
 
-The README uses GitHub's native text styling for headings, prose, links and code.
-There is no custom CSS, hidden text or remote-font dependency in the README.
-The page opens with one project heading, a concise purpose and useful action links.
-Section headings describe the content rather than using decorative numbering.
-Historical section anchors remain available for existing links.
+The default README now opens with actual moving media rather than the static typography cover. A compact introduction and category links lead directly to three real examples, then two-column visual cards for character stories, editable local motion, source sprites/review, earlier finishing and the Blender archive. Each card links an actual source and production method. Parameters and longer instructions live in the guides or optional disclosures.
 
-The shorter static cover and optional three-shot diagram use **Open Sans Regular
-and Semibold**, matching the website's type direction. Lettering is converted to
-vector outlines so the cover renders consistently without Arial/Helvetica fallback.
-The warm paper, charcoal and brown palette is quieter beside the actual footage.
-The former silver-ring artwork and oversized all-caps display have been removed.
-The artwork does not depict or demonstrate 3D animation.
+GIF Factory's useful pattern is the reference: compact introduction, dense visual examples, categories and linked methods. No upstream artwork, characters, fonts, template or exporter code is copied. This independent collection is smaller and does not claim its style count or example volume.
 
-- `assets/identity/cover.svg`: 1200 × 354 wide cover.
-- `assets/identity/cover-mobile.svg`: 600 × 342 narrow composition, selected by a
-  standard HTML `picture` source at viewport widths up to 600 px.
-- `assets/identity/story-strip.svg`: 1000 × 210 static three-beat diagram, shown
-  inside an optional disclosure after the actual film.
+The README uses GitHub's own type and code styling. The earlier outlined Open Sans cover and static diagram remain in source history, but neither appears above the footage. They are static artwork, not proof of a generation engine.
 
-These SVGs contain no scripts, embedded HTML, animation, external images or web fonts.
-Each has a descriptive title and description. Essential project information is also
-normal README text; the artwork is not required to operate or understand the toolkit.
+## Actual new local motion
 
-## Reproduce the artwork
+Two GIFs were rendered with the public local CLI from the existing layered-shapes and vertical-motion scene JSON, with zero provider calls. The catalog manifest pins source/output Git blob identities and decoded technical facts. There are no new model-generated character actions.
 
-`tools/build_readme_identity.py` contains the layouts and checks the exact hashes of
-the original Open Sans 1.10 Regular and Semibold TTFs. It needs optional design tools
-Pillow and fonttools; these are not added to the filmmaking runtime requirements.
-No font program is bundled. [Font notice](assets/identity/FONT-NOTICE.txt) and
-[Apache 2.0 license](assets/identity/FONT-LICENSE.txt) cover the source typography.
+The source GIF and storyboard images in the sprites/review cards are existing published media. The cards link real packing, slicing and full-frame review tools; they do not pretend those images are a complete exported atlas or an accepted all-frame review. Reproduce the full packs using the guide.
 
-```bash
-python tools/build_readme_identity.py --font-dir /path/to/open-sans
-python tools/build_readme_identity.py --font-dir /path/to/open-sans --check
-```
+## Separate methods
 
-## Actual motion
+All previous GIF/MP4 bytes stay unchanged. Original API output, edited source footage, local graphic composition, private finishing and Blender artwork are labeled separately. Titles, page layouts, sprite export and camera movement do not create new character actions.
 
-The typography introduces no newly generated footage. Every existing direct GIF,
-source take, public-toolkit export and finishing study is preserved byte-for-byte.
-The original completed Chrome Trefoil is also archived unchanged in a separate
-visible section: it is Blender EEVEE artwork, not native API output or a core
-runtime feature. [Its provenance and source](MOTION-DESIGN.md) distinguish the
-art-production method from the public API workflow. The six requested variations
-are not presented as finished media.
+Finishing previews loop 2.24-second excerpts; private finishing is not a public CLI feature. The chrome archive remains one original Blender EEVEE study, not native API output or a six-animation pack. Its card offers a reduced-motion still and pausable MP4 link.
 
-The 3D archive uses its original 6.17 MB GIF, with a still poster for viewers who
-prefer reduced motion and a separately linked pausable MP4. The cover and diagram
-remain static typography; they are not Blender renders or animation samples.
+## Verification
 
-The direct sample has 9 drawings at 200 ms each, totaling 1.80 seconds. The public
-film uses three different reference-conditioned sources, each 16 drawings at 160 ms.
-It lasts 7.68 seconds. The title recipe adds 2 seconds of local typography to those
-same actions. The long-story example remains an unrendered production plan.
-
-The [identity/media manifest](assets/identity/manifest.json) records exact files,
-hashes and source-font identifiers. The [showcase manifest](assets/showcase/asset-manifest.json)
-records comparisons. Private finishing limitations stay directly above the visible
-previews. GIF embeds and video links are separate to avoid GitHub replacing the
-looping previews with full video players.
-
-## Verify
-
-```bash
-python -m unittest discover -s tests -p 'test_readme.py' -v
-python -m unittest discover -s tests -v
-python -m compileall -q gif_cinema
-```
-
-The checks validate local links/anchors, original media hashes and timings, static
-SVG safety, reviewed sizes, outlined typography and visible gallery placement.
-They do not certify aesthetics or continuity. Inspect the live GitHub README,
-wide/narrow artwork, actual playback and zero-call render receipts separately.
+README checks cover moving media before explanation, category links, source paths, exact new GIF blob identities and timing, and preserved earlier media. Final CI verifies the published tree. Independent live desktop/narrow-screen review checks presentation; technical receipts do not establish aesthetic or character-continuity acceptance.
