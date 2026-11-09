@@ -44,6 +44,21 @@ def read_bytes(path, limit):
     return raw
 
 
+def default_font_path():
+    """Find an installed font without downloading or bundling font bytes."""
+    windows = Path(os.environ.get('WINDIR', 'C:/Windows')) / 'Fonts' / 'arial.ttf'
+    candidates = ('DejaVuSans.ttf', windows,
+                  '/System/Library/Fonts/Supplemental/Arial.ttf',
+                  '/Library/Fonts/Arial.ttf', 'Arial.ttf')
+    for candidate in candidates:
+        try:
+            font = ImageFont.truetype(str(candidate), 20)
+        except OSError:
+            continue
+        return Path(os.fsdecode(font.path))
+    raise ValueError('No installed DejaVu Sans or Arial found; supply a licensed local font with --font')
+
+
 def only(value, keys, label):
     if not isinstance(value, dict) or set(value) - set(keys):
         raise ValueError(f'{label}: invalid object or unknown fields')
@@ -175,10 +190,7 @@ def prepare(path, font_path=None):
         if 'font' in data:
             font_path = local(path.parent, data['font'])
         else:
-            try:
-                font_path = ImageFont.truetype('DejaVuSans.ttf', 20).path
-            except OSError as exc:
-                raise ValueError('No default DejaVu Sans found; supply a licensed local font with --font') from exc
+            font_path = default_font_path()
     font_raw = read_bytes(font_path, MAX_FONT_BYTES)
     pin(font_raw, data.get('font_sha256'), 'Font')
     snapshots, entries, seen = [], [], set()

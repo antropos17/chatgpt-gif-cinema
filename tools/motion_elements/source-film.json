@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "title": "Chrome / continuous trefoil",
+  "ratio": "1:1",
+  "width": 512,
+  "height": 512,
+  "fps": 25,
+  "style_bible": "Original procedural 3D chrome knot, rendered locally with Blender EEVEE. No model generation. Preserve actual source frames and timing.",
+  "audio_notes": "Silent motion-design study.",
+  "shots": [
+    {
+      "id": "chrome",
+      "source": "../../docs/assets/motion-elements/chrome.gif",
+      "transition": "cut",
+      "first_frame_target": "Chrome trefoil suspended in the studio.",
+      "last_frame_target": "Final unique frame before the periodic loop returns to its beginning.",
+      "caption": "Chrome / continuous trefoil"
+    }
+  ]
+}

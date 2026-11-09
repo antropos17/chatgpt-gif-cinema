@@ -24,6 +24,15 @@ MAX_GIF_FRAME_PIXELS = 16 * 1024 * 1024
 MAX_GIF_FRAMES = 1500
 MAX_GIF_PIXEL_FRAMES = 160 * 1024 * 1024
 MEDIA_TIMEOUT_SECONDS = 300
+MODEL_ENV = "GIF_CINEMA_MODEL"
+
+
+def default_model():
+    """Model used when none is given: $GIF_CINEMA_MODEL, else the first known model."""
+    model = os.environ.get(MODEL_ENV, "").strip() or MODELS[0]
+    if model not in MODELS:
+        raise ValueError(f"{MODEL_ENV}={model!r} is not supported; choose one of: {', '.join(MODELS)}")
+    return model
 
 
 class APIError(RuntimeError):
@@ -48,12 +57,20 @@ def read_gif_bytes(source):
     return raw
 
 
-def check_gif_limits(raw):
+def check_gif_limits(raw, *, max_frames=None, max_pixel_frames=None, fixed_canvas=False):
     """Scan GIF block sizes before Pillow can allocate disposal/composite images.
 
     This is a resource preflight, not a substitute for decoding every frame.
     In particular, a later image descriptor can grow a tiny logical screen.
+    Callers may request tighter limits and reject canvas growth. The shared
+    ingestion ceilings remain the upper bounds and defaults remain unchanged.
     """
+    for name, value in (("max_frames", max_frames), ("max_pixel_frames", max_pixel_frames)):
+        if value is not None and (type(value) is not int or value <= 0):
+            raise ValueError(f"{name} must be a positive integer")
+    frame_limit = MAX_GIF_FRAMES if max_frames is None else min(max_frames, MAX_GIF_FRAMES)
+    pixel_limit = (MAX_GIF_PIXEL_FRAMES if max_pixel_frames is None
+                   else min(max_pixel_frames, MAX_GIF_PIXEL_FRAMES))
     if raw[:6] not in (b"GIF87a", b"GIF89a"):
         raise ValueError("not a GIF")
     if len(raw) < 13:
@@ -63,6 +80,7 @@ def check_gif_limits(raw):
         raise ValueError("Invalid GIF dimensions")
     if width * height > MAX_GIF_FRAME_PIXELS:
         raise ValueError("GIF frame exceeds the 16 megapixel limit")
+    canvas_width, canvas_height = width, height
     offset = 13 + ((3 << ((raw[10] & 7) + 1)) if raw[10] & 128 else 0)
     count, pixels = 0, 0
 
@@ -117,15 +135,17 @@ def check_gif_limits(raw):
                       for position in range(offset, offset + 8, 2))
         if not w or not h:
             raise ValueError("Invalid GIF frame dimensions")
+        if fixed_canvas and (x + w > canvas_width or y + h > canvas_height):
+            raise ValueError("GIF frame exceeds the fixed logical canvas")
         width, height = max(width, x + w), max(height, y + h)
         if width * height > MAX_GIF_FRAME_PIXELS:
             raise ValueError("GIF frame exceeds the 16 megapixel limit")
         count += 1
         pixels += width * height
-        if count > MAX_GIF_FRAMES:
-            raise ValueError("GIF exceeds the 1500 frame limit")
-        if pixels > MAX_GIF_PIXEL_FRAMES:
-            raise ValueError("GIF exceeds the decoded pixel budget (160 megapixels across frames)")
+        if count > frame_limit:
+            raise ValueError(f"GIF exceeds the {frame_limit} frame limit")
+        if pixels > pixel_limit:
+            raise ValueError(f"GIF exceeds the decoded pixel budget ({pixel_limit} pixels across frames)")
         flags = raw[offset + 8]
         offset += 9 + ((3 << ((flags & 7) + 1)) if flags & 128 else 0)
         offset = skip_blocks(offset + 1)  # Skip the LZW code size, then image data.
@@ -247,29 +267,49 @@ def request_gif(payload, key, endpoint=API_URL, transport=urlopen):
     validate_gif(io.BytesIO(raw))
     return raw, body.get("usage")
 
+def generation_action(out, payload, *, resume=False, force=False):
+    """Validate the current output state for both planning and locked execution."""
+    meta = out.with_suffix(".json")
+    if os.path.lexists(out) or os.path.lexists(meta):
+        if resume:
+            if not out.is_file() or not meta.is_file():
+                raise ValueError("Cannot resume: GIF and metadata are both required")
+            raw = read_gif_bytes(out)
+            saved = json.loads(meta.read_text(encoding="utf-8"))
+            validate_gif(io.BytesIO(raw))
+            if not isinstance(saved, dict) or saved.get("parameters") != payload or saved.get("sha256") != hashlib.sha256(raw).hexdigest():
+                raise ValueError("Cannot resume: parameters or GIF checksum do not match")
+            return "reuse"
+        if not force:
+            raise ValueError("Output or metadata already exists; use --resume to reuse or --force to regenerate")
+    if out.is_dir() or meta.is_dir():
+        raise ValueError("Output and metadata must be files")
+    return "generate"
+
+
 def generate(args):
-    payload = make_payload(args.prompt,args.model,args.frames,args.duration,args.size,args.quality,args.complexity)
-    out = Path(args.output); out.parent.mkdir(parents=True,exist_ok=True)
+    payload = make_payload(args.prompt,args.model or default_model(),args.frames,args.duration,args.size,args.quality,args.complexity)
+    out = Path(args.output)
     if out.suffix.lower() != ".gif":
         raise ValueError("Output must have a .gif extension")
-    meta = out.with_suffix(".json")
     force = getattr(args, "force", False)
+    resume = getattr(args, "resume", False)
+    if getattr(args, "dry_run", False):
+        # Offline preview uses the same output checks, without locks or writes.
+        action = generation_action(out, payload, resume=resume, force=force)
+        plan = {"mode": "dry-run", "api_calls": 0, "would_send_api_calls": int(action == "generate"),
+                "action": action, "output": str(out), "output_exists": out.exists(), "payload": payload,
+                "cost": "no new API calls; reuses a verified GIF" if action == "reuse" else
+                        "unknown; rerun without --dry-run to send one paid request",
+                "note": "Execution rechecks the output under its lock; this preview writes nothing."}
+        print(json.dumps(plan, ensure_ascii=False, indent=2))
+        return plan
+    out.parent.mkdir(parents=True,exist_ok=True)
+    meta = out.with_suffix(".json")
     with output_lock(out):
-        if out.exists() or meta.exists():
-            if getattr(args, "resume", False):
-                if not out.is_file() or not meta.is_file():
-                    raise ValueError("Cannot resume: GIF and metadata are both required")
-                raw = read_gif_bytes(out)
-                saved = json.loads(meta.read_text(encoding="utf-8"))
-                validate_gif(io.BytesIO(raw))
-                if not isinstance(saved, dict) or saved.get("parameters") != payload or saved.get("sha256") != hashlib.sha256(raw).hexdigest():
-                    raise ValueError("Cannot resume: parameters or GIF checksum do not match")
-                print(f"Reused verified GIF: {out} (no API request)")
-                return
-            if not force:
-                raise ValueError("Output or metadata already exists; use --resume to reuse or --force to regenerate")
-        if out.is_dir() or meta.is_dir():
-            raise ValueError("Output and metadata must be files")
+        if generation_action(out, payload, resume=resume, force=force) == "reuse":
+            print(f"Reused verified GIF: {out} (no API request)")
+            return
         key = os.environ.get("OPENAI_API_KEY")
         if not key:
             raise RuntimeError("Set OPENAI_API_KEY in your environment. Never commit it.")
@@ -378,12 +418,15 @@ def build_parser():
     p=argparse.ArgumentParser(prog="gif-cinema",description="GPT Image GIF generator and film assembler")
     sub=p.add_subparsers(dest="command",required=True)
     from .render import add_parser
+    from .doctor import add_parser as add_doctor_parser
     add_parser(sub)
+    add_doctor_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")
     reuse.add_argument("--force",action="store_true",help="Replace existing output; makes a new paid API request")
-    g.add_argument("--model",choices=MODELS,default=MODELS[0]);g.add_argument("--frames",type=int,default=9)
+    g.add_argument("--dry-run",action="store_true",help="Print the request that would be sent; no API call, key or writes")
+    g.add_argument("--model",choices=MODELS,default=None,help=f"Default: ${MODEL_ENV} or {MODELS[0]}");g.add_argument("--frames",type=int,default=9)
     g.add_argument("--duration",type=int,default=200);g.add_argument("--size",default="auto")
     g.add_argument("--quality",choices=["auto","low","medium","high","xhigh","max"],default="low")
     g.add_argument("--complexity",choices=["low","medium","high"],default="low");g.set_defaults(func=generate)

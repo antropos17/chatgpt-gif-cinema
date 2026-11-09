@@ -1,0 +1,9 @@
+Open Sans 1.10 Regular and Semibold
+Digitized data copyright (c) 2010-2011, Google Corporation.
+Licensed under the Apache License, Version 2.0. See FONT-LICENSE.txt.
+Project: https://www.opensans.com/
+
+The three static SVGs use outlined lettering derived from those fonts.
+No font program, external stylesheet or web-font request is included.
+Layout source: tools/build_readme_identity.py, with reviewed source-font hashes.
+The artwork is a static document, not animated or model-generated footage.

@@ -2,6 +2,7 @@
 from contextlib import ExitStack
 import argparse
 import copy
+import errno
 import hashlib
 import importlib.util
 import io
@@ -36,7 +37,7 @@ class StoryPageTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
         self.stack.enter_context(patch('gif_cinema.cli.urlopen', side_effect=AssertionError('No provider calls')))
@@ -141,7 +142,12 @@ class StoryPageTests(unittest.TestCase):
             self.export()
         self.assertEqual((self.out / 'accepted').read_bytes(), b'keep')
         dangling = self.root / 'dangling'
-        dangling.symlink_to(self.root / 'missing')
+        try:
+            dangling.symlink_to(self.root / 'missing')
+        except OSError as exc:
+            if getattr(exc, 'winerror', None) == 1314 or exc.errno in (errno.ENOSYS, errno.ENOTSUP):
+                self.skipTest('Symlink creation is unavailable on this system')
+            raise
         with self.assertRaisesRegex(ValueError, 'new directory'):
             pages.export_pages(self.input, dangling)
         self.assertTrue(dangling.is_symlink())
@@ -190,12 +196,26 @@ class StoryPageTests(unittest.TestCase):
         self.assertFalse(self.out.exists())
 
     def test_long_words_wrap_and_newlines_remain(self):
-        font = pages.ImageFont.truetype('DejaVuSans.ttf', 20)
+        font = pages.ImageFont.truetype(str(pages.default_font_path()), 20)
         draw = ImageDraw.Draw(Image.new('RGB', (1, 1)))
         lines = pages.wrap('abcdefghijklm\n\nHello', font, 70, draw)
         self.assertIn('', lines)
         self.assertEqual(''.join(lines), 'abcdefghijklmHello')
         self.assertTrue(all(draw.textbbox((0, 0), line, font=font)[2] <= 70 for line in lines))
+
+    def test_installed_font_fallback_and_missing_font_message(self):
+        installed = pages.ImageFont.truetype(str(pages.default_font_path()), 20)
+        with patch.object(pages.ImageFont, 'truetype', side_effect=[OSError('unavailable'), installed]) as lookup:
+            self.assertEqual(pages.default_font_path(), Path(os.fsdecode(installed.path)))
+            self.assertEqual(lookup.call_count, 2)
+        with patch.object(pages.ImageFont, 'truetype', side_effect=OSError('unavailable')):
+            with self.assertRaisesRegex(ValueError, 'licensed local font'):
+                pages.default_font_path()
+
+    def test_explicit_font_does_not_depend_on_system_discovery(self):
+        font = pages.default_font_path()
+        with patch.object(pages, 'default_font_path', side_effect=AssertionError('Unexpected font discovery')):
+            self.assertEqual(self.export(font_path=font)['provider_calls'], 0)
 
     def test_source_and_output_limits(self):
         for name, value, message in [('MAX_INPUT_BYTES', 10, 'combined'),

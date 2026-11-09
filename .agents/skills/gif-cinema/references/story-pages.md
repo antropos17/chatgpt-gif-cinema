@@ -59,8 +59,10 @@ transparent stickers**. Character consistency and correct action must be reviewe
 - `background`, `foreground`, `accent`, `image_background`: optional opaque
   `#RRGGBB` colors. Defaults are warm paper, dark green, burnt orange and white.
 - `font`: optional local TrueType/OpenType file. `--font` selects a font for a new
-  project. Without either, the helper looks for DejaVu Sans and gives a clear error
-  if unavailable. No font is downloaded.
+  project. Without either, the helper looks for installed DejaVu Sans or Arial on
+  Linux, Windows or macOS and gives a clear error if unavailable. No font is
+  downloaded or bundled. Different installed fonts can change wrapping; use an
+  explicit licensed font for a matching layout on another system.
 - `pages`: 1–24 ordered pages. IDs are case-insensitively unique, safe ASCII names
   of up to 40 characters. Each needs `source`, `heading` (up to 100 characters) and
   `text` (up to 800 characters). Text must fit at a readable fixed size; long words
@@ -72,7 +74,8 @@ A supplied font must cover the requested language. The helper measures text, but
 **does not certify glyph coverage, complex-script shaping or accessibility**.
 Inspect first/last PNGs, the actual GIF lettering and contrast. Use a font licensed
 for your intended use; the helper copies it into the project. Review font rights
-and private source/text content before sharing that project.
+and private source/text content before sharing that project. Installed system-font
+licenses may restrict redistribution even though the helper can use them locally.
 
 ## Preserve, continue and inspect
 

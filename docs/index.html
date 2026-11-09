@@ -1,42 +1,54 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GIF Cinema | Turn ChatGPT GIFs into short films</title>
-<meta name="description" content="Generate animated GIFs with OpenAI GPT Image 2.6, inspect continuity and assemble cinematic MP4 shorts with an AI filmmaking toolkit.">
-<style>
-:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,Arial,sans-serif}
-*{box-sizing:border-box}body{margin:0;background:#080808;color:#fafafa;min-height:100vh}
-body:before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.09),transparent 48%);pointer-events:none}
-header,main,footer{width:min(1100px,calc(100% - 44px));margin:auto}
-header{height:90px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #252525}
-.logo{font-weight:850;letter-spacing:-.05em;font-size:23px}.logo b{border:1px solid #aaa;border-radius:8px;padding:6px 10px;margin-right:8px}
-a{color:inherit;text-decoration:none}.muted{color:#aaa}
-a.button{display:inline-block;color:#101010;background:#fff;border-radius:11px;padding:13px 18px;font-weight:650}
-a.outline{border:1px solid #555;color:#eee;background:#161616}
-.hero{text-align:center;padding:115px 0 75px}.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#aaa}
-h1{font-size:clamp(48px,8vw,104px);letter-spacing:-.075em;line-height:1.02;margin:22px auto;max-width:920px;font-weight:750}
-.lead{max-width:660px;font-size:18px;line-height:1.7;color:#b6b6b6;margin:20px auto 32px}
-.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:45px 0}
-.card{border:1px solid #353535;background:rgba(255,255,255,.055);backdrop-filter:blur(18px);border-radius:18px;padding:26px;min-height:190px}
-.card span{color:#929292;font-size:11px}.card h3{font-size:20px;margin:24px 0 8px;letter-spacing:-.035em}.card p{color:#aaa;font-size:14px;line-height:1.6}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:25px;border:1px solid #333;border-radius:16px;background:#141414;color:#dfdfdf;font-size:14px}
-section{margin:55px 0}h2{letter-spacing:-.055em;font-size:36px}
-footer{padding:35px 0 60px;border-top:1px solid #333;color:#888;font-size:13px}
-@media(max-width:740px){.hero{padding:75px 0 40px}.grid{grid-template-columns:1fr}header{height:74px}}
-.showcase{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.65fr);gap:28px;align-items:center;margin:12px 0 65px}.movie{border:1px solid #383838;border-radius:20px;background:rgba(255,255,255,.045);padding:12px;backdrop-filter:blur(20px)}.movie video{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;background:#000;border-radius:12px}.showcase p{line-height:1.7}.small{font-size:12px;color:#999}@media(max-width:740px){.showcase{grid-template-columns:1fr}}
-</style></head>
-<body><header><a class="logo" href="#"><b>▰</b> GIF CINEMA</a><a class="muted" href="https://github.com/antropos17/chatgpt-gif-cinema">GITHUB ↗</a></header>
-<main><div class="hero"><div class="eyebrow">ChatGPT GIFs → short films</div><h1>Every frame tells a story.</h1>
-<p class="lead">OpenAI GPT Image GIF generation, shot continuity checks, and MP4 film assembly. One focused toolkit for creators and developers.</p>
-<div class="actions"><a class="button" href="https://github.com/antropos17/chatgpt-gif-cinema">View source ↗</a><a class="button outline" href="https://github.com/antropos17/chatgpt-gif-cinema/tree/main/.agents/skills">Explore skills</a></div></div>
-<section class="showcase"><div class="movie"><video autoplay muted loop playsinline controls preload="metadata" aria-label="Three scene AI GIF short film, A Reply from the Stars"><source src="assets/three-shot/three-shot-film.mp4" type="video/mp4">Your browser does not support video playback.</video></div><div><div class="eyebrow">01 / VERIFIED LIVE PROOF</div><h2>A Reply from the Stars.</h2><p class="muted">Three independently generated GPT Image GIF shots. A 5.4-second film assembled automatically into H.264 MP4, with real API calls and recorded continuity diagnostics.</p><p class="small">512 × 512 · 3 shots · no simulated renders</p><a class="button outline" href="https://github.com/antropos17/chatgpt-gif-cinema/blob/main/docs/assets/three-shot/three-shot-film.mp4">See the film ↗</a></div></section><section><div class="grid">
-<div class="card"><span>01 / GENERATE</span><h3>Animated shots</h3><p>Call GPT Image 2.6 to create actual GIF files. Save parameters and output metadata.</p></div>
-<div class="card"><span>02 / INSPECT</span><h3>Frame continuity</h3><p>Extract first and last frames, compare adjacent shots, and review transitions.</p></div>
-<div class="card"><span>03 / ASSEMBLE</span><h3>Cinematic output</h3><p>Combine GIF sequences into H.264 MP4 files with optional audio using FFmpeg.</p></div></div></section>
-<section><h2>Build your first shot.</h2><pre>pip install -e ".[filmqa]"
-export OPENAI_API_KEY="your-key"
-gif-cinema generate "A paper airplane flies past the camera" -o output/shot.gif
-gif-cinema film output/shot.gif -o output/film.mp4</pre></section>
-<section><h2>Six agent skills. One pipeline.</h2><p class="muted">Director · GIF API · Continuity · Assembly · QA · Orchestrator.</p>
-<p class="muted">Live API generation verified on November 5, 2026. Multi-shot assembly also verified; character continuity and sound design remain experimental.</p></section></main>
-<footer>GIF Cinema © 2026 · Source-available evaluation license · Built for creators.</footer></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GIF Cinema — Small moments. Bigger stories.</title>
+<meta name="description" content="Watch character-led GIF films, inspect the edits, and make your own with GIF Cinema. A skill and local filmmaking toolkit for Codex and Claude Code.">
+<meta name="theme-color" content="#f1ece4"><meta property="og:title" content="GIF Cinema — Small moments. Bigger stories."><meta property="og:description" content="Real footage. Thoughtful cuts. Little stories worth keeping.">
+<link rel="preload" href="assets/site/fonts/open-sans-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="assets/site/fonts/open-sans-semibold.woff" as="font" type="font/woff" crossorigin>
+<link rel="icon" href="assets/site/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="site.css"><script src="site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#films">Skip to films</a>
+<header class="site-header wrap">
+<a class="brand" href="#top" aria-label="GIF Cinema home"><svg aria-hidden="true" class="brand-mark" viewBox="0 0 30 30"><rect x="2" y="3" width="20" height="20" rx="3"/><path d="M8 27h17a3 3 0 0 0 3-3V9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10 9 7 4-7 4z" class="brand-play"/></svg>GIF Cinema</a>
+<nav aria-label="Main navigation"><a href="#films">Films</a><a href="#cutting-room">The edit</a><a href="#make">Get started</a></nav>
+<button class="motion-toggle" id="motion-toggle" aria-pressed="false"><span class="pause-icon" aria-hidden="true"></span><span>Pause previews</span></button>
+</header>
+<main id="top">
+<section class="intro wrap" aria-labelledby="hero-title">
+<div class="eyebrow">GIF Cinema · A filmmaking toolkit</div>
+<div class="intro-layout"><h1 id="hero-title">Turn your GIFs<br>into a short film.</h1><div class="intro-note"><p>Watch the character studies below.<br>Then make a film with the included footage.</p><a class="text-link" href="#films">Explore the films <span aria-hidden="true">↓</span></a></div></div>
+</section>
+<section id="films" class="films wrap" aria-labelledby="films-title">
+<div class="section-rule"><h2 id="films-title">The collection</h2><span>Three studies · Existing footage</span></div>
+<div class="film-grid">
+<article class="film-card"><button class="film-preview space-preview" data-film="astronaut" aria-label="Play A Signal in Space, 7.68 seconds"><video data-loop muted loop playsinline preload="metadata" poster="assets/site/astronaut-poster.jpg" aria-label="Paper astronaut story preview"><source src="assets/showcase/astronaut-native-film.mp4" type="video/mp4"></video><span class="preview-action"><span class="play-icon" aria-hidden="true"></span> Play film</span></button><div class="film-title"><h3>A Signal in Space</h3><span>7.68s</span></div><p class="film-description">A small wave gets an unexpected reply.</p><div class="film-meta"><span class="film-tag">Paper-cut · 3D look</span><span>Public CLI · 3 shots</span></div></article>
+<article class="film-card"><button class="film-preview cat-preview" data-film="cat" aria-label="Play The Art of Doing Nothing, 57.2 seconds"><video data-loop muted loop playsinline preload="metadata" poster="assets/site/cat-poster.jpg" aria-label="Five-second excerpt of the locally finished cat film"><source src="assets/site/cat-preview.mp4" type="video/mp4"></video><span class="preview-action"><span class="play-icon" aria-hidden="true"></span> Play film</span></button><div class="film-title"><h3>The Art of Doing Nothing</h3><span>57.2s</span></div><p class="film-description">A windowsill. A little leap. A well-earned rest.</p><div class="film-meta"><span class="film-tag">Locally finished film</span><span>5s preview · Silent</span></div></article>
+<article class="film-card"><button class="film-preview dog-preview" data-film="dog" aria-label="Play Eyes on the Ball comparison, 10.24 seconds"><video data-loop muted loop playsinline preload="metadata" poster="assets/site/dog-poster.jpg" aria-label="5.12-second native-timing dog preview from the comparison"><source src="assets/site/dog-preview.mp4" type="video/mp4"></video><span class="preview-action"><span class="play-icon" aria-hidden="true"></span> Play comparison</span></button><div class="film-title"><h3>Eyes on the Ball</h3><span>10.24s</span></div><p class="film-description">One good dog. One very important red ball.</p><div class="film-meta"><span class="film-tag">Native / finished study</span><span>5.12s preview</span></div></article>
+</div>
+<p class="collection-note">The films come first. Previews use existing footage at its original speed. <a href="https://github.com/antropos17/chatgpt-gif-cinema/blob/main/docs/SHOWCASE.md">Read the production notes <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></svg></a></p>
+</section>
+<section id="motion-study" class="motion-study wrap" aria-labelledby="motion-study-title">
+<div class="section-rule"><h2 id="motion-study-title">3D motion study</h2><span>One original loop · From the archive</span></div>
+<div class="motion-study-layout"><button class="film-preview chrome-preview" data-film="chrome" aria-label="Play Chrome Knot, a 3.2-second Blender reference"><video data-loop muted loop playsinline preload="metadata" poster="assets/motion-elements/poster.png" aria-label="Chrome knot rotating in a procedural 3D loop"><source src="assets/motion-elements/chrome.mp4" type="video/mp4"></video><span class="preview-action"><span class="play-icon" aria-hidden="true"></span> Play 3D reference</span></button>
+<div class="motion-study-copy"><span class="eyebrow">Blender reference · Not native API output</span><h3>Chrome Knot</h3><p>A continuous turn, a soft shadow, a shifting reflection. One 3.2-second procedural loop, rendered in Blender EEVEE.</p><dl><div><dt>Length</dt><dd>3.2 seconds</dd></div><div><dt>Frames</dt><dd>80 unique frames</dd></div><div><dt>Format</dt><dd>512 × 512 · Silent</dd></div></dl><p class="reference-note">An earlier visual study, shown separately from the GIF filmmaking toolkit. It is not native API output and does not add a Blender dependency to the public CLI.</p><a class="text-link" href="https://github.com/antropos17/chatgpt-gif-cinema/blob/main/docs/MOTION-DESIGN.md">View the original GIF and provenance <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div></div>
+</section>
+<section id="cutting-room" class="cutting-room" aria-labelledby="cut-title"><div class="wrap">
+<div class="section-rule"><span>The edit</span><span>Original and finished</span></div>
+<div class="cut-heading"><h2 id="cut-title">See what changes<br>in the finished cut.</h2><p>Follow the character, the paws, the props.<br>Compare the original timing with local finishing<br>and decide what actually improves the scene.</p></div>
+<div class="comparison-layout"><div class="comparison-player"><div class="comparison-tabs" role="group" aria-label="Choose a comparison"><button class="selected" aria-pressed="true" data-compare="astronaut">Astronaut <span>5.12s</span></button><button aria-pressed="false" data-compare="cat">Cat <span>7.68s</span></button><button aria-pressed="false" data-compare="dog">Dog <span>10.24s</span></button></div><video id="compare-video" controls playsinline preload="metadata" poster="assets/showcase/astronaut-poster.png" aria-label="Astronaut native versus locally finished comparison"><source src="assets/showcase/astronaut-comparison.mp4" type="video/mp4"></video><div class="comparison-legend"><span><i></i> Original drawings & timing</span><span><i></i> Additional local finishing</span></div></div>
+<aside class="cut-notes"><span class="eyebrow">What you're watching</span><h3 id="comparison-heading">A gesture, before and after.</h3><p id="comparison-note">The same first two astronaut shots. The finished panel adds local in-between frames; the original drawings are unchanged.</p><p class="honesty-note">Finishing experiments use additional local tools, not features included in the public CLI. More frames cannot repair a broken pose or a disappearing prop.</p><a class="text-link" id="frame-link" href="assets/showcase/astronaut-frames.png">Inspect the actual frames <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></svg></a></aside></div>
+</div></section>
+<section id="make" class="make wrap" aria-labelledby="make-title"><div class="section-rule"><span>Get started</span><span>Codex + Claude Code</span></div><div class="make-layout"><div class="make-copy"><h2 id="make-title">Make your<br>first film.</h2><p>A skill and local CLI for choosing takes, reviewing cuts, adding titles and assembling short films.</p><ol class="steps"><li><span>01</span><div><h3>Choose the action.</h3><p>Bring existing GIFs, or plan one clear action per shot.</p></div></li><li><span>02</span><div><h3>Review the cut.</h3><p>Keep the character and props consistent between scenes.</p></div></li><li><span>03</span><div><h3>Make it a film.</h3><p>Export an MP4, a small GIF, or whole-shot chapters.</p></div></li></ol><a class="pill" href="https://github.com/antropos17/chatgpt-gif-cinema/blob/main/docs/STORYTELLING-SKILL.md#try-the-current-repository-skill">Open the getting-started guide <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></svg></a></div>
+<div class="starter"><div class="starter-heading"><span class="eyebrow">Included example</span><h3>Three GIFs. One story.<br>No API key.</h3><p>Assemble the complete 7.68-second astronaut film.</p></div><div class="command-platform" role="group" aria-label="Choose your terminal"><button data-platform="unix" class="selected" aria-pressed="true">macOS / Linux</button><button data-platform="windows" aria-pressed="false">Windows</button><button id="copy-command" aria-label="Copy demo commands">Copy</button></div><pre id="demo-command" tabindex="0" aria-label="Demo commands">git clone https://github.com/antropos17/chatgpt-gif-cinema.git
+cd chatgpt-gif-cinema
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install .
+python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/my-first-film</pre><div class="starter-footer"><p>Requires Python 3.10+, Git, FFmpeg and ffprobe.<br>Open <code>output/my-first-film/film.mp4</code> when finished.</p><span id="copy-status" role="status" aria-live="polite"></span></div><details><summary>About new footage</summary><p>This example only assembles the bundled footage. New generated action requires supported model access and separately authorized requests.</p></details></div>
+</div></section>
+</main>
+<footer class="wrap"><div class="footer-top"><a class="brand" href="#top">GIF Cinema</a><span>Small moments. Bigger stories.</span><div><a href="https://github.com/antropos17/chatgpt-gif-cinema">GitHub <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></svg></a><a href="https://github.com/antropos17/chatgpt-gif-cinema/blob/main/.agents/skills/gif-cinema/SKILL.md">Read the skill</a></div></div><div class="footer-bottom"><span>© 2026 GIF Cinema · <a href="https://github.com/antropos17/chatgpt-gif-cinema/blob/main/LICENSE">Source-available evaluation license</a></span><span>Gallery inspiration: <a href="https://github.com/WoYun520/gif-factory">GIF Factory</a>. Original design and project footage.</span></div></footer>
+<dialog id="film-dialog" aria-labelledby="dialog-title"><div class="dialog-top"><div><span class="eyebrow" id="dialog-type">SCREENING ROOM</span><h2 id="dialog-title"></h2></div><button id="close-dialog" aria-label="Close film"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div><video id="dialog-video" controls playsinline preload="none"></video><div id="story-beats" class="beats" role="group" aria-label="Select a story beat" hidden><button data-seek="0" aria-pressed="true"><span>01</span> A wave</button><button data-seek="2.56" aria-pressed="false"><span>02</span> A reply</button><button data-seek="5.12" aria-pressed="false"><span>03</span> A feeling</button></div><p id="dialog-note"></p><a id="dialog-source" href="#">Open original media <svg class="arrow-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></svg></a></dialog>
+</body></html>
