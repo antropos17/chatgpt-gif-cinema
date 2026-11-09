@@ -2,63 +2,70 @@
 
 [Back to GIF Cinema](../README.md)
 
-## Original visual identity
+## Typography and hierarchy
 
-The graphite, cream and orange cover, silver orbital ribbons and three story-beat
-symbols are original, hand-authored SVG graphics made for this repository. They are
-**static editorial artwork**, not generated GIF samples, video frames or evidence of
-a motion engine. No third-party illustration or font file is bundled. Text uses the
-viewer's Arial/Helvetica/sans-serif fallback.
+The README uses GitHub's native text styling for headings, prose, links and code.
+There is no custom CSS, hidden text or remote-font dependency in the README.
+The page opens with one project heading, a concise purpose and useful action links.
+Section headings describe the content rather than using decorative numbering.
+Historical section anchors remain available for existing links.
 
-- `assets/identity/cover.svg`: wide 1200 × 610 cover.
-- `assets/identity/cover-mobile.svg`: narrow 600 × 710 composition, selected by a
+The shorter static cover and optional three-shot diagram use **Open Sans Regular
+and Semibold**, matching the website's type direction. Lettering is converted to
+vector outlines so the cover renders consistently without Arial/Helvetica fallback.
+The warm paper, charcoal and brown palette is quieter beside the actual footage.
+The former silver-ring artwork and oversized all-caps display have been removed.
+The artwork does not depict or demonstrate 3D animation.
+
+- `assets/identity/cover.svg`: 1200 × 354 wide cover.
+- `assets/identity/cover-mobile.svg`: 600 × 342 narrow composition, selected by a
   standard HTML `picture` source at viewport widths up to 600 px.
-- `assets/identity/story-strip.svg`: static diagram of the bundled film's three beats.
+- `assets/identity/story-strip.svg`: 1000 × 210 static three-beat diagram, shown
+  inside an optional disclosure after the actual film.
 
-The SVGs contain no script, embedded HTML, animation, external image or remote font
-references. Their source is editable in the repository. If a Markdown client ignores
-`picture`, the wide image is the fallback. Essential content also appears in normal
-README text and alternative text; the artwork is not the only way to read the page.
+These SVGs contain no scripts, embedded HTML, animation, external images or web fonts.
+Each has a descriptive title and description. Essential project information is also
+normal README text; the artwork is not required to operate or understand the toolkit.
 
-## What changed in the page
+## Reproduce the artwork
 
-The first screen has a new identity rather than the existing beige cat comparison.
-The main sequence is **one direct GIF → one repeatable film → finishing studies → copyable recipes**.
-All examples occupy one column. This follow-up keeps the original identity and
-recipes, adds watch/make/inspect entry routes, and makes all three existing animated
-finishing studies visible before the setup instructions. Their shared private-tool
-scope appears above the first preview; individual captions explain the method and
-link to full videos and actual frame pairs. Previews are plain image embeds with
-separate watch links: GitHub turns a thumbnail wrapped in an attachment-video link
-into a full video player, losing the intended looping GIF. There is no side-by-side table that
-squeezes characters and labels on a phone. Earlier watch/demo/install anchors are
-preserved so existing links keep working.
+`tools/build_readme_identity.py` contains the layouts and checks the exact hashes of
+the original Open Sans 1.10 Regular and Semibold TTFs. It needs optional design tools
+Pillow and fonttools; these are not added to the filmmaking runtime requirements.
+No font program is bundled. [Font notice](assets/identity/FONT-NOTICE.txt) and
+[Apache 2.0 license](assets/identity/FONT-LICENSE.txt) cover the source typography.
 
-The identity and visible-gallery updates were developed as two reviewable changes.
-The gallery does not imply an additional native-generation sample or a publicly
-hosted website. Website source and its separate deployment scope are documented in
-[the screening-room guide](WEBSITE.md).
+```bash
+python tools/build_readme_identity.py --font-dir /path/to/open-sans
+python tools/build_readme_identity.py --font-dir /path/to/open-sans --check
+```
 
-## Actual media
+## Actual motion
 
-No new model-generated GIF, video or character artwork is introduced by this README
-revision. The historical direct-GIF sample, its prompt record, the three bundled
-source takes, the public-toolkit MP4 and the finishing comparisons remain unchanged.
+The typography introduces no newly generated footage. Every existing direct GIF,
+source take, public-toolkit export and finishing study is preserved byte-for-byte.
+The original completed Chrome Trefoil is also archived unchanged in a separate
+visible section: it is Blender EEVEE artwork, not native API output or a core
+runtime feature. [Its provenance and source](MOTION-DESIGN.md) distinguish the
+art-production method from the public API workflow. The six requested variations
+are not presented as finished media.
 
-The direct sample is 9 drawings at 200 ms each, 1.80 seconds total. The film uses
-three different reference-conditioned sources, each 16 drawings at 160 ms. It is
-7.68 seconds, not a longer version of the first sample. The title recipe adds a
-locally rendered 2-second opening; it does not create new character actions.
+The 3D archive uses its original 6.17 MB GIF, with a still poster for viewers who
+prefer reduced motion and a separately linked pausable MP4. The cover and diagram
+remain static typography; they are not Blender renders or animation samples.
 
-The [asset manifest](assets/identity/manifest.json) identifies exact files and hashes.
-The original [showcase manifest](assets/showcase/asset-manifest.json) records the
-finishing comparisons. [Recipes](RECIPES.md) distinguish historical API parameters,
-offline reconstruction, model-access limits and technical output from visual quality.
+The direct sample has 9 drawings at 200 ms each, totaling 1.80 seconds. The public
+film uses three different reference-conditioned sources, each 16 drawings at 160 ms.
+It lasts 7.68 seconds. The title recipe adds 2 seconds of local typography to those
+same actions. The long-story example remains an unrendered production plan.
 
-The static identity implies no additional native-generation or smooth-motion
-capability. The included long-story plan is still an unrendered plan.
+The [identity/media manifest](assets/identity/manifest.json) records exact files,
+hashes and source-font identifiers. The [showcase manifest](assets/showcase/asset-manifest.json)
+records comparisons. Private finishing limitations stay directly above the visible
+previews. GIF embeds and video links are separate to avoid GitHub replacing the
+looping previews with full video players.
 
-## Recheck the page
+## Verify
 
 ```bash
 python -m unittest discover -s tests -p 'test_readme.py' -v
@@ -66,10 +73,7 @@ python -m unittest discover -s tests -v
 python -m compileall -q gif_cinema
 ```
 
-The README tests validate relative files and section anchors, manifest byte hashes,
-actual GIF dimensions/timing, visible gallery placement and SVG safety/sizing. The
-three preview GIFs are also checked against their original showcase hashes and
-2.24-second timing. They do not certify aesthetic
-quality or remote media availability. To verify actual media, run the zero-call
-recipes, inspect their receipts, and watch the delivered files. To verify presentation,
-inspect GitHub's rendered README and the narrow-screen cover separately.
+The checks validate local links/anchors, original media hashes and timings, static
+SVG safety, reviewed sizes, outlined typography and visible gallery placement.
+They do not certify aesthetics or continuity. Inspect the live GitHub README,
+wide/narrow artwork, actual playback and zero-call render receipts separately.
