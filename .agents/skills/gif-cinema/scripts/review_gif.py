@@ -12,7 +12,6 @@ import io
 import json
 import os
 from pathlib import Path
-import shutil
 import stat
 import sys
 
@@ -35,7 +34,7 @@ def digest(raw):
 
 def read_local(path, limit):
     """Bound the actual read; reject devices/FIFOs without waiting for a writer."""
-    fd = os.open(path, os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0))
+    fd = os.open(path, os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0) | getattr(os, 'O_BINARY', 0))
     with os.fdopen(fd, 'rb') as stream:
         if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
             raise ValueError('Input must be a regular local file')
@@ -185,13 +184,20 @@ def extract(gif, output, focus=None, purpose='general'):
     report = {'schema_version': 1, 'source_name': gif.name, 'media': facts(raw, frames, delays, loop, purpose),
               'focus': focus, 'transitions': changes(frames), 'notice': NOTICE, 'artifacts': {}}
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.mkdir()  # Exclusive ownership. Never reuse or replace an existing review.
+    output.mkdir()  # Never reuse or replace an existing review.
+    created = output.lstat()
+    identity = (created.st_dev, created.st_ino)
     total = 0
+    def check_output_directory():
+        current = output.lstat()
+        if not stat.S_ISDIR(current.st_mode) or (current.st_dev, current.st_ino) != identity:
+            raise ValueError('Review output directory changed; existing data was retained')
     def save(name, data, track=True):
         nonlocal total
         total += len(data)
         if total > MAX_OUTPUT_BYTES:
             raise ValueError('Review output exceeds 512 MiB; use a shorter or smaller source')
+        check_output_directory()
         path = output / name
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open('xb') as stream:
@@ -202,34 +208,33 @@ def extract(gif, output, focus=None, purpose='general'):
         stream = io.BytesIO()
         image.save(stream, format='PNG')
         save(name, stream.getvalue())
-    try:
-        save('animation.gif', raw)
-        save('index.html', player(gif.name, delays, loop, bool(focus)))
-        for index, frame in enumerate(frames):
-            save_image(f'frames/{index:04}.png', frame)
-            if focus:
-                save_image(f'focus/{index:04}.png', frame.crop(focus))
-        # Bounded thumbnail sheets, never one enormous native-size contact sheet.
-        for start in range(0, len(frames), 16):
-            batch = frames[start:start + 16]
-            sheet = Image.new('RGB', (4 * 208, ((len(batch) + 3) // 4) * 232), '#edf2f7')
-            pen = ImageDraw.Draw(sheet)
-            for offset, frame in enumerate(batch):
-                thumb = flatten(frame, 'white')
-                thumb.thumbnail((192, 192))
-                x, y = (offset % 4) * 208 + 8, (offset // 4) * 232 + 8
-                sheet.paste(thumb, (x, y + 24))
-                pen.text((x, y), f'{start + offset:04} | {delays[start + offset]} ms', fill='#111827')
-            save_image(f'sheets/{start // 16:03}.png', sheet)
-        audit_raw = json_bytes(report)
-        save('audit.json', audit_raw, track=False)
-        review = {'schema_version': 1, 'audit_sha256': digest(audit_raw), 'gif_sha256': digest(raw),
-                  'reviewer': '', 'frames': [{'index': i, 'decision': 'pending', 'notes': ''} for i in range(len(frames))],
-                  'playback': 'pending', 'loop_seam': 'pending', 'user_acceptance': 'pending', 'notes': ''}
-        save('review.json', json_bytes(review), track=False)
-    except BaseException:
-        shutil.rmtree(output)
-        raise
+    # Retain partial output on failure. This path can be renamed/replaced by
+    # another process, so recursive rollback could delete unrelated data.
+    save('animation.gif', raw)
+    save('index.html', player(gif.name, delays, loop, bool(focus)))
+    for index, frame in enumerate(frames):
+        save_image(f'frames/{index:04}.png', frame)
+        if focus:
+            save_image(f'focus/{index:04}.png', frame.crop(focus))
+    # Bounded thumbnail sheets, never one enormous native-size contact sheet.
+    for start in range(0, len(frames), 16):
+        batch = frames[start:start + 16]
+        sheet = Image.new('RGB', (4 * 208, ((len(batch) + 3) // 4) * 232), '#edf2f7')
+        pen = ImageDraw.Draw(sheet)
+        for offset, frame in enumerate(batch):
+            thumb = flatten(frame, 'white')
+            thumb.thumbnail((192, 192))
+            x, y = (offset % 4) * 208 + 8, (offset // 4) * 232 + 8
+            sheet.paste(thumb, (x, y + 24))
+            pen.text((x, y), f'{start + offset:04} | {delays[start + offset]} ms', fill='#111827')
+        save_image(f'sheets/{start // 16:03}.png', sheet)
+    audit_raw = json_bytes(report)
+    save('audit.json', audit_raw, track=False)
+    review = {'schema_version': 1, 'audit_sha256': digest(audit_raw), 'gif_sha256': digest(raw),
+              'reviewer': '', 'frames': [{'index': i, 'decision': 'pending', 'notes': ''} for i in range(len(frames))],
+              'playback': 'pending', 'loop_seam': 'pending', 'user_acceptance': 'pending', 'notes': ''}
+    save('review.json', json_bytes(review), track=False)
+    check_output_directory()
     return report
 
 

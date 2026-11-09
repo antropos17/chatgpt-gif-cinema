@@ -56,6 +56,17 @@ per-frame limit, and 64 megapixels of total decoded frames. Output is bounded to
 The raw GIF descriptor scan runs before image decoding. Inputs must be ordinary
 local files; FIFOs and devices are rejected. Each extraction requires a new output
 directory, so repairs cannot overwrite an earlier review or retain stale approval.
+Reads explicitly use binary mode on Windows; newline and control bytes remain exact.
+
+If extraction fails after creating its directory, the partial output is retained.
+It is not a completed review pack: `check` rejects missing or mismatched audit,
+review or artifact files. Retry into a **new** directory after resolving the cause.
+The helper never recursively deletes failed output, since another process could
+have renamed the original directory and replaced its path with unrelated data.
+It also checks the created directory's identity before subsequent writes and after
+export. These checks detect ordinary directory replacement; they are not a sandbox
+against a hostile process racing every filesystem operation. Existing filenames
+are opened exclusively and never overwritten.
 
 ## Complete the record after actual inspection
 

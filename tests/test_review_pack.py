@@ -214,11 +214,53 @@ class ReviewPackTests(unittest.TestCase):
             self.extract()
         self.assertEqual((self.output / 'review.json').read_bytes(), old)
 
-    def test_failed_write_removes_only_new_partial_output(self):
+    def test_failed_write_retains_partial_output_without_a_complete_review(self):
         with patch.object(review, 'MAX_OUTPUT_BYTES', 1), self.assertRaisesRegex(ValueError, 'output exceeds'):
             self.extract()
-        self.assertFalse(self.output.exists())
+        self.assertTrue(self.output.is_dir())
+        self.assertFalse((self.output / 'audit.json').exists())
+        self.assertFalse((self.output / 'review.json').exists())
+        with self.assertRaises((OSError, ValueError)):
+            review.check(self.output)
+        with self.assertRaisesRegex(ValueError, 'new directory'):
+            self.extract()
         self.assertEqual(self.gif.read_bytes(), self.original)
+
+    def replace_output(self):
+        moved = self.root / 'original-partial-review'
+        self.output.rename(moved)
+        self.output.mkdir()
+        (self.output / 'unrelated-sentinel.txt').write_bytes(b'Keep unrelated user data')
+        return moved
+
+    def test_failed_export_never_deletes_replacement_directory(self):
+        def replace_then_fail(*args, **kwargs):
+            self.replace_output()
+            raise OSError('Simulated export failure after directory replacement')
+        with patch.object(review, 'player', side_effect=replace_then_fail):
+            with self.assertRaisesRegex(OSError, 'Simulated export failure'):
+                self.extract()
+        self.assertEqual((self.output / 'unrelated-sentinel.txt').read_bytes(), b'Keep unrelated user data')
+        self.assertEqual((self.root / 'original-partial-review/animation.gif').read_bytes(), self.original)
+        self.assertEqual(self.gif.read_bytes(), self.original)
+        self.assertEqual(sorted(path.name for path in self.output.iterdir()), ['unrelated-sentinel.txt'])
+
+    def test_replacement_directory_stops_later_writes(self):
+        original_player = review.player
+        def replace_then_continue(*args, **kwargs):
+            self.replace_output()
+            return original_player(*args, **kwargs)
+        with patch.object(review, 'player', side_effect=replace_then_continue):
+            with self.assertRaisesRegex(ValueError, 'output directory changed'):
+                self.extract()
+        self.assertEqual((self.output / 'unrelated-sentinel.txt').read_bytes(), b'Keep unrelated user data')
+        self.assertEqual(sorted(path.name for path in self.output.iterdir()), ['unrelated-sentinel.txt'])
+
+    def test_read_local_preserves_binary_control_characters_and_line_endings(self):
+        path = self.root / 'binary-input.dat'
+        raw = bytes(range(256)) + b'\r\n\x1a\r\n\0\xff'
+        path.write_bytes(raw)
+        self.assertEqual(review.read_local(path, len(raw)), raw)
 
     def test_input_and_decoded_budgets_checked_before_output(self):
         for constant, limit in [('MAX_BYTES', 10), ('MAX_FRAMES', 2), ('MAX_PIXELS', 48 * 48)]:
