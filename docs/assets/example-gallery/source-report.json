@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "title": "A Reply from the Stars",
+  "provider_calls": 0,
+  "source_count": 3,
+  "source_frames": 48,
+  "native_action_ms": 7680,
+  "visual_acceptance": "human-review-required",
+  "sources": [
+    {
+      "id": "01-signal",
+      "path": ".agents/skills/gif-cinema/assets/example/shot-01.gif",
+      "sha256": "5599c7b0ccad2dd4fcaf2b86235cc12e3689a8da323311845b724c352d3d6dac",
+      "bytes": 1265542,
+      "width": 512,
+      "height": 512,
+      "frames": 16,
+      "unique_frames": 16,
+      "durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "total_duration_ms": 2560,
+      "loop": 0
+    },
+    {
+      "id": "02-answer",
+      "path": ".agents/skills/gif-cinema/assets/example/shot-02.gif",
+      "sha256": "0f6366ad5da2ad949ecb399dfdfe10fd33416f542a573316ee4a319f669f8d13",
+      "bytes": 1540725,
+      "width": 512,
+      "height": 512,
+      "frames": 16,
+      "unique_frames": 16,
+      "durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "total_duration_ms": 2560,
+      "loop": 0
+    },
+    {
+      "id": "03-recognition",
+      "path": ".agents/skills/gif-cinema/assets/example/shot-03.gif",
+      "sha256": "461a37f8e813549b8b0ee70ad1f04cf3b64b7d17c7eb458bd5f163ef0380bb28",
+      "bytes": 1407614,
+      "width": 512,
+      "height": 512,
+      "frames": 16,
+      "unique_frames": 16,
+      "durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "total_duration_ms": 2560,
+      "loop": 0
+    }
+  ],
+  "outputs": {
+    "astronaut-storyboard.png": "25dffb036cede00f000045222112f7ee39ea596788ae5b98718a15b2933e45fa"
+  },
+  "sampled_frames": [
+    {
+      "source_id": "01-signal",
+      "frame_index": 0,
+      "start_ms": 0
+    },
+    {
+      "source_id": "01-signal",
+      "frame_index": 8,
+      "start_ms": 1280
+    },
+    {
+      "source_id": "01-signal",
+      "frame_index": 15,
+      "start_ms": 2400
+    },
+    {
+      "source_id": "02-answer",
+      "frame_index": 0,
+      "start_ms": 0
+    },
+    {
+      "source_id": "02-answer",
+      "frame_index": 8,
+      "start_ms": 1280
+    },
+    {
+      "source_id": "02-answer",
+      "frame_index": 15,
+      "start_ms": 2400
+    },
+    {
+      "source_id": "03-recognition",
+      "frame_index": 0,
+      "start_ms": 0
+    },
+    {
+      "source_id": "03-recognition",
+      "frame_index": 8,
+      "start_ms": 1280
+    },
+    {
+      "source_id": "03-recognition",
+      "frame_index": 15,
+      "start_ms": 2400
+    }
+  ],
+  "presentation": "Decoded source frames fitted to panels; labels added locally. No new poses."
+}
