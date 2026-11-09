@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import unittest
@@ -34,10 +35,14 @@ class MotionReferenceTests(unittest.TestCase):
             self.assertEqual(sum(delays), 3200)
             self.assertEqual(len(drawings), 80)
 
-    def test_original_mp4_bytes_and_technical_facts(self):
+    def test_original_mp4_bytes(self):
         path = MEDIA / 'chrome.mp4'
         self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),
                          '264b505b8a8879e4e3527bd9b9630a579ebadb2c0aeed46b3f4083e2636ca750')
+
+    @unittest.skipUnless(shutil.which('ffprobe'), 'ffprobe required for MP4 inspection')
+    def test_original_mp4_technical_facts(self):
+        path = MEDIA / 'chrome.mp4'
         result = subprocess.run(['ffprobe', '-v', 'error', '-count_frames', '-show_streams',
                                  '-show_format', '-of', 'json', str(path)],
                                 check=True, capture_output=True, text=True, timeout=30)
