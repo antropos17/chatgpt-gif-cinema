@@ -165,3 +165,58 @@ limits. It does not promise platform-specific compatibility or a particular file
 Use a local verified MP4. Export is bounded to 300 seconds per media subprocess.
 If an export fails, no previous accepted file is replaced. For long/high-resolution
 stories use a smaller GIF, lower supported FPS, or chapters plus the MP4 master.
+
+## Export whole-shot GIF chapters
+
+After a successful render, use the exact `film.json` and its completed render folder.
+The companion helper groups consecutive **whole shots**, splitting only at cuts:
+
+```bash
+python scripts/story_chapters.py PROJECT/film.json --render RENDER \
+  --out output/chapters --width 320 --fps 10 --max-seconds 15 --dry-run
+python scripts/story_chapters.py PROJECT/film.json --render RENDER \
+  --out output/chapters --width 320 --fps 10 --max-seconds 15
+```
+
+Dry-run verifies the script, saved GIF hashes and measured delays, completed manifest,
+and movie hash. It prints the planned shot groups without invoking FFmpeg or writing
+anything. Actual movie decoding is deferred until export. Both modes reject a
+modified script, missing/changed footage or movie, or an incomplete latest render.
+Keep the render's manifest and saved GIFs, not just `film.mp4`.
+
+Export snapshots the matching MP4, verifies its H.264 dimensions, frame count, frame
+rate and duration, and fully decodes it. Each chapter uses source-frame boundaries,
+not approximate keyframe seeking. The published folder contains `chapter-01.gif`,
+`chapter-02.gif`, and so on, plus `chapters.json` with shot IDs, half-open source-frame
+ranges, input/output hashes and actual GIF timing. The source movie and render folder
+are unchanged. All chapters are staged and decoded before the new folder is published;
+a failed export does not publish a partial chapter set or replace earlier chapters.
+
+Chapter timing comes from the completed render's **measured source delays**, not
+storyboard estimates. Source-frame ranges cover the movie once, in order, without
+gaps or overlap. GIF FPS resamples that footage. Each chapter's playback length is
+rounded **up** to a GIF frame, with a final-frame hold of less than one GIF frame.
+Those small holds can accumulate across chapters; the MP4 master keeps its original
+timing. For example, the 9.68-second astronaut film with `--max-seconds 5` groups the
+title and first shot, then the two remaining shots separately: 4.6, 2.6 and 2.6 seconds
+at 10 fps. This is the same existing footage, not additional character animation.
+
+- Width is 64–640 and FPS is 5, 10, 20 or 25. Height preserves aspect ratio and is even.
+- `--max-seconds` is an integer from 1 to 120 (default 15). It is an upper bound, not
+  a promise to make every chapter exactly that long. The frame/pixel budget may split
+  sooner. One shot that cannot fit is rejected instead of silently cutting its action.
+- Runtime limits apply to each GIF: at most 1,500 decoded frames, 160 megapixels
+  across frames and 128 MiB. Combined GIF files are capped at 512 MiB.
+- The completed film is limited to one hour and 512 MiB. JSON inputs are at most
+  1 MiB. Only regular local files, version 1 render records and hard cuts are supported.
+- Effective dimensions and FPS come from the completed render's probe, including
+  runtime CLI overrides, and are verified against the actual movie. A chapter shorter
+  than two GIF playback frames is rejected;
+  raise GIF FPS or group more shots. Media subprocesses have the runtime's 300-second
+  timeout. Very large chapters may need smaller dimensions/FPS on a slower machine.
+- Chapters are silent and play once by default. `--repeat` loops each chapter forever.
+  Some viewers override loop metadata. Palette conversion can lose colors; inspect
+  each final GIF. Successful decoding does not establish narrative or visual quality.
+
+The skill ZIP includes this helper. It works with the same pinned runtime as the
+compiler, and neither planning nor export reads credentials or calls a provider.

@@ -87,6 +87,32 @@ interpolation, automatic transitions, sound generation or a rigged character eng
 For those requirements, use a genuinely available compositor or generation service
 and describe its role. Source-only editing can proceed when generation is unavailable.
 
+## Deliver longer stories as GIF chapters
+
+Keep the verified MP4 as the master. To deliver smaller GIFs without cutting an
+individual shot in half, group the completed film into whole-shot chapters:
+
+```bash
+PYTHONPATH=. python .agents/skills/gif-cinema/scripts/story_chapters.py \
+  output/story-project/film.json --render output/story-render \
+  --out output/story-chapters --width 320 --fps 10 --max-seconds 5 --dry-run
+PYTHONPATH=. python .agents/skills/gif-cinema/scripts/story_chapters.py \
+  output/story-project/film.json --render output/story-render \
+  --out output/story-chapters --width 320 --fps 10 --max-seconds 5
+```
+
+The existing 9.68-second source edit becomes three GIFs: 4.6, 2.6 and 2.6 seconds.
+The title stays with the first astronaut shot. Each GIF's final hold is rounded up
+to a 100 ms frame, so their combined 9.8 seconds is slightly longer than the master.
+No shots are duplicated or omitted; this is not newly generated animation.
+
+Dry-run validates input hashes and measured GIF timing without output writes or
+FFmpeg. Export verifies and snapshots the actual MP4, trims by source-frame boundaries,
+checks every GIF, and publishes a new directory with a `chapters.json` receipt. The
+completed render folder must retain its manifest and saved shots. One shot exceeding
+the chosen budget fails with guidance instead of being split automatically.
+[Exact limits, verification and timing](../.agents/skills/gif-cinema/references/story-project.md#export-whole-shot-gif-chapters).
+
 ## Package and verify the skill
 
 The previously published `skill-v0.1.1` ZIP is an older skill. To package the current
@@ -94,7 +120,7 @@ repository version, including examples, scripts, references, license and notices
 
 ```bash
 python tools/package_skill.py --out dist/gif-cinema-story-skill.zip
-python -m unittest discover -s tests -p test_story_skill.py -v
+python -m unittest discover -s tests -p 'test_story*.py' -v
 ```
 
 The ZIP is deterministic, has a single `gif-cinema/` root, and contains only an
