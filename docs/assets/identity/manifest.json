@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-11-09",
+  "scope": "README identity and primary actual-media examples; no new generation",
+  "assets": [
+    {
+      "path": "docs/assets/identity/cover.svg",
+      "role": "original static identity",
+      "bytes": 3379,
+      "sha256": "56217613bf53ff240e94099d47b913e99300cff30922c155a8f8ca5dc4e07faa"
+    },
+    {
+      "path": "docs/assets/identity/cover-mobile.svg",
+      "role": "original static identity for narrow screens",
+      "bytes": 2593,
+      "sha256": "1fa80e872ea1935773d5fd628c845f845c2c2ddffa6d7ee11fa598f5838ddf7e"
+    },
+    {
+      "path": "docs/assets/identity/story-strip.svg",
+      "role": "original static editorial diagram",
+      "bytes": 1357,
+      "sha256": "2c7575b94a1bab504c456126cbdaffaae350aaa2d9f3d8d3175e2a9d57f2c42d"
+    },
+    {
+      "path": "docs/assets/first-live-render.gif",
+      "role": "unchanged historical direct API output",
+      "bytes": 754055,
+      "sha256": "7cf9bcc475ff2c491ac580301449f353fc162e274b690073015859474fca0191",
+      "width": 512,
+      "height": 512,
+      "frames": 9,
+      "loop": 0,
+      "frame_durations_ms": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "duration_ms": 1800
+    },
+    {
+      "path": ".agents/skills/gif-cinema/assets/example/shot-01.gif",
+      "role": "unchanged bundled source: signal",
+      "bytes": 1265542,
+      "sha256": "5599c7b0ccad2dd4fcaf2b86235cc12e3689a8da323311845b724c352d3d6dac",
+      "width": 512,
+      "height": 512,
+      "frames": 16,
+      "loop": 0,
+      "frame_durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "duration_ms": 2560
+    },
+    {
+      "path": ".agents/skills/gif-cinema/assets/example/shot-02.gif",
+      "role": "unchanged bundled source: answer",
+      "bytes": 1540725,
+      "sha256": "0f6366ad5da2ad949ecb399dfdfe10fd33416f542a573316ee4a319f669f8d13",
+      "width": 512,
+      "height": 512,
+      "frames": 16,
+      "loop": 0,
+      "frame_durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "duration_ms": 2560
+    },
+    {
+      "path": ".agents/skills/gif-cinema/assets/example/shot-03.gif",
+      "role": "unchanged bundled source: recognition",
+      "bytes": 1407614,
+      "sha256": "461a37f8e813549b8b0ee70ad1f04cf3b64b7d17c7eb458bd5f163ef0380bb28",
+      "width": 512,
+      "height": 512,
+      "frames": 16,
+      "loop": 0,
+      "frame_durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "duration_ms": 2560
+    },
+    {
+      "path": "docs/assets/showcase/astronaut-native-film.mp4",
+      "role": "unchanged published public-CLI export",
+      "bytes": 402028,
+      "sha256": "75d9f230bf0b03a4aed6b511f7d6666692672f72cf889278ec3fc9667df40efd"
+    }
+  ]
+}
