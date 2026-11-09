@@ -109,7 +109,7 @@ class ExampleGalleryTests(unittest.TestCase):
     def test_storyboard_also_uses_hashed_preflighted_bytes(self):
         raw = self.expanded_canvas_gif()
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
+            root = Path(tmp).resolve()
             (root / "expanded.gif").write_bytes(raw)
             source = copy.deepcopy(self.catalog["sources"][0])
             source.update(path="expanded.gif", sha256=hashlib.sha256(raw).hexdigest())
@@ -179,7 +179,7 @@ class ExampleGalleryTests(unittest.TestCase):
                 gallery.safe_source(ROOT, path)
     def test_symlinked_source_is_rejected_when_supported(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
+            root = Path(tmp).resolve()
             target = root / "source.gif"
             target.write_bytes(b"GIF89a")
             self.symlink_or_skip(root / "link.gif", target)
@@ -209,7 +209,9 @@ class ExampleGalleryTests(unittest.TestCase):
         before = {s["path"]: hashlib.sha256((ROOT / s["path"]).read_bytes()).hexdigest()
                   for s in self.catalog["sources"]}
         with tempfile.TemporaryDirectory() as tmp, mock.patch("socket.socket", side_effect=AssertionError("Network forbidden")):
-            out = Path(tmp) / "gallery"
+            # macOS exposes temporary directories through /var -> /private/var.
+            # Use the physical fixture path; the output symlink guard stays strict.
+            out = Path(tmp).resolve() / "gallery"
             report = gallery.build(out, self.catalog)
             self.assertEqual([s["frame_index"] for s in report["sampled_frames"]], [0, 8, 15] * 3)
             self.assertEqual([s["start_ms"] for s in report["sampled_frames"]], [0, 1280, 2400] * 3)
@@ -223,7 +225,7 @@ class ExampleGalleryTests(unittest.TestCase):
 
     def test_existing_output_is_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
+            root = Path(tmp).resolve()
             marker = root / "keep.txt"
             marker.write_text("original")
             with self.assertRaisesRegex(ValueError, "new directory"):
@@ -232,7 +234,7 @@ class ExampleGalleryTests(unittest.TestCase):
 
     def test_symlinked_output_is_refused_when_supported(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
+            root = Path(tmp).resolve()
             self.symlink_or_skip(root / "link", root, target_is_directory=True)
             with self.assertRaisesRegex(ValueError, "symlinks"):
                 gallery.build(root / "link" / "new", self.catalog)
