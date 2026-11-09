@@ -141,6 +141,18 @@ can damage gradients and fine outlines; review the actual final GIF too. High pl
 FPS does not create new motion. [review.md](references/review.md) gives the visual and
 technical acceptance checks.
 
+## Compose animated story pages
+
+For a readable illustrated book from existing GIF actions, use
+`scripts/story_pages.py STORYBOOK.json --out NEW_DIRECTORY`. Add `--dry-run` first
+to decode inputs and check text fit without writes. Landscape places text beside
+the action; portrait places text below it. The helper preserves source cadence,
+exports actual play-once GIF pages and a portable hash-pinned project, and emits
+`film.json` for zero-call MP4 assembly. Use a licensed local font and inspect glyphs.
+The included `assets/example/storybook.json` reuses three astronaut takes; it does
+not generate new poses or add reading holds. Review actual playback and every cut.
+See [commands, schema, timing and limits](references/story-pages.md).
+
 ## Deliver the actual result
 
 Provide requested GIF/MP4 files with actual duration, dimensions, loop behavior,
