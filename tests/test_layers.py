@@ -382,6 +382,11 @@ with patch.object(layers.os, 'open', side_effect=replace_and_open):
         out = self.root / 'render'
         receipt = layers.render_scene(self.path, out)
         self.assertEqual(receipt['frames'], 4)
+        endpoint_commands = [command for command in receipt['commands'] if 'rawvideo' in command]
+        self.assertEqual(len(endpoint_commands), 1)
+        endpoint_command = endpoint_commands[0]
+        self.assertNotIn('-vsync', endpoint_command)
+        self.assertEqual(endpoint_command[endpoint_command.index('-fps_mode') + 1], 'passthrough')
         self.assertEqual(sum(receipt['gif_delays_ms']), 160)
         self.assertTrue(receipt['source_unchanged'])
         self.assertEqual(receipt['api_calls'], 0)

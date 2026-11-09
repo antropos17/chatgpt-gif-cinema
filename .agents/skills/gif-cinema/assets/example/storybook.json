@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "title": "A Reply from the Stars",
+  "layout": "landscape",
+  "pages": [
+    {
+      "id": "01-signal",
+      "source": "shot-01.gif",
+      "heading": "Hello, out there.",
+      "text": "One small wave into the dark."
+    },
+    {
+      "id": "02-answer",
+      "source": "shot-02.gif",
+      "heading": "A light answers.",
+      "text": "Something in the distance notices."
+    },
+    {
+      "id": "03-recognition",
+      "source": "shot-03.gif",
+      "heading": "Not alone.",
+      "text": "A hand moves toward the heart."
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import io
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -37,6 +38,36 @@ class FontCoverageTests(unittest.TestCase):
     def setUp(self):
         clear_caches()
         self.addCleanup(clear_caches)
+
+    @unittest.skipUnless(shutil.which('git'), 'Git required for checkout regression')
+    def test_autocrlf_checkout_preserves_hashed_coverage_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            def git(*args):
+                subprocess.run(['git', *args], cwd=root, check=True,
+                               capture_output=True, timeout=30)
+            git('init', '--quiet')
+            git('config', 'core.autocrlf', 'true')
+            (root / '.gitattributes').write_bytes((ROOT / '.gitattributes').read_bytes())
+            paths = []
+            for descriptor in text_fonts.FONTS.values():
+                relative = Path('gif_cinema/assets/fonts') / descriptor['coverage']
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes((ROOT / relative).read_bytes())
+                paths.append((target, descriptor['coverage_sha256']))
+            for name in ('OFL.txt', 'PROVENANCE.json'):
+                relative = Path('gif_cinema/assets/fonts') / name
+                raw = (ROOT / relative).read_bytes()
+                target = root / relative
+                target.write_bytes(raw)
+                paths.append((target, hashlib.sha256(raw).hexdigest()))
+            git('add', '.')
+            for path, _ in paths:
+                path.unlink()
+            git('checkout-index', '--all')
+            for path, expected in paths:
+                self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), expected)
 
     def test_full_russian_and_azerbaijani_alphabets_have_real_glyphs(self):
         coverage = text_fonts.coverage(text_fonts.NOTO_FONT)

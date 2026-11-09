@@ -1,2 +1,7 @@
 # Keep hash-pinned text artwork byte-identical on Windows and Unix checkouts.
 docs/assets/identity/*.svg text eol=lf
+
+# Coverage manifests are byte-hashed at runtime; never convert them to CRLF.
+gif_cinema/assets/fonts/*.coverage.json text eol=lf
+gif_cinema/assets/fonts/OFL.txt text eol=lf
+gif_cinema/assets/fonts/PROVENANCE.json text eol=lf

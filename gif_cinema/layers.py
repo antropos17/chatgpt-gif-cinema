@@ -615,7 +615,7 @@ def render_scene(path, out, dry_run=False):
             run_command(['ffmpeg', '-v', 'error', '-xerror', '-nostdin', *options,
                          '-i', str(media), '-f', 'null', '-'], commands)
         endpoint_bytes = run_command(['ffmpeg', '-v', 'error', '-nostdin', '-i', str(movie),
-            '-vf', f'select=eq(n\\,0)+eq(n\\,{count - 1})', '-vsync', '0',
+            '-vf', f'select=eq(n\\,0)+eq(n\\,{count - 1})', '-fps_mode', 'passthrough',
             '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], commands)
         frame_bytes = scene['width'] * scene['height'] * 3
         if len(endpoint_bytes) != frame_bytes * 2:
