@@ -173,7 +173,7 @@ class FontCoverageTests(unittest.TestCase):
         folder = ROOT / 'gif_cinema' / 'assets' / 'fonts'
         self.assertEqual(hashlib.sha256((folder / 'NotoSans-Regular.ttf').read_bytes()).hexdigest(),
                          text_fonts.FONTS[text_fonts.NOTO_FONT]['sha256'])
-        license = (folder / 'OFL.txt').read_text()
+        license = (folder / 'OFL.txt').read_text(encoding='utf-8')
         for required in ('Copyright 2015 Google LLC.', 'SIL OPEN FONT LICENSE', 'PERMISSION & CONDITIONS', 'TERMINATION', 'DISCLAIMER'):
             self.assertIn(required, license)
         for font_id in (text_fonts.LEGACY_FONT, text_fonts.NOTO_FONT):
@@ -201,7 +201,7 @@ class FontFileTests(unittest.TestCase):
         reopened = layers.prepare_scene(moved / 'scene.json')
         for timestamp in (0, 40, 80, 120, 160):
             self.assertEqual(layers.render_at(prepared, timestamp)[0].tobytes(), layers.render_at(reopened, timestamp)[0].tobytes())
-        saved = json.loads((moved / 'scene.json').read_text())
+        saved = json.loads((moved / 'scene.json').read_text(encoding='utf-8'))
         self.assertIn('font_sha256', saved['layers'][0])
         self.assertEqual(saved['text_renderer'], text_fonts.renderer_identity())
 
@@ -215,7 +215,7 @@ class FontFileTests(unittest.TestCase):
         self.assertEqual(verify(out)['frames_reopened_and_matched'], 4)
 
     def test_bad_unicode_fails_dry_run_before_output_or_encoder(self):
-        self.path.write_text(json.dumps(scene('Привет', font_id=None)))
+        self.path.write_text(json.dumps(scene('Привет', font_id=None)), encoding='utf-8')
         out = self.root / 'bad'
         with patch('subprocess.run', side_effect=AssertionError('No encoder')):
             with self.assertRaisesRegex(ValueError, 'Unsupported text'):

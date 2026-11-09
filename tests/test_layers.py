@@ -2,7 +2,7 @@
 import copy
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import shutil
 import subprocess
 import sys
@@ -23,6 +23,19 @@ def fixture(**changes):
 
 
 class ValidationTests(unittest.TestCase):
+    def test_generated_receipt_paths_are_portable_and_still_validated(self):
+        for path_type, root in ((PureWindowsPath, 'C:/export'), (PurePosixPath, '/export')):
+            directory = path_type(root)
+            for name in ('frames/0000.png', 'layers/early.png', 'editable/assets/hash.image'):
+                with self.subTest(platform=path_type.__name__, name=name):
+                    self.assertEqual(layers.output_name(directory / name, directory), name)
+        with self.assertRaises(ValueError):
+            layers.output_name(PurePosixPath('/export/../outside'), PurePosixPath('/export'))
+        with self.assertRaises(ValueError):
+            layers.output_name(PurePosixPath('/export/frames\\0000.png'), PurePosixPath('/export'))
+        with self.assertRaises(ValueError):
+            layers.source_name('frames\\0000.png')
+
     def test_normalization_and_roundtrip_do_not_mutate_input(self):
         value = fixture()
         before = copy.deepcopy(value)

@@ -92,6 +92,11 @@ def source_name(value):
     return value
 
 
+def output_name(path, directory):
+    """Serialize generated receipt paths portably without relaxing input guards."""
+    return source_name(path.relative_to(directory).as_posix())
+
+
 def easing_value(value):
     if isinstance(value, str) and value in motion.EASINGS:
         return value
@@ -645,7 +650,7 @@ def render_scene(path, out, dry_run=False):
             'last_frame_time_ms': (count - 1) * step, 'endpoint_time_ms': scene['duration_ms'],
             'layer_endpoint_states': closing_states,
             'note': 'Equal endpoints and low pixel differences do not prove perceptual or velocity continuity.'}
-        outputs = {str(p.relative_to(stage)): digest(p.read_bytes()) for p in sorted(stage.rglob('*')) if p.is_file()}
+        outputs = {output_name(p, stage): digest(p.read_bytes()) for p in sorted(stage.rglob('*')) if p.is_file()}
         receipt = {**plan, 'status': 'human-review-required', 'source_unchanged': True,
             'gif_drawings': len(delays), 'gif_delays_ms': delays, 'loop_review': loop_review,
             'layer_previews': layer_previews,
