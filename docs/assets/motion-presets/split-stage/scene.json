@@ -1,0 +1,472 @@
+{
+  "title": "Motion preset: split-stage",
+  "fps": 25,
+  "loop": true,
+  "matte": "#151824",
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "width": 480,
+  "height": 320,
+  "duration_ms": 3200,
+  "layers": [
+    {
+      "name": "background",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "background",
+      "type": "rect",
+      "size": [
+        480,
+        320
+      ],
+      "fill": "#f6f2e9",
+      "stroke": "#00000000",
+      "stroke_width": 0,
+      "radius": 0
+    },
+    {
+      "name": "headline",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.5,
+          "y": 0.33,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.38,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.06,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.5,
+          "y": 0.3225,
+          "zoom": 1.025,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.23,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.5,
+          "y": 0.33,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.32,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.33,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.5,
+          "y": 0.33,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.33,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "headline",
+      "type": "text",
+      "text": "OPEN",
+      "font_size": 48,
+      "font_id": "noto-sans-regular-2.004",
+      "fill": "#151824",
+      "font_sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+    },
+    {
+      "name": "second_line",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.5,
+          "y": 0.56,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.6000000000000001,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.1,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.5,
+          "y": 0.554,
+          "zoom": 1.025,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.27,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.5,
+          "y": 0.56,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.36,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.56,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.5,
+          "y": 0.56,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.56,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "second_line",
+      "type": "text",
+      "text": "STAGE",
+      "font_size": 58,
+      "font_id": "noto-sans-regular-2.004",
+      "fill": "#151824",
+      "font_sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+    },
+    {
+      "name": "caption",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.5,
+          "y": 0.85,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.85,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "caption",
+      "type": "text",
+      "text": "Make room for the next big idea",
+      "font_size": 14,
+      "font_id": "noto-sans-regular-2.004",
+      "fill": "#151824",
+      "font_sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+    },
+    {
+      "name": "left_panel",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.25,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.25,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.08,
+          "easing": "smootherstep"
+        },
+        {
+          "x": -0.26,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.32,
+          "easing": "linear"
+        },
+        {
+          "x": -0.26,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.76,
+          "easing": "smootherstep"
+        },
+        {
+          "x": 0.25,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.96,
+          "easing": "linear"
+        },
+        {
+          "x": 0.25,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "left_panel",
+      "type": "rect",
+      "size": [
+        244,
+        320
+      ],
+      "fill": "#151824",
+      "stroke": "#00000000",
+      "stroke_width": 0,
+      "radius": 0
+    },
+    {
+      "name": "right_panel",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.75,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.75,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.08,
+          "easing": "smootherstep"
+        },
+        {
+          "x": 1.26,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.32,
+          "easing": "linear"
+        },
+        {
+          "x": 1.26,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.76,
+          "easing": "smootherstep"
+        },
+        {
+          "x": 0.75,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.96,
+          "easing": "linear"
+        },
+        {
+          "x": 0.75,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "right_panel",
+      "type": "rect",
+      "size": [
+        244,
+        320
+      ],
+      "fill": "#ff795c",
+      "stroke": "#00000000",
+      "stroke_width": 0,
+      "radius": 0
+    },
+    {
+      "name": "seam",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.07,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.18,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.91,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "seam",
+      "type": "rect",
+      "size": [
+        3,
+        68
+      ],
+      "fill": "#f6f2e9",
+      "stroke": "#00000000",
+      "stroke_width": 0,
+      "radius": 0
+    }
+  ],
+  "text_renderer": {
+    "layout_engine": "BASIC",
+    "normalization": "NFC",
+    "pillow": "10.4.0",
+    "freetype": "2.13.2"
+  }
+}

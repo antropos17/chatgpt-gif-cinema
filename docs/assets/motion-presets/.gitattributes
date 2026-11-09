@@ -1,0 +1,2 @@
+# Receipt hashes bind the exact editable scene bytes on every platform.
+*.json text eol=lf
