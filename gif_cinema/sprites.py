@@ -8,6 +8,7 @@ import io
 import json
 import math
 from pathlib import Path
+import stat
 import tempfile
 
 from PIL import Image, ImageSequence
@@ -43,6 +44,17 @@ def read_bytes(path, limit):
 
 def digest(raw):
     return hashlib.sha256(raw).hexdigest()
+
+
+def directory_identity(path):
+    """Refuse renamed/replaced output directories between publication steps."""
+    try:
+        status = path.lstat()
+    except OSError as exc:
+        raise ValueError('Output directory changed during publication') from exc
+    if not stat.S_ISDIR(status.st_mode):
+        raise ValueError('Output directory changed during publication')
+    return status.st_dev, status.st_ino
 
 
 def reject_duplicate_keys(pairs):
@@ -283,9 +295,14 @@ def export(frames, delays, loop, source, options, out, *, dry_run=False):
         # may already have replaced or started using them. A partial directory
         # without a manifest is explicitly incomplete, not an accepted export.
         target.mkdir()
+        target_identity = directory_identity(target)
         (target / 'frames').mkdir()
+        frames_identity = directory_identity(target / 'frames')
         files = sorted(p for p in stage.rglob('*') if p.is_file() and p.name != 'manifest.json')
         for path in files + [stage / 'manifest.json']:
+            if (directory_identity(target) != target_identity or
+                    directory_identity(target / 'frames') != frames_identity):
+                raise ValueError('Output directory changed during publication')
             publish_file(path, target / path.relative_to(stage))
     return report
 

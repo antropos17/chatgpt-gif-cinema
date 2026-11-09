@@ -145,6 +145,44 @@ class SpriteTests(unittest.TestCase):
         self.assertEqual((self.root / 'out/animation.gif').read_bytes(), b'accepted replacement')
         self.assertFalse((self.root / 'out/manifest.json').exists())
 
+    def test_directory_swap_stops_further_publication(self):
+        from gif_cinema.cli import publish_file
+        def swap_after_first(stage, target):
+            publish_file(stage, target)
+            if target.name == 'animation.gif':
+                target.parent.rename(self.root / 'preserved')
+                target.parent.mkdir()
+        with patch('gif_cinema.cli.publish_file', side_effect=swap_after_first):
+            with self.assertRaisesRegex(ValueError, 'directory changed'):
+                self.export()
+        self.assertEqual(list((self.root / 'out').iterdir()), [])
+        self.assertTrue((self.root / 'preserved/animation.gif').exists())
+        self.assertFalse((self.root / 'preserved/manifest.json').exists())
+
+    def test_frames_directory_swap_stops_further_publication(self):
+        from gif_cinema.cli import publish_file
+        def swap_after_first(stage, target):
+            publish_file(stage, target)
+            if target.name == 'animation.gif':
+                (target.parent / 'frames').rename(target.parent / 'preserved-frames')
+                (target.parent / 'frames').mkdir()
+        with patch('gif_cinema.cli.publish_file', side_effect=swap_after_first):
+            with self.assertRaisesRegex(ValueError, 'directory changed'):
+                self.export()
+        self.assertFalse((self.root / 'out/atlas.png').exists())
+        self.assertFalse((self.root / 'out/manifest.json').exists())
+
+    def test_directory_identity_rejects_symlinks(self):
+        destination = self.root / 'destination'
+        destination.mkdir()
+        link = self.root / 'link'
+        try:
+            link.symlink_to(destination, target_is_directory=True)
+        except OSError:
+            self.skipTest('Creating symlinks is unavailable')
+        with self.assertRaisesRegex(ValueError, 'directory changed'):
+            sprites.directory_identity(link)
+
     def test_margin_catches_nonempty_edge_strips(self):
         report = self.export({'require_margin': 2}, dry_run=True)
         self.assertEqual(report['frame_count'], 2)

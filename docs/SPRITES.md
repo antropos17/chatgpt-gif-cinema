@@ -36,7 +36,9 @@ loop metadata before publication. Files publish without clobbering existing path
 A failure during publication can leave a partial directory without a manifest.
 Already published files are retained, not deleted, because another process could
 have replaced or started using them. Inspect that directory and choose a new output
-path for a retry. Original media are never changed.
+path for a retry. Directory identities are checked between publication steps to
+stop when another process replaces the output or frames directory. Original media
+are never changed.
 
 Each `frame_layout` entry uses an absolute pixel rectangle `[x, y, width, height]`
 inside `atlas.png`. Coordinates exclude padding. `duration_ms` belongs to that
