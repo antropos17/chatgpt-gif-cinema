@@ -76,6 +76,7 @@ def check_gif_limits(raw, *, max_frames=None, max_pixel_frames=None, fixed_canva
     if len(raw) < 13:
         raise ValueError("Invalid or truncated GIF")
     width, height = int.from_bytes(raw[6:8], 'little'), int.from_bytes(raw[8:10], 'little')
+    initial_size = (width, height)
     if not width or not height:
         raise ValueError("Invalid GIF dimensions")
     if width * height > MAX_GIF_FRAME_PIXELS:
@@ -97,7 +98,8 @@ def check_gif_limits(raw, *, max_frames=None, max_pixel_frames=None, fixed_canva
         marker = raw[offset]
         offset += 1
         if marker == 0x3B:  # Trailer.
-            return
+            return {'frames': count, 'pixel_frames': pixels, 'width': width, 'height': height,
+                    'canvas_expanded': (width, height) != initial_size}
         if marker == 0x21:
             if offset + 2 > len(raw):
                 raise ValueError("Invalid or truncated GIF extension")
@@ -325,7 +327,8 @@ def generate(args):
         print(f"Created {out} ({len(raw):,} bytes)")
 
 def film(args):
-    from .doctor import require_film_capabilities
+    from .audio import MAX_AUDIO_SECONDS, prepare_audio
+    from .doctor import inspect_tool, require_film_capabilities
     if not shutil.which("ffmpeg"):
         raise RuntimeError("ffmpeg is required: https://ffmpeg.org/download.html")
     if args.width <= 0 or args.height <= 0 or args.width % 2 or args.height % 2 or args.fps <= 0:
@@ -335,7 +338,7 @@ def film(args):
     for clip in clips:
         _, durations, _ = validate_gif(clip)
         clip_frames.append(max(1, round(sum(durations) * args.fps / 1000)))
-    out=Path(args.output).resolve();out.parent.mkdir(parents=True,exist_ok=True)
+    out=Path(args.output).resolve()
     if out.suffix.lower() != ".mp4":
         raise ValueError("Film output must have a .mp4 extension")
     if out in clips or (args.audio and out == Path(args.audio).resolve()):
@@ -344,12 +347,29 @@ def film(args):
     if out.exists() and (not force or not out.is_file()):
         raise ValueError("Film output already exists; use --force to replace it")
     require_film_capabilities(audio=bool(args.audio))
+    audio_path = Path(args.audio).resolve() if args.audio else None
+    if audio_path is not None:
+        if not audio_path.exists():
+            raise ValueError(f"audio not found: {args.audio}")
+        if sum(clip_frames) / args.fps > MAX_AUDIO_SECONDS:
+            raise ValueError("Films with audio must be at most 3600 seconds")
+        if not inspect_tool("ffprobe")["available"]:
+            raise RuntimeError("Working ffprobe is required for films with audio; no output was published")
+    # Reuse render's strict bounded input contract, including its snapshot.
+    # Silent assembly does not gain an ffprobe dependency or new media limits.
+    with prepare_audio(audio_path) as prepared:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        _encode_film(args, clips, clip_frames, out, force, prepared["path"] if prepared else None)
+    print(f"Created movie: {out}")
+
+
+def _encode_film(args, clips, clip_frames, out, force, audio_path):
+    from .audio import verify_film_audio
     command=["ffmpeg","-hide_banner","-loglevel","error","-nostdin","-y"]
     for clip in clips:
         command+=["-ignore_loop","1","-i",str(clip)]
-    if args.audio:
-        if not Path(args.audio).is_file():raise ValueError(f"audio not found: {args.audio}")
-        command+=["-i",str(Path(args.audio).resolve())]
+    if audio_path is not None:
+        command+=["-i",str(audio_path)]
     filters=[]
     for i in range(len(clips)):
         # Pad before resampling so FFmpeg cannot drop the final GIF delay.
@@ -357,7 +377,7 @@ def film(args):
         filters.append(f"[{i}:v]tpad=stop_mode=clone:stop=-1,fps={args.fps},trim=end_frame={clip_frames[i]},scale={args.width}:{args.height}:force_original_aspect_ratio=decrease,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setpts=PTS-STARTPTS[v{i}]")
     filters.append("".join(f"[v{i}]" for i in range(len(clips)))+f"concat=n={len(clips)}:v=1:a=0[outv]")
     command+=["-filter_complex",";".join(filters),"-map","[outv]"]
-    if args.audio:command+=["-map",f"{len(clips)}:a:0","-af","apad","-shortest","-c:a","aac"]
+    if audio_path is not None:command+=["-map",f"{len(clips)}:a:0","-af","apad","-shortest","-c:a","aac"]
     with output_lock(out):
         fd, name = tempfile.mkstemp(dir=out.parent, suffix=".mp4")
         os.close(fd)
@@ -367,10 +387,11 @@ def film(args):
             run_media(command)
             if staged.stat().st_size == 0:
                 raise RuntimeError("FFmpeg produced an empty movie")
+            if audio_path is not None:
+                verify_film_audio(staged, sum(clip_frames) / args.fps)
             publish_file(staged, out, force)
         finally:
             staged.unlink(missing_ok=True)
-    print(f"Created movie: {out}")
 
 def gif_frames(path):
     return validate_gif(path)
@@ -421,6 +442,8 @@ def build_parser():
     from .doctor import add_parser as add_doctor_parser
     add_parser(sub)
     add_doctor_parser(sub)
+    from .motion import add_parser as add_motion_parser
+    add_motion_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")
