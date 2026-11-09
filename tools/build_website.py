@@ -9,6 +9,7 @@ FILES = ['index.html', 'site.css', 'site.js',
          'assets/site/favicon.svg', 'assets/site/astronaut-poster.jpg',
          'assets/site/cat-poster.jpg', 'assets/site/dog-poster.jpg',
          'assets/site/cat-preview.mp4', 'assets/site/dog-preview.mp4']
+FILES += ['assets/motion-elements/chrome.mp4', 'assets/motion-elements/poster.png']
 for character in ('astronaut', 'cat', 'dog'):
     FILES += [f'assets/showcase/{character}-{suffix}' for suffix in ('comparison.mp4', 'poster.png', 'frames.png')]
 FILES += ['assets/showcase/astronaut-native-film.mp4', 'assets/showcase/cat-film.mp4']

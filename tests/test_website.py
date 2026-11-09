@@ -31,7 +31,7 @@ class WebsiteTests(unittest.TestCase):
             self.assertNotIn(text,self.html)
     def test_previews_are_named_muted_and_reduced_motion_aware(self):
         previews = [a for t,a in self.dom.items if t=='video' and 'data-loop' in a]
-        self.assertEqual(len(previews),3)
+        self.assertEqual(len(previews),4)
         for attrs in previews:
             self.assertIn('aria-label',attrs); self.assertIn('muted',attrs); self.assertIn('playsinline',attrs)
             self.assertNotIn('autoplay',attrs)
@@ -74,11 +74,17 @@ class WebsiteTests(unittest.TestCase):
         for url in re.findall(r'url\("([^"\)]+)"\)', self.css):
             self.assertTrue((ROOT/'docs'/url).is_file(), url)
         self.assertTrue((ROOT/'docs/assets/site/fonts/LICENSE.txt').is_file())
+    def test_archival_3d_is_separate_and_accurately_labeled(self):
+        self.assertIn('id="motion-study"', self.html)
+        self.assertIn('Blender reference · Not native API output', self.html)
+        self.assertIn('does not add a Blender dependency', self.html)
+        self.assertIn('80 unique frames', self.html)
+        self.assertIn("src: 'assets/motion-elements/chrome.mp4'", self.js)
     def test_self_contained_assets_and_comparison_targets(self):
         self.assertNotIn('@import',self.css)
         self.assertNotIn('fonts.googleapis',self.html)
         self.assertEqual({a['data-compare'] for _,a in self.dom.items if 'data-compare' in a},{'cat','dog','astronaut'})
-        self.assertEqual({a['data-film'] for _,a in self.dom.items if 'data-film' in a},{'cat','dog','astronaut'})
+        self.assertEqual({a['data-film'] for _,a in self.dom.items if 'data-film' in a},{'cat','dog','astronaut','chrome'})
         for suffix in ('-comparison.mp4','-poster.png','-frames.png'):
             self.assertIn(suffix,self.js)
 if __name__=='__main__': unittest.main()

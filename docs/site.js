@@ -39,6 +39,12 @@ comparison.addEventListener('play', syncPreviews);
 comparison.addEventListener('pause', syncPreviews);
 comparison.addEventListener('ended', syncPreviews);
 const films = {
+  chrome: {
+    title: 'Chrome Knot',
+    type: 'BLENDER EEVEE REFERENCE · 3.2 SECONDS · SILENT',
+    src: 'assets/motion-elements/chrome.mp4',
+    note: 'One archival procedural 3D loop, rendered in Blender EEVEE and encoded locally. Not native model output or a feature of the public CLI. 80 unique frames, 512 × 512, no API calls.'
+  },
   astronaut: {
     title: 'A Signal in Space',
     type: 'PUBLIC CLI FILM · 7.68 SECONDS · SILENT',
