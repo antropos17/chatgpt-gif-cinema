@@ -140,6 +140,21 @@ class OfflineTests(unittest.TestCase):
         with Image.open(prefix + "-last.png") as last:
             self.assertEqual(last.getpixel((0, 0)), (0, 0, 255))
 
+    def test_endpoint_force_cannot_replace_either_source_path(self):
+        raw = animation()
+        for suffix in ("first", "last"):
+            with self.subTest(suffix=suffix):
+                folder = self.root / suffix
+                folder.mkdir()
+                source = folder / f"edge-{suffix}.png"
+                source.write_bytes(raw)  # GIF decoding follows bytes, not the suffix.
+                args = build_parser().parse_args([
+                    "endpoints", str(source), "-o", str(folder / "edge"), "--force"])
+                with self.assertRaisesRegex(ValueError, "must not replace an input"):
+                    args.func(args)
+                self.assertEqual(source.read_bytes(), raw)
+                self.assertEqual(list(folder.iterdir()), [source])
+
 
 @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg required for integration tests")
 class FilmTests(unittest.TestCase):

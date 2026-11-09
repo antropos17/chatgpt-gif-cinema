@@ -55,9 +55,12 @@ class ExampleGalleryTests(unittest.TestCase):
 
     def test_expanded_second_frame_is_rejected_before_any_decoder_dispatch(self):
         raw = self.expanded_canvas_gif()
-        # Confirm the audit fixture really expands Pillow's composed canvas.
-        frames, _, _ = cli.validate_gif(io.BytesIO(raw))
-        self.assertEqual([frame.size for frame in frames], [(16, 16), (1016, 1016)])
+        # Older supported Pillow versions clip this descriptor; newer ones grow
+        # the canvas. Assert encoded geometry independently of decoder behavior.
+        facts = cli.check_gif_limits(raw)
+        self.assertTrue(facts['canvas_expanded'])
+        self.assertEqual((facts['width'], facts['height']), (1016, 1016))
+        self.assertEqual(facts['frames'], 2)
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "expanded.gif"
             path.write_bytes(raw)

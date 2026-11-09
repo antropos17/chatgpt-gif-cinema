@@ -413,11 +413,14 @@ def save_report(output, data, inputs, force=False):
 
 def endpoints(args):
     frames,_,_=gif_frames(args.gif)
-    p=Path(args.output);p.parent.mkdir(parents=True,exist_ok=True)
+    p=Path(args.output)
     outputs = [Path(str(p)+"-first.png"), Path(str(p)+"-last.png")]
+    if Path(args.gif).resolve() in [path.resolve() for path in outputs]:
+        raise ValueError("Endpoint output must not replace an input file")
     force = getattr(args, "force", False)
     if not force and any(path.exists() for path in outputs):
         raise ValueError("Endpoint output already exists; use --force to replace it")
+    p.parent.mkdir(parents=True,exist_ok=True)
     for frame, path in zip([frames[0], frames[-1]], outputs):
         data = io.BytesIO()
         frame.save(data, format="PNG")
