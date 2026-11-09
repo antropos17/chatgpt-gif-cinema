@@ -93,6 +93,64 @@ class MotionTests(unittest.TestCase):
         self.assertTrue((report_dir / "contact-sheet.png").is_file())
         self.assertEqual(report["contact_sheet_frame_indices"], [0, 1, 2])
 
+    def native_fixture(self, *, transparent=False, unused_transparency=False):
+        """Full requested profile with cheap flat-color synthetic drawings."""
+        frames = []
+        palette = [0, 0, 0, 230, 30, 100, 40, 80, 200] + [0] * (768 - 9)
+        for index in range(64):
+            frame = Image.new("P", (512, 512), 1 + index % 2)
+            frame.putpalette(palette)
+            if transparent:
+                frame.putpixel((0, 0), 0)
+            frames.append(frame)
+        stream = io.BytesIO()
+        options = {"transparency": 0} if transparent or unused_transparency else {}
+        frames[0].save(stream, format="GIF", save_all=True,
+                       append_images=frames[1:], duration=50, loop=0,
+                       optimize=False, disposal=2, **options)
+        return stream.getvalue()
+
+    def inspect_fixture(self, raw, name):
+        plan = self.root / "higgsfield-tool-64"
+        if not plan.exists():
+            self.compile()
+        source = self.root / (name + ".gif")
+        source.write_bytes(raw)
+        target = self.root / (name + "-review")
+        self.run_cmd("inspect", source, "--request", plan / "chrome-trefoil.request.json", "--out", target)
+        self.assertEqual(source.read_bytes(), raw)
+        return json.loads((target / "inspection.json").read_text())
+
+    def test_composited_transparency_prevents_opaque_match(self):
+        report = self.inspect_fixture(self.native_fixture(transparent=True), "transparent")
+        self.assertEqual(report["technical_status"], "decoded-with-warnings")
+        self.assertEqual(report["visual_status"], "human-review-required")
+        self.assertFalse(report["actual"]["all_frames_opaque"])
+        self.assertEqual(report["actual"]["transparent_frame_indices"], list(range(64)))
+        self.assertEqual(len(report["warnings"]), 1)
+        self.assertIn("transparent pixels", report["warnings"][0])
+
+    def test_later_canvas_expansion_prevents_dimension_match(self):
+        raw = bytearray(self.native_fixture())
+        # Full-frame descriptors in this controlled fixture: move frame two down
+        # one pixel without changing its compressed image or the logical screen.
+        descriptor = b"\x2c\x00\x00\x00\x00\x00\x02\x00\x02"
+        offsets = [i for i in range(len(raw)) if raw[i:i + len(descriptor)] == descriptor]
+        self.assertEqual(len(offsets), 64)
+        raw[offsets[1] + 3] = 1
+        report = self.inspect_fixture(bytes(raw), "expanded")
+        self.assertEqual(report["actual"]["frame_dimensions"][0], [512, 512])
+        self.assertEqual(report["actual"]["frame_dimensions"][1], [512, 513])
+        self.assertEqual(report["technical_status"], "decoded-with-warnings")
+        self.assertEqual(report["visual_status"], "human-review-required")
+        self.assertTrue(any("dimensions" in warning for warning in report["warnings"]))
+
+    def test_unused_transparency_metadata_does_not_reject_opaque_pixels(self):
+        report = self.inspect_fixture(self.native_fixture(unused_transparency=True), "opaque")
+        self.assertEqual(report["technical_status"], "requested-format-matched")
+        self.assertTrue(report["actual"]["all_frames_opaque"])
+        self.assertEqual(report["actual"]["transparent_frame_indices"], [])
+
     def test_malformed_metadata_is_a_validation_error(self):
         for value in ([], {}, None, 7):
             with self.assertRaises(ValueError):

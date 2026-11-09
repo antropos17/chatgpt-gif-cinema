@@ -81,11 +81,17 @@ scanner and full decoder, with encoded byte, frame, per-frame pixel and cumulati
 pixel budgets. A still image, invalid/truncated GIF or unsafe input is rejected.
 
 The receipt retains the exact request, its file hash and actual GIF hash. It reports
-actual dimensions, frame count, all delays, duration, loop metadata, exact unique
+every composited frame's dimensions, actual transparent-frame indices, frame count,
+all delays, duration, loop metadata, exact unique
 composited-frame count, adjacent-frame pixel differences and the last-to-first
 pixel difference. The contact sheet includes start, quarter, half, three-quarter
 and final frames, with exact indices in the receipt. Infinite loop metadata is
-`0`; a missing extension or finite repeat count is flagged.
+`0`; a missing extension or finite repeat count is flagged. Any frame with dimensions
+other than 512×512 is flagged, including later canvas expansion. For the opaque
+Higgsfield profile, actual transparent pixels in composited RGBA frames are flagged;
+an unused palette transparency index alone is not a mismatch. Alpha inspection
+streams one frame at a time after the shared bounded scanner and decoder accept
+the same immutable input bytes.
 
 A technically decodable mismatch produces warnings and `decoded-with-warnings`,
 not an invented success. A format match produces `requested-format-matched`.

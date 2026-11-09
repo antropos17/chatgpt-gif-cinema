@@ -134,10 +134,19 @@ def read_request(path):
 
 
 def inspect_result(args):
-    from PIL import Image, ImageChops, ImageStat
+    from PIL import Image, ImageChops, ImageStat, ImageSequence
     request, request_hash = read_request(args.request)
     raw = read_gif_bytes(args.gif)
     frames, durations, loop = validate_gif(io.BytesIO(raw))
+    # The shared preflight and full decode above validate these immutable bytes
+    # against all ingestion budgets before any additional RGBA allocation. Stream
+    # one composited RGBA frame at a time, never retain a second frame collection.
+    transparent_indices = []
+    with Image.open(io.BytesIO(raw)) as image:
+        for index, frame in enumerate(ImageSequence.Iterator(image)):
+            if frame.convert("RGBA").getchannel("A").getextrema()[0] < 255:
+                transparent_indices.append(index)
+    dimensions = [list(frame.size) for frame in frames]
     p = request["parameters"]
     hashes = [sha(frame.tobytes()) for frame in frames]
     def difference(a, b):
@@ -147,13 +156,15 @@ def inspect_result(args):
         warnings.append("Decoded frame count differs from requested frame count.")
     if any(d != p["frame_duration_ms"] for d in durations):
         warnings.append("Decoded frame delays differ from requested delays.")
-    if frames[0].size != (512, 512):
+    if any(frame.size != (512, 512) for frame in frames):
         warnings.append("Decoded dimensions differ from requested 512x512.")
+    if p.get("background") == "opaque" and transparent_indices:
+        warnings.append("Composited GIF frames contain transparent pixels despite requested opaque background.")
     if loop != 0:
         warnings.append("GIF does not declare infinite looping.")
     if len(set(hashes)) < 2:
         warnings.append("All decoded frames are identical; no visible motion detected.")
-    report = {"schema_version": 1, "request_sha256": request_hash, "request": request, "gif_sha256": sha(raw), "bytes": len(raw), "actual": {"frames": len(frames), "unique_decoded_frames": len(set(hashes)), "width": frames[0].width, "height": frames[0].height, "duration_ms": sum(durations), "frame_durations_ms": durations, "loop": loop}, "first_last_pixel_mae_0_255": difference(frames[-1], frames[0]), "adjacent_pixel_mae_0_255": [difference(a, b) for a, b in zip(frames, frames[1:])], "warnings": warnings, "technical_status": "decoded-with-warnings" if warnings else "requested-format-matched", "visual_status": "human-review-required", "provenance_note": "Caller-supplied request association, not authenticated proof of provider origin. Pixel metrics cannot establish seamlessness, geometry quality or genuine object motion."}
+    report = {"schema_version": 1, "request_sha256": request_hash, "request": request, "gif_sha256": sha(raw), "bytes": len(raw), "actual": {"frames": len(frames), "unique_decoded_frames": len(set(hashes)), "width": frames[0].width, "height": frames[0].height, "frame_dimensions": dimensions, "all_frames_opaque": not transparent_indices, "transparent_frame_indices": transparent_indices, "duration_ms": sum(durations), "frame_durations_ms": durations, "loop": loop}, "first_last_pixel_mae_0_255": difference(frames[-1], frames[0]), "adjacent_pixel_mae_0_255": [difference(a, b) for a, b in zip(frames, frames[1:])], "warnings": warnings, "technical_status": "decoded-with-warnings" if warnings else "requested-format-matched", "visual_status": "human-review-required", "provenance_note": "Caller-supplied request association, not authenticated proof of provider origin. Pixel metrics cannot establish seamlessness, geometry quality or genuine object motion."}
     with fresh_output(args.out) as out:
         frames[0].save(out / "first.png")
         frames[-1].save(out / "last.png")
