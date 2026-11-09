@@ -7,6 +7,10 @@ existing inputs, creates local title GIFs, and writes strict runtime inputs. It 
 not invent story beats, call a model, choose takes, or claim visual acceptance.
 The agent writes the storyboard with the user's brief and source review.
 
+Run examples from the installed skill folder, but put all output under your own
+project folder (the examples use `../project`). Do not write project outputs into
+the installed skill.
+
 ## Storyboard schema 1
 
 Top level:
@@ -76,7 +80,7 @@ contains 64 lowercase hexadecimal characters. `review_notes` is required nonempt
 text, at most 4,000 characters. Unknown fields fail. Supply 1–64 selections.
 
 ```bash
-python scripts/story_project.py compile story.json --takes takes.json --out output/selected-v1
+python scripts/story_project.py compile story.json --takes takes.json --out ../project/selected-v1
 ```
 
 The helper reads the GIF once into a bounded buffer and hashes, validates and copies
@@ -89,8 +93,8 @@ Partial selection is supported. Continue with the **portable** storyboard and a
 manifest containing only the next missing shots:
 
 ```bash
-python scripts/story_project.py compile output/selected-v1/storyboard.json \
-  --takes next-takes.json --out output/selected-v2
+python scripts/story_project.py compile ../project/selected-v1/storyboard.json \
+  --takes next-takes.json --out ../project/selected-v2
 ```
 
 The previous project and original media remain unchanged. The whole project folder
@@ -106,9 +110,9 @@ Try the full selection workflow without generating anything:
 
 ```bash
 python scripts/story_project.py compile assets/example/storyboard.pending.json \
-  --takes assets/example/takes.example.json --out output/selected-example
-python -m gif_cinema render output/selected-example/film.json --execute \
-  --max-api-calls 0 --out output/selected-render
+  --takes assets/example/takes.example.json --out ../project/selected-example
+python -m gif_cinema render ../project/selected-example/film.json --execute \
+  --max-api-calls 0 --out ../project/selected-render
 ```
 
 This maps the **same three bundled astronaut GIFs** into pending slots and adds the
@@ -159,10 +163,14 @@ The export helper uses FFmpeg palette generation/quantization and decodes the ac
 GIF before publishing it without overwriting. Width is 64–640; FPS is 5, 10, 20 or 25
 for exact centisecond timing. It preserves aspect ratio with even height, removes
 sound, and defaults to no loop extension. `--repeat` uses an infinite loop. It checks
-actual timing against the MP4 within one GIF frame and applies runtime frame/pixel
-limits. It does not promise platform-specific compatibility or a particular file size.
+actual timing against the MP4 within one GIF frame and applies the full-frame reviewer's 512-frame, 64-Mi-pixel and 32-MiB limits. Outputs are
+checked against those same limits before publication. It does not promise platform-specific compatibility or a particular file size.
 
-Use a local verified MP4. Export is bounded to 300 seconds per media subprocess.
+Use a local MP4 no larger than 512 MiB. Export first snapshots a regular file,
+records the exact movie SHA-256, then forces local MP4 decoding with external data
+references disabled. A renamed network playlist is rejected instead of fetched.
+Source dimensions are bounded to the runtime's 16-Mi-pixel decode budget. Export is
+bounded to 300 seconds per media subprocess.
 If an export fails, no previous accepted file is replaced. For long/high-resolution
 stories use a smaller GIF, lower supported FPS, or chapters plus the MP4 master.
 
@@ -173,9 +181,9 @@ The companion helper groups consecutive **whole shots**, splitting only at cuts:
 
 ```bash
 python scripts/story_chapters.py PROJECT/film.json --render RENDER \
-  --out output/chapters --width 320 --fps 10 --max-seconds 15 --dry-run
+  --out ../project/chapters --width 320 --fps 10 --max-seconds 15 --dry-run
 python scripts/story_chapters.py PROJECT/film.json --render RENDER \
-  --out output/chapters --width 320 --fps 10 --max-seconds 15
+  --out ../project/chapters --width 320 --fps 10 --max-seconds 15
 ```
 
 Dry-run verifies the script, saved GIF hashes and measured delays, completed manifest,
@@ -205,8 +213,11 @@ at 10 fps. This is the same existing footage, not additional character animation
 - `--max-seconds` is an integer from 1 to 120 (default 15). It is an upper bound, not
   a promise to make every chapter exactly that long. The frame/pixel budget may split
   sooner. One shot that cannot fit is rejected instead of silently cutting its action.
-- Runtime limits apply to each GIF: at most 1,500 decoded frames, 160 megapixels
-  across frames and 128 MiB. Combined GIF files are capped at 512 MiB.
+- Full-frame review limits apply to each delivered GIF: at most 512 decoded frames,
+  64 Mi pixels across frames and 32 MiB. Chapter planning uses the same capacity,
+  splitting at shot boundaries before encoding. A single shot that exceeds it needs
+  lower width/FPS; raising `--max-seconds` cannot bypass the review limit.
+  Combined GIF files are capped at 512 MiB.
 - The completed film is limited to one hour and 512 MiB. JSON inputs are at most
   1 MiB. Only regular local files, version 1 render records and hard cuts are supported.
 - Effective dimensions and FPS come from the completed render's probe, including
