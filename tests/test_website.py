@@ -9,9 +9,9 @@ class Elements(HTMLParser):
     def handle_starttag(self, tag, attrs): self.items.append((tag, dict(attrs)))
 class WebsiteTests(unittest.TestCase):
     def setUp(self):
-        self.html = (ROOT/'docs/index.html').read_text(); self.dom = Elements(); self.dom.feed(self.html)
-        self.js = (ROOT/'docs/site.js').read_text()
-        self.css = (ROOT/'docs/site.css').read_text()
+        self.html = (ROOT/'docs/index.html').read_text(encoding="utf-8"); self.dom = Elements(); self.dom.feed(self.html)
+        self.js = (ROOT/'docs/site.js').read_text(encoding="utf-8")
+        self.css = (ROOT/'docs/site.css').read_text(encoding="utf-8")
     def test_local_links_and_media_exist(self):
         for _, attrs in self.dom.items:
             for key in ('src','poster','href'):
