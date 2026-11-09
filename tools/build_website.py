@@ -12,6 +12,7 @@ FILES = ['index.html', 'site.css', 'site.js',
 for character in ('astronaut', 'cat', 'dog'):
     FILES += [f'assets/showcase/{character}-{suffix}' for suffix in ('comparison.mp4', 'poster.png', 'frames.png')]
 FILES += ['assets/showcase/astronaut-native-film.mp4', 'assets/showcase/cat-film.mp4']
+FILES += ['assets/site/fonts/' + name for name in ('open-sans-regular.woff', 'open-sans-semibold.woff', 'open-sans-bold.woff', 'LICENSE.txt')]
 for name in FILES:
     source, target = ROOT / 'docs' / name, DEST / name
     if not source.is_file():
