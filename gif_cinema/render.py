@@ -16,6 +16,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageStat
 
 from . import cli
 from .durability import durable_write, sync_directory
+from .audio import MAX_AUDIO_SECONDS, prepare_audio, verify_film_audio
 
 VERSION = 1
 ASSEMBLY_VERSION = 2  # Invalidate older exports that could lose the final frame.
@@ -62,7 +63,7 @@ def fields(value, allowed, label):
 
 
 def load_script(path, args):
-    """Validate the entire script and every local input before any API request."""
+    """Validate script/local inputs; strict audio decoding is execution preflight."""
     if path.stat().st_size > 1024 * 1024:
         raise ValueError("Script exceeds 1 MiB")
     script = json.loads(path.read_text(encoding="utf-8-sig"))
@@ -198,7 +199,7 @@ def cached(root, record, shot):
     return True
 
 
-def probe(path, width, height, expected_seconds, fps, shots):
+def probe(path, width, height, expected_seconds, fps, shots, expected_audio=False):
     command = ["ffprobe", "-v", "error", "-count_frames", "-select_streams", "v:0", "-show_entries", "stream=codec_name,width,height,duration,nb_read_frames", "-of", "json", str(path)]
     result = cli.run_media(command)
     info = json.loads(result.stdout)["streams"][0]
@@ -210,6 +211,8 @@ def probe(path, width, height, expected_seconds, fps, shots):
         raise RuntimeError("Encoded film failed codec, dimensions or duration verification")
     # Decode all frames, not just the container metadata.
     cli.run_media(["ffmpeg", "-nostdin", "-v", "error", "-xerror", "-i", str(path), "-map", "0:v:0", "-f", "null", "-"])
+    if expected_audio:
+        info["audio"] = verify_film_audio(path, expected_seconds)
     return info
 
 
@@ -311,6 +314,8 @@ def run(args):
     plan = {"title": script["title"], "mode": "execute" if args.execute else "dry-run", "minimum_new_api_calls": actions.count("generate"),
             "max_api_calls_including_retries": args.max_api_calls, "cost": "unknown; usage is not a currency quote",
             "shots": [{"id": s["id"], "action": a, "expected_duration_ms": s["expected_ms"]} for s, a in zip(script["shots"], actions)]}
+    if script.get("audio_path"):
+        plan["audio_validation"] = "pending execution preflight; dry-run does not decode audio"
     print(json.dumps(plan, indent=2), flush=True)
     if not args.execute:
         return plan
@@ -321,6 +326,21 @@ def run(args):
     require_film_capabilities(audio=bool(script.get("audio_path")))
     if not inspect_tool("ffprobe")["available"]:
         raise RuntimeError("ffprobe could not run before execution; no API requests made")
+    if script.get("audio_path"):
+        seconds = sum(max(1, round(shot["expected_ms"] * script["fps"] / 1000))
+                      for shot in script["shots"]) / script["fps"]
+        if seconds > MAX_AUDIO_SECONDS:
+            raise ValueError("Films with audio must be at most 3600 seconds")
+    with prepare_audio(script.get("audio_path")) as audio:
+        script = dict(script)
+        if audio:
+            script["audio_path"] = audio["path"]
+            script["audio_preflight"] = {key: value for key, value in audio.items() if key != "path"}
+        return execute(args, script_path, script, root, manifest_path, manifest, actions)
+
+
+def execute(args, script_path, script, root, manifest_path, manifest, actions):
+    """Run only after local preflight; audio_path refers to validated snapshot bytes."""
     if actions.count("generate") and not os.environ.get("OPENAI_API_KEY"):
         raise RuntimeError("Set OPENAI_API_KEY to execute generated shots; imported shots do not require it")
     if script_path.is_relative_to(root):
@@ -334,6 +354,10 @@ def run(args):
         manifest["runs"].append(run_record)
         manifest["title"] = script["title"]
         manifest["script_sha256"] = digest(script_path.read_bytes())
+        if "audio_preflight" in script:
+            manifest["audio_preflight"] = script["audio_preflight"]
+        else:
+            manifest.pop("audio_preflight", None)
         save(manifest_path, manifest)
         records = []
         try:
@@ -411,13 +435,13 @@ def run(args):
                 save(manifest_path, manifest)
                 records.append(record)
             diagnostics(root, script, records)
-            movie_fingerprint = digest(encoded({"assembly_version": ASSEMBLY_VERSION, "shots": [r["sha256"] for r in records], "width": script["width"], "height": script["height"], "fps": script["fps"], "audio": digest(script["audio_path"].read_bytes()) if script.get("audio_path") else None}))
+            movie_fingerprint = digest(encoded({"assembly_version": ASSEMBLY_VERSION, "shots": [r["sha256"] for r in records], "width": script["width"], "height": script["height"], "fps": script["fps"], "audio": script.get("audio_preflight", {}).get("sha256")}))
             old_film = manifest.get("film", {})
             film_path = root / "film.mp4"
             expected_frames = sum(max(1, round(r["duration_ms"] * script["fps"] / 1000)) for r in records)
             expected = expected_frames / script["fps"]
             if old_film.get("fingerprint") == movie_fingerprint and film_path.exists() and digest(film_path.read_bytes()) == old_film.get("sha256"):
-                info = probe(film_path, script["width"], script["height"], expected, script["fps"], len(records))
+                info = probe(film_path, script["width"], script["height"], expected, script["fps"], len(records), expected_audio=bool(script.get("audio_path")))
             else:
                 # Stage the entire movie and verify before replacing an accepted export.
                 with tempfile.TemporaryDirectory(dir=root, prefix="encode-") as staging:
@@ -425,7 +449,7 @@ def run(args):
                     cli.film(argparse.Namespace(clips=[local_path(root, r["output"]) for r in records], output=staged,
                                                width=script["width"], height=script["height"], fps=script["fps"],
                                                audio=script.get("audio_path"), force=False))
-                    info = probe(staged, script["width"], script["height"], expected, script["fps"], len(records))
+                    info = probe(staged, script["width"], script["height"], expected, script["fps"], len(records), expected_audio=bool(script.get("audio_path")))
                     if film_path.exists() and (not old_film or digest(film_path.read_bytes()) != old_film.get("sha256")):
                         raise ValueError("Existing film is untracked or changed; refusing to overwrite")
                     if film_path.exists():
@@ -446,9 +470,13 @@ def run(args):
                 clock = end
             cli.write_result(root / "captions.srt", "\n".join(subtitles).encode("utf-8"), force=True)
             run_record.update(status="complete", film_seconds=float(info["duration"]), verification="decoded-h264; narrative-human-review-required")
+            if script.get("audio_path"):
+                run_record["verification"] = "decoded-h264-and-aac; narrative-human-review-required"
             save(manifest_path, manifest)
             receipt = {**run_record, "film": str(film_path), "usage_from_completed_shots_including_reused": [r["usage"] for r in records if r.get("usage")],
                        "cost": "not calculated; imported shots made no new API calls", "continuity": "human-review-required"}
+            if "audio" in info:
+                receipt["audio"] = info["audio"]
             save(root / "receipt.json", receipt)
             print(json.dumps(receipt, indent=2))
             return receipt

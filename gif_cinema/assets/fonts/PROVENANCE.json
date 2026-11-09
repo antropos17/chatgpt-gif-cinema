@@ -1,0 +1,15 @@
+{
+  "file": "NotoSans-Regular.ttf",
+  "unmodified": true,
+  "source": "Unmodified copy of a preinstalled font file with accompanying Debian-format copyright notice",
+  "upstream": "https://github.com/googlei18n/noto-fonts",
+  "version": "2.004",
+  "sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d",
+  "license": "SIL Open Font License 1.1",
+  "coverage_generator": "fontTools 4.61.1; getBestCmap, nonzero glyph IDs; not a runtime dependency",
+  "local_source_file": "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf",
+  "local_copyright_file": "/usr/share/doc/fonts-noto-core/copyright",
+  "copyright_file_sha256": "075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125",
+  "upstream_revision": null,
+  "provenance_limit": "No upstream release/commit or package-manager registration was verified; font bytes and the accompanying license notice were inspected locally."
+}

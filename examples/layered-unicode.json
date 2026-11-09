@@ -1,0 +1,17 @@
+{
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "title": "Русский и Azərbaycan dili",
+  "width": 640,
+  "height": 360,
+  "fps": 25,
+  "duration_ms": 800,
+  "loop": true,
+  "matte": "#111725",
+  "layers": [
+    {"id": "background", "type": "rect", "size": [640, 360], "fill": "#111725"},
+    {"id": "russian", "type": "text", "text": "Привет, мир!", "font_id": "noto-sans-regular-2.004", "font_size": 44, "fill": "#f2e8d8", "keyframes": [{"at": 0, "x": 0.48, "y": 0.28, "easing": "smootherstep"}, {"at": 0.5, "x": 0.52, "easing": "smootherstep"}, {"at": 1, "x": 0.48}]},
+    {"id": "azerbaijani", "type": "text", "text": "Salam, Azərbaycan!", "font_id": "noto-sans-regular-2.004", "font_size": 38, "fill": "#bed8e5", "keyframes": [{"at": 0, "x": 0.52, "y": 0.52, "easing": "smootherstep"}, {"at": 0.5, "x": 0.48, "easing": "smootherstep"}, {"at": 1, "x": 0.52}]},
+    {"id": "letters", "type": "text", "text": "Ə ə · Ğ ğ · I ı · İ i · Ş ş · Ç ç", "font_id": "noto-sans-regular-2.004", "font_size": 25, "fill": "#a5b3ca", "keyframes": [{"at": 0, "y": 0.77}, {"at": 1}]}
+  ]
+}
