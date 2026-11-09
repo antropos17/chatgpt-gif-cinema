@@ -19,7 +19,7 @@ import stat
 import subprocess
 import tempfile
 
-from . import motion, strokes, text_fonts
+from . import layer_gifs, motion, strokes, text_fonts
 from .motion import run_command
 
 FORMAT = 'gif-cinema-layered-scene'
@@ -167,10 +167,11 @@ def normalize_scene(value):
     special = {'rect': ['size', 'fill', 'stroke', 'stroke_width', 'radius'],
                'ellipse': ['size', 'fill', 'stroke', 'stroke_width'],
                'stroke': ['size', 'points', 'stroke', 'stroke_width'],
-               'text': ['text', 'font_size', 'fill', 'font_id', 'font_sha256'], 'image': ['source', 'size', 'sha256']}
+               'text': ['text', 'font_size', 'fill', 'font_id', 'font_sha256'],
+               'image': ['source', 'size', 'sha256'], 'gif': ['source', 'size', 'sha256', 'playback']}
     for layer in layers:
         if not isinstance(layer, dict) or not isinstance(layer.get('type'), str) or layer['type'] not in special:
-            raise ValueError('Layer type must be rect, ellipse, stroke, text or image')
+            raise ValueError('Layer type must be rect, ellipse, stroke, text, image or gif')
         kind = layer['type']
         require_fields(layer, common + special[kind], ['id', 'type'], 'Layer')
         name = layer['id']
@@ -219,6 +220,10 @@ def normalize_scene(value):
             motion.number(row['stroke_width'], 'stroke_width', 1, 128, True)
         else:
             row['source'] = source_name(row.get('source'))
+            if kind == 'gif':
+                row.setdefault('playback', 'once')
+                if row['playback'] not in ('once', 'loop'):
+                    raise ValueError('GIF layer playback must be once or loop')
             if 'sha256' in row and (not isinstance(row['sha256'], str) or not re.fullmatch(r'[0-9a-f]{64}', row['sha256'])):
                 raise ValueError('Asset sha256 must be a lowercase SHA-256 digest')
         normalized.append(row)
@@ -256,7 +261,7 @@ def raster_budget(scene):
             supersampled = high_size[0] * high_size[1]
         else:
             size = layer['size']
-            supersampled = size[0] * size[1] * SUPERSAMPLE ** 2 if layer['type'] != 'image' else 0
+            supersampled = size[0] * size[1] * SUPERSAMPLE ** 2 if layer['type'] not in ('image', 'gif') else 0
         area = size[0] * size[1]
         if area > MAX_LAYER_RASTER_PIXELS or supersampled > MAX_SUPERSAMPLED_RASTER_PIXELS:
             raise ValueError(f'Layer {layer["id"]} exceeds raster/supersampling pixel budget')
@@ -353,9 +358,11 @@ def read_assets(scene, base):
     base = Path(base).resolve()
     assets, pixels, total_bytes = {}, 0, 0
     for layer in scene['layers']:
-        if layer['type'] != 'image':
+        if layer['type'] not in ('image', 'gif'):
             continue
         name = layer['source']
+        if name in assets and assets[name]['kind'] != layer['type']:
+            raise ValueError('The same source cannot be both image and GIF layer')
         if name not in assets:
             path = (base / name).resolve()
             if not path.is_relative_to(base):
@@ -364,19 +371,32 @@ def read_assets(scene, base):
             total_bytes += len(raw)
             if total_bytes > MAX_TOTAL_ASSET_BYTES:
                 raise ValueError('Total asset bytes exceed budget')
-            with Image.open(io.BytesIO(raw)) as source:
-                if source.format not in ('PNG', 'JPEG', 'WEBP') or getattr(source, 'n_frames', 1) != 1:
-                    raise ValueError('Layers support still PNG/JPEG/WebP only; animated assets are not supported')
-                area = source.width * source.height
-                pixels += area
-                if area > MAX_ASSET_PIXELS or pixels > MAX_TOTAL_ASSET_PIXELS:
-                    raise ValueError('Assets exceed decoded pixel budget')
-                image = ImageOps.exif_transpose(source).convert('RGBA')
-                image.info.clear()
-            assets[name] = {'raw': raw, 'rgba': image, 'sha256': digest(raw)}
+            if layer['type'] == 'gif':
+                decoded = layer_gifs.decode(raw, MAX_ASSET_PIXELS, MAX_TOTAL_ASSET_PIXELS - pixels)
+                pixels += sum(frame.width * frame.height for frame in decoded['frames'])
+            else:
+                with Image.open(io.BytesIO(raw)) as source:
+                    if source.format not in ('PNG', 'JPEG', 'WEBP') or getattr(source, 'n_frames', 1) != 1:
+                        raise ValueError('Image layers support still PNG/JPEG/WebP only; use a gif layer for animation')
+                    area = source.width * source.height
+                    pixels += area
+                    if area > MAX_ASSET_PIXELS or pixels > MAX_TOTAL_ASSET_PIXELS:
+                        raise ValueError('Assets exceed decoded pixel budget')
+                    image = ImageOps.exif_transpose(source).convert('RGBA')
+                    image.info.clear()
+                decoded = {'rgba': image}
+            assets[name] = {'raw': raw, **decoded, 'sha256': digest(raw), 'kind': layer['type']}
         if layer.get('sha256', assets[name]['sha256']) != assets[name]['sha256']:
             raise ValueError(f'Asset changed: {name}')
     return assets
+
+
+def fit_image(source, size):
+    from PIL import Image
+    source = source.copy()
+    source.thumbnail(tuple(size), Image.Resampling.LANCZOS)
+    scale = min(size[0] / source.width, size[1] / source.height)
+    return source.resize((max(1, round(source.width * scale)), max(1, round(source.height * scale))), Image.Resampling.LANCZOS)
 
 
 def rasterize(layer, assets):
@@ -384,12 +404,8 @@ def rasterize(layer, assets):
     kind = layer['type']
     if kind == 'stroke':
         return strokes.rasterize(layer, strokes.prepare_path(layer['points']), 1, SUPERSAMPLE)
-    if kind == 'image':
-        source = assets[layer['source']]['rgba'].copy()
-        source.thumbnail(tuple(layer['size']), Image.Resampling.LANCZOS)
-        # Enlarge small images to their author-chosen box, preserving aspect ratio.
-        scale = min(layer['size'][0] / source.width, layer['size'][1] / source.height)
-        return source.resize((max(1, round(source.width * scale)), max(1, round(source.height * scale))), Image.Resampling.LANCZOS)
+    if kind in ('image', 'gif'):
+        return fit_image(assets[layer['source']]['rgba'], layer['size'])
     scale = SUPERSAMPLE
     if kind == 'text':
         font, bounds, high_size, size = text_layout(layer)
@@ -414,12 +430,22 @@ def prepare_scene(path):
     raw = read_regular(path, MAX_SCENE_BYTES)
     scene = parse_scene(raw)
     assets = read_assets(scene, path.parent)
+    cached_gif_pixels = layer_gifs.cache_budget(scene, assets)
     # Cache premultiplication once, not a conversion of the full source on each frame.
-    rasters = {layer['id']: rasterize(layer, assets).convert('RGBa') for layer in scene['layers']}
+    rasters, gif_rasters = {}, {}
+    for layer in scene['layers']:
+        if layer['type'] == 'gif':
+            variants = [fit_image(frame, layer['size']).convert('RGBa')
+                        for frame in assets[layer['source']]['frames']]
+            gif_rasters[layer['id']] = variants
+            rasters[layer['id']] = variants[0]
+        else:
+            rasters[layer['id']] = rasterize(layer, assets).convert('RGBa')
     paths = {layer['id']: strokes.prepare_path(layer['points'])
              for layer in scene['layers'] if layer['type'] == 'stroke'}
     return {'scene': scene, 'assets': assets, 'rasters': rasters,
             'stroke_paths': paths,
+            'gif_rasters': gif_rasters, 'cached_gif_pixels_upper_bound': cached_gif_pixels,
             'source_path': path, 'source_sha256': digest(raw)}
 
 
@@ -444,10 +470,15 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
         if only_layer is not None and layer['id'] != only_layer:
             continue
         state = layer_transform(scene, layer, time_ms)
+        if state is not None and layer['type'] == 'gif':
+            state['source_index'] = layer_gifs.frame_index(prepared['assets'][layer['source']],
+                time_ms - layer['in_ms'], layer['playback'])
         states[layer['id']] = state
         if state is None or state['opacity'] <= 0:
             continue
         raster = prepared['rasters'][layer['id']]
+        if layer['type'] == 'gif':
+            raster = prepared['gif_rasters'][layer['id']][state['source_index']]
         if layer['type'] == 'stroke' and state['reveal'] != 1:
             if state['reveal'] == 0:
                 continue
@@ -521,7 +552,7 @@ def save_bundle(prepared, destination):
     normalized = copy.deepcopy(prepared['scene'])
     snapshots = {}
     for layer in normalized['layers']:
-        if layer['type'] != 'image':
+        if layer['type'] not in ('image', 'gif'):
             continue
         asset = prepared['assets'][layer['source']]
         layer['source'] = f'assets/{asset["sha256"]}.image'
@@ -554,6 +585,8 @@ def render_scene(path, out, dry_run=False):
             'width': scene['width'], 'height': scene['height'], 'layer_count': len(scene['layers']),
             'loop': scene['loop'], 'scene_sha256': prepared['source_sha256'],
             'raster_budget': raster_budget(scene),
+            'cached_gif_pixels_upper_bound': prepared['cached_gif_pixels_upper_bound'],
+            'gif_timing': layer_gifs.timing_report(scene, prepared['assets']),
             'text_renderer': scene.get('text_renderer'),
             'font_assets': text_fonts.font_receipt(scene),
             'asset_sha256': {name: asset['sha256'] for name, asset in prepared['assets'].items()},
@@ -688,7 +721,9 @@ def render_scene(path, out, dry_run=False):
             'reopen_verified_frames': reopen_verified, 'reopen_scope': 'five sampled frames, all sources snapshotted',
             'pillow': PIL.__version__, 'probe': probe, 'commands': commands, 'samples': samples, 'outputs': outputs,
             'limitations': ['Experimental GIF Cinema format, not Lottie-compatible.',
-                'Still image, text, ellipse, rounded rectangle and authored polyline stroke layers; no articulated animation.',
+                'Still images, existing GIF drawings, text, shapes and authored polyline strokes; no new character poses.',
+                'GIF layers retain native source cadence on the output frame grid; high FPS does not create new drawings.',
+                'GIF source loop metadata is ignored; each GIF layer explicitly plays once with final hold or loops.',
                 'Stroke reveal follows authored point order and arc length; no handwriting generation, tracing or SVG import.',
                 'No expressions, scripts, URLs, font paths/downloads, parenting, masks, blend modes or Lottie import/export.',
                 'Layer order is back to front; opacity uses source-over alpha compositing.',

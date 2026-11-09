@@ -21,7 +21,7 @@ def expected_outputs(scene):
     names.update(f'frames/{index:04}.png' for index in range(count))
     names.update(f"layers/{layer['id']}.png" for layer in scene['layers'])
     names.update(layers.source_name(f"editable/{layer['source']}")
-                 for layer in scene['layers'] if layer['type'] == 'image')
+                 for layer in scene['layers'] if layer['type'] in ('image', 'gif'))
     return names
 
 

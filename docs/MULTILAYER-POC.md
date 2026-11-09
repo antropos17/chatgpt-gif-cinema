@@ -53,8 +53,12 @@ Types:
 
 - `image`: local still PNG/JPEG/WebP `source`, desired pixel `size: [w,h]`.
   Images fit within that box without changing aspect ratio. Animated sources are
-  deliberately rejected in this first experiment. Source EXIF display orientation
+  rejected for this still-image type. Source EXIF display orientation
   is normalized before compositing. Portable saves include a verified `sha256`.
+- `gif`: existing local GIF `source`, desired pixel `size`, and explicit `playback`
+  (`once` with final hold, or `loop`). Native delays, independent layer clocks,
+  alpha/disposal and actual source indices are retained. See [GIF layers](GIF-LAYERS.md)
+  for the no-key example, cache limits, skipped-drawing diagnostics and precise scope.
 - `text`: editable single-line `text`, `font_size`, `fill`, and optional `font_id`.
   The default `pillow-default` preserves the known bundled Aileron font. Explicit
   `noto-sans-regular-2.004` loads the packaged OFL font for Russian/Azerbaijani.
