@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "new_provider_calls": 0,
+  "scope": "Actual local layered-scene renders; not newly model-generated character footage. Original earlier media unchanged.",
+  "assets": [
+    {
+      "file": "local-shapes.gif",
+      "git_blob_sha1": "9d54e08678115d2c4aa36e15c454685a02dad37a",
+      "bytes": 88204,
+      "source": "examples/layered-shapes.json",
+      "source_git_blob_sha1": "dc71684b9c0c81f298822f87495dd9a5f5747cb4",
+      "method": "public local layered-scene render",
+      "width": 320,
+      "height": 180,
+      "frames": 24,
+      "duration_ms": 1000,
+      "loop": 0,
+      "api_calls": 0,
+      "visual_acceptance": "human-review-required"
+    },
+    {
+      "file": "vertical-motion.gif",
+      "git_blob_sha1": "73d2eb74c29f3f29273309240b7634e023bcdf26",
+      "bytes": 966206,
+      "source": "examples/vertical-motion.json",
+      "source_git_blob_sha1": "9b58052253eeb88d57d643835a683ada6dbe89f3",
+      "method": "public local layered-scene render",
+      "width": 540,
+      "height": 960,
+      "frames": 160,
+      "duration_ms": 3200,
+      "loop": 0,
+      "api_calls": 0,
+      "visual_acceptance": "human-review-required"
+    }
+  ]
+}

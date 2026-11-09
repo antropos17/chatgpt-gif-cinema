@@ -24,6 +24,9 @@ MAX_INPUT_BYTES = 128 * 1024 * 1024
 MAX_PAGE_PIXELS = 32 * 1024 * 1024
 MAX_PROJECT_PIXELS = 128 * 1024 * 1024
 MAX_OUTPUT_BYTES = 256 * 1024 * 1024
+MAX_REVIEW_BYTES = 32 * 1024 * 1024
+MAX_REVIEW_FRAMES = 512
+MAX_REVIEW_PIXELS = 64 * 1024 * 1024
 
 
 def digest(raw):
@@ -31,7 +34,7 @@ def digest(raw):
 
 
 def read_bytes(path, limit):
-    descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0))
+    descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_NONBLOCK', 0) | getattr(os, 'O_BINARY', 0))
     with os.fdopen(descriptor, 'rb') as stream:
         info = os.fstat(stream.fileno())
         if not stat.S_ISREG(info.st_mode):
@@ -215,6 +218,8 @@ def prepare(path, font_path=None):
         del frames
         pixels = count * w * h
         total_pixels += pixels
+        if count > MAX_REVIEW_FRAMES or pixels > MAX_REVIEW_PIXELS:
+            raise ValueError('Page exceeds the full-frame review budget; use a shorter/smaller source')
         if pixels > MAX_PAGE_PIXELS or total_pixels > MAX_PROJECT_PIXELS:
             raise ValueError('Story pages exceed the rendered pixel budget; use smaller dimensions or fewer pages')
         if len(set(dimensions)) != 1:
@@ -279,7 +284,11 @@ def export_pages(path, out, font_path=None, dry_run=False):
             frames[0].save(target, save_all=True, append_images=frames[1:], duration=record['frame_durations_ms'],
                            optimize=False, disposal=1)
             del frames
-            encoded = read_bytes(target, cli.MAX_GIF_BYTES)
+            if target.stat().st_size > MAX_REVIEW_BYTES:
+                raise ValueError('Page exceeds the 32 MiB full-frame review limit; use smaller dimensions')
+            encoded = read_bytes(target, min(cli.MAX_GIF_BYTES, MAX_REVIEW_BYTES))
+            cli.check_gif_limits(encoded, max_frames=MAX_REVIEW_FRAMES,
+                                 max_pixel_frames=MAX_REVIEW_PIXELS, fixed_canvas=True)
             with Image.open(io.BytesIO(encoded)) as check:
                 if check.n_frames < 2:
                     raise ValueError('Page has no visible animation after resizing/palette conversion; use larger dimensions or a clearer action')
@@ -293,7 +302,7 @@ def export_pages(path, out, font_path=None, dry_run=False):
             decoded[-1].save(last)
             record.update(output=f'pages/{sid}.gif', gif_sha256=digest(encoded), encoded_frames=len(decoded),
                           encoded_frame_durations_ms=delays, first=f'review/{sid}-first.png',
-                          last=f'review/{sid}-last.png', image_box=list(art))
+                          last=f'review/{sid}-last.png', image_box=list(art), full_frame_review_compatible=True)
             del decoded
             total += len(encoded) + first.stat().st_size + last.stat().st_size
             if total > MAX_OUTPUT_BYTES:

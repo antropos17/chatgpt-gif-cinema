@@ -223,6 +223,7 @@ class StorySkillTests(unittest.TestCase):
         self.assertEqual(sha(movie / 'film.mp4'), digest)
 
     def test_gif_resource_budget_rejects_before_encoder(self):
+        (self.root / 'long.mp4').write_bytes(b'Probe stub, not a valid movie')
         result = argparse.Namespace(stdout=json.dumps({'streams':[{'width':512,'height':512,'duration':'3600'}]}).encode())
         with patch.object(cli, 'run_media', return_value=result) as run:
             with self.assertRaisesRegex(ValueError, 'budget'):

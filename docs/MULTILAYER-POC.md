@@ -23,8 +23,8 @@ python tools/verify_layered_scene.py output/layers-render
 ```
 
 The dry-run writes nothing. The final command reopens and rerenders every frame,
-compares RGBA pixels and verifies all receipt output hashes. All output directories
-must be new. The separate showcase artwork, media and demo generator are not included.
+compares RGBA pixels, requires the complete export inventory and verifies its hashes.
+All output directories must be new. The separate showcase artwork, media and demo generator are not included.
 
 ## Contract
 
@@ -164,8 +164,20 @@ components or symlinks escaping the scene directory are accepted.
 `render` includes the same portable scene under `editable/`, tests five reopened
 frames, and records all exported PNG hashes. `tools/verify_layered_scene.py`
 rerenders every frame from that saved scene, compares its RGBA bytes with the PNG
-and receipt, and checks every output file hash. Pixel reproducibility is scoped
-to the same Pillow/font version. Encoded MP4 bytes may vary across FFmpeg builds.
+and receipt, and checks every required output file hash. The inventory is derived
+from the saved scene, never from whatever subset the receipt chooses to list:
+GIF and MP4 previews, every timeline PNG, every isolated layer PNG, the portable
+scene and its distinct image assets, contact sheet, first/last/closing stills and
+both seam sheets are mandatory. Missing or unexpected inventory entries, duplicate
+JSON fields and malformed SHA-256 values fail verification. Historical receipts
+without the additive layer-preview metadata remain supported. Unlisted auxiliary
+review reports are allowed on disk and are outside this export check.
+
+Pixel reproducibility is scoped to the same Pillow/font version. Encoded MP4 bytes
+may vary across FFmpeg builds. This verifier checks media hashes against the saved
+receipt; it does not independently repeat the renderer's GIF/MP4 decoding checks
+or authenticate a receipt someone has edited together with its files. It does
+not establish artistic quality, loop continuity or human acceptance.
 
 All inputs are read-only. Changed hashes fail export or reopen instead of silently
 substituting another image. Rendering stages files beside a fresh output directory,
@@ -186,6 +198,7 @@ that file-opening helper; confined image aliases are resolved before it is calle
 
 ```sh
 python -m unittest discover -s tests -p test_layers.py -v
+python -m unittest discover -s tests -p test_layered_verifier.py -v
 python -m unittest discover -s tests -v
 python -m compileall -q gif_cinema tools
 ```
@@ -204,6 +217,10 @@ ties at both frame rates, transparent/off-canvas samples, invisible layers,
 unsampled/closing-only visibility, unchanged composites, zero-alpha RGB parity,
 retained-image release,
 real export and historical receipt compatibility.
+`test_layered_verifier.py` covers empty/incomplete inventories, absent files,
+unexpected paths, duplicate fields, malformed hashes, media/PNG tampering, shared
+image assets, relocation and complete real exports without encoder or network use
+during verification.
 
 ## Not a Lottie implementation
 

@@ -134,7 +134,10 @@ class RenderTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
-        self.root = Path(self.temporary.name)
+        # macOS commonly returns /var/... where /var aliases /private/var.
+        # Exercise the canonical temporary directory without weakening the
+        # production renderer's explicit no-symlink output contract.
+        self.root = Path(self.temporary.name).resolve()
         self.path = self.root / 'scene.json'
         for name in ('urllib.request.OpenerDirector.open', 'socket.create_connection'):
             guard = patch(name, side_effect=AssertionError('Network forbidden'))

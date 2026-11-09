@@ -63,7 +63,7 @@ class SkillPackageTests(unittest.TestCase):
             self.assertEqual(len(archive.namelist()), count)
             self.assertEqual(archive.namelist(), sorted(archive.namelist()))
             manifest = json.loads(archive.read('gif-cinema/package-manifest.json'))
-            self.assertEqual(manifest['skill_version'], '0.2.0')
+            self.assertEqual(manifest['skill_version'], '0.2.1')
             self.assertIs(manifest['runtime_bundled'], False)
             self.assertEqual(set(manifest['files']), set(packaging.FILES))
             self.assertEqual(len(manifest['files']) + 1, count)

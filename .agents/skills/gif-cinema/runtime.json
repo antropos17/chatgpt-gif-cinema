@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "skill_version": "0.2.0",
+  "skill_version": "0.2.1",
   "runtime_version": "0.5.0",
   "runtime_repository": "https://github.com/antropos17/chatgpt-gif-cinema.git",
   "runtime_commit": "d3c39b29704f50c2cf6891d91b7750efa52a9915",
