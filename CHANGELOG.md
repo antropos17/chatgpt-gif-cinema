@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — CLI conveniences and cross-platform CI
+
+- Add `gif-cinema doctor`: a no-request readiness report for Python, Pillow,
+  FFmpeg/ffprobe capabilities, the effective model and whether an API key is set.
+- Add `generate --dry-run`, which prints the exact payload without a key, request or writes.
+- Honor `GIF_CINEMA_MODEL` as the default model for `generate` and script shots.
+- Run CI on Linux (Python 3.10, 3.12, 3.13), Windows and macOS; skip the dangling
+  symlink check where Windows denies symlink creation.
+
 ## Unreleased — shot-aligned GIF chapters
 
 - Export a completed film into ordered GIF chapters that keep whole shots together,
