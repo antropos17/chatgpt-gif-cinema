@@ -48,7 +48,7 @@ The sprite example uses all 16 existing drawings and produces a shared-coordinat
 
 Open the review pack's local index.html. Step through every native frame and the seam, then record what you actually inspected. Its review record starts pending; neither frame counts nor a contact sheet manufacture approval. [Sprite contract](SPRITES.md) · [Review workflow](GIF-REVIEW.md).
 
-GIF previews have palette/binary-alpha limits. Shared trimming preserves source alignment; it cannot repair inconsistent source drawings. Runtime coordinates are explicit, not an engine-compatibility claim. The current 0.2.0 source skill includes helper/guidance for these workflows; install its pinned runtime separately.
+GIF previews have palette/binary-alpha limits. Shared trimming preserves source alignment; it cannot repair inconsistent source drawings. Runtime coordinates are explicit, not an engine-compatibility claim. The current source skill includes helper/guidance for these workflows; install its pinned runtime separately.
 
 ## Finishing studies
 

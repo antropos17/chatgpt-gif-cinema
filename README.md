@@ -4,17 +4,23 @@
 
 [Stories](#character-stories) · [Motion](#motion-graphics) · [Sprites & review](#sprites-and-frame-review) · [Finishing](#finishing-studies) · [3D archive](#archived-3d-study) · [Install](#install-the-skill)
 
+<a id="a-wave-from-the-moon"></a>
+<a id="01--one-prompt-one-small-performance"></a>
+
 <p align="center">
-<a href="docs/SHOWCASE.md#cat--walk-jump-curl-up"><img src="docs/assets/showcase/cat-preview.gif" height="170" alt="Cat: existing native and locally finished footage, side by side."></a>
-<a href="docs/RECIPES.md#one-prompt-one-gif"><img src="docs/assets/first-live-render.gif" height="170" alt="An actual original API GIF: a paper-cut astronaut raises a hand."></a>
-<a href="docs/MOTION-DESIGN.md"><img src="docs/assets/motion-elements/chrome.gif" height="170" alt="The original archived chrome rotation, rendered in Blender EEVEE."></a>
+<a href="docs/SHOWCASE.md#cat--walk-jump-curl-up"><picture><img src="docs/assets/showcase/cat-preview.gif" height="150" alt="Cat: existing native and locally finished footage, side by side."></picture></a>
+<a href="docs/RECIPES.md#one-prompt-one-gif"><picture><img src="docs/assets/first-live-render.gif" height="150" alt="An actual original API GIF: a paper-cut astronaut raises a hand."></picture></a>
+<a href="docs/MOTION-DESIGN.md"><picture><img src="docs/assets/motion-elements/chrome.gif" height="150" alt="The original archived chrome rotation, rendered in Blender EEVEE."></picture></a>
 </p>
 
-*A native/finished comparison, an original API take, and an archived Blender render.* [Full catalog & recipes](docs/GALLERY.md) · [Try the no-key film](#make-your-first-film)
+*A native/finished comparison, an original API take, and an archived Blender render.* [Methods & recipes](docs/GALLERY.md) · [Try the no-key film](#make-your-first-film)
 
 <a id="see-it-in-motion"></a>
 <a id="on-the-screen"></a>
 <a id="selected-work"></a>
+
+<a id="a-reply-from-the-stars"></a>
+<a id="02--three-takes-a-complete-little-exchange"></a>
 
 ## Character stories
 
@@ -23,12 +29,12 @@ Existing generated footage, turned into small edits. Titles and layouts do not c
 <table>
 <tr>
 <td width="50%" align="center" valign="top">
-<a href="docs/assets/example-gallery/titled-story.gif"><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: local animated title followed by the three existing astronaut actions."></a><br>
+<a href="docs/assets/example-gallery/titled-story.gif"><picture><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: local animated title followed by the three existing astronaut actions."></picture></a><br>
 <strong>A Reply from the Stars</strong><br>Three takes + local title · 9.70 s play-once GIF<br>
 <a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share">Make this edit</a> · <a href=".agents/skills/gif-cinema/assets/example/storyboard.json">Editable story</a>
 </td>
 <td width="50%" align="center" valign="top">
-<a href=".agents/skills/gif-cinema/assets/example/shot-02.gif"><img src=".agents/skills/gif-cinema/assets/example/shot-02.gif" width="300" alt="An existing reference-conditioned take: a small light appears beside the astronaut's raised hand."></a><br>
+<a href=".agents/skills/gif-cinema/assets/example/shot-02.gif"><picture><img src=".agents/skills/gif-cinema/assets/example/shot-02.gif" width="300" alt="An existing reference-conditioned take: a small light appears beside the astronaut's raised hand."></picture></a><br>
 <strong>Something answers</strong><br>Original source take · 2.56 s loop<br>
 <a href="docs/EXAMPLES.md#the-actual-three-shot-story">See the three takes</a> · <a href="examples/asset-catalog.json">Source facts</a>
 </td>
@@ -52,12 +58,12 @@ Real outputs from the public local renderer. Shapes, text and keyframes are edit
 <table>
 <tr>
 <td width="50%" align="center" valign="top">
-<a href="docs/assets/catalog/local-shapes.gif"><img src="docs/assets/catalog/local-shapes.gif" width="320" alt="An independently moving card, dot and text, rendered from the public layered-shapes recipe."></a><br>
+<a href="docs/assets/catalog/local-shapes.gif"><picture><img src="docs/assets/catalog/local-shapes.gif" width="320" alt="An independently moving card, dot and text, rendered from the public layered-shapes recipe."></picture></a><br>
 <strong>Independent layers</strong><br>Four editable layers · 1.00 s loop<br>
 <a href="docs/MULTILAYER-POC.md">Layer workflow</a> · <a href="examples/layered-shapes.json">Scene JSON</a>
 </td>
 <td width="50%" align="center" valign="top">
-<a href="docs/assets/catalog/vertical-motion.gif"><img src="docs/assets/catalog/vertical-motion.gif" height="260" alt="The actual 9:16 layered motion study: moving shapes with static readable typography."></a><br>
+<a href="docs/assets/catalog/vertical-motion.gif"><picture><img src="docs/assets/catalog/vertical-motion.gif" height="260" alt="The actual 9:16 layered motion study: moving shapes with static readable typography."></picture></a><br>
 <strong>Made for a vertical frame</strong><br>Twelve layers · 3.20 s · 50 fps<br>
 <a href="docs/VERTICAL-MOTION-EXAMPLE.md">Composition & margins</a> · <a href="examples/vertical-motion.json">Scene JSON</a>
 </td>
@@ -73,17 +79,21 @@ Turn accepted drawings into reusable assets. Inspect every delivered frame, not 
 <table>
 <tr>
 <td width="50%" align="center" valign="top">
-<a href=".agents/skills/gif-cinema/assets/example/shot-01.gif"><img src=".agents/skills/gif-cinema/assets/example/shot-01.gif" width="300" alt="The real sixteen-drawing source take used by the offline sprite export example."></a><br>
+<a href=".agents/skills/gif-cinema/assets/example/shot-01.gif"><picture><img src=".agents/skills/gif-cinema/assets/example/shot-01.gif" width="300" alt="The real sixteen-drawing source take used by the offline sprite export example."></picture></a><br>
 <strong>One take → reusable sprite cells</strong><br>Export these same sixteen drawings, with timing<br>
 <a href="docs/SPRITES.md">Pack or slice sprites</a> · <a href="docs/GALLERY.md#sprites-and-review">Try the real source</a>
 </td>
 <td width="50%" align="center" valign="top">
-<a href="docs/assets/example-gallery/astronaut-storyboard.png"><img src="docs/assets/example-gallery/astronaut-storyboard.png" width="310" alt="Actual first, middle and last decoded drawings from each of the three astronaut takes. This is a sample sheet, not a complete visual review."></a><br>
 <strong>See the state across a cut</strong><br>Actual decoded samples · full-frame tools linked below<br>
 <a href="docs/GIF-REVIEW.md">Review player & checklist</a> · <a href="docs/GALLERY.md#sprites-and-review">Extract every frame</a>
 </td>
 </tr>
 </table>
+
+<p align="center">
+<a href="docs/assets/example-gallery/astronaut-storyboard.png"><img src="docs/assets/example-gallery/astronaut-storyboard.png" width="680" alt="Actual first, middle and last drawings from all three source takes. This sample sheet is not an accepted all-frame review."></a>
+</p>
+
 
 <details>
 <summary>What stays intact, and what still needs a person</summary>
@@ -93,6 +103,7 @@ Sprite export preserves source timing and one shared crop; it does not generate 
 </details>
 
 <a id="03--from-the-cutting-room"></a>
+<a id="from-the-cutting-room"></a>
 
 ## Finishing studies
 
@@ -103,13 +114,13 @@ public CLI**. Each thumbnail loops a **2.24-second excerpt**; the linked films s
 <tr>
 <td width="50%" align="center" valign="top">
 <a id="cat--walk-jump-curl-up"></a>
-<a href="docs/assets/showcase/cat-preview.gif"><img src="docs/assets/showcase/cat-preview.gif" width="330" alt="Cat comparison: native source beside existing compositing, framing cleanup and selective interpolation."></a><br>
+<a href="docs/assets/showcase/cat-preview.gif"><picture><img src="docs/assets/showcase/cat-preview.gif" width="330" alt="Cat comparison: native source beside existing compositing, framing cleanup and selective interpolation."></picture></a><br>
 <strong>A window, a jump, a nap</strong><br>Three takes · 7.68 s comparison<br>
 <a href="https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5">Watch comparison</a> · <a href="docs/SHOWCASE.md#cat--walk-jump-curl-up">Method & frame pairs</a>
 </td>
 <td width="50%" align="center" valign="top">
 <a id="dog--follow-the-ball"></a>
-<a href="docs/assets/showcase/dog-preview.gif"><img src="docs/assets/showcase/dog-preview.gif" width="330" alt="Dog and red ball: the same original takes before and after existing local interpolation."></a><br>
+<a href="docs/assets/showcase/dog-preview.gif"><picture><img src="docs/assets/showcase/dog-preview.gif" width="330" alt="Dog and red ball: the same original takes before and after existing local interpolation."></picture></a><br>
 <strong>Follow the red ball</strong><br>Four takes · 10.24 s comparison<br>
 <a href="https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638">Watch comparison</a> · <a href="docs/SHOWCASE.md#dog--the-same-four-takes">Method & frame pairs</a>
 </td>
@@ -117,7 +128,7 @@ public CLI**. Each thumbnail loops a **2.24-second excerpt**; the linked films s
 <tr>
 <td width="50%" align="center" valign="top">
 <a id="astronaut--a-signal-an-answer"></a>
-<a href="docs/assets/showcase/astronaut-preview.gif"><img src="docs/assets/showcase/astronaut-preview.gif" width="330" alt="The astronaut greeting at native drawing cadence beside existing locally interpolated motion."></a><br>
+<a href="docs/assets/showcase/astronaut-preview.gif"><picture><img src="docs/assets/showcase/astronaut-preview.gif" width="330" alt="The astronaut greeting at native drawing cadence beside existing locally interpolated motion."></picture></a><br>
 <strong>A signal, an answer</strong><br>Two takes · 5.12 s comparison<br>
 <a href="https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34">Watch comparison</a> · <a href="docs/SHOWCASE.md#astronaut--two-shots-one-exchange">Method & frame pairs</a>
 </td>
@@ -149,10 +160,6 @@ public CLI**. Each thumbnail loops a **2.24-second excerpt**; the linked films s
 </table>
 
 <a id="try-it-without-an-api-key"></a>
-<a id="a-wave-from-the-moon"></a>
-<a id="a-reply-from-the-stars"></a>
-<a id="01--one-prompt-one-small-performance"></a>
-<a id="02--three-takes-a-complete-little-exchange"></a>
 
 ## Make your first film
 
@@ -185,7 +192,7 @@ Open `output/my-first-film/film.mp4`, its contact sheet and cut endpoints. Repea
 
 ## Install the skill
 
-For Codex or Claude Code, build the current **0.2.0 source skill** and extract its single `gif-cinema` folder into your agent's skill directory. The runtime is installed separately; follow the included setup/check instructions.
+For Codex or Claude Code, build the current **current source skill** and extract its single `gif-cinema` folder into your agent's skill directory. The runtime is installed separately; follow the included setup/check instructions.
 
 ```bash
 python tools/package_skill.py --out dist/gif-cinema.skill.zip
@@ -196,7 +203,7 @@ python tools/package_skill.py --out dist/gif-cinema.skill.zip
 
 > Use the gif-cinema skill to assemble the included astronaut story with zero API calls. Return the MP4, a small GIF and an honest review of both cuts.
 
-[Skill instructions](.agents/skills/gif-cinema/SKILL.md) · [Production guide](docs/PRODUCTION.md) · [Full catalog & recipes](docs/GALLERY.md) · [Verification](STATUS.md)
+[Skill instructions](.agents/skills/gif-cinema/SKILL.md) · [Production guide](docs/PRODUCTION.md) · [Methods & recipes](docs/GALLERY.md) · [Verification](STATUS.md)
 
 ## Rights and credits
 

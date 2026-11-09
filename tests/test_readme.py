@@ -159,6 +159,30 @@ class ReadmeTests(unittest.TestCase):
                     self.assertEqual(im.info.get('loop'), asset['loop'])
                     self.assertEqual(sum(f.info['duration'] for f in ImageSequence.Iterator(im)), asset['duration_ms'])
 
+    def test_table_gifs_use_responsive_picture_wrappers(self):
+        class Media(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.tables = self.pictures = 0
+                self.bare = []
+            def handle_starttag(self, tag, attrs):
+                if tag == 'table':
+                    self.tables += 1
+                if tag == 'picture':
+                    self.pictures += 1
+                if tag == 'img' and self.tables and not self.pictures:
+                    src = dict(attrs).get('src', '')
+                    if src.endswith('.gif'):
+                        self.bare.append(src)
+            def handle_endtag(self, tag):
+                if tag == 'table':
+                    self.tables -= 1
+                if tag == 'picture':
+                    self.pictures -= 1
+        parser = Media()
+        parser.feed((ROOT / 'README.md').read_text(encoding='utf-8'))
+        self.assertEqual(parser.bare, [])
+
     def test_cover_text_colors_have_readable_contrast(self):
         def luminance(color):
             values = [int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)]
