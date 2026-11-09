@@ -258,9 +258,17 @@ def request_gif(payload, key, endpoint=API_URL, transport=urlopen):
 
 def generate(args):
     payload = make_payload(args.prompt,args.model or default_model(),args.frames,args.duration,args.size,args.quality,args.complexity)
-    out = Path(args.output); out.parent.mkdir(parents=True,exist_ok=True)
+    out = Path(args.output)
     if out.suffix.lower() != ".gif":
         raise ValueError("Output must have a .gif extension")
+    if getattr(args, "dry_run", False):
+        # Offline preview: no API key, no request, no directories or files.
+        plan = {"mode": "dry-run", "api_calls": 0, "would_send_api_calls": 1,
+                "output": str(out), "output_exists": out.exists(), "payload": payload,
+                "cost": "unknown; rerun without --dry-run to send one paid request"}
+        print(json.dumps(plan, ensure_ascii=False, indent=2))
+        return plan
+    out.parent.mkdir(parents=True,exist_ok=True)
     meta = out.with_suffix(".json")
     force = getattr(args, "force", False)
     with output_lock(out):
@@ -392,6 +400,7 @@ def build_parser():
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")
     reuse.add_argument("--force",action="store_true",help="Replace existing output; makes a new paid API request")
+    g.add_argument("--dry-run",action="store_true",help="Print the request that would be sent; no API call, key or writes")
     g.add_argument("--model",choices=MODELS,default=None,help=f"Default: ${MODEL_ENV} or {MODELS[0]}");g.add_argument("--frames",type=int,default=9)
     g.add_argument("--duration",type=int,default=200);g.add_argument("--size",default="auto")
     g.add_argument("--quality",choices=["auto","low","medium","high","xhigh","max"],default="low")

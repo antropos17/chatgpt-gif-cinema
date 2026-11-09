@@ -43,6 +43,21 @@ class APIPayloadTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "GIF_CINEMA_MODEL"):
                 default_model()
 
+    def test_dry_run_sends_nothing_and_writes_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "new" / "a.gif"
+            args = build_parser().parse_args(["generate", "x", "-o", str(output),
+                                              "--model", "gpt-image-2.6-flare", "--dry-run"])
+            with patch.dict("os.environ", {"GIF_CINEMA_MODEL": "gpt-image-2.6-sunburst"}, clear=True), \
+                    patch("gif_cinema.cli.request_gif") as request, \
+                    patch("sys.stdout", new_callable=io.StringIO) as out:
+                generate(args)
+            request.assert_not_called()
+            plan = json.loads(out.getvalue())
+            self.assertEqual(plan["api_calls"], 0)
+            self.assertEqual(plan["payload"]["model"], "gpt-image-2.6-flare")  # --model beats env
+            self.assertFalse(output.parent.exists())
+
 
 
 class LiveSafetyTests(unittest.TestCase):
