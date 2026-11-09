@@ -59,6 +59,11 @@ class WebsiteTests(unittest.TestCase):
         self.assertIn('aria-label="Main navigation"',self.html)
         self.assertIn('.site-header nav { order: 3;',self.css)
         self.assertNotIn('.site-header nav{display:none}',self.css)
+    def test_comparison_loads_metadata_before_user_playback(self):
+        comparison = next(a for _,a in self.dom.items if a.get("id") == "compare-video")
+        self.assertEqual(comparison.get("preload"), "metadata")
+    def test_starter_contrast_has_margin(self):
+        self.assertIn('--muted: #625e57; --accent: #805033;', self.css)
     def test_self_contained_assets_and_comparison_targets(self):
         self.assertNotIn('@import',self.css)
         self.assertNotIn('fonts.googleapis',self.html)
