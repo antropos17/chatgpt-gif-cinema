@@ -18,7 +18,7 @@ footage: no API key needed.**
 
 ### A window, a jump, a nap
 
-[![Cat comparison: original GIF timing on the left, local framing, compositing and selective interpolation on the right.](docs/assets/showcase/cat-preview.gif)](https://github.com/user-attachments/assets/4c200322-2bfc-46ad-8ba9-8548614608a5)
+![Cat comparison: original GIF timing on the left, local framing, compositing and selective interpolation on the right.](docs/assets/showcase/cat-preview.gif)
 
 Walk across the room. Jump to the windowsill. Curl into a ball. **Three takes,
 7.68 seconds of action.** The comparison follows the same selected footage from
@@ -32,13 +32,13 @@ local tools not included in the public CLI.*
 <table>
 <tr>
 <td width="50%" valign="top">
-<a href="https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34"><img src="docs/assets/showcase/astronaut-preview.gif" alt="A paper-textured astronaut raises a hand: native GIF timing beside locally interpolated motion." width="380"></a>
+<a href="docs/assets/showcase/astronaut-preview.gif"><img src="docs/assets/showcase/astronaut-preview.gif" alt="A paper-textured astronaut raises a hand: native GIF timing beside locally interpolated motion." width="380"></a>
 <br><strong>A signal. An answer.</strong>
 <br>A small gesture in a quiet universe. Two astronaut shots, 5.12 seconds, with native and locally interpolated motion side by side.
 <br><a href="https://github.com/user-attachments/assets/86a158cc-c346-4486-8373-1a08fd54fd34">Watch comparison</a> · <a href="docs/assets/showcase/astronaut-frames.png">Frame pairs</a>
 </td>
 <td width="50%" valign="top">
-<a href="https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638"><img src="docs/assets/showcase/dog-preview.gif" alt="An illustrated dog follows a red ball: the same source takes before and after local interpolation." width="380"></a>
+<a href="docs/assets/showcase/dog-preview.gif"><img src="docs/assets/showcase/dog-preview.gif" alt="An illustrated dog follows a red ball: the same source takes before and after local interpolation." width="380"></a>
 <br><strong>One dog. One red ball.</strong>
 <br>Four takes, 10.24 seconds. Follow the ball, paws, and contact points through the native and locally interpolated versions.
 <br><a href="https://github.com/user-attachments/assets/63d2cff7-2cf6-4ba9-82a2-1d61dd4e0638">Watch comparison</a> · <a href="docs/assets/showcase/dog-frames.png">Frame pairs</a>
