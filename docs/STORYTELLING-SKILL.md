@@ -133,3 +133,10 @@ particularly its separation of style/movement/purpose and once-only causal actio
 Its MIT notice is preserved in the skill's [third-party notices](../.agents/skills/gif-cinema/THIRD_PARTY_NOTICES.md).
 No GIF Factory artwork, fonts or exporter code are bundled. GIF Cinema keeps its own
 [source-available evaluation license](../LICENSE).
+
+## Animated story-page layouts
+
+Compose existing GIF actions with editable headings and body text, in landscape or
+portrait, using the [offline story-page helper](STORY-PAGES.md). It preserves actual
+source cadence, exports play-once GIF pages and a portable project, and emits a
+zero-call film script. No new artwork or poses are generated.
