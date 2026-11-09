@@ -186,20 +186,27 @@ def extract(gif, output, focus=None, purpose='general'):
     output.parent.mkdir(parents=True, exist_ok=True)
     output.mkdir()  # Never reuse or replace an existing review.
     created = output.lstat()
-    identity = (created.st_dev, created.st_ino)
+    directories = {output: (created.st_dev, created.st_ino)}
     total = 0
-    def check_output_directory():
-        current = output.lstat()
-        if not stat.S_ISDIR(current.st_mode) or (current.st_dev, current.st_ino) != identity:
+    def check_directory(path):
+        current = path.lstat()
+        if not stat.S_ISDIR(current.st_mode) or (current.st_dev, current.st_ino) != directories[path]:
             raise ValueError('Review output directory changed; existing data was retained')
+    def prepare_parent(parent):
+        check_directory(output)
+        if parent not in directories:
+            parent.mkdir()  # Never adopt an unexpectedly existing child directory.
+            created = parent.lstat()
+            directories[parent] = (created.st_dev, created.st_ino)
+        check_directory(parent)
+        check_directory(output)
     def save(name, data, track=True):
         nonlocal total
         total += len(data)
         if total > MAX_OUTPUT_BYTES:
             raise ValueError('Review output exceeds 512 MiB; use a shorter or smaller source')
-        check_output_directory()
         path = output / name
-        path.parent.mkdir(parents=True, exist_ok=True)
+        prepare_parent(path.parent)
         with path.open('xb') as stream:
             stream.write(data)
         if track:
@@ -234,7 +241,8 @@ def extract(gif, output, focus=None, purpose='general'):
               'reviewer': '', 'frames': [{'index': i, 'decision': 'pending', 'notes': ''} for i in range(len(frames))],
               'playback': 'pending', 'loop_seam': 'pending', 'user_acceptance': 'pending', 'notes': ''}
     save('review.json', json_bytes(review), track=False)
-    check_output_directory()
+    for directory in directories:
+        check_directory(directory)
     return report
 
 

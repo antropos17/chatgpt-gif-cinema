@@ -63,8 +63,9 @@ It is not a completed review pack: `check` rejects missing or mismatched audit,
 review or artifact files. Retry into a **new** directory after resolving the cause.
 The helper never recursively deletes failed output, since another process could
 have renamed the original directory and replaced its path with unrelated data.
-It also checks the created directory's identity before subsequent writes and after
-export. These checks detect ordinary directory replacement; they are not a sandbox
+It also checks the created output and child directories' identities before
+subsequent writes and after export, and refuses unexpectedly existing child
+directories instead of adopting them. These checks detect ordinary directory replacement; they are not a sandbox
 against a hostile process racing every filesystem operation. Existing filenames
 are opened exclusively and never overwritten.
 

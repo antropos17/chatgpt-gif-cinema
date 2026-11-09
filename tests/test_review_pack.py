@@ -256,6 +256,39 @@ class ReviewPackTests(unittest.TestCase):
         self.assertEqual((self.output / 'unrelated-sentinel.txt').read_bytes(), b'Keep unrelated user data')
         self.assertEqual(sorted(path.name for path in self.output.iterdir()), ['unrelated-sentinel.txt'])
 
+    def test_replaced_frames_directory_stops_writes_and_preserves_sentinel(self):
+        original_save = Image.Image.save
+        png_count = 0
+        def replace_before_second_png_save(image, *args, **kwargs):
+            nonlocal png_count
+            result = original_save(image, *args, **kwargs)
+            png_count += 1
+            if png_count == 2:
+                (self.output / 'frames').rename(self.root / 'original-frames')
+                (self.output / 'frames').mkdir()
+                (self.output / 'frames/sentinel').write_bytes(b'Unrelated frames directory')
+            return result
+        with patch.object(Image.Image, 'save', new=replace_before_second_png_save):
+            with self.assertRaisesRegex(ValueError, 'output directory changed'):
+                self.extract()
+        self.assertEqual((self.output / 'frames/sentinel').read_bytes(), b'Unrelated frames directory')
+        self.assertEqual(sorted(p.name for p in (self.output / 'frames').iterdir()), ['sentinel'])
+        self.assertTrue((self.root / 'original-frames/0000.png').is_file())
+        self.assertFalse((self.output / 'audit.json').exists())
+
+    def test_unexpected_child_directory_is_not_adopted(self):
+        original_player = review.player
+        def create_unrelated_child(*args, **kwargs):
+            (self.output / 'frames').mkdir()
+            (self.output / 'frames/sentinel').write_bytes(b'Keep this directory')
+            return original_player(*args, **kwargs)
+        with patch.object(review, 'player', side_effect=create_unrelated_child):
+            with self.assertRaises(FileExistsError):
+                self.extract()
+        self.assertEqual((self.output / 'frames/sentinel').read_bytes(), b'Keep this directory')
+        self.assertEqual(sorted(p.name for p in (self.output / 'frames').iterdir()), ['sentinel'])
+        self.assertFalse((self.output / 'audit.json').exists())
+
     def test_read_local_preserves_binary_control_characters_and_line_endings(self):
         path = self.root / 'binary-input.dat'
         raw = bytes(range(256)) + b'\r\n\x1a\r\n\0\xff'
