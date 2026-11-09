@@ -34,3 +34,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+## Offline review and sprites
+
+Full-frame review and shared-pose sprite export are independently implemented,
+informed by GIF Factory's review/stability/export workflow and
+https://github.com/aldegad/sprite-gen (Apache-2.0) runtime-atlas concepts.
+No sprite-gen code, media, provider adapter or credentials are bundled.
+The referenced projects' gallery art and character rights are not granted by this
+package. Use only authorized input assets. GIF Cinema's evaluation license remains.
