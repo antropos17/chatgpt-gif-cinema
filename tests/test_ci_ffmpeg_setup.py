@@ -16,7 +16,7 @@ SCRIPT = ROOT / 'tools/ci_install_ffmpeg_ubuntu.sh'
 @unittest.skipUnless(os.name == 'posix' and shutil.which('bash'), 'POSIX shell fixture required')
 class UbuntuFFmpegSetupTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix='ffmpeg setup ')
+        self.temp = tempfile.TemporaryDirectory(prefix="ffmpeg setup '$; ")
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
         self.bin = self.root / 'bin'
@@ -55,7 +55,7 @@ if phase == 'install':
 ''', encoding='utf-8')
         sudo.chmod(0o755)
 
-    def run_setup(self, scenario='success', existing=(), valid_host=True):
+    def run_setup(self, scenario='success', existing=(), valid_host=True, unwind_work=False):
         for name in existing:
             tool = self.bin / name
             tool.write_text('#!/bin/sh\nexit 0\n', encoding='utf-8')
@@ -63,9 +63,12 @@ if phase == 'install':
         env = dict(os.environ, PATH=str(self.bin), TMPDIR=str(self.root),
                    TEST_APT_LOG=str(self.log), TEST_APT_BIN=str(self.bin), TEST_APT_SCENARIO=scenario)
         # Mock only the host gate. Every orchestration branch runs as written.
+        # Model older Bash unwinding the local before executing an EXIT trap.
+        trap_hook = 'trap() { builtin trap "$@"; unset work; }; ' if unwind_work else ''
         result = subprocess.run([shutil.which('bash'), '-c',
                                  'source "$1"; verify_ubuntu_host() { ' +
-                                 (':' if valid_host else 'return 1') + '; }; install_ubuntu_ffmpeg',
+                                 (':' if valid_host else 'return 1') + '; }; ' + trap_hook +
+                                 'install_ubuntu_ffmpeg',
                                  'ci-test', str(SCRIPT)], env=env, capture_output=True, text=True, timeout=10)
         calls = [json.loads(line) for line in self.log.read_text(encoding='utf-8').splitlines()] \
             if self.log.exists() else []
@@ -75,6 +78,11 @@ if phase == 'install':
     def test_existing_tools_need_no_apt(self):
         result, calls = self.run_setup(existing=('ffmpeg', 'ffprobe'))
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(calls, [])
+
+    def test_cleanup_does_not_depend_on_local_variable_lifetime(self):
+        result, calls = self.run_setup(unwind_work=True)
+        self.assertNotEqual(result.returncode, 0)
         self.assertEqual(calls, [])
 
     def test_rejected_host_does_not_start_apt(self):

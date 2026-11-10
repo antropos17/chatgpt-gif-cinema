@@ -19,7 +19,9 @@ install_ubuntu_ffmpeg() (
   verify_ubuntu_host || return
   local work mirror
   work=$(mktemp -d "${TMPDIR:-/tmp}/ffmpeg-apt.XXXXXX")
-  trap 'rm -rf -- "$work"' EXIT
+  # Bash 3.2 can unwind local variables before an errexit EXIT trap runs.
+  # Freeze the safely shell-quoted path now instead of looking it up on exit.
+  trap "rm -rf -- $(printf '%q' "$work")" EXIT
   chmod 755 "$work"
   local apt_options=(
     -o "Dir::Etc::sourcelist=$work/ubuntu.sources"
