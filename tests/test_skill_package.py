@@ -107,15 +107,19 @@ class SkillPackageTests(unittest.TestCase):
         relative = Path('.agents/skills/gif-cinema')
         shutil.copytree(SKILL, repository / relative, ignore=shutil.ignore_patterns('__pycache__'))
         shutil.copy2(ROOT / '.gitattributes', repository / '.gitattributes')
+        shutil.copy2(ROOT / 'LICENSE', repository / 'LICENSE')
         def git(*parts):
             return subprocess.run(['git', *parts], cwd=repository, check=True,
                                   capture_output=True, timeout=30)
         git('init', '-q')
         git('config', 'core.autocrlf', 'true')
-        git('add', '.gitattributes', str(relative))
+        git('add', '.gitattributes', 'LICENSE', str(relative))
         checked = self.root / 'autocrlf-worktree'
         checked.mkdir()
         git('checkout-index', '--all', '--force', '--prefix=' + checked.as_posix() + '/')
+        self.assertEqual((checked / 'LICENSE').read_bytes(), (ROOT / 'LICENSE').read_bytes())
+        self.assertEqual((checked / relative / 'LICENSE').read_bytes(),
+                         (checked / 'LICENSE').read_bytes())
         first, second = self.root / 'native.zip', self.root / 'autocrlf.zip'
         packaging.package(first)
         with patch.object(packaging, 'SKILL', checked / relative):

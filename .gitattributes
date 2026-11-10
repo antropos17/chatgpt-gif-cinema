@@ -7,5 +7,7 @@ gif_cinema/assets/fonts/OFL.txt text eol=lf
 gif_cinema/assets/fonts/PROVENANCE.json text eol=lf
 
 # Resource ZIPs must have the same bytes on Windows and Unix checkouts.
+# The packaged license is byte-compared with this root source.
+/LICENSE text eol=lf
 .agents/skills/gif-cinema/** text=auto eol=lf
 .agents/skills/gif-cinema/**/*.gif -text
