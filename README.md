@@ -51,6 +51,17 @@ Existing generated footage, turned into small edits. Titles and layouts do not c
 
 </details>
 
+## Blender motion study
+
+<p align="center">
+<a href="examples/blender-form-01/README.md"><picture><img src="examples/blender-form-01/deliverables/FORM-01.gif" width="520" alt="FORM / 01: a real Blender render of porcelain arcs unfolding around a copper sphere."></picture></a>
+</p>
+
+**FORM / 01** · Blender EEVEE · 6-second loop · no generative image/video API or JavaScript animation.
+[Watch MP4](examples/blender-form-01/deliverables/FORM-01.mp4) · [Edit the .blend](examples/blender-form-01/form_01.blend) · [Rebuild from Python](examples/blender-form-01/README.md).
+
+This standalone 3D example includes the actual editable scene, exports, font license and verification facts. It is not a new public CLI backend. The MP4 is 800 × 800 at 24 fps; the GIF is 640 × 640 at 20 fps. [Review scope and limitations](examples/blender-form-01/README.md#review-status).
+
 ## Motion graphics
 
 Real outputs from the public local renderer. Shapes, text and keyframes are editable; no model or API call is involved.

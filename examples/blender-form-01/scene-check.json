@@ -1,0 +1,29 @@
+{
+  "blender_version": "4.3.2",
+  "renderer": "BLENDER_EEVEE_NEXT",
+  "resolution": [
+    800,
+    800
+  ],
+  "fps": 24,
+  "frame_range": [
+    1,
+    144
+  ],
+  "duration_seconds": 6.0,
+  "geometry_loop_max_transform_error": 5.731346528944757e-17,
+  "geometry_loop_closed": true,
+  "animated_controllers": 12,
+  "camera": "Locked orthographic three-quarter camera",
+  "asset_sources": "Authored Blender meshes; bundled DejaVu typeface; no external textures",
+  "materials": [
+    "01 | Warm porcelain",
+    "02 | Satin silver",
+    "03 | Anodized graphite",
+    "04 | Burnt copper",
+    "05 | Warm limestone backdrop",
+    "Type | unlit charcoal"
+  ],
+  "lighting": "Four studio area lights; the key casts soft shadows",
+  "denoising": "No generative or neural denoising; conventional FFmpeg hqdn3d only"
+}
