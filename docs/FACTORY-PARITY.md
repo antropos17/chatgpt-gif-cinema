@@ -6,6 +6,24 @@ checked. Stars are a time-sensitive popularity count, not a quality score.
 This comparison is based on the checked code, manifests and production guides;
 it is not a claim that every upstream example was regenerated or visually accepted.
 
+## Current implementation update — 10 November 2026
+
+The table below preserves the **historical `ba629d7` comparison**, not the current
+feature status. By Cinema `debc104`, full-frame review, sprite packing/slicing,
+animated GIF/sprite layers, source trims, editable text/strokes, story pages and
+story-state checks were already implemented. They are no longer missing foundations.
+
+The new [offline factory](OFFLINE-FACTORY.md) adds a manifest-driven mixed batch of
+existing GIFs and local layer scenes, exact source/output hashes, decoded-GIF previews,
+a script-free local gallery and a readback-verified ZIP. It does not yet provide
+video review reels, lenticular A/B transitions, raster handwriting reveal, physical
+page turns or event-based SFX mixing. Those remain separate, testable next steps.
+
+The latest independent upstream comparison used GIF Factory `ff9b8ae`: ten routing
+choices and 75 unique example files, including 19 signatures. These counts are not
+ten animation engines or proof that every example can be regenerated automatically.
+The earlier showcase/star counts below belong only to their original snapshot.
+
 ## The systems start from different sources
 
 GIF Cinema generates short animated GIFs through its existing direct OpenAI workflow,

@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — offline GIF factory
+
+- Build a strict hash-pinned manifest of local GIFs and existing layered scenes into
+  a named collection, static no-JavaScript gallery and portable stored ZIP.
+- Preserve imported GIF bytes and derive preview pixels/timing from the actual final
+  GIFs; reject exact decoded duplicates, animated-preview substitutions and unsafe paths.
+- Bound individual and aggregate work, stage all results, verify ZIP members by
+  readback, and expose a separate saved-collection verifier. Visual acceptance remains pending.
+- Include a mixed-input repository example and English guide. No provider calls,
+  third-party code, new generated artwork or new versioned skill release is included.
+
 ## Unreleased — preserve edited subtitles
 
 - Pin the installable skill to the published, verified offline integration, including
