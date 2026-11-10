@@ -1,5 +1,64 @@
 # Changelog
 
+## Unreleased — preserve edited subtitles
+
+- Track generated SRT hashes and shot timing; preserve manually edited subtitles
+  during resume and rebuild, with a separate generated proposal for merging.
+- Warn when retained subtitles have unknown timing history or their shot order/
+  millisecond boundaries changed. Keep the warning in the manifest and receipt.
+- Refresh unedited generated subtitles without rewriting unchanged files, retain
+  previous versions, and avoid clobbering an editor save during publication.
+- Cover ordinary/edited/legacy/empty SRT, changed timing, concurrent saves,
+  unreadable outputs, and a real zero-call film resume/rebuild.
+
+## Unreleased — bounded inputs and script snapshot identity
+
+- Reject special-file GIFs, scripts and still references before opening, with
+  nonblocking descriptor checks against FIFO replacement races on POSIX.
+- Bound actual script and reference reads, including the combined reference
+  budget and pre-request recheck, rather than relying only on an earlier size.
+- Parse and hash the same returned script bytes once; preserve that snapshot's
+  identity in the manifest even if the script changes during preflight/render.
+- Reject chapter export for a changed script instead of mislabelling an old
+  movie. Cover equal-duration shot reordering and zero-call rerender recovery.
+- Preserve regular-file symlinks, in-memory GIF streams, source timing and
+  zero-call planning. Add offline regressions for FIFO hangs, growing files,
+  descriptor cleanup, reference limits and unchanged valid inputs.
+
+## Unreleased — exact shared-palette colors
+
+- Preserve exact palette colors in motion and layered GIF exports even when a
+  frame also contains colors that need approximation. Prevent a 257th color from
+  collapsing a represented grayscale ramp through Pillow's lookup cache.
+- Store the shared GIF color table once without changing timing, frame disposal,
+  loop policy or decoded colors. Keep the full-color PNG/MP4 route unchanged.
+- Use explicit per-frame delays so Pillow 10.1 retains the total hold when all
+  motion/layer frames are identical, instead of failing timing verification.
+- Add an offline before/after benchmark, FFmpeg palette comparisons and decoded
+  fixtures. Report measured fidelity, size and CPU tradeoffs without claiming
+  automatic artwork or motion acceptance.
+
+## Unreleased — explicit film colors
+
+- Encode `film` and script-render MP4s with a matching BT.709 color matrix and
+  limited-range SDR tags instead of relying on a player's SD/HD fallback.
+- Verify and record the four color tags for script renders. Rebuild older untagged
+  cached films locally, preserve their archives, and retain timing and source GIFs.
+- Check both real SD/HD encoded pixels and metadata offline. No new character
+  action, interpolation or color-managed HDR/ICC support is implied.
+
+## Unreleased — standalone motion GIF replay
+
+- Add strict recipe `gif_loop` and mutually exclusive `--play-once` / `--loop`
+  overrides. Existing recipes and commands still default to infinite GIF replay.
+- Play-once omits the GIF loop extension; reopen and verify the encoded policy
+  before publishing, and report planned/verified policy in plans and receipts.
+- Preserve source playback/repeats, timing, PNG samples and MP4 content. MP4 replay
+  remains player-controlled, and viewers can override GIF metadata.
+- Cover real GIF/MP4 exports, single-drawing holds, CLI overrides, strict validation,
+  unchanged sources and refusal to publish an incorrectly encoded loop policy.
+  This runtime feature does not change the separately pinned skill package.
+
 ## Unreleased — safe motion stack integration
 
 - Integrate standalone motion, experimental layers and audio validation with the

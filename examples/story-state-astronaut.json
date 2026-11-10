@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "story_sha256": "3fbdc0f804de8949252965901978b8052fd7ff5810a0c6a1fe7d5ae937022c68",
+  "source_hashes": {
+    "01-signal": "5599c7b0ccad2dd4fcaf2b86235cc12e3689a8da323311845b724c352d3d6dac",
+    "02-answer": "0f6366ad5da2ad949ecb399dfdfe10fd33416f542a573316ee4a319f669f8d13",
+    "03-recognition": "461a37f8e813549b8b0ee70ad1f04cf3b64b7d17c7eb458bd5f163ef0380bb28"
+  },
+  "facts": [
+    {
+      "id": "astronaut.identity",
+      "initial": "supplied astronaut",
+      "fixed": true
+    },
+    {
+      "id": "astronaut.hand_pose",
+      "initial": "resting"
+    },
+    {
+      "id": "light.state",
+      "initial": "not answering"
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "00-title",
+      "requires": {
+        "astronaut.identity": "supplied astronaut"
+      },
+      "changes": [],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "01-signal",
+      "requires": {
+        "astronaut.identity": "supplied astronaut",
+        "astronaut.hand_pose": "resting"
+      },
+      "changes": [
+        {
+          "fact": "astronaut.hand_pose",
+          "from": "resting",
+          "to": "raised",
+          "reason": "The storyboard asks the astronaut to raise one hand."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "02-answer",
+      "requires": {
+        "astronaut.identity": "supplied astronaut",
+        "astronaut.hand_pose": "raised",
+        "light.state": "not answering"
+      },
+      "changes": [
+        {
+          "fact": "light.state",
+          "from": "not answering",
+          "to": "answering",
+          "reason": "The storyboard asks the small light to answer the raised hand."
+        }
+      ],
+      "handoff_changes": []
+    },
+    {
+      "shot_id": "03-recognition",
+      "requires": {
+        "astronaut.identity": "supplied astronaut",
+        "astronaut.hand_pose": "raised",
+        "light.state": "answering"
+      },
+      "changes": [
+        {
+          "fact": "astronaut.hand_pose",
+          "from": "raised",
+          "to": "at chest",
+          "reason": "The storyboard asks for a hand toward the chest in acknowledgment."
+        }
+      ],
+      "handoff_changes": []
+    }
+  ]
+}

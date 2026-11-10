@@ -1,0 +1,82 @@
+{
+  "status": "verified",
+  "api_calls": 0,
+  "frames_reopened_and_matched": 128,
+  "output_hashes_verified": 146,
+  "fps": 50,
+  "duration_ms": 2560,
+  "loop_review": {
+    "status": "human-review-required",
+    "closing_endpoint_rgba_equal": true,
+    "closing_endpoint_rgb_mae": 0.0,
+    "exported_seam_rgb_mae": 0.8714650848765432,
+    "decoded_gif_seam_rgb_mae": 0.8646460262345679,
+    "decoded_mp4_seam_rgb_mae": 0.9844521604938272,
+    "adjacent_rgb_mae_max": 0.9436897183641975,
+    "adjacent_rgb_mae_mean": 0.19896585192475938,
+    "last_frame_time_ms": 2540,
+    "endpoint_time_ms": 2560,
+    "layer_endpoint_states": {
+      "dark": {
+        "x": 0.25,
+        "y": 0.5,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1
+      },
+      "light": {
+        "x": 0.75,
+        "y": 0.5,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1
+      },
+      "header": {
+        "x": 0.5,
+        "y": 0.09722222222222222,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1
+      },
+      "title": {
+        "x": 0.5,
+        "y": 0.09722222222222222,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1
+      },
+      "left": {
+        "x": 0.25,
+        "y": 0.54,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1,
+        "source_index": 0
+      },
+      "right": {
+        "x": 0.73,
+        "y": 0.54,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1,
+        "source_index": 0
+      },
+      "dark_label": {
+        "x": 0.25,
+        "y": 0.89,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1
+      },
+      "light_label": {
+        "x": 0.75,
+        "y": 0.89,
+        "zoom": 1,
+        "rotation": 0,
+        "opacity": 1
+      }
+    },
+    "note": "Equal endpoints and low pixel differences do not prove perceptual or velocity continuity."
+  },
+  "scope": "Complete schema-1 output inventory present and hash-matched; all timeline PNG pixels rerendered from portable saved scene. Media hashes do not replace visual review or authenticate an edited receipt."
+}

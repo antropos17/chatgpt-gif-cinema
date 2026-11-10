@@ -1,6 +1,8 @@
 ---
 name: gif-cinema
-description: Make multi-scene animated stories, mini cartoons, and motion-design GIFs or MP4s with story beats, character references, short generated takes, local animated titles, offline sprite atlases, and full-frame review. Use for longer narrative edits, not just extending a short loop.
+description: Make multi-scene animated stories and motion-design GIFs or MP4s from existing GIFs, editable text/shape/stroke layers, sprite atlases and reviewed takes. Use for narrative edits, composited animation and authored draw-on graphics.
+license: "GIF Cinema Source-Available Evaluation License v1.0 (see LICENSE)"
+metadata: {"version": "0.3.1"}
 ---
 
 # GIF Cinema
@@ -21,11 +23,12 @@ This is an author-guided workflow, not an autonomous animation model.
   Shared crop/scale preserves pose coordinates, source delays and RGBA PNG assets.
   This creates neither new action drawings nor transparent backgrounds. See
   [sprites.md](references/sprites.md).
-- **Motion design:** use the included local animated-title renderer for separate
-  typography shots. The pinned runtime also supplies whole-image motion presets and
-  an experimental editable text/shape/still-image layer renderer. Neither is a rigged
-  character animator. See its [motion guide](https://github.com/antropos17/chatgpt-gif-cinema/blob/d3c39b29704f50c2cf6891d91b7750efa52a9915/docs/STANDALONE-MOTION.md)
-  and [layer contract](https://github.com/antropos17/chatgpt-gif-cinema/blob/d3c39b29704f50c2cf6891d91b7750efa52a9915/docs/MULTILAYER-POC.md).
+- **Motion design:** use local animated titles, whole-image motion presets or
+  editable graphic layers. Place existing GIF action beside independent titles,
+  shapes and strokes. The bundled stroke example draws original paths with
+  separate reveal timing and holds. These tools do not invent character action.
+  See [the installed layer/stroke workflow](references/layers.md) and the installed
+  [whole-image motion guide](references/motion.md).
 
 Do not count camera drift, an overlay, reversed footage, another caption on the same
 clip, or longer holds as a new character action. A long cartoon needs additional
@@ -34,9 +37,9 @@ an honest animatic or production plan, not a claimed finished cartoon.
 
 ## Runtime and a no-key check
 
-Skill package **0.2.1** contains helpers, guides and examples. The Python runtime is
+Skill package **0.3.1** contains helpers, guides and examples. The Python runtime is
 installed separately. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
-film/chapter export also needs FFmpeg and ffprobe. Git/network access is needed only
+film, chapter, layer and motion export also need FFmpeg and ffprobe. Git/network access is needed only
 for the installation command below. Use an isolated environment.
 `runtime.json` records the exact tested commit (runtime version 0.5.0 is a separate
 version number and by itself is not a compatibility guarantee):
@@ -44,7 +47,7 @@ version number and by itself is not a compatibility guarantee):
 ```bash
 python -m venv .venv
 # Activate .venv with the command for your shell, then:
-python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@d3c39b29704f50c2cf6891d91b7750efa52a9915"
+python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@c4cc9a095ab55ee9618f1dd0c3150743b047c1ac"
 python -m gif_cinema --help
 ```
 
@@ -75,9 +78,15 @@ loops the entire result. Some viewers override GIF loop behavior.
 
 For a review/sprite check without FFmpeg, run
 `python scripts/smoke_media.py --out ../project/media-smoke`.
+For editable layers/strokes, run
+`python scripts/smoke_layers.py --out ../project/layer-smoke`; it needs FFmpeg and
+ffprobe, renders the bundled stroke and GIF-composition examples and verifies every saved frame.
+For whole-image motion, run
+`python scripts/smoke_motion.py --out ../project/motion-smoke`; it needs the same
+encoders and checks existing GIF/still inputs and the bundled returning-camera recipe.
 For the complete CLI/film check, first confirm `ffmpeg -version` and
 `ffprobe -version`, then run `python scripts/smoke_test.py --out ../project/full-smoke`.
-Both output directories must be new and outside the installed skill. Neither test
+All output directories must be new and outside the installed skill. None of these checks
 needs a key. The media test blocks network and leaves visual review/user acceptance
 pending; synthetic fixtures are not an artwork-quality demonstration.
 The story helper never makes provider calls and refuses an existing output project. [story-project.md](references/story-project.md) documents

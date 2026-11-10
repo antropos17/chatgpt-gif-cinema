@@ -1,4 +1,4 @@
-"""Exercise the installed public CLI with synthetic media and no provider calls."""
+"""Exercise the installed public CLI with local media and no provider calls."""
 import argparse
 import hashlib
 import json
@@ -20,6 +20,8 @@ def main():
     skill = Path(__file__).resolve().parents[1]
     if root.is_relative_to(skill):
         raise ValueError("Smoke output belongs outside the installed skill directory")
+    if not all(shutil.which(tool) for tool in ("ffmpeg", "ffprobe")):
+        raise ValueError("FFmpeg and ffprobe are required for full smoke; use smoke_media.py for a no-encoder check")
     root.mkdir(parents=True, exist_ok=False)
     env = os.environ.copy()
     env.pop("OPENAI_API_KEY", None)
@@ -27,6 +29,12 @@ def main():
     subprocess.run([sys.executable, str(skill / "scripts/smoke_media.py"),
                     "--out", str(root / "media")], cwd=root, env=env, check=True,
                    capture_output=True, text=True, timeout=60)
+    subprocess.run([sys.executable, str(skill / "scripts/smoke_layers.py"),
+                    "--out", str(root / "layers")], cwd=root, env=env, check=True,
+                   capture_output=True, text=True, timeout=180)
+    subprocess.run([sys.executable, str(skill / "scripts/smoke_motion.py"),
+                    "--out", str(root / "motion")], cwd=root, env=env, check=True,
+                   capture_output=True, text=True, timeout=180)
     calls = []
 
     def run(*parts):
@@ -98,11 +106,13 @@ def main():
     else:
         render_sha = None
     assert before == [sha(p) for p in sources]
-    receipt = {"status": "passed", "source": "synthetic", "provider_calls": 0,
+    receipt = {"status": "passed", "source": "synthetic film fixtures plus bundled layer/motion artwork", "provider_calls": 0,
                "inspection": inspections, "film_sha256": sha(root / "film.mp4"),
                "sources_unchanged": True, "render_and_resume_checked": render_checked,
                "render_sha256": render_sha, "plan": plan, "commands": calls,
                "reference_preflight_checked": True, "packaged_review_and_sprites_checked": True,
+               "packaged_layers_and_strokes_checked": True, "packaged_gif_layers_checked": True,
+               "packaged_motion_checked": True,
                "scope": "CLI offline behavior; no live generation or artistic acceptance."}
     (root / "verification.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
     print(json.dumps({k: receipt[k] for k in ("status", "provider_calls", "sources_unchanged",

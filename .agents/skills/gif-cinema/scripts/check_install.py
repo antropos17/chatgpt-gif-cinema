@@ -15,6 +15,15 @@ sys.dont_write_bytecode = True
 SKILL = Path(__file__).resolve().parents[1]
 # Independent expected inventory, checked against the builder in regression tests.
 RESOURCE_FILES = frozenset({
+    'assets/example/motion-loop.json',
+    'references/motion.md',
+    'scripts/smoke_motion.py',
+    'assets/example/gif-layer.json',
+    'scripts/verify_layers.py',
+    'scripts/smoke_layers.py',
+    'references/layers.md',
+    'assets/example/stroke-reveal.json',
+    'assets/example/layered-shapes.json',
     'SKILL.md',
     'LICENSE',
     'THIRD_PARTY_NOTICES.md',
@@ -80,7 +89,7 @@ def verify_files(root=SKILL):
 def check_runtime(root=SKILL):
     runtime = json.loads((Path(root) / 'runtime.json').read_text(encoding='utf-8'))
     import gif_cinema
-    from gif_cinema import cli, sprites
+    from gif_cinema import cli, layers, motion, sprites
     if 'fixed_canvas' not in inspect.signature(cli.check_gif_limits).parameters:
         raise ValueError('Runtime lacks bounded review decoding; install the pinned runtime')
     if not all(callable(getattr(sprites, name, None)) for name in ('load_gif', 'load_sheet', 'export')):
@@ -93,6 +102,35 @@ def check_runtime(root=SKILL):
                 parser.parse_args(arguments)
         except SystemExit as error:
             raise ValueError('Runtime lacks sprite CLI commands; install the pinned runtime') from error
+    if not all(callable(getattr(layers, name, None)) for name in
+               ('normalize_scene', 'prepare_scene', 'render_scene', 'render_at', 'read_regular')):
+        raise ValueError('Runtime lacks required editable layer interfaces')
+    try:
+        layers.normalize_scene({'format': 'gif-cinema-layered-scene', 'schema_version': 1,
+            'width': 32, 'height': 32, 'fps': 25, 'duration_ms': 160, 'layers': [
+                {'id': 'line', 'type': 'stroke', 'size': [16, 16],
+                 'points': [[2, 2], [12, 12]], 'keyframes': [
+                    {'at': 0, 'reveal': 0}, {'at': 1, 'reveal': 1}]}]})
+    except (ValueError, TypeError, KeyError) as error:
+        raise ValueError('Runtime lacks stroke layer support; install the pinned runtime') from error
+    try:
+        layers.normalize_scene({'format': 'gif-cinema-layered-scene', 'schema_version': 1,
+            'width': 32, 'height': 32, 'fps': 50, 'duration_ms': 160, 'layers': [
+                {'id': 'actor', 'type': 'gif', 'source': 'unused.gif',
+                 'size': [16, 16], 'playback': 'once'}]})
+    except (ValueError, TypeError, KeyError) as error:
+        raise ValueError('Runtime lacks animated GIF layers; install the pinned runtime') from error
+    if not all(callable(getattr(motion, name, None)) for name in
+               ('motion', 'load_recipe', 'normalize_recipe', 'decode_source', 'build_timeline', 'sample_timeline',
+                'render_frame', 'evaluate_keyframes')):
+        raise ValueError('Runtime lacks required whole-image motion interfaces')
+    for arguments in (['motion', 'input.gif', '--preset', 'push-in', '--out', 'unused', '--dry-run'],
+                      ['motion', 'input.gif', '--recipe', 'input.json', '--out', 'unused', '--dry-run']):
+        try:
+            with redirect_stderr(io.StringIO()):
+                parser.parse_args(arguments)
+        except SystemExit as error:
+            raise ValueError('Runtime lacks motion CLI commands; install the pinned runtime') from error
     installed_commit = None
     try:
         distribution = metadata.distribution('gif-cinema')
@@ -106,7 +144,7 @@ def check_runtime(root=SKILL):
     return {'status': 'interfaces-present', 'runtime_version': gif_cinema.__version__,
             'expected_commit': runtime['runtime_commit'], 'installed_commit': installed_commit,
             'pin_matches_metadata': installed_commit == runtime['runtime_commit'],
-            'note': 'Interface checks are not behavioral or visual acceptance. Run smoke_media.py and smoke_test.py. A local checkout may not expose VCS installation metadata.'}
+            'note': 'Interface checks are not behavioral or visual acceptance. Run smoke_media.py, smoke_layers.py, smoke_motion.py and smoke_test.py. A local checkout may not expose VCS installation metadata.'}
 
 
 def main():

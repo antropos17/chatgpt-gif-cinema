@@ -7,9 +7,9 @@ or replaces a take. This is a development-preview feature, not a new versioned s
 ## Start with a preset
 
 ```bash
-python -m gif_cinema motion poster.png --preset pop-in --out output/poster --dry-run
-python -m gif_cinema motion poster.png --preset pop-in --out output/poster
-python -m gif_cinema motion shot.gif --preset push-in --out output/push-in
+python -m gif_cinema motion poster.png --preset pop-in --play-once --out output/poster --dry-run
+python -m gif_cinema motion poster.png --preset pop-in --play-once --out output/poster
+python -m gif_cinema motion shot.gif --preset push-in --play-once --out output/push-in
 ```
 
 Inputs are local GIFs, or still PNG/JPEG/WebP. Transparent PNGs keep their alpha in
@@ -17,15 +17,23 @@ the output PNG sequence and atlas. Presets: `identity`, `push-in`, `pan-left`,
 `pop-in`. Still images default to two seconds. The preset transforms the **whole
 image**: it does not isolate letters, articulate limbs, or repair generated poses.
 
+**Choose GIF replay deliberately.** The existing default is still infinite replay.
+`pop-in`, `push-in` and `pan-left` have different starting and ending transforms, so
+replaying them can cause an abrupt reset. `--play-once` requests one play of the
+finished GIF; `--loop` requests infinite replay. Neither makes the motion seamless.
+Some GIF viewers override loop metadata. MP4 looping is controlled by its player,
+not either flag. The one-way examples above use play-once delivery.
+
 Still PNG/JPEG/WebP inputs honor their EXIF display orientation before default
 canvas sizing, fitting and keyframe transforms, including mirrored orientations.
 The original file and its hash stay unchanged. Decoded PNG frames retain alpha;
 metadata is stripped as before. No ICC color-profile conversion is performed.
 
 `--dry-run` validates the complete recipe and decoded input, reports exact output
-timing and budgets, requires no FFmpeg, and writes nothing. Rendering needs Pillow,
-FFmpeg with H.264, and ffprobe. Use a new output folder for every candidate, including
-after a failed attempt. Originals are read-only and checked again before publishing.
+timing, GIF replay policy and budgets, requires no FFmpeg, and writes nothing.
+Rendering needs Pillow, FFmpeg with H.264, and ffprobe. Use a new output folder for
+every candidate, including after a failed attempt. Originals are read-only and
+checked again before publishing.
 
 ## Direct the motion with keyframes
 
@@ -76,9 +84,44 @@ rejected. Recipe files are limited to 64 KiB.
 | `speed` | 1; 0.1..8; divides every trimmed source hold duration |
 | `playback` | `forward`, `reverse` or `ping-pong` |
 | `repeats` | 1; integer 1..16; repeats the source cycle before applying keyframes |
+| `gif_loop` | true; strict JSON boolean; true requests infinite GIF replay, false requests one play of the complete output |
 | `hold_start_ms`, `hold_end_ms` | 0; integer 0..10000; extra source-pose holds, once before/after all repeats |
 | `spritesheet` | false; opt-in RGBA atlas plus explicit frame rectangles/timing JSON |
 | `keyframes` | Identity at 0 and 1; 2..32 keys, strictly increasing `at`, includes both 0 and 1 |
+
+### GIF delivery is separate from source playback
+
+Set `"gif_loop": false` in a recipe for play-once GIF delivery. Omitting the field
+preserves the earlier infinite-loop behavior. Only JSON `true` and `false` are
+accepted, not `0`, `1`, strings or `null`.
+
+The mutually exclusive `--play-once` and `--loop` flags override a valid recipe's
+`gif_loop` setting, or apply to a preset. Without either flag the recipe wins, with
+`true` as its default. An invalid recipe still fails rather than being hidden by an
+override. The effective setting is saved in `recipe.json`.
+
+```bash
+# A one-time entrance from an editable recipe:
+python -m gif_cinema motion poster.png --recipe entrance.json --play-once --out output/entrance
+# Explicitly restore infinite GIF replay without editing that recipe:
+python -m gif_cinema motion poster.png --recipe entrance.json --loop --out output/entrance-loop
+```
+
+This setting changes only the final GIF's replay request. It does not change source
+`playback`, `repeats`, trimming, speed, holds, keyframes, PNG pixels or MP4 content.
+For example, `"repeats": 3, "gif_loop": false` plays the source cycle three times
+inside a finished clip and requests one play of that whole clip. Source GIF loop
+metadata never determines delivery. A play-once export ends at the same final pose
+and preserves its encoded hold; it does not add a hold, reverse the entrance or
+make a viewer keep the image on screen indefinitely.
+
+Python callers can use the optional keyword-only override
+`motion(source, out, recipe=recipe, gif_loop=False)`. `None` means use the recipe or
+default; otherwise the override must be a real boolean. Existing positional calls
+remain valid. This field and these flags require a runtime that includes this
+feature; they are not changes to the separately pinned skill package.
+
+### Keyframes and easing
 
 Keyframes support `x`, `y` (source center in normalized canvas coordinates, default
 0.5, range -2..3), `zoom` (relative to fit, default 1, 0.1..8), `rotation` (clockwise
@@ -119,23 +162,39 @@ A frame center exactly on a boundary belongs to the following source drawing.
   playback frame. Per-file and pixel hashes are in `receipt.json`.
 - `review.mp4`: silent H.264 from full-color frames composited onto `background`.
   Codec, dimensions, FPS, frame count and duration are checked with ffprobe, followed
-  by a full decode. It is not a preview of GIF palette loss.
-- `take.gif`: same timing, infinite loop, one shared palette and no dithering for
-  stable flat graphics. Identical adjacent frames may merge into longer holds. GIF
-  is flattened, not transparent, and its colors can differ from MP4/PNG.
+  by a full decode. It is not a preview of GIF palette loss. The file contains one
+  complete rendered timeline; whether it replays is a player setting.
+- `take.gif`: same timing, infinite replay by default or play-once when requested,
+  one shared palette and no dithering for stable flat graphics. Identical adjacent
+  frames may merge into longer holds. GIF is flattened, not transparent, and its
+  colors can differ from MP4/PNG.
   Palette training uses up to 256 representative colors from each full-resolution
   composited frame, not averaged thumbnails. A clip using at most 256 distinct RGB
   colors retains those colors exactly, including thin white marks and isolated
-  accents. More colorful artwork still requires lossy palette reduction; inspect
-  the GIF separately from the full-color MP4.
+  accents. Colors that exactly match the shared palette also remain exact when
+  other colors in that frame need approximation. One global color table avoids
+  storing the same palette again with every changed frame. More colorful artwork
+  still requires lossy palette reduction; inspect the GIF separately from the
+  full-color MP4. See the [decoded encoder comparison](GIF-PALETTE-QUALITY.md).
 - `first.png`, `last.png`, `contact-sheet.png`, `loop-seam.png`: review endpoints,
-  sampled playback, and the actual final-to-first wraparound. Pixel MAE is a diagnostic,
-  never an automatic visual pass.
+  sampled playback, and the final-to-first comparison. For a play-once GIF that
+  comparison is a hypothetical replay, not a transition within the clip. Pixel MAE
+  is a diagnostic, never an automatic visual pass.
 - `recipe.json`: expanded editable settings; `receipt.json`: input/output hashes,
   complete frame-to-source trace, encoder commands and verification evidence. The
   receipt is written last as the completion marker; status stays `human-review-required`.
 - Optional `spritesheet.png` and `spritesheet.json`: transparent full-canvas atlas,
   with exact rectangles and frame durations. No trimming or rotation of packed cells.
+
+The plan, completion summary and receipt report `delivery.gif.loop_policy` as
+`infinite` or `play-once`, with `loop_extension` equal to `0` or `null` respectively.
+Play-once omits the GIF loop extension entirely: an extension value of `1` means
+one **repeat**, not one play. Export reopens the encoded GIF and checks this metadata
+and total frame delays before publishing. `delivery.gif.verification` is `pending`
+in a dry-run and `passed` in a completed receipt. A failed metadata check leaves no
+published candidate or completion receipt. The receipt's loop-review applicability
+is false for play-once GIFs. `delivery.mp4.loop_policy` is always `player-controlled`.
+Verification concerns the encoded request, not a guarantee about a viewer's behavior.
 
 Limits protect local memory and disk: source ≤32 MiB/4 megapixels, ≤512 source
 drawings and 64 million decoded source pixel-frames; output ≤1500 frames and 160

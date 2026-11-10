@@ -1,0 +1,166 @@
+{
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "title": "Keep the action you want",
+  "width": 480,
+  "height": 288,
+  "fps": 50,
+  "duration_ms": 3200,
+  "loop": false,
+  "matte": "#111827",
+  "layers": [
+    {
+      "id": "title",
+      "type": "text",
+      "text": "KEEP THE ACTION YOU WANT",
+      "font_size": 22,
+      "fill": "#edf4ff",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.5,
+          "y": 0.105
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "full_label",
+      "type": "text",
+      "text": "FULL TAKE",
+      "font_size": 15,
+      "fill": "#edf4ff",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.17,
+          "y": 0.27
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "full",
+      "type": "gif",
+      "source": "astronaut.gif",
+      "size": [
+        144,
+        144
+      ],
+      "playback": "once",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.17,
+          "y": 0.56
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "hold_label",
+      "type": "text",
+      "text": "TRIM + HOLD",
+      "font_size": 15,
+      "fill": "#edf4ff",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.5,
+          "y": 0.27
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "hold",
+      "type": "gif",
+      "source": "astronaut.gif",
+      "size": [
+        144,
+        144
+      ],
+      "playback": "once",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.5,
+          "y": 0.56
+        },
+        {
+          "at": 1
+        }
+      ],
+      "source_range_ms": [
+        640,
+        1920
+      ]
+    },
+    {
+      "id": "repeat_label",
+      "type": "text",
+      "text": "TRIM + LOOP",
+      "font_size": 15,
+      "fill": "#edf4ff",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.83,
+          "y": 0.27
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "repeat",
+      "type": "gif",
+      "source": "astronaut.gif",
+      "size": [
+        144,
+        144
+      ],
+      "playback": "loop",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.83,
+          "y": 0.56
+        },
+        {
+          "at": 1
+        }
+      ],
+      "source_range_ms": [
+        640,
+        1920
+      ]
+    },
+    {
+      "id": "note",
+      "type": "text",
+      "text": "Same source. Native timing. No new drawings.",
+      "font_size": 16,
+      "fill": "#b8c8dd",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.5,
+          "y": 0.91
+        },
+        {
+          "at": 1
+        }
+      ]
+    }
+  ]
+}

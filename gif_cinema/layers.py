@@ -19,7 +19,7 @@ import stat
 import subprocess
 import tempfile
 
-from . import motion, strokes, text_fonts
+from . import layer_gifs, layer_sprites, motion, strokes, text_fonts
 from .motion import run_command
 
 FORMAT = 'gif-cinema-layered-scene'
@@ -167,10 +167,13 @@ def normalize_scene(value):
     special = {'rect': ['size', 'fill', 'stroke', 'stroke_width', 'radius'],
                'ellipse': ['size', 'fill', 'stroke', 'stroke_width'],
                'stroke': ['size', 'points', 'stroke', 'stroke_width'],
-               'text': ['text', 'font_size', 'fill', 'font_id', 'font_sha256'], 'image': ['source', 'size', 'sha256']}
+               'text': ['text', 'font_size', 'fill', 'font_id', 'font_sha256'],
+               'image': ['source', 'size', 'sha256'],
+               'gif': ['source', 'size', 'sha256', 'playback', 'source_range_ms'],
+               'sprites': ['source', 'size', 'sha256', 'playback', 'frames', 'sampling', 'source_range_ms']}
     for layer in layers:
         if not isinstance(layer, dict) or not isinstance(layer.get('type'), str) or layer['type'] not in special:
-            raise ValueError('Layer type must be rect, ellipse, stroke, text or image')
+            raise ValueError('Layer type must be rect, ellipse, stroke, text, image, gif or sprites')
         kind = layer['type']
         require_fields(layer, common + special[kind], ['id', 'type'], 'Layer')
         name = layer['id']
@@ -219,6 +222,17 @@ def normalize_scene(value):
             motion.number(row['stroke_width'], 'stroke_width', 1, 128, True)
         else:
             row['source'] = source_name(row.get('source'))
+            if kind in ('gif', 'sprites'):
+                row.setdefault('playback', 'once')
+                if row['playback'] not in ('once', 'loop'):
+                    raise ValueError('Animated layer playback must be once or loop')
+                if 'source_range_ms' in row:
+                    row['source_range_ms'] = layer_gifs.normalize_range(row['source_range_ms'])
+            if kind == 'sprites':
+                row['frames'] = layer_sprites.normalize_frames(row.get('frames'))
+                row.setdefault('sampling', 'smooth')
+                if row['sampling'] not in ('smooth', 'pixel'):
+                    raise ValueError('Sprite sampling must be smooth or pixel')
             if 'sha256' in row and (not isinstance(row['sha256'], str) or not re.fullmatch(r'[0-9a-f]{64}', row['sha256'])):
                 raise ValueError('Asset sha256 must be a lowercase SHA-256 digest')
         normalized.append(row)
@@ -256,7 +270,7 @@ def raster_budget(scene):
             supersampled = high_size[0] * high_size[1]
         else:
             size = layer['size']
-            supersampled = size[0] * size[1] * SUPERSAMPLE ** 2 if layer['type'] != 'image' else 0
+            supersampled = size[0] * size[1] * SUPERSAMPLE ** 2 if layer['type'] not in ('image', 'gif', 'sprites') else 0
         area = size[0] * size[1]
         if area > MAX_LAYER_RASTER_PIXELS or supersampled > MAX_SUPERSAMPLED_RASTER_PIXELS:
             raise ValueError(f'Layer {layer["id"]} exceeds raster/supersampling pixel budget')
@@ -353,9 +367,11 @@ def read_assets(scene, base):
     base = Path(base).resolve()
     assets, pixels, total_bytes = {}, 0, 0
     for layer in scene['layers']:
-        if layer['type'] != 'image':
+        if layer['type'] not in ('image', 'gif', 'sprites'):
             continue
         name = layer['source']
+        if name in assets and (assets[name]['kind'] == 'gif') != (layer['type'] == 'gif'):
+            raise ValueError('The same source cannot be both image and GIF layer')
         if name not in assets:
             path = (base / name).resolve()
             if not path.is_relative_to(base):
@@ -364,19 +380,50 @@ def read_assets(scene, base):
             total_bytes += len(raw)
             if total_bytes > MAX_TOTAL_ASSET_BYTES:
                 raise ValueError('Total asset bytes exceed budget')
-            with Image.open(io.BytesIO(raw)) as source:
-                if source.format not in ('PNG', 'JPEG', 'WEBP') or getattr(source, 'n_frames', 1) != 1:
-                    raise ValueError('Layers support still PNG/JPEG/WebP only; animated assets are not supported')
-                area = source.width * source.height
-                pixels += area
-                if area > MAX_ASSET_PIXELS or pixels > MAX_TOTAL_ASSET_PIXELS:
-                    raise ValueError('Assets exceed decoded pixel budget')
-                image = ImageOps.exif_transpose(source).convert('RGBA')
-                image.info.clear()
-            assets[name] = {'raw': raw, 'rgba': image, 'sha256': digest(raw)}
+            if layer['type'] == 'gif':
+                decoded = layer_gifs.decode(raw, MAX_ASSET_PIXELS, MAX_TOTAL_ASSET_PIXELS - pixels)
+                pixels += sum(frame.width * frame.height for frame in decoded['frames'])
+            else:
+                with Image.open(io.BytesIO(raw)) as source:
+                    if source.format not in ('PNG', 'JPEG', 'WEBP') or getattr(source, 'n_frames', 1) != 1:
+                        raise ValueError('Image layers support still PNG/JPEG/WebP only; use a gif layer for animation')
+                    area = source.width * source.height
+                    pixels += area
+                    limit = layer_sprites.MAX_ATLAS_PIXELS if layer['type'] == 'sprites' else MAX_ASSET_PIXELS
+                    if area > limit or pixels > MAX_TOTAL_ASSET_PIXELS:
+                        raise ValueError('Assets exceed decoded pixel budget')
+                    if layer['type'] == 'sprites' and source.format != 'PNG':
+                        raise ValueError('Sprite layer source must be a still PNG atlas')
+                    if layer['type'] == 'sprites' and max(source.size) > layer_sprites.MAX_ATLAS_SIDE:
+                        raise ValueError('Sprite atlas exceeds maximum side length')
+                    source_format = source.format
+                    orientation = source.getexif().get(274, 1)
+                    if layer['type'] == 'sprites' and orientation != 1:
+                        raise ValueError('Sprite atlas must use unrotated pixel coordinates, without EXIF orientation')
+                    image = ImageOps.exif_transpose(source).convert('RGBA')
+                    image.info.clear()
+                decoded = {'rgba': image, 'source_format': source_format, 'source_orientation': orientation}
+            assets[name] = {'raw': raw, **decoded, 'sha256': digest(raw), 'kind': layer['type']}
+        if layer['type'] == 'sprites' and assets[name].get('source_format') != 'PNG':
+            raise ValueError('Sprite layer source must be a still PNG atlas')
+        if layer['type'] == 'sprites' and assets[name].get('source_orientation') != 1:
+            raise ValueError('Sprite atlas must use unrotated pixel coordinates, without EXIF orientation')
+        if layer['type'] == 'sprites' and max(assets[name]['rgba'].size) > layer_sprites.MAX_ATLAS_SIDE:
+            raise ValueError('Sprite atlas exceeds maximum side length')
+        if layer['type'] == 'image' and assets[name]['rgba'].width * assets[name]['rgba'].height > MAX_ASSET_PIXELS:
+            raise ValueError('Still image asset exceeds per-frame decoded pixel budget')
         if layer.get('sha256', assets[name]['sha256']) != assets[name]['sha256']:
             raise ValueError(f'Asset changed: {name}')
     return assets
+
+
+def fit_image(source, size, *, sampling='smooth'):
+    from PIL import Image
+    source = source.copy()
+    method = Image.Resampling.NEAREST if sampling == 'pixel' else Image.Resampling.LANCZOS
+    source.thumbnail(tuple(size), method)
+    scale = min(size[0] / source.width, size[1] / source.height)
+    return source.resize((max(1, round(source.width * scale)), max(1, round(source.height * scale))), method)
 
 
 def rasterize(layer, assets):
@@ -384,12 +431,12 @@ def rasterize(layer, assets):
     kind = layer['type']
     if kind == 'stroke':
         return strokes.rasterize(layer, strokes.prepare_path(layer['points']), 1, SUPERSAMPLE)
-    if kind == 'image':
-        source = assets[layer['source']]['rgba'].copy()
-        source.thumbnail(tuple(layer['size']), Image.Resampling.LANCZOS)
-        # Enlarge small images to their author-chosen box, preserving aspect ratio.
-        scale = min(layer['size'][0] / source.width, layer['size'][1] / source.height)
-        return source.resize((max(1, round(source.width * scale)), max(1, round(source.height * scale))), Image.Resampling.LANCZOS)
+    if kind in ('image', 'gif'):
+        return fit_image(assets[layer['source']]['rgba'], layer['size'])
+    if kind == 'sprites':
+        x, y, width, height = layer['frames'][0]['rect']
+        drawing = assets[layer['source']]['rgba'].crop((x, y, x + width, y + height))
+        return fit_image(drawing, layer['size'], sampling=layer['sampling'])
     scale = SUPERSAMPLE
     if kind == 'text':
         font, bounds, high_size, size = text_layout(layer)
@@ -414,12 +461,42 @@ def prepare_scene(path):
     raw = read_regular(path, MAX_SCENE_BYTES)
     scene = parse_scene(raw)
     assets = read_assets(scene, path.parent)
-    # Cache premultiplication once, not a conversion of the full source on each frame.
-    rasters = {layer['id']: rasterize(layer, assets).convert('RGBa') for layer in scene['layers']}
+    # GIF disposal can depend on earlier drawings, so trimming never bypasses
+    # full bounded source decoding. Validate actual duration before raster caches.
+    for layer in scene['layers']:
+        if layer['type'] in ('gif', 'sprites'):
+            sequence = assets[layer['source']] if layer['type'] == 'gif' else layer_sprites.sequence(layer)
+            layer_gifs.playback_range(sequence, layer)
+    cached_gif_pixels = layer_gifs.cache_budget(scene, assets)
+    sprite_budget = layer_sprites.budgets(scene, assets, cached_gif_pixels)
+    # Cache premultiplication once for interpolated transforms. Nearest-neighbor
+    # sprite sampling needs no premultiplication and keeps exact source colors.
+    rasters, gif_rasters, sprite_sequences = {}, {}, {}
+    for layer in scene['layers']:
+        if layer['type'] == 'gif':
+            variants = [fit_image(frame, layer['size']).convert('RGBa')
+                        for frame in assets[layer['source']]['frames']]
+            gif_rasters[layer['id']] = variants
+            rasters[layer['id']] = variants[0]
+        elif layer['type'] == 'sprites':
+            source = assets[layer['source']]['rgba']
+            variants = []
+            for record in layer['frames']:
+                x, y, width, height = record['rect']
+                drawing = source.crop((x, y, x + width, y + height))
+                raster = fit_image(drawing, layer['size'], sampling=layer['sampling'])
+                variants.append(raster if layer['sampling'] == 'pixel' else raster.convert('RGBa'))
+            gif_rasters[layer['id']] = variants
+            rasters[layer['id']] = variants[0]
+            sprite_sequences[layer['id']] = layer_sprites.sequence(layer)
+        else:
+            rasters[layer['id']] = rasterize(layer, assets).convert('RGBa')
     paths = {layer['id']: strokes.prepare_path(layer['points'])
              for layer in scene['layers'] if layer['type'] == 'stroke'}
     return {'scene': scene, 'assets': assets, 'rasters': rasters,
             'stroke_paths': paths,
+            'gif_rasters': gif_rasters, 'cached_gif_pixels_upper_bound': cached_gif_pixels,
+            'sprite_sequences': sprite_sequences, 'sprite_budget': sprite_budget,
             'source_path': path, 'source_sha256': digest(raw)}
 
 
@@ -444,10 +521,18 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
         if only_layer is not None and layer['id'] != only_layer:
             continue
         state = layer_transform(scene, layer, time_ms)
+        if state is not None and layer['type'] == 'gif':
+            state['source_index'] = layer_gifs.frame_index(prepared['assets'][layer['source']],
+                time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms'))
+        elif state is not None and layer['type'] == 'sprites':
+            state['source_index'] = layer_gifs.frame_index(prepared['sprite_sequences'][layer['id']],
+                time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms'))
         states[layer['id']] = state
         if state is None or state['opacity'] <= 0:
             continue
         raster = prepared['rasters'][layer['id']]
+        if layer['type'] in ('gif', 'sprites'):
+            raster = prepared['gif_rasters'][layer['id']][state['source_index']]
         if layer['type'] == 'stroke' and state['reveal'] != 1:
             if state['reveal'] == 0:
                 continue
@@ -459,8 +544,8 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
         cx, cy = state['x'] * scene['width'], state['y'] * scene['height']
         ax, ay = layer['anchor'][0] * raster.width, layer['anchor'][1] * raster.height
         matrix = (a, b, ax - a * cx - b * cy, d, e, ay - d * cx - e * cy)
-        transformed = raster.transform(canvas.size, Image.Transform.AFFINE,
-                        matrix, resample=Image.Resampling.BICUBIC).convert('RGBA')
+        method = Image.Resampling.NEAREST if layer.get('sampling') == 'pixel' else Image.Resampling.BICUBIC
+        transformed = raster.transform(canvas.size, Image.Transform.AFFINE, matrix, resample=method).convert('RGBA')
         if state['opacity'] != 1:
             transformed.putalpha(transformed.getchannel('A').point(lambda alpha: round(alpha * state['opacity'])))
         if _layer_previews is not None:
@@ -521,7 +606,7 @@ def save_bundle(prepared, destination):
     normalized = copy.deepcopy(prepared['scene'])
     snapshots = {}
     for layer in normalized['layers']:
-        if layer['type'] != 'image':
+        if layer['type'] not in ('image', 'gif', 'sprites'):
             continue
         asset = prepared['assets'][layer['source']]
         layer['source'] = f'assets/{asset["sha256"]}.image'
@@ -554,6 +639,9 @@ def render_scene(path, out, dry_run=False):
             'width': scene['width'], 'height': scene['height'], 'layer_count': len(scene['layers']),
             'loop': scene['loop'], 'scene_sha256': prepared['source_sha256'],
             'raster_budget': raster_budget(scene),
+            'cached_gif_pixels_upper_bound': prepared['cached_gif_pixels_upper_bound'],
+            'gif_timing': layer_gifs.timing_report(scene, prepared['assets']),
+            'sprite_budget': prepared['sprite_budget'], 'sprite_timing': layer_sprites.timing_report(scene),
             'text_renderer': scene.get('text_renderer'),
             'font_assets': text_fonts.font_receipt(scene),
             'asset_sha256': {name: asset['sha256'] for name, asset in prepared['assets'].items()},
@@ -624,8 +712,9 @@ def render_scene(path, out, dry_run=False):
                 gif_frames.append(motion.quantize_shared(frame.convert('RGB'), palette))
         gif = stage / 'preview.gif'
         options = {'loop': 0} if scene['loop'] else {}
-        gif_frames[0].save(gif, save_all=True, append_images=gif_frames[1:], duration=step,
-                           optimize=False, disposal=1, **options)
+        # Per-frame delays preserve an all-identical clip's total hold on Pillow 10.1 too.
+        gif_frames[0].save(gif, save_all=True, append_images=gif_frames[1:], duration=[step] * len(gif_frames),
+                           optimize=False, disposal=1, palette=palette.getpalette(), **options)
         del gif_frames
         with Image.open(gif) as encoded:
             gif_first = encoded.convert('RGB').copy()
@@ -688,7 +777,11 @@ def render_scene(path, out, dry_run=False):
             'reopen_verified_frames': reopen_verified, 'reopen_scope': 'five sampled frames, all sources snapshotted',
             'pillow': PIL.__version__, 'probe': probe, 'commands': commands, 'samples': samples, 'outputs': outputs,
             'limitations': ['Experimental GIF Cinema format, not Lottie-compatible.',
-                'Still image, text, ellipse, rounded rectangle and authored polyline stroke layers; no articulated animation.',
+                'Still images, existing GIF/PNG-atlas drawings, text, shapes and strokes; no new character poses.',
+                'Sprite layers use authored equal-size atlas rectangles and delays; no auto-rigging, automatic spatial trimming or pose synthesis.',
+                'GIF layers retain native source cadence on the output frame grid; high FPS does not create new drawings.',
+                'GIF source loop metadata is ignored; each GIF layer explicitly plays once with final hold or loops.',
+                'Animated source_range_ms selects existing native intervals; it neither retimes drawings nor repairs a loop seam.',
                 'Stroke reveal follows authored point order and arc length; no handwriting generation, tracing or SVG import.',
                 'No expressions, scripts, URLs, font paths/downloads, parenting, masks, blend modes or Lottie import/export.',
                 'Layer order is back to front; opacity uses source-over alpha compositing.',
@@ -716,9 +809,20 @@ def main(argv=None):
     save = sub.add_parser('save', help='Save a new portable editable scene and snapshot its assets')
     save.add_argument('scene', type=Path)
     save.add_argument('--out', required=True, type=Path)
+    atlas = sub.add_parser('import-sprites', help='Import a verified sprites pack/slice manifest as a portable animated scene')
+    atlas.add_argument('manifest', type=Path)
+    atlas.add_argument('--out', required=True, type=Path)
+    atlas.add_argument('--width', type=int, default=512)
+    atlas.add_argument('--height', type=int, default=512)
+    atlas.add_argument('--fps', type=int, choices=(25, 50), default=50)
+    atlas.add_argument('--repeat', action='store_true')
+    atlas.add_argument('--dry-run', action='store_true')
     args = parser.parse_args(argv)
     try:
-        if args.command == 'save':
+        if args.command == 'import-sprites':
+            result = layer_sprites.import_project(args.manifest, args.out, width=args.width, height=args.height,
+                fps=args.fps, repeat=args.repeat, dry_run=args.dry_run)
+        elif args.command == 'save':
             result = {'scene': str(save_bundle(prepare_scene(args.scene), args.out)), 'api_calls': 0}
         else:
             result = render_scene(args.scene, args.out, dry_run=args.dry_run)

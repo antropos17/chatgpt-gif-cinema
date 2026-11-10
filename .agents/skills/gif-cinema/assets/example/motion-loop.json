@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "width": 256,
+  "height": 256,
+  "fps": 25,
+  "fit": "contain",
+  "background": "#101018",
+  "playback": "ping-pong",
+  "keyframes": [
+    {"at": 0, "zoom": 1, "easing": "ease-in-out"},
+    {"at": 0.5, "zoom": 1.12, "rotation": 2, "easing": "ease-in-out"},
+    {"at": 1, "zoom": 1, "rotation": 0}
+  ]
+}

@@ -9,17 +9,22 @@ import os
 from pathlib import Path
 import re
 import shutil
+import sys
 import tempfile
 import time
 
-from PIL import Image, ImageChops, ImageDraw, ImageStat
+from PIL import Image, ImageDraw
 
 from . import cli
+from .continuity import cut_context, cut_sheet
 from .durability import durable_write, sync_directory
 from .audio import MAX_AUDIO_SECONDS, prepare_audio, verify_film_audio
+from .captions import publish as publish_captions
 
 VERSION = 1
-ASSEMBLY_VERSION = 2  # Invalidate older exports that could lose the final frame.
+ASSEMBLY_VERSION = 3  # Rebuild older untagged exports with a matched color matrix.
+MAX_SCRIPT_BYTES = 1024 * 1024
+MAX_REFERENCE_BYTES = 20 * 1024 * 1024
 
 
 def digest(value):
@@ -64,10 +69,12 @@ def fields(value, allowed, label):
 
 def load_script(path, args):
     """Validate script/local inputs; strict audio decoding is execution preflight."""
-    if path.stat().st_size > 1024 * 1024:
-        raise ValueError("Script exceeds 1 MiB")
-    script = json.loads(path.read_text(encoding="utf-8-sig"))
+    # Parse and identify exactly the bytes returned by the bounded regular-file
+    # reader, before GIF/reference reads reuse raw or the script path changes.
+    raw = cli.read_local_bytes(path, MAX_SCRIPT_BYTES, "Script")
+    script = json.loads(raw.decode("utf-8-sig"))
     fields(script, {"schema_version", "title", "ratio", "style_bible", "shots", "width", "height", "fps", "audio", "audio_notes"}, "script")
+    script["_script_sha256"] = digest(raw)
     if type(script.get("schema_version")) is not int or script["schema_version"] != VERSION:
         raise ValueError("schema_version must be 1")
     text(script.get("title"), "title")
@@ -145,10 +152,8 @@ def load_script(path, args):
                 inputs, total = [], 0
                 for name in names:
                     reference = (path.parent / text(name, "reference")).resolve()
-                    total += reference.stat().st_size
-                    if total > 20 * 1024 * 1024:
-                        raise ValueError("Shot references exceed 20 MiB combined")
-                    raw = reference.read_bytes()
+                    raw = cli.read_local_bytes(reference, MAX_REFERENCE_BYTES - total, "Shot references")
+                    total += len(raw)
                     with Image.open(io.BytesIO(raw)) as im:
                         if im.format not in {"PNG", "JPEG", "WEBP"} or getattr(im, "n_frames", 1) != 1:
                             raise ValueError("References must be still PNG, JPEG or WebP images")
@@ -169,9 +174,10 @@ def reference_receipt(shot):
 def request_payload(shot):
     payload = dict(shot["payload"])
     if "reference_inputs" in shot:
-        images = []
+        images, total = [], 0
         for ref in shot["reference_inputs"]:
-            raw = ref["path"].read_bytes()
+            raw = cli.read_local_bytes(ref["path"], MAX_REFERENCE_BYTES - total, "Shot references")
+            total += len(raw)
             if digest(raw) != ref["sha256"]:
                 raise ValueError("Reference image changed since planning; no request sent")
             images.append({"image_url": f"data:{ref['mime']};base64," + base64.b64encode(raw).decode("ascii")})
@@ -200,7 +206,7 @@ def cached(root, record, shot):
 
 
 def probe(path, width, height, expected_seconds, fps, shots, expected_audio=False):
-    command = ["ffprobe", "-v", "error", "-count_frames", "-select_streams", "v:0", "-show_entries", "stream=codec_name,width,height,duration,nb_read_frames", "-of", "json", str(path)]
+    command = ["ffprobe", "-v", "error", "-count_frames", "-select_streams", "v:0", "-show_entries", "stream=codec_name,width,height,duration,nb_read_frames,color_range,color_space,color_transfer,color_primaries", "-of", "json", str(path)]
     result = cli.run_media(command)
     info = json.loads(result.stdout)["streams"][0]
     actual = float(info["duration"])
@@ -209,6 +215,8 @@ def probe(path, width, height, expected_seconds, fps, shots, expected_audio=Fals
             or count != round(expected_seconds * fps) or not math.isfinite(actual)
             or abs(actual - expected_seconds) > 0.5 / fps):
         raise RuntimeError("Encoded film failed codec, dimensions or duration verification")
+    if any(info.get(key) != value for key, value in cli.FILM_COLOR_TAGS.items()):
+        raise RuntimeError("Encoded film failed BT.709 limited-range color verification")
     # Decode all frames, not just the container metadata.
     cli.run_media(["ffmpeg", "-nostdin", "-v", "error", "-xerror", "-i", str(path), "-map", "0:v:0", "-f", "null", "-"])
     if expected_audio:
@@ -219,9 +227,9 @@ def probe(path, width, height, expected_seconds, fps, shots, expected_audio=Fals
 def diagnostics(root, script, records):
     sheet = Image.new("RGB", (480, len(records) * 205), "#181818")
     draw = ImageDraw.Draw(sheet)
-    joins, previous = [], None
+    joins, previous, previous_delays, previous_offset = [], None, None, 0
     for index, (shot, record) in enumerate(zip(script["shots"], records)):
-        frames, _, _ = cli.validate_gif(local_path(root, record["output"]))
+        frames, delays, _ = cli.validate_gif(local_path(root, record["output"]))
         for label, frame, x in (("first", frames[0], 0), ("last", frames[-1], 240)):
             output = root / f"{shot['id']}-{label}.png"
             data = io.BytesIO(); frame.save(data, format="PNG")
@@ -230,13 +238,21 @@ def diagnostics(root, script, records):
             sheet.paste(thumbnail, (x, index * 205))
             draw.text((x + 4, index * 205 + 183), f"{shot['id']} {label}", fill="white")
         if previous is not None:
-            diff = ImageChops.difference(previous.resize((128, 128)), frames[0].resize((128, 128)))
+            context = cut_context(previous, previous_delays, frames, delays, previous_offset)
+            strip_name = f"join-{index:02}.png"
+            data = io.BytesIO()
+            cut_sheet(previous, frames, context).save(data, format="PNG")
+            cli.write_result(root / strip_name, data.getvalue(), force=True)
             joins.append({"previous": script["shots"][index - 1]["id"], "next": shot["id"],
-                          "pixel_mae_0_255": round(sum(ImageStat.Stat(diff).mean) / 3, 3),
+                          "pixel_mae_0_255": round(context["cut_pixel_mae_0_255"], 3),
+                          "cut_context": context, "context_sheet": strip_name,
                           "previous_end_target": script["shots"][index - 1]["last_frame_target"],
                           "next_start_target": shot["first_frame_target"], "status": "human-review-required"})
-        previous = frames[-1]
-        del frames  # Retain only the endpoint, not the previous shot's entire decode.
+        # Retain only the final three drawings and their timing between decodes.
+        previous_offset = max(0, len(frames) - 3)
+        previous = frames[-3:]
+        previous_delays = delays[-3:]
+        del frames
     data = io.BytesIO(); sheet.save(data, format="PNG")
     cli.write_result(root / "contact-sheet.png", data.getvalue(), force=True)
     report = {"status": "human-review-required", "note": "Pixel MAE cannot measure identity, motion or narrative continuity. Targets are instructions, not verified observations.", "joins": joins}
@@ -353,7 +369,7 @@ def execute(args, script_path, script, root, manifest_path, manifest, actions):
         run_record = {"status": "running", "api_calls": 0, "generated": 0, "imported": 0, "skipped": 0, "max_api_calls": args.max_api_calls}
         manifest["runs"].append(run_record)
         manifest["title"] = script["title"]
-        manifest["script_sha256"] = digest(script_path.read_bytes())
+        manifest["script_sha256"] = script["_script_sha256"]
         if "audio_preflight" in script:
             manifest["audio_preflight"] = script["audio_preflight"]
         else:
@@ -459,22 +475,17 @@ def execute(args, script_path, script, root, manifest_path, manifest, actions):
                     cli.write_result(film_path, staged.read_bytes(), force=film_path.exists())
                 manifest["film"] = {"fingerprint": movie_fingerprint, "sha256": digest(film_path.read_bytes()), "output": "film.mp4", "probe": info}
             save(root / "film-inspect.json", info)
-            # Captions are a separate, editable SRT; they do not alter source GIFs.
-            clock, subtitles = 0, []
-            def stamp(ms):
-                return f"{ms // 3600000:02}:{ms // 60000 % 60:02}:{ms // 1000 % 60:02},{ms % 1000:03}"
-            for shot, record in zip(script["shots"], records):
-                end = clock + max(1, round(record["duration_ms"] * script["fps"] / 1000)) * 1000 / script["fps"]
-                if shot.get("caption"):
-                    subtitles.append(f"{len(subtitles)+1}\n{stamp(round(clock))} --> {stamp(round(end))}\n{shot['caption']}\n")
-                clock = end
-            cli.write_result(root / "captions.srt", "\n".join(subtitles).encode("utf-8"), force=True)
+            caption_record = publish_captions(root, script, records, manifest.get("captions"))
+            manifest["captions"] = caption_record
+            if caption_record.get("warning"):
+                print("Warning: " + caption_record["warning"], file=sys.stderr)
             run_record.update(status="complete", film_seconds=float(info["duration"]), verification="decoded-h264; narrative-human-review-required")
             if script.get("audio_path"):
                 run_record["verification"] = "decoded-h264-and-aac; narrative-human-review-required"
             save(manifest_path, manifest)
             receipt = {**run_record, "film": str(film_path), "usage_from_completed_shots_including_reused": [r["usage"] for r in records if r.get("usage")],
-                       "cost": "not calculated; imported shots made no new API calls", "continuity": "human-review-required"}
+                       "cost": "not calculated; imported shots made no new API calls", "continuity": "human-review-required",
+                       "captions": caption_record}
             if "audio" in info:
                 receipt["audio"] = info["audio"]
             save(root / "receipt.json", receipt)

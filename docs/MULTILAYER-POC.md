@@ -26,6 +26,11 @@ The dry-run writes nothing. The final command reopens and rerenders every frame,
 compares RGBA pixels, requires the complete export inventory and verifies its hashes.
 All output directories must be new. The separate showcase artwork, media and demo generator are not included.
 
+For GIF/sprite sources, [native drawing review](NATIVE-LAYER-REVIEW.md) can then
+show every selected source pose on light/dark backgrounds. Unlike a few evenly
+spaced scene thumbnails, it cannot accidentally sample only one phase of a loop.
+It complements, rather than replaces, watching and reviewing the final export.
+
 ## Contract
 
 A scene has `format: "gif-cinema-layered-scene"`, `schema_version: 1`, a title,
@@ -48,13 +53,24 @@ rasters are premultiplied once and reused for every frame.
 
 Every layer has a unique `id`, `type`, optional human-readable `name`, optional
 `anchor: [0.5, 0.5]`, `in_ms` and `out_ms`, and 2..32 `keyframes`.
+Animated GIF/sprite layers may select an explicit `source_range_ms: [start,end]`
+in native source time. The end is exclusive; this is separate from scene-time
+visibility. See [non-destructive source trimming](SOURCE-TRIMS.md).
 
 Types:
 
 - `image`: local still PNG/JPEG/WebP `source`, desired pixel `size: [w,h]`.
   Images fit within that box without changing aspect ratio. Animated sources are
-  deliberately rejected in this first experiment. Source EXIF display orientation
+  rejected for this still-image type. Source EXIF display orientation
   is normalized before compositing. Portable saves include a verified `sha256`.
+- `gif`: existing local GIF `source`, desired pixel `size`, and explicit `playback`
+  (`once` with final hold, or `loop`). Native delays, independent layer clocks,
+  alpha/disposal and actual source indices are retained. See [GIF layers](GIF-LAYERS.md)
+  for the no-key example, cache limits, skipped-drawing diagnostics and precise scope.
+- `sprites`: existing still PNG atlas `source`, equal-size `frames` rectangles
+  with native delays, desired `size`, `playback` and `sampling`. Retains source
+  RGBA without a GIF round trip; nontrivial EXIF orientation is rejected to keep
+  atlas coordinates explicit. See [sprite layers and verified import](SPRITE-LAYERS.md).
 - `text`: editable single-line `text`, `font_size`, `fill`, and optional `font_id`.
   The default `pillow-default` preserves the known bundled Aileron font. Explicit
   `noto-sans-regular-2.004` loads the packaged OFL font for Russian/Azerbaijani.

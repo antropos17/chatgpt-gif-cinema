@@ -9,6 +9,15 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / '.agents/skills/gif-cinema'
 FILES = (
+    'assets/example/motion-loop.json',
+    'references/motion.md',
+    'scripts/smoke_motion.py',
+    'assets/example/gif-layer.json',
+    'scripts/verify_layers.py',
+    'scripts/smoke_layers.py',
+    'references/layers.md',
+    'assets/example/stroke-reveal.json',
+    'assets/example/layered-shapes.json',
     'SKILL.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'agents/openai.yaml', 'runtime.json',
     'scripts/check_install.py', 'scripts/smoke_test.py', 'scripts/smoke_media.py',
     'scripts/review_gif.py', 'scripts/story_project.py', 'scripts/story_chapters.py', 'scripts/story_pages.py',
