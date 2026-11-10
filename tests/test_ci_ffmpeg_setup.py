@@ -64,7 +64,7 @@ if phase == 'install':
                    TEST_APT_LOG=str(self.log), TEST_APT_BIN=str(self.bin), TEST_APT_SCENARIO=scenario)
         # Mock only the host gate. Every orchestration branch runs as written.
         # Model older Bash unwinding the local before executing an EXIT trap.
-        trap_hook = 'trap() { builtin trap "$@"; unset work; }; ' if unwind_work else ''
+        trap_hook = 'trap() { builtin trap "$@"; unset work; exit 47; }; ' if unwind_work else ''
         result = subprocess.run([shutil.which('bash'), '-c',
                                  'source "$1"; verify_ubuntu_host() { ' +
                                  (':' if valid_host else 'return 1') + '; }; ' + trap_hook +
@@ -82,7 +82,7 @@ if phase == 'install':
 
     def test_cleanup_does_not_depend_on_local_variable_lifetime(self):
         result, calls = self.run_setup(unwind_work=True)
-        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.returncode, 47, result.stderr)
         self.assertEqual(calls, [])
 
     def test_rejected_host_does_not_start_apt(self):
