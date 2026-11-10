@@ -16,6 +16,7 @@ keywords = ["openai", "gif", "animation", "film", "codex", "skill"]
 
 [project.optional-dependencies]
 filmqa = ["Pillow>=10.1"]
+lossless = ["av>=16.1,<17"]
 
 [project.scripts]
 gif-cinema = "gif_cinema.cli:main"

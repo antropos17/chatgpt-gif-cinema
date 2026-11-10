@@ -491,6 +491,8 @@ def build_parser():
     add_story_state_parser(sub)
     from .factory import add_parser as add_factory_parser
     add_factory_parser(sub)
+    from .master import add_parser as add_master_parser
+    add_master_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")
