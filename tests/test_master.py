@@ -115,7 +115,7 @@ class MasterTests(unittest.TestCase):
     def test_independent_ffmpeg_decoder_matches_all_master_rgba(self):
         report = master.build(self.paths, self.out)
         raw = cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(self.out / 'master.mkv'),
-                            '-vsync', '0', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-']).stdout
+                            '-fps_mode', 'passthrough', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-']).stdout
         stride = report['width'] * report['height'] * 4
         self.assertEqual(len(raw), report['frame_count'] * stride)
         for frame in report['frames']:

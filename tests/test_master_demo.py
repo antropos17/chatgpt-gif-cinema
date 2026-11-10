@@ -17,8 +17,11 @@ class MasterDemoTests(unittest.TestCase):
             with self.subTest(key=key):
                 probe = subprocess.CompletedProcess([], 0, stdout=json.dumps({'frames': [{'pts_time': '0.030000', key: '0.070000'}]}).encode())
                 raw = subprocess.CompletedProcess([], 0, stdout=bytes([255, 0, 0]) * 48 * 48)
-                with patch.object(cli, 'run_media', side_effect=[probe, raw]):
+                with patch.object(cli, 'run_media', side_effect=[probe, raw]) as runner:
                     frames = demo.decoded(Path('fixture.mp4'))
+                decode = runner.call_args_list[1].args[0]
+                self.assertNotIn('-vsync', decode)
+                self.assertEqual(decode[decode.index('-fps_mode') + 1], 'passthrough')
                 self.assertEqual(frames, [{'start_ms': 30, 'duration_ms': 70, 'rgb': [255, 0, 0]}])
 
     def test_missing_duration_is_a_clear_error(self):

@@ -23,7 +23,7 @@ DELAYS = [30, 70, 20, 20, 30, 70, 20]
 def decoded(path):
     info = json.loads(cli.run_media(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_frames',
         '-show_entries', 'frame=pts_time,duration_time,pkt_duration_time', '-of', 'json', str(path)]).stdout)['frames']
-    raw = cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(path), '-vsync', '0',
+    raw = cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(path), '-fps_mode', 'passthrough',
                          '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-']).stdout
     stride = 48 * 48 * 3
     if len(raw) != len(info) * stride: raise ValueError('Unexpected comparison decode size')
