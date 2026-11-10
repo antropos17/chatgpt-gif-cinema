@@ -190,6 +190,10 @@ public CLI**. Each thumbnail loops a **2.24-second excerpt**; the linked films s
 
 ## Make your first film
 
+Need every stored drawing and declared hold preserved? Use the
+[verified RGBA film master](docs/GIF-MASTER.md), with an optional standard MP4
+viewing copy. The fixed-FPS route below remains available.
+
 **Three bundled GIFs → a 7.68-second MP4. No key, no paid requests.** Python 3.10+, Pillow, Git, FFmpeg and ffprobe are required.
 
 <details>

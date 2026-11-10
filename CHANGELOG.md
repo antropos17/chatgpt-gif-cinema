@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — exact decoded-GIF film master
+
+- Add optional FFV1/BGRA Matroska masters with one frame per stored GIF drawing,
+  exact RGBA/PTS/hold verification and explicit packet durations before muxing.
+- Preserve original pixels through transparent center-padding, without resizing,
+  cropping, frame coalescing or interpolation. Strict ambiguous-GIF cases fail.
+- Add an optional lossy H.264 viewing copy on an exact 10 ms grid; explicitly pad/trim
+  optional AAC audio instead of relying on `-shortest`. Preserve a silent pixel master.
+- Include bounded staging, no-clobber publication, optional PyAV tests and a reproducible
+  comparison against ordinary fixed-FPS exports. Visual acceptance remains pending.
+
 ## Unreleased — offline GIF factory
 
 - Build a strict hash-pinned manifest of local GIFs and existing layered scenes into
