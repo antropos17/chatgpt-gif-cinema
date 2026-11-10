@@ -1,0 +1,81 @@
+{
+  "blender_version": "4.3.2",
+  "renderer": "BLENDER_EEVEE_NEXT",
+  "resolution": [
+    800,
+    800
+  ],
+  "fps": 24,
+  "frame_range": [
+    1,
+    144
+  ],
+  "duration_seconds": 6.0,
+  "geometry_loop_max_transform_error": 5.731346528944757e-17,
+  "geometry_loop_closed": true,
+  "animated_controllers": 12,
+  "camera": "Locked orthographic three-quarter camera",
+  "asset_sources": "Authored Blender meshes; bundled DejaVu typeface; no external textures",
+  "materials": [
+    "01 | Warm porcelain",
+    "02 | Satin silver",
+    "03 | Anodized graphite",
+    "04 | Burnt copper",
+    "05 | Warm limestone backdrop",
+    "Type | unlit charcoal"
+  ],
+  "lighting": "Four studio area lights; the key casts soft shadows",
+  "denoising": "No generative or neural denoising; conventional FFmpeg hqdn3d only",
+  "png_frame_count": 144,
+  "mp4": {
+    "codec": "h264",
+    "resolution": [
+      800,
+      800
+    ],
+    "frame_count": 144,
+    "frame_rate": "24/1",
+    "seconds": 6.0,
+    "audio": false
+  },
+  "gif": {
+    "resolution": [
+      640,
+      640
+    ],
+    "frame_count": 120,
+    "durations_ms": [
+      50
+    ],
+    "seconds": 6.0,
+    "loop": "infinite"
+  },
+  "frame_seam_mean_abs_rgb_difference": 0.1418890625,
+  "first_step_mean_abs_rgb_difference": 0.14213229166666666,
+  "seam_check_note": "Geometry transforms at frame 145 and frame 1 are identical. Encoded sequence intentionally ends on frame 144.",
+  "unique_render_frames": 144,
+  "contact_sheet_frames": [
+    1,
+    13,
+    25,
+    37,
+    49,
+    61,
+    73,
+    85,
+    97,
+    109,
+    121,
+    144
+  ],
+  "exports": {
+    "FORM-01.mp4": {
+      "bytes": 360583,
+      "sha256": "bd070044dd65a9f0c3f60a27cabf0790de9b827a71461d4d0d09d88ba7443e99"
+    },
+    "FORM-01.gif": {
+      "bytes": 5371724,
+      "sha256": "650025f8a6547fb9c173f41e3574c91024839f683a9e552eb241e6391986fa18"
+    }
+  }
+}

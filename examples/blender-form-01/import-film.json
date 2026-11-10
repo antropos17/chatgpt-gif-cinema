@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "title": "FORM / 01 \u00b7 imported Blender loop",
+  "ratio": "1:1",
+  "width": 640,
+  "height": 640,
+  "fps": 20,
+  "style_bible": "Existing Blender EEVEE render: porcelain segments open around a copper core and return. This imports the supplied GIF; it does not create new 3D action or make an AI generation call.",
+  "audio_notes": "Silent.",
+  "shots": [
+    {
+      "id": "form-01",
+      "source": "deliverables/FORM-01.gif",
+      "transition": "cut",
+      "first_frame_target": "Porcelain ring nearly closed around the copper core.",
+      "last_frame_target": "The same arrangement returns one frame interval before the first pose."
+    }
+  ]
+}

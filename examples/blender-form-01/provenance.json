@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "title": "FORM / 01",
+  "production_method": "Authored Blender geometry, materials, lighting, typography and keyframes; rendered in Blender EEVEE 4.3.2; conventional FFmpeg encoding.",
+  "code_authorship": "Assistant-authored Python; not AI image/video model output.",
+  "new_provider_calls": 0,
+  "javascript_animation": false,
+  "standalone_example": true,
+  "runtime_backend_added": false,
+  "font": {
+    "family": "DejaVu Sans",
+    "origin": "Unmodified preinstalled DejaVu font package; upstream https://dejavu-fonts.github.io/",
+    "license": "assets/DejaVu-LICENSE.txt",
+    "packed_in_blend": true
+  },
+  "review": {
+    "all_frames_decoded": true,
+    "keyframes_visually_reviewed": [
+      1,
+      13,
+      25,
+      37,
+      49,
+      61,
+      73,
+      85,
+      97,
+      109,
+      121,
+      144
+    ],
+    "full_frame_visual_review": "pending",
+    "realtime_playback_review": "pending",
+    "user_artistic_acceptance": "pending",
+    "limitations": [
+      "GIF dithering is visible in gradients.",
+      "Small footer text is decorative at GIF size."
+    ]
+  },
+  "files": {
+    "form_01.blend": {
+      "bytes": 4243340,
+      "sha256": "ffa88c415ac75b7cbfa40d08969f82becebe1d69a4e64ca32f07c0a6ca6bf5e6"
+    },
+    "form_study.py": {
+      "bytes": 10393,
+      "sha256": "2bb9e98e8f26e27629bf53c1c46c775bcb410f8b2a90c7fd6deaa9185c456815"
+    },
+    "encode.sh": {
+      "bytes": 649,
+      "sha256": "b334972f5135bbe2df37f3c4fe33bc1394868dc314d23814eb73a6ffccf3c004"
+    },
+    "assets/DejaVuSans.ttf": {
+      "bytes": 759720,
+      "sha256": "57f73e11f51999432bf7ab22ce55b6f945d5eca1bf824404cfa9ec2e3718c84e"
+    },
+    "assets/DejaVu-LICENSE.txt": {
+      "bytes": 3857,
+      "sha256": "e81d9dced49fea2a7d576cbea283873de58563c5d488f954deb282843c3ea79c"
+    },
+    "deliverables/FORM-01.gif": {
+      "bytes": 5371724,
+      "sha256": "650025f8a6547fb9c173f41e3574c91024839f683a9e552eb241e6391986fa18"
+    },
+    "deliverables/FORM-01.mp4": {
+      "bytes": 360583,
+      "sha256": "bd070044dd65a9f0c3f60a27cabf0790de9b827a71461d4d0d09d88ba7443e99"
+    },
+    "deliverables/contact-sheet.jpg": {
+      "bytes": 293701,
+      "sha256": "726ff8f0a7c756d489fb8ac5ce735cf0daf1659d63c9b9a7c4d9b97e109181a7"
+    },
+    "deliverables/validation.json": {
+      "bytes": 1874,
+      "sha256": "ec61a88437749c25858b911246f69dc765830421f8ca7dbb2c6c8e0963ac2da0"
+    },
+    "scene-check.json": {
+      "bytes": 807,
+      "sha256": "29ecf036057e4292753da42c96de0b02b9e9590ef1d4e06eda813dbf1fb76c28"
+    },
+    "import-film.json": {
+      "bytes": 682,
+      "sha256": "ad2cb40ad304fa4ab8a0dc2665ad19fd184f7cf24a1732b53786c7efa9fcfec8"
+    }
+  },
+  "source_rebuild_verified": {
+    "blender": "4.3.2",
+    "packed_font_relative_path": "//assets/DejaVuSans.ttf",
+    "render_output_relative_path": "//renders/form_"
+  },
+  "cli_import_verification": {
+    "api_calls": 0,
+    "duration_seconds": 6.0,
+    "width": 640,
+    "height": 640,
+    "decoded_frames": 120,
+    "codec": "h264",
+    "color_space": "bt709",
+    "repeat_run_reused_shots": 1,
+    "continuity": "human-review-required"
+  }
+}
