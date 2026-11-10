@@ -29,7 +29,9 @@ class ScriptSnapshotTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        # render.run canonicalizes the script path; macOS temp roots (or an
+        # explicit TMPDIR) may themselves be symlinks.
+        self.root = Path(self.temp.name).resolve()
         self.script = self.root / 'film.json'
         self.output = self.root / 'render'
         self.data = {'schema_version': 1, 'title': 'Snapshot fixture', 'ratio': '1:1',

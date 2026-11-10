@@ -327,6 +327,29 @@ class SpriteImportTests(unittest.TestCase):
 
 
 class SpriteExampleTests(unittest.TestCase):
+    def assert_portable_example_equal(self, expected, actual):
+        scenes = []
+        for prepared in (expected, actual):
+            scene = copy.deepcopy(prepared['scene'])
+            for layer in scene['layers']:
+                if layer['type'] == 'sprites':
+                    asset = prepared['assets'][layer['source']]
+                    self.assertEqual(layer['sha256'], layers.digest(asset['raw']))
+                    # PNG encoders can write different lossless byte streams.
+                    # Verify each file pin, then compare authored scene meaning
+                    # and exact decoded pixels rather than compressed PNG bytes.
+                    del layer['sha256']
+            scenes.append(scene)
+        self.assertEqual(*scenes)
+        self.assertEqual(set(expected['assets']), set(actual['assets']))
+        for source in expected['assets']:
+            before = expected['assets'][source]['rgba']
+            after = actual['assets'][source]['rgba']
+            self.assertEqual(before.size, after.size)
+            self.assertEqual(before.tobytes(), after.tobytes())
+        self.assertEqual(layer_sprites.timing_report(expected['scene']),
+                         layer_sprites.timing_report(actual['scene']))
+
     def test_original_example_is_reproducible_and_not_pinned_to_author_machine(self):
         from tools.make_sprite_layer_example import create
         root = Path(__file__).resolve().parents[1]
@@ -336,13 +359,44 @@ class SpriteExampleTests(unittest.TestCase):
             generated = create(Path(tmp).resolve() / 'example')
             expected = layers.prepare_scene(authored)
             actual = layers.prepare_scene(generated)
-            self.assertEqual(expected['scene'], actual['scene'])
+            self.assert_portable_example_equal(expected, actual)
             self.assertEqual(len(actual['assets']), 1)
-            self.assertEqual(expected['assets']['source/atlas.png']['rgba'].tobytes(),
-                             actual['assets']['source/atlas.png']['rgba'].tobytes())
             report = layer_sprites.timing_report(actual['scene'])
             self.assertEqual(report['left']['sampled_source_indices'], list(range(8)))
             self.assertEqual(report['right']['source_duration_ms'], 640)
+
+    def test_lossless_png_reencoding_keeps_pixels_but_never_bypasses_source_pins(self):
+        from tools.make_sprite_layer_example import create
+        root = Path(__file__).resolve().parents[1]
+        expected = layers.prepare_scene(root / 'examples/sprite-layer/scene.json')
+        with tempfile.TemporaryDirectory() as tmp:
+            generated = create(Path(tmp).resolve() / 'example')
+            atlas = generated.parent / 'source/atlas.png'
+            original_hash = layers.digest(atlas.read_bytes())
+            with Image.open(atlas) as encoded:
+                pixels = encoded.convert('RGBA')
+            pixels.save(atlas, compress_level=0)
+            self.assertNotEqual(layers.digest(atlas.read_bytes()), original_hash)
+            # A different encoding is still a source change until explicitly
+            # repinned. The normal loader must reject the stale byte hash.
+            with self.assertRaisesRegex(ValueError, 'Asset changed: source/atlas.png'):
+                layers.prepare_scene(generated)
+
+            def repin():
+                data = json.loads(generated.read_text(encoding='utf-8'))
+                for layer in data['layers']:
+                    if layer['type'] == 'sprites':
+                        layer['sha256'] = layers.digest(atlas.read_bytes())
+                generated.write_text(json.dumps(data), encoding='utf-8')
+
+            repin()
+            self.assert_portable_example_equal(expected, layers.prepare_scene(generated))
+            # Even a valid new file pin cannot conceal a different drawing.
+            pixels.putpixel((0, 0), (255, 0, 0, 255))
+            pixels.save(atlas, compress_level=0)
+            repin()
+            with self.assertRaises(AssertionError):
+                self.assert_portable_example_equal(expected, layers.prepare_scene(generated))
 
 
 if __name__ == '__main__':
