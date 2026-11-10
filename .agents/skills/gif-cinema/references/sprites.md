@@ -137,7 +137,7 @@ script if it contains at least two decoded frames. A single pose still exports
 useful PNG assets, but does not count as an animated film source. Preserve
 `first_frame_target` and `last_frame_target` descriptions and check
 the neighboring cuts. Use `render ... --execute --max-api-calls 0` for a guaranteed
-source-only film. See [the pinned script contract](https://github.com/antropos17/chatgpt-gif-cinema/blob/c4cc9a095ab55ee9618f1dd0c3150743b047c1ac/docs/SCRIPT-FORMAT.md).
+source-only film. See [the pinned script contract](https://github.com/antropos17/chatgpt-gif-cinema/blob/b098d3b0cf3f9989f5b4bfb2b857f69a80e0c520/docs/SCRIPT-FORMAT.md).
 
 Sprite export retains alpha. The existing film assembler uses opaque video frames;
 exporting a transparent atlas does not add transparent-video or layered scene

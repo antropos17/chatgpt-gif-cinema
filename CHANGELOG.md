@@ -2,6 +2,8 @@
 
 ## Unreleased — preserve edited subtitles
 
+- Pin the installable skill to the published, verified offline integration, including
+  input limits, script snapshots, retained subtitle edits and current story tools.
 - Track generated SRT hashes and shot timing; preserve manually edited subtitles
   during resume and rebuild, with a separate generated proposal for merging.
 - Warn when retained subtitles have unknown timing history or their shot order/

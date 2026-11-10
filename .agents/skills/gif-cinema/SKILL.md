@@ -47,7 +47,7 @@ version number and by itself is not a compatibility guarantee):
 ```bash
 python -m venv .venv
 # Activate .venv with the command for your shell, then:
-python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@c4cc9a095ab55ee9618f1dd0c3150743b047c1ac"
+python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@b098d3b0cf3f9989f5b4bfb2b857f69a80e0c520"
 python -m gif_cinema --help
 ```
 

@@ -14,7 +14,7 @@ label that method accurately. The skill does not embed a video service or free c
 
 ## Current public runtime contract
 
-Read the pinned [script schema](https://github.com/antropos17/chatgpt-gif-cinema/blob/c4cc9a095ab55ee9618f1dd0c3150743b047c1ac/docs/SCRIPT-FORMAT.md)
+Read the pinned [script schema](https://github.com/antropos17/chatgpt-gif-cinema/blob/b098d3b0cf3f9989f5b4bfb2b857f69a80e0c520/docs/SCRIPT-FORMAT.md)
 when changing generation settings. It validates strict JSON fields before dispatch.
 
 - Request 2–16 frames, 20–2000 ms per frame in 10 ms steps. These are requested
