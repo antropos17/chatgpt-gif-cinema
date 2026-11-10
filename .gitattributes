@@ -11,3 +11,6 @@ gif_cinema/assets/fonts/PROVENANCE.json text eol=lf
 /LICENSE text eol=lf
 .agents/skills/gif-cinema/** text=auto eol=lf
 .agents/skills/gif-cinema/**/*.gif -text
+
+# The offline factory example pins this scene's exact source bytes.
+/examples/stroke-reveal.json text eol=lf

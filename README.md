@@ -72,6 +72,22 @@ Real outputs from the public local renderer. Shapes, text and keyframes are edit
 
 [Whole-image motion recipes](docs/STANDALONE-MOTION.md) · [Exact commands and output facts](docs/GALLERY.md#local-motion)
 
+## Build an offline GIF collection
+
+**One manifest → verified GIFs, an offline gallery, decoded previews and a ZIP.**
+Combine accepted existing GIFs, including Blender renders, with editable local
+layer scenes. There are no scripts in the gallery and no model/API calls.
+
+```bash
+python -m gif_cinema factory build factory.example.json --out output/my-collection
+python -m gif_cinema factory verify output/my-collection
+```
+
+Install the current checkout first. Open `output/my-collection/index.html`, or
+share `collection.zip`. The repository example reuses the archived chrome GIF
+and existing stroke scene; it does not claim newly generated artwork or visual
+approval. [Complete setup, manifest and limits](docs/OFFLINE-FACTORY.md).
+
 ## Sprites and frame review
 
 Turn accepted drawings into reusable assets. Inspect every delivered frame, not just the endpoints.

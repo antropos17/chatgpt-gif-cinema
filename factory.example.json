@@ -1,0 +1,23 @@
+{
+  "format": "gif-cinema-factory",
+  "schema_version": 1,
+  "title": "An offline GIF collection",
+  "items": [
+    {
+      "id": "chrome-archive",
+      "title": "Chrome Trefoil",
+      "group": "Existing Blender render",
+      "caption": "Archived Blender EEVEE footage, copied byte-for-byte. This package adds no new 3D animation.",
+      "gif": "docs/assets/motion-elements/chrome.gif",
+      "sha256": "b8795d8927b1749ab0a779112dc445b74bcc1dbac69e3bd5035f799be17dcee3"
+    },
+    {
+      "id": "stroke-study",
+      "title": "Draw-on study",
+      "group": "Editable local graphics",
+      "caption": "The existing authored stroke scene, rendered locally. It does not generate handwriting or new character drawings.",
+      "scene": "examples/stroke-reveal.json",
+      "sha256": "55510ee26fbce189cb16b7e4e4e09fb6d6609fd26c639715d504ed5d97a4e212"
+    }
+  ]
+}

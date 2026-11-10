@@ -61,6 +61,20 @@ jobs:
           retention-days: 7
           if-no-files-found: error
 
+      - name: Build and verify the offline GIF factory example
+        if: matrix.artifact
+        run: |
+          python -m gif_cinema factory build factory.example.json --out output/factory-example --dry-run
+          python -m gif_cinema factory build factory.example.json --out output/factory-example
+          python -m gif_cinema factory verify output/factory-example
+      - if: matrix.artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-gif-factory
+          path: output/factory-example/
+          retention-days: 14
+          if-no-files-found: error
+
       - name: Package the installable skill
         if: matrix.artifact
         run: |
