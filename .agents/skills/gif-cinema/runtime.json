@@ -1,14 +1,33 @@
 {
   "schema_version": 1,
-  "skill_version": "0.2.1",
+  "skill_version": "0.3.1",
   "runtime_version": "0.5.0",
   "runtime_repository": "https://github.com/antropos17/chatgpt-gif-cinema.git",
-  "runtime_commit": "d3c39b29704f50c2cf6891d91b7750efa52a9915",
+  "runtime_commit": "b098d3b0cf3f9989f5b4bfb2b857f69a80e0c520",
   "runtime_bundled": false,
   "python": ">=3.10",
   "pillow": ">=10.1",
-  "media_only_dependencies": ["Python", "Pillow", "pinned gif-cinema runtime"],
-  "film_dependencies": ["ffmpeg", "ffprobe"],
-  "offline_features": ["full-frame review", "GIF sprite packing", "PNG grid slicing", "story projects", "story pages", "whole-shot chapters"],
+  "media_only_dependencies": [
+    "Python",
+    "Pillow",
+    "pinned gif-cinema runtime"
+  ],
+  "film_dependencies": [
+    "ffmpeg",
+    "ffprobe"
+  ],
+  "offline_features": [
+    "full-frame review",
+    "GIF sprite packing",
+    "PNG grid slicing",
+    "story projects",
+    "story pages",
+    "whole-shot chapters",
+    "editable graphic layers",
+    "authored stroke reveal",
+    "complete layered output verification",
+    "native-timing GIF layers",
+    "whole-image motion recipes and complete smoke checks"
+  ],
   "notice": "Skill and runtime have separate version numbers. Install the immutable commit; a runtime version string alone does not establish compatibility. Git and network access are needed for the documented initial pip install. No provider calls are needed for local review, sprite export or smoke tests."
 }

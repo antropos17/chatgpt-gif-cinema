@@ -1,0 +1,157 @@
+{
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "title": "A signal, composed locally",
+  "width": 400,
+  "height": 256,
+  "fps": 50,
+  "duration_ms": 3200,
+  "loop": false,
+  "matte": "#101622",
+  "layers": [
+    {
+      "id": "background",
+      "type": "rect",
+      "size": [
+        400,
+        256
+      ],
+      "fill": "#101622"
+    },
+    {
+      "id": "panel",
+      "type": "rect",
+      "size": [
+        204,
+        204
+      ],
+      "radius": 12,
+      "fill": "#405877",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.29
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "astronaut",
+      "type": "gif",
+      "source": "shot-01.gif",
+      "sha256": "5599c7b0ccad2dd4fcaf2b86235cc12e3689a8da323311845b724c352d3d6dac",
+      "size": [
+        196,
+        196
+      ],
+      "playback": "once",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.29
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "text": "A SIGNAL",
+      "font_size": 22,
+      "fill": "#f5f8ff",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.77,
+          "y": 0.38,
+          "opacity": 0,
+          "easing": "ease-out"
+        },
+        {
+          "at": 0.15,
+          "opacity": 1
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "caption",
+      "type": "text",
+      "text": "16 source drawings",
+      "font_size": 14,
+      "fill": "#a8b9ce",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.77,
+          "y": 0.53
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "timing",
+      "type": "text",
+      "text": "Native timing",
+      "font_size": 14,
+      "fill": "#a8b9ce",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.77,
+          "y": 0.62
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "accent",
+      "type": "stroke",
+      "size": [
+        120,
+        16
+      ],
+      "points": [
+        [
+          4,
+          8
+        ],
+        [
+          116,
+          8
+        ]
+      ],
+      "stroke": "#7ad9e7",
+      "stroke_width": 2,
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.77,
+          "y": 0.76,
+          "reveal": 0
+        },
+        {
+          "at": 0.1,
+          "easing": "ease-out"
+        },
+        {
+          "at": 0.4,
+          "reveal": 1
+        },
+        {
+          "at": 1
+        }
+      ]
+    }
+  ]
+}

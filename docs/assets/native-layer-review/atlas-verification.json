@@ -1,0 +1,9 @@
+{
+  "status": "verified",
+  "api_calls": 0,
+  "drawings_verified": 16,
+  "artifacts_verified": 19,
+  "visual_review": "pending",
+  "user_acceptance": "pending",
+  "notice": "Native source drawings only: no scene placement, transforms, occlusion or final encoding. Review the delivered animation separately. Technical verification is not visual approval or user acceptance."
+}

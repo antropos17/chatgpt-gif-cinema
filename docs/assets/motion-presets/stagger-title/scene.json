@@ -1,0 +1,586 @@
+{
+  "title": "Motion preset: stagger-title",
+  "fps": 25,
+  "loop": true,
+  "matte": "#151824",
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "width": 480,
+  "height": 320,
+  "duration_ms": 3200,
+  "layers": [
+    {
+      "name": "background",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "background",
+      "type": "rect",
+      "size": [
+        480,
+        320
+      ],
+      "fill": "#151824",
+      "stroke": "#00000000",
+      "stroke_width": 0,
+      "radius": 0
+    },
+    {
+      "name": "eyebrow",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.17,
+          "y": 0.13,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.17,
+          "y": 0.13,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "eyebrow",
+      "type": "text",
+      "text": "TYPE / 01",
+      "font_size": 13,
+      "font_id": "noto-sans-regular-2.004",
+      "fill": "#b9f36b",
+      "font_sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+    },
+    {
+      "name": "headline",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.41,
+          "y": 0.36,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.32999999999999996,
+          "y": 0.36,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.06,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.422,
+          "y": 0.36,
+          "zoom": 1.025,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.23,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.41,
+          "y": 0.36,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.32,
+          "easing": "linear"
+        },
+        {
+          "x": 0.41,
+          "y": 0.36,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.41,
+          "y": 0.36,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.41,
+          "y": 0.36,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "headline",
+      "type": "text",
+      "text": "MAKE IT",
+      "font_size": 43,
+      "font_id": "noto-sans-regular-2.004",
+      "fill": "#f6f2e9",
+      "font_sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+    },
+    {
+      "name": "second_line",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.48,
+          "y": 0.58,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.57,
+          "y": 0.58,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.12,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.46649999999999997,
+          "y": 0.58,
+          "zoom": 1.025,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.29000000000000004,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.48,
+          "y": 0.58,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.38,
+          "easing": "linear"
+        },
+        {
+          "x": 0.48,
+          "y": 0.58,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.48,
+          "y": 0.58,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.48,
+          "y": 0.58,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "second_line",
+      "type": "text",
+      "text": "MOVE",
+      "font_size": 66,
+      "font_id": "noto-sans-regular-2.004",
+      "fill": "#b9f36b",
+      "font_sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+    },
+    {
+      "name": "caption",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.5,
+          "y": 0.86,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.9,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.16,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.5,
+          "y": 0.854,
+          "zoom": 1.025,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.33,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.5,
+          "y": 0.86,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.42000000000000004,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.86,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.5,
+          "y": 0.86,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.5,
+          "y": 0.86,
+          "zoom": 0.96,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "caption",
+      "type": "text",
+      "text": "A little rhythm goes a long way",
+      "font_size": 14,
+      "font_id": "noto-sans-regular-2.004",
+      "fill": "#f6f2e9",
+      "font_sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d"
+    },
+    {
+      "name": "beat_0",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.79,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.79,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.12,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.79,
+          "y": 0.17,
+          "zoom": 1.25,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.25,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.79,
+          "y": 0.17,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.37,
+          "easing": "linear"
+        },
+        {
+          "x": 0.79,
+          "y": 0.17,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.79,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.79,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "beat_0",
+      "type": "ellipse",
+      "size": [
+        13,
+        13
+      ],
+      "fill": "#b9f36b",
+      "stroke": "#00000000",
+      "stroke_width": 0
+    },
+    {
+      "name": "beat_1",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.8450000000000001,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.8450000000000001,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.16999999999999998,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.8450000000000001,
+          "y": 0.17,
+          "zoom": 1.25,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.3,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.8450000000000001,
+          "y": 0.17,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.42,
+          "easing": "linear"
+        },
+        {
+          "x": 0.8450000000000001,
+          "y": 0.17,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.8450000000000001,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.8450000000000001,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "beat_1",
+      "type": "ellipse",
+      "size": [
+        13,
+        13
+      ],
+      "fill": "#b9f36b",
+      "stroke": "#00000000",
+      "stroke_width": 0
+    },
+    {
+      "name": "beat_2",
+      "in_ms": 0,
+      "out_ms": 3200,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "keyframes": [
+        {
+          "x": 0.9,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0,
+          "easing": "linear"
+        },
+        {
+          "x": 0.9,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.22,
+          "easing": "ease-out"
+        },
+        {
+          "x": 0.9,
+          "y": 0.17,
+          "zoom": 1.25,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.35,
+          "easing": "ease-in-out"
+        },
+        {
+          "x": 0.9,
+          "y": 0.17,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.47,
+          "easing": "linear"
+        },
+        {
+          "x": 0.9,
+          "y": 0.17,
+          "zoom": 1,
+          "rotation": 0,
+          "opacity": 1,
+          "at": 0.79,
+          "easing": "ease-in"
+        },
+        {
+          "x": 0.9,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 0.94,
+          "easing": "linear"
+        },
+        {
+          "x": 0.9,
+          "y": 0.17,
+          "zoom": 0.4,
+          "rotation": 0,
+          "opacity": 0,
+          "at": 1,
+          "easing": "linear"
+        }
+      ],
+      "id": "beat_2",
+      "type": "ellipse",
+      "size": [
+        13,
+        13
+      ],
+      "fill": "#b9f36b",
+      "stroke": "#00000000",
+      "stroke_width": 0
+    }
+  ],
+  "text_renderer": {
+    "layout_engine": "BASIC",
+    "normalization": "NFC",
+    "pillow": "10.4.0",
+    "freetype": "2.13.2"
+  }
+}

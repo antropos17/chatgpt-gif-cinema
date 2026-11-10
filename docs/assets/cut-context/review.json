@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "source_revision": "d514e649407a6318792e46ee28969e68a85c397d",
+  "provider_calls": 0,
+  "review_scope": "Two six-frame thumbnail strips and four native endpoint PNGs; full playback not reviewed",
+  "visual_status": "human-review-required",
+  "sources": [
+    {
+      "shot": "01-signal",
+      "sha256": "5599c7b0ccad2dd4fcaf2b86235cc12e3689a8da323311845b724c352d3d6dac"
+    },
+    {
+      "shot": "02-answer",
+      "sha256": "0f6366ad5da2ad949ecb399dfdfe10fd33416f542a573316ee4a319f669f8d13"
+    },
+    {
+      "shot": "03-recognition",
+      "sha256": "461a37f8e813549b8b0ee70ad1f04cf3b64b7d17c7eb458bd5f163ef0380bb28"
+    }
+  ],
+  "diagnostics": {
+    "joins": [
+      {
+        "context_sheet": "join-01.png",
+        "cut_context": {
+          "cut_pixel_mae_0_255": 58.990824,
+          "cut_to_local_change_ratio": 39.261989,
+          "local_change_median_0_255": 1.502492,
+          "next": {
+            "adjacent_changes": [
+              {
+                "from_frame": 0,
+                "pixel_mae_0_255": 1.539775,
+                "pixel_mae_per_second": 9.623591,
+                "to_frame": 1
+              },
+              {
+                "from_frame": 1,
+                "pixel_mae_0_255": 1.507222,
+                "pixel_mae_per_second": 9.420141,
+                "to_frame": 2
+              }
+            ],
+            "frame_offset": 0,
+            "frames": [
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 160,
+                "frame": 0,
+                "start_ms_from_cut": 0
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 320,
+                "frame": 1,
+                "start_ms_from_cut": 160
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 480,
+                "frame": 2,
+                "start_ms_from_cut": 320
+              }
+            ]
+          },
+          "note": "Scores describe pixels, not identity, motion direction or smoothness. A null ratio means no nonzero local baseline; it is not a pass.",
+          "previous": {
+            "adjacent_changes": [
+              {
+                "from_frame": 13,
+                "pixel_mae_0_255": 1.453512,
+                "pixel_mae_per_second": 9.084447,
+                "to_frame": 14
+              },
+              {
+                "from_frame": 14,
+                "pixel_mae_0_255": 1.497762,
+                "pixel_mae_per_second": 9.361013,
+                "to_frame": 15
+              }
+            ],
+            "frame_offset": 13,
+            "frames": [
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": -320,
+                "frame": 13,
+                "start_ms_from_cut": -480
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": -160,
+                "frame": 14,
+                "start_ms_from_cut": -320
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 0,
+                "frame": 15,
+                "start_ms_from_cut": -160
+              }
+            ]
+          },
+          "review_checks": [
+            "character identity and costume",
+            "pose, hands, props and contact",
+            "gaze and screen direction",
+            "action speed and holds around the cut",
+            "scene geography, lighting and causality"
+          ],
+          "status": "human-review-required"
+        },
+        "next": "02-answer",
+        "next_start_target": "The same astronaut keeps the greeting pose.",
+        "pixel_mae_0_255": 58.991,
+        "previous": "01-signal",
+        "previous_end_target": "The astronaut raises one hand toward the sky.",
+        "status": "human-review-required"
+      },
+      {
+        "context_sheet": "join-02.png",
+        "cut_context": {
+          "cut_pixel_mae_0_255": 60.057088,
+          "cut_to_local_change_ratio": 24.977059,
+          "local_change_median_0_255": 2.40449,
+          "next": {
+            "adjacent_changes": [
+              {
+                "from_frame": 0,
+                "pixel_mae_0_255": 3.068298,
+                "pixel_mae_per_second": 19.176865,
+                "to_frame": 1
+              },
+              {
+                "from_frame": 1,
+                "pixel_mae_0_255": 3.560527,
+                "pixel_mae_per_second": 22.253291,
+                "to_frame": 2
+              }
+            ],
+            "frame_offset": 0,
+            "frames": [
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 160,
+                "frame": 0,
+                "start_ms_from_cut": 0
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 320,
+                "frame": 1,
+                "start_ms_from_cut": 160
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 480,
+                "frame": 2,
+                "start_ms_from_cut": 320
+              }
+            ]
+          },
+          "note": "Scores describe pixels, not identity, motion direction or smoothness. A null ratio means no nonzero local baseline; it is not a pass.",
+          "previous": {
+            "adjacent_changes": [
+              {
+                "from_frame": 13,
+                "pixel_mae_0_255": 1.691956,
+                "pixel_mae_per_second": 10.574722,
+                "to_frame": 14
+              },
+              {
+                "from_frame": 14,
+                "pixel_mae_0_255": 1.740682,
+                "pixel_mae_per_second": 10.879262,
+                "to_frame": 15
+              }
+            ],
+            "frame_offset": 13,
+            "frames": [
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": -320,
+                "frame": 13,
+                "start_ms_from_cut": -480
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": -160,
+                "frame": 14,
+                "start_ms_from_cut": -320
+              },
+              {
+                "duration_ms": 160,
+                "end_ms_from_cut": 0,
+                "frame": 15,
+                "start_ms_from_cut": -160
+              }
+            ]
+          },
+          "review_checks": [
+            "character identity and costume",
+            "pose, hands, props and contact",
+            "gaze and screen direction",
+            "action speed and holds around the cut",
+            "scene geography, lighting and causality"
+          ],
+          "status": "human-review-required"
+        },
+        "next": "03-recognition",
+        "next_start_target": "The astronaut reacts to the reply.",
+        "pixel_mae_0_255": 60.057,
+        "previous": "02-answer",
+        "previous_end_target": "A small light answers the raised hand.",
+        "status": "human-review-required"
+      }
+    ],
+    "note": "Pixel MAE cannot measure identity, motion or narrative continuity. Targets are instructions, not verified observations.",
+    "status": "human-review-required"
+  }
+}

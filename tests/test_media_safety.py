@@ -188,7 +188,7 @@ class MediaCommandTests(unittest.TestCase):
         self.assertNotIn('private', str(caught.exception))
 
     def test_both_probe_and_complete_decode_have_deadlines(self):
-        info = {'codec_name': 'h264', 'width': 32, 'height': 32, 'duration': '0.6', 'nb_read_frames': '15'}
+        info = {'codec_name': 'h264', 'width': 32, 'height': 32, 'duration': '0.6', 'nb_read_frames': '15', **cli.FILM_COLOR_TAGS}
         response = subprocess.CompletedProcess([], 0, json.dumps({'streams': [info]}).encode())
         with patch('gif_cinema.cli.subprocess.run', return_value=response) as run:
             self.assertEqual(render.probe(Path('fixture.mp4'), 32, 32, 0.6, 25, 1), info)
@@ -198,7 +198,7 @@ class MediaCommandTests(unittest.TestCase):
             self.assertEqual(call.kwargs['stdin'], subprocess.DEVNULL)
 
     def test_decode_timeout_is_not_a_successful_verification(self):
-        info = {'codec_name': 'h264', 'width': 32, 'height': 32, 'duration': '0.6', 'nb_read_frames': '15'}
+        info = {'codec_name': 'h264', 'width': 32, 'height': 32, 'duration': '0.6', 'nb_read_frames': '15', **cli.FILM_COLOR_TAGS}
         response = subprocess.CompletedProcess([], 0, json.dumps({'streams': [info]}).encode())
         with patch('gif_cinema.cli.subprocess.run', side_effect=[response, subprocess.TimeoutExpired('ffmpeg', 300)]):
             with self.assertRaisesRegex(RuntimeError, 'timed out'):
@@ -224,7 +224,7 @@ class CapabilityTests(unittest.TestCase):
     def test_capability_names_are_detected_from_encoder_and_filter_listing(self):
         encoders = ' V....D libx264 H.264\n A..... aac AAC\n'
         filters = '\n'.join(' ... ' + name + ' V->V' for name in
-                            ('fps', 'scale', 'pad', 'concat', 'tpad', 'trim', 'setpts', 'format', 'setsar', 'apad'))
+                            ('fps', 'scale', 'pad', 'concat', 'tpad', 'trim', 'setpts', 'format', 'setsar', 'setparams', 'apad'))
         responses = [subprocess.CompletedProcess([], 0, encoders), subprocess.CompletedProcess([], 0, filters)]
         with patch('gif_cinema.doctor.subprocess.run', side_effect=responses):
             capabilities = doctor.inspect_ffmpeg_capabilities()

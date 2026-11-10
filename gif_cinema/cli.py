@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -25,6 +26,10 @@ MAX_GIF_FRAMES = 1500
 MAX_GIF_PIXEL_FRAMES = 160 * 1024 * 1024
 MEDIA_TIMEOUT_SECONDS = 300
 MODEL_ENV = "GIF_CINEMA_MODEL"
+# Match the RGB-to-YUV matrix to the metadata that players use to decode it.
+# Untagged H.264 otherwise relies on player-specific SD/HD color defaults.
+FILM_COLOR_TAGS = {"color_range": "tv", "color_space": "bt709",
+                   "color_transfer": "bt709", "color_primaries": "bt709"}
 
 
 def default_model():
@@ -41,6 +46,30 @@ class APIError(RuntimeError):
         self.status = status
         super().__init__(f"OpenAI API HTTP {status}; response body omitted to protect credentials")
 
+
+def read_local_bytes(source, limit, label):
+    """Read a bounded regular file; reject special files before they can block."""
+    if not stat.S_ISREG(os.stat(source).st_mode):
+        raise ValueError(f"{label} input must be a regular local file")
+    # NONBLOCK plus fstat covers a FIFO substituted after the initial stat.
+    # BINARY preserves bytes on Windows. Existing regular-file symlinks work.
+    flags = os.O_RDONLY | getattr(os, "O_NONBLOCK", 0) | getattr(os, "O_BINARY", 0)
+    descriptor = os.open(source, flags)
+    try:
+        status = os.fstat(descriptor)
+        if not stat.S_ISREG(status.st_mode):
+            raise ValueError(f"{label} input must be a regular local file")
+        if status.st_size > limit:
+            raise ValueError(f"{label} exceeds the {limit} byte input limit")
+        with os.fdopen(descriptor, "rb", closefd=False) as stream:
+            raw = stream.read(limit + 1)
+        if len(raw) > limit:
+            raise ValueError(f"{label} exceeds the {limit} byte input limit")
+        return raw
+    finally:
+        os.close(descriptor)
+
+
 def read_gif_bytes(source):
     """Bound actual reads, including streams and files that grow during reading."""
     if hasattr(source, "read"):
@@ -50,8 +79,7 @@ def read_gif_bytes(source):
             pass  # Non-seekable streams are consumed from their current position.
         raw = source.read(MAX_GIF_BYTES + 1)
     else:
-        with open(source, "rb") as stream:
-            raw = stream.read(MAX_GIF_BYTES + 1)
+        raw = read_local_bytes(source, MAX_GIF_BYTES, "GIF")
     if len(raw) > MAX_GIF_BYTES:
         raise ValueError("GIF exceeds the 128 MiB input limit")
     return raw
@@ -374,7 +402,7 @@ def _encode_film(args, clips, clip_frames, out, force, audio_path):
     for i in range(len(clips)):
         # Pad before resampling so FFmpeg cannot drop the final GIF delay.
         # Trim to an explicit nearest-frame duration (ties to even), at least one.
-        filters.append(f"[{i}:v]tpad=stop_mode=clone:stop=-1,fps={args.fps},trim=end_frame={clip_frames[i]},scale={args.width}:{args.height}:force_original_aspect_ratio=decrease,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setpts=PTS-STARTPTS[v{i}]")
+        filters.append(f"[{i}:v]tpad=stop_mode=clone:stop=-1,fps={args.fps},trim=end_frame={clip_frames[i]},scale={args.width}:{args.height}:force_original_aspect_ratio=decrease:out_color_matrix=bt709:out_range=tv,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709,setpts=PTS-STARTPTS[v{i}]")
     filters.append("".join(f"[v{i}]" for i in range(len(clips)))+f"concat=n={len(clips)}:v=1:a=0[outv]")
     command+=["-filter_complex",";".join(filters),"-map","[outv]"]
     if audio_path is not None:command+=["-map",f"{len(clips)}:a:0","-af","apad","-shortest","-c:a","aac"]
@@ -383,7 +411,9 @@ def _encode_film(args, clips, clip_frames, out, force, audio_path):
         os.close(fd)
         staged = Path(name)
         try:
-            command+=["-r",str(args.fps),"-c:v","libx264","-pix_fmt","yuv420p","-movflags","+faststart",str(staged)]
+            command+=["-r",str(args.fps),"-c:v","libx264","-pix_fmt","yuv420p",
+                      "-color_range","tv","-colorspace","bt709","-color_primaries","bt709",
+                      "-color_trc","bt709","-movflags","+faststart",str(staged)]
             run_media(command)
             if staged.stat().st_size == 0:
                 raise RuntimeError("FFmpeg produced an empty movie")
@@ -435,13 +465,13 @@ def endpoints(args):
         write_result(path, data.getvalue(), force)
 
 def continuity(args):
-    from PIL import ImageChops,ImageStat
-    a,_,_=gif_frames(args.previous);b,_,_=gif_frames(args.next)
-    diff=ImageChops.difference(a[-1].resize((128,128)),b[0].resize((128,128)))
-    mae=sum(ImageStat.Stat(diff).mean)/3
+    from .continuity import cut_context
+    a,ad,_=gif_frames(args.previous);b,bd,_=gif_frames(args.next)
+    context = cut_context(a, ad, b, bd)
+    mae = context["cut_pixel_mae_0_255"]
     report={"previous":str(args.previous),"next":str(args.next),"pixel_mae_0_255":round(mae,3),
             "threshold":args.threshold,"status":"review-required" if mae>args.threshold else "pixel-similar-review-still-required",
-            "note":"Pixel MAE cannot measure identity or narrative continuity."}
+            "note":"Pixel MAE cannot measure identity or narrative continuity.", "cut_context":context}
     print(json.dumps(report,indent=2))
     if args.output:
         save_report(args.output, report, [args.previous, args.next], getattr(args, "force", False))
@@ -457,6 +487,8 @@ def build_parser():
     add_sprites_parser(sub)
     from .motion import add_parser as add_motion_parser
     add_motion_parser(sub)
+    from .story_state import add_parser as add_story_state_parser
+    add_story_state_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")

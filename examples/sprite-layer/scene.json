@@ -1,0 +1,316 @@
+{
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "title": "One atlas, two stages",
+  "width": 480,
+  "height": 288,
+  "fps": 50,
+  "duration_ms": 2560,
+  "loop": true,
+  "matte": "#101622",
+  "layers": [
+    {
+      "id": "dark",
+      "type": "rect",
+      "size": [
+        240,
+        288
+      ],
+      "fill": "#101622",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.25
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "light",
+      "type": "rect",
+      "size": [
+        240,
+        288
+      ],
+      "fill": "#f1e9dd",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.75
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "header",
+      "type": "rect",
+      "size": [
+        480,
+        56
+      ],
+      "fill": "#0b1019",
+      "keyframes": [
+        {
+          "at": 0,
+          "y": 0.09722222222222222
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "text": "ONE ATLAS. TWO STAGES.",
+      "font_size": 22,
+      "fill": "#f6f9ff",
+      "keyframes": [
+        {
+          "at": 0,
+          "y": 0.09722222222222222
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "type": "sprites",
+      "source": "source/atlas.png",
+      "sha256": "7bec4155072939d35afb4bd008e657d39e9105d33b1a3774f955bff0efc3bc90",
+      "size": [
+        160,
+        160
+      ],
+      "sampling": "smooth",
+      "playback": "loop",
+      "frames": [
+        {
+          "rect": [
+            1,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            99,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            197,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            295,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            1,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            99,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            197,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            295,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        }
+      ],
+      "id": "left",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.25,
+          "y": 0.54
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "type": "sprites",
+      "source": "source/atlas.png",
+      "sha256": "7bec4155072939d35afb4bd008e657d39e9105d33b1a3774f955bff0efc3bc90",
+      "size": [
+        160,
+        160
+      ],
+      "sampling": "smooth",
+      "playback": "loop",
+      "frames": [
+        {
+          "rect": [
+            1,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            99,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            197,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            295,
+            1,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            1,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            99,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            197,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        },
+        {
+          "rect": [
+            295,
+            99,
+            96,
+            96
+          ],
+          "duration_ms": 80
+        }
+      ],
+      "id": "right",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.73,
+          "y": 0.54,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.5,
+          "x": 0.77,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1,
+          "x": 0.73
+        }
+      ]
+    },
+    {
+      "id": "dark_label",
+      "type": "text",
+      "text": "Soft alpha / dark",
+      "font_size": 17,
+      "fill": "#abc0d6",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.25,
+          "y": 0.89
+        },
+        {
+          "at": 1
+        }
+      ]
+    },
+    {
+      "id": "light_label",
+      "type": "text",
+      "text": "Soft alpha / light",
+      "font_size": 17,
+      "fill": "#425268",
+      "keyframes": [
+        {
+          "at": 0,
+          "x": 0.75,
+          "y": 0.89
+        },
+        {
+          "at": 1
+        }
+      ]
+    }
+  ]
+}

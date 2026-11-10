@@ -11,6 +11,10 @@ For the implemented script pipeline and zero-call demonstration, see
 existing-asset example with `--execute --max-api-calls 0`. The output includes a
 manifest, first/last frames, a contact sheet and a continuity review report.
 
+For longer scripts, use the [authored continuity ledger](STORY-STATE.md) to track
+explicit costume, prop and location facts through the shot order. This checks
+declared story states, not visual identity or the contents of the GIFs.
+
 ## Five production passes
 
 1. **Script**: establish one story beat per short shot, consistent camera direction, scale, light and character props. Use explicit shot IDs and timestamps.

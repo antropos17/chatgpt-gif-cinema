@@ -132,6 +132,12 @@ does not create extra action drawings; duplicated poses remain holds.
 
 ## Import into a film
 
+To keep PNG color and soft alpha in an editable composition, use
+[`layers import-sprites`](SPRITE-LAYERS.md) on this export's `manifest.json`.
+It checks the atlas bytes and every selected RGBA crop, then saves a portable
+animated layer without using the lossy GIF preview. This requires the newer
+sprite-layer runtime and remains separate from the opaque film assembler below.
+
 After reviewing `animation.gif`, use it as a local `source` in a normal v1 film
 script if it contains at least two decoded frames. A single pose still exports
 useful PNG assets, but does not count as an animated film source. Preserve

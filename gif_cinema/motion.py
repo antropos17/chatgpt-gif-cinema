@@ -97,6 +97,7 @@ def normalize_recipe(value, source_size):
                 'background': '#101018', 'trim_start_ms': 0, 'trim_end_ms': None,
                 'speed': 1, 'playback': 'forward', 'repeats': 1, 'hold_start_ms': 0,
                 'hold_end_ms': 0, 'still_duration_ms': 2000, 'spritesheet': False,
+                'gif_loop': True,
                 'keyframes': PRESETS['identity']}
     if not isinstance(value, dict) or set(value) - set(defaults):
         raise ValueError('Recipe must be an object with known fields only')
@@ -123,8 +124,9 @@ def normalize_recipe(value, source_size):
         number(config[name], name, 0, 300000 if name == 'trim_start_ms' else 10000, True)
     if config['trim_end_ms'] is not None:
         number(config['trim_end_ms'], 'trim_end_ms', 1, 300000, True)
-    if type(config['spritesheet']) is not bool:
-        raise ValueError('spritesheet must be true or false')
+    for name in ('spritesheet', 'gif_loop'):
+        if type(config[name]) is not bool:
+            raise ValueError(f'{name} must be true or false')
     keys = config['keyframes']
     if not isinstance(keys, list) or not 2 <= len(keys) <= 32:
         raise ValueError('Require 2..32 keyframes')
@@ -361,10 +363,13 @@ def palette_row(frame):
 
 
 def quantize_shared(frame, palette):
-    """Use exact index remapping when all actual frame colors fit the palette.
+    """Preserve every exact palette color, including in high-color frames.
 
     Pillow's fixed-palette RGB lookup uses a coarse color cache, which can merge
-    nearby colors even when both are present. Indexed remapping avoids that loss.
+    nearby colors even when both are present. Indexed remapping handles low-color
+    frames cheaply. Otherwise retain the normal no-dither approximation only for
+    colors absent from the shared palette, and repair exact matches in one bounded
+    pixel pass. No per-pixel Python color cache grows with the source artwork.
     """
     from PIL import Image
     colors = frame.getcolors(256)
@@ -379,16 +384,23 @@ def quantize_shared(frame, palette):
         result = indexed.point(mapping)
         result.putpalette(values)
         return result
-    return frame.quantize(palette=palette, dither=Image.Dither.NONE)
+    result = frame.quantize(palette=palette, dither=Image.Dither.NONE)
+    channels = iter(frame.tobytes())
+    pixels = zip(channels, channels, channels)
+    result.frombytes(bytes(lookup.get(color, index)
+                           for color, index in zip(pixels, result.tobytes())))
+    return result
 
 
-def motion(source, out, recipe=None, preset=None, dry_run=False):
+def motion(source, out, recipe=None, preset=None, dry_run=False, *, gif_loop=None):
     import PIL
     from PIL import Image, ImageDraw, ImageSequence
     if preset is not None and preset not in PRESETS:
         raise ValueError('Unknown motion preset')
     if recipe is not None and preset is not None:
         raise ValueError('Choose a recipe or preset, not both')
+    if gif_loop is not None and type(gif_loop) is not bool:
+        raise ValueError('gif_loop override must be true, false or None')
     value = copy.deepcopy(recipe) if recipe is not None else {}
     if preset is not None:
         value['keyframes'] = PRESETS[preset]
@@ -400,6 +412,9 @@ def motion(source, out, recipe=None, preset=None, dry_run=False):
     raw = read_bounded(source, MAX_BYTES)
     frames, delays, source_format = decode_source(raw, still_duration)
     config = normalize_recipe(value, frames[0].size)
+    # Validate the recipe before applying an override so a flag cannot hide a typo.
+    if gif_loop is not None:
+        config['gif_loop'] = gif_loop
     timeline = build_timeline(delays, config)
     count, step = timeline['playback_frames'], 1000 // config['fps']
     samples = [{'frame': i, 'time_ms': i * step, 'source_index': sample_timeline(timeline, i),
@@ -409,6 +424,10 @@ def motion(source, out, recipe=None, preset=None, dry_run=False):
     plan = {'schema_version': 1, 'status': 'planned', 'api_calls': 0,
             'source_sha256': sha(raw), 'source_format': source_format, 'source_drawings': len(frames),
             'source_duration_ms': sum(delays), 'recipe': config, 'timeline': timeline,
+            'delivery': {'gif': {'loop_policy': 'infinite' if config['gif_loop'] else 'play-once',
+                                 'loop_extension': 0 if config['gif_loop'] else None,
+                                 'verification': 'pending'},
+                         'mp4': {'loop_policy': 'player-controlled'}},
             'omitted_source_drawings': sorted(selected - used),
             'sampling': 'center of uniformly retimed bins; first/last source poses retained',
             'keyframe_timing': 'normalized across the whole output, including repeats and holds'}
@@ -470,11 +489,19 @@ def motion(source, out, recipe=None, preset=None, dry_run=False):
             with Image.open(preview_dir / f'{index:04}.png') as frame:
                 gif_frames.append(quantize_shared(frame.convert('RGB'), palette))
         candidate = stage / 'take.gif'
-        gif_frames[0].save(candidate, save_all=True, append_images=gif_frames[1:], duration=step,
-                           loop=0, optimize=False, disposal=1)
+        # No loop extension means one play. loop=1 means one repeat, not one play.
+        # Never inherit source loop metadata: this is an explicit delivery choice.
+        gif_frames[0].info.pop('loop', None)
+        loop_options = {'loop': 0} if config['gif_loop'] else {}
+        # A per-frame duration list also retains identical-frame holds on Pillow 10.1.
+        gif_frames[0].save(candidate, save_all=True, append_images=gif_frames[1:], duration=[step] * len(gif_frames),
+                           optimize=False, disposal=1, palette=palette.getpalette(), **loop_options)
         del gif_frames
         with Image.open(candidate) as image:
+            actual_loop = image.info.get('loop')
             actual_delays = [frame.info.get('duration', 0) for frame in ImageSequence.Iterator(image)]
+        if actual_loop != plan['delivery']['gif']['loop_extension']:
+            raise ValueError('Encoded GIF loop policy mismatch')
         if sum(actual_delays) != timeline['output_duration_ms']:
             raise ValueError('Encoded GIF timing mismatch')
         movie = stage / 'review.mp4'
@@ -501,11 +528,15 @@ def motion(source, out, recipe=None, preset=None, dry_run=False):
         if atlas is not None:
             outputs += ['spritesheet.png', 'spritesheet.json']
         receipt = {**plan, 'status': 'human-review-required', 'source_unchanged': True,
-                   'gif_palette': 'shared median-cut from up to 256 full-resolution representative colors per output frame; no dithering',
+                   'delivery': {'gif': {'loop_policy': 'infinite' if actual_loop == 0 else 'play-once',
+                                        'loop_extension': actual_loop, 'verification': 'passed'},
+                                'mp4': {'loop_policy': 'player-controlled'}},
+                   'gif_palette': 'shared median-cut from up to 256 full-resolution representative colors per output frame; exact palette colors preserved; no dithering; one global color table',
                    'still_orientation': 'EXIF display orientation normalized before recipe sizing and transforms',
                    'candidate_drawings': len(actual_delays), 'candidate_delays_ms': actual_delays,
                    'loop_review': {'status': 'human-review-required', 'endpoint_rgb_mae': seam_mae,
-                                   'note': 'Pixel difference is diagnostic only, not seamlessness or continuity acceptance.'},
+                                   'applies_to_gif_delivery': config['gif_loop'],
+                                   'note': 'Last-to-first diagnostic only (hypothetical replay for play-once GIFs), not seamlessness or continuity acceptance.'},
                    'samples': samples, 'outputs': {name: sha((stage / name).read_bytes()) for name in outputs},
                    'pillow': PIL.__version__, 'probe': probe,
                    'ffmpeg': run_command(['ffmpeg', '-version'], commands).decode().splitlines()[0],
@@ -514,6 +545,7 @@ def motion(source, out, recipe=None, preset=None, dry_run=False):
                        'No new in-between drawings: retiming may repeat or omit source drawings.',
                        'PNG sequence and spritesheet retain alpha; GIF and MP4 use the explicit background.',
                        'MP4 uses full-color PNGs, not the palette-quantized GIF; inspect both deliverables.',
+                       'GIF loop metadata is a playback request; viewers may override it. MP4 looping is controlled by the player.',
                        'Ping-pong avoids repeated endpoint holds but does not prove a seamless loop.',
                        'Keyframes run across the entire output, including source holds and repeats.',
                        'Technical verification is not visual acceptance; inspect subjects and both cuts.']}
@@ -529,11 +561,13 @@ def motion(source, out, recipe=None, preset=None, dry_run=False):
 
 def run(args):
     recipe = load_recipe(args.recipe) if args.recipe else None
-    result = motion(args.source, args.out, recipe, args.preset, args.dry_run)
+    result = motion(args.source, args.out, recipe, args.preset, args.dry_run,
+                    gif_loop=args.gif_loop)
     print(json.dumps(result if args.dry_run else {
         'out': str(args.out), 'status': result['status'], 'api_calls': 0,
         'playback_frames': result['timeline']['playback_frames'],
         'duration_ms': result['timeline']['output_duration_ms'],
+        'delivery': result['delivery'],
         'omitted_source_drawings': result['omitted_source_drawings']}, indent=2))
 
 
@@ -544,5 +578,10 @@ def add_parser(sub):
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--recipe', help='Strict motion recipe JSON')
     group.add_argument('--preset', choices=tuple(PRESETS))
+    delivery = parser.add_mutually_exclusive_group()
+    delivery.add_argument('--play-once', dest='gif_loop', action='store_false', default=None,
+                          help='Request one GIF play by omitting loop metadata; overrides the recipe')
+    delivery.add_argument('--loop', dest='gif_loop', action='store_true', default=None,
+                          help='Request infinite GIF replay; overrides the recipe (default without a recipe choice)')
     parser.add_argument('--dry-run', action='store_true', help='Validate and print zero-call plan without writing or FFmpeg')
     parser.set_defaults(func=run)

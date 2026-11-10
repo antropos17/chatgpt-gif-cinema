@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "api_calls": 0,
+  "source": {
+    "kind": "original-procedural-graphic",
+    "description": "Eight authored RGBA light-pulse cels; no model generation"
+  },
+  "transform": {
+    "crop": [
+      0,
+      0,
+      96,
+      96
+    ],
+    "scale": 1,
+    "sampling": "pixel",
+    "source_size": [
+      96,
+      96
+    ]
+  },
+  "frame_count": 8,
+  "duration_ms": 640,
+  "loop": 0,
+  "atlas": "atlas.png",
+  "atlas_size": [
+    392,
+    196
+  ],
+  "padding": 1,
+  "consecutive_duplicate_indices": [],
+  "review_status": "human-review-required",
+  "warnings": [
+    "Character identity, alignment, clipped edges and loop continuity require human review.",
+    "GIF preview has binary alpha and limited color; PNG frames and atlas preserve RGBA."
+  ],
+  "frame_layout": [
+    {
+      "index": 0,
+      "file": "frames/0000.png",
+      "rect": [
+        1,
+        1,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "8ac4f80529947ce2779017523335c19ef24a7748637adb5e319eca9bcc7503c9"
+    },
+    {
+      "index": 1,
+      "file": "frames/0001.png",
+      "rect": [
+        99,
+        1,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "3c7579246aaf3af8b9d1a2e49ac616e0546c89a1c972fcb58221aa3b056a5cf7"
+    },
+    {
+      "index": 2,
+      "file": "frames/0002.png",
+      "rect": [
+        197,
+        1,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "15ed6cdc03620762f5f8f311b8a270c30e22e7ee89b5a450138d93c41f6e3b6c"
+    },
+    {
+      "index": 3,
+      "file": "frames/0003.png",
+      "rect": [
+        295,
+        1,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "3c7579246aaf3af8b9d1a2e49ac616e0546c89a1c972fcb58221aa3b056a5cf7"
+    },
+    {
+      "index": 4,
+      "file": "frames/0004.png",
+      "rect": [
+        1,
+        99,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "8ac4f80529947ce2779017523335c19ef24a7748637adb5e319eca9bcc7503c9"
+    },
+    {
+      "index": 5,
+      "file": "frames/0005.png",
+      "rect": [
+        99,
+        99,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "8c5b49e6dd2d6e2ac52ccea0eb959b10989f2c66bc0764ecea17458334c0c09c"
+    },
+    {
+      "index": 6,
+      "file": "frames/0006.png",
+      "rect": [
+        197,
+        99,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "1c1a56b7f100ee59dd763af729707789a072bcb07b2f6ab42662fae93f930355"
+    },
+    {
+      "index": 7,
+      "file": "frames/0007.png",
+      "rect": [
+        295,
+        99,
+        96,
+        96
+      ],
+      "duration_ms": 80,
+      "rgba_sha256": "8c5b49e6dd2d6e2ac52ccea0eb959b10989f2c66bc0764ecea17458334c0c09c"
+    }
+  ],
+  "preview": {
+    "file": "animation.gif",
+    "decoded_frames": 8,
+    "durations_ms": [
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80,
+      80
+    ],
+    "duration_ms": 640,
+    "loop": 0,
+    "alpha_threshold": 128,
+    "note": "Shared 255-color GIF palette with binary alpha; consecutive equal drawings may merge."
+  },
+  "files_sha256": {
+    "animation.gif": "d0caef0edccc251869e94581b859e5d949fc40ffb225d5978b2a559dda9d9989",
+    "atlas.png": "7bec4155072939d35afb4bd008e657d39e9105d33b1a3774f955bff0efc3bc90",
+    "frames/0000.png": "f0139035d663b3afcacebb3c2f5412bfbf3c23b5fbfc0231b354c740a3c81f02",
+    "frames/0001.png": "210d89d00f0748e52bd4d0826ce1dd5c363647a0383d8e0d268a08f85470f209",
+    "frames/0002.png": "bdffc44da95abd906281fada47bf92006b572690eb7727407f7a7f7beae271c5",
+    "frames/0003.png": "210d89d00f0748e52bd4d0826ce1dd5c363647a0383d8e0d268a08f85470f209",
+    "frames/0004.png": "f0139035d663b3afcacebb3c2f5412bfbf3c23b5fbfc0231b354c740a3c81f02",
+    "frames/0005.png": "f84867fe02b0f6e9c46684def106bb997723d53f1f548b641a2d6e352a00abd0",
+    "frames/0006.png": "bf8c12e3fc3d599467cc230baa0474c1de4e69f5a3f47484fc2f2b97178b3ab1",
+    "frames/0007.png": "f84867fe02b0f6e9c46684def106bb997723d53f1f548b641a2d6e352a00abd0"
+  }
+}

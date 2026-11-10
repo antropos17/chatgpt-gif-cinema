@@ -65,22 +65,74 @@ jobs:
       - name: Package the installable skill
         if: matrix.artifact
         run: |
-          python tools/package_skill.py --out output/gif-cinema-skill-0.2.1.zip
+          python tools/package_skill.py --out output/gif-cinema-skill-0.3.1.zip
           python tools/package_skill.py --out output/gif-cinema-skill-repeat.zip
           python - <<'PYCODE'
           import hashlib
           from pathlib import Path
-          first = Path('output/gif-cinema-skill-0.2.1.zip')
+          first = Path('output/gif-cinema-skill-0.3.1.zip')
           assert first.read_bytes() == Path('output/gif-cinema-skill-repeat.zip').read_bytes()
-          Path('output/gif-cinema-skill-0.2.1.sha256').write_text(
+          Path('output/gif-cinema-skill-0.3.1.sha256').write_text(
               hashlib.sha256(first.read_bytes()).hexdigest() + '  ' + first.name + '\n', encoding='utf-8')
+          PYCODE
+      - name: Smoke the extracted skill with its immutable runtime pin
+        if: matrix.artifact
+        run: |
+          python - <<'PYCODE'
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+          import tempfile
+          import venv
+          import zipfile
+
+          report_path = Path('output/installed-skill-smoke.json').resolve()
+          archive = Path('output/gif-cinema-skill-0.3.1.zip').resolve()
+          with tempfile.TemporaryDirectory(prefix='installed-skill-') as temporary:
+              work = Path(temporary).resolve()
+              with zipfile.ZipFile(archive) as package:
+                  package.extractall(work / 'installed')
+              skill = work / 'installed/gif-cinema'
+              runtime = json.loads((skill / 'runtime.json').read_text(encoding='utf-8'))
+              assert runtime['runtime_repository'] == 'https://github.com/antropos17/chatgpt-gif-cinema.git'
+              environment = work / 'venv'
+              # Reuse the job's Pillow dependency, not its editable runtime.
+              # The installation metadata check below rejects a checkout import.
+              venv.EnvBuilder(with_pip=True, system_site_packages=True).create(environment)
+              python = environment / 'bin/python'
+              env = os.environ.copy()
+              for name in ('PYTHONPATH', 'PYTHONHOME', 'OPENAI_API_KEY'):
+                  env.pop(name, None)
+              env['PYTHONDONTWRITEBYTECODE'] = '1'
+              subprocess.run([str(python), '-m', 'pip', 'install', '--ignore-installed', '--no-deps',
+                  'gif-cinema @ git+' + runtime['runtime_repository'] + '@' + runtime['runtime_commit']],
+                  cwd=work, env=env, check=True, timeout=300)
+              check = subprocess.run([str(python), str(skill / 'scripts/check_install.py')],
+                  cwd=work, env=env, check=True, capture_output=True, text=True, timeout=30)
+              installation = json.loads(check.stdout)
+              assert installation['package']['status'] == 'passed'
+              assert installation['runtime']['pin_matches_metadata'] is True
+              subprocess.run([str(python), str(skill / 'scripts/smoke_test.py'), '--out', str(work / 'proof')],
+                  cwd=work, env=env, check=True, timeout=360)
+              proof = json.loads((work / 'proof/verification.json').read_text(encoding='utf-8'))
+              assert proof['status'] == 'passed' and proof['provider_calls'] == 0
+              assert proof['sources_unchanged'] and proof['packaged_motion_checked']
+              proof['installation'] = installation
+              proof['component_checks'] = {name: json.loads(
+                  (work / 'proof' / name / 'verification.json').read_text(encoding='utf-8'))
+                  for name in ('media', 'layers', 'motion')}
+              assert all(report['status'] == 'passed' and report['provider_calls'] == 0
+                  for report in proof['component_checks'].values())
+              report_path.write_text(json.dumps(proof, indent=2) + '\n', encoding='utf-8')
           PYCODE
       - if: matrix.artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gif-cinema-skill-0.2.1
+          name: gif-cinema-skill-0.3.1
           path: |
-            output/gif-cinema-skill-0.2.1.zip
-            output/gif-cinema-skill-0.2.1.sha256
+            output/gif-cinema-skill-0.3.1.zip
+            output/gif-cinema-skill-0.3.1.sha256
+            output/installed-skill-smoke.json
           retention-days: 14
           if-no-files-found: error

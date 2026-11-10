@@ -20,8 +20,9 @@ to the player. Some GIF viewers repeat even a play-once file.
 ## Run and verify
 
 Use the repository checkout containing this feature, Python 3.10+, Pillow 10.1+,
-FFmpeg and ffprobe. The earlier skill ZIP/runtime pin does not include stroke
-layers. This is not an instruction to replace an installed skill automatically.
+FFmpeg and ffprobe. Skill package 0.3.0 and its pinned runtime include the same
+stroke feature, examples and verification helper. See the [installed workflow](../.agents/skills/gif-cinema/references/layers.md).
+Older skill/runtime pins do not include strokes; do not replace a working installation automatically.
 
 ```sh
 python -m gif_cinema.layers render examples/stroke-reveal.json --out output/strokes --dry-run
