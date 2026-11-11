@@ -33,7 +33,8 @@ args = sys.argv[1:]
 source = next(Path(a.split('=', 1)[1]) for a in args if a.startswith('Dir::Etc::sourcelist='))
 sources = source.read_text()
 phase = 'update' if 'update' in args else ('download' if '--download-only' in args else 'install')
-mirror = 'primary' if 'https://archive.ubuntu.com/' in sources else 'fallback'
+mirror = ('primary' if 'https://archive.ubuntu.com/' in sources else
+          'fallback' if 'https://azure.archive.ubuntu.com/' in sources else 'security')
 with open(os.environ['TEST_APT_LOG'], 'a', encoding='utf-8') as log:
     log.write(json.dumps({'args': args, 'sources': sources, 'phase': phase, 'mirror': mirror}) + '\n')
 scenario = os.environ['TEST_APT_SCENARIO']
@@ -41,8 +42,12 @@ if scenario == 'download_timeout' and phase == 'download' and mirror == 'primary
     sys.exit(124)
 if scenario == 'update_failure' and phase == 'update' and mirror == 'primary':
     sys.exit(100)
-if scenario == 'both_fail' and phase == 'download':
+if scenario == 'all_fail' and phase == 'download':
     sys.exit(124)
+if scenario == 'two_index_failures' and phase == 'update' and mirror != 'security':
+    sys.exit(100)
+if scenario == 'all_index_failures' and phase == 'update':
+    sys.exit(100)
 if scenario == 'install_failure' and phase == 'install':
     sys.exit(100)
 if phase == 'install':
@@ -122,9 +127,35 @@ if phase == 'install':
                           ('fallback', 'download'), ('fallback', 'install')])
 
     def test_exhausted_downloads_fail_without_installing(self):
-        result, calls = self.run_setup('both_fail')
+        result, calls = self.run_setup('all_fail')
         self.assertNotEqual(result.returncode, 0)
-        self.assertEqual([c['phase'] for c in calls], ['update', 'download', 'update', 'download'])
+        self.assertEqual([(c['mirror'], c['phase']) for c in calls],
+                         [('primary', 'update'), ('primary', 'download'),
+                          ('fallback', 'update'), ('fallback', 'download'),
+                          ('security', 'update'), ('security', 'download')])
+
+    def test_two_index_failures_use_runner_security_archive_with_same_trust(self):
+        result, calls = self.run_setup('two_index_failures')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual([(c['mirror'], c['phase']) for c in calls],
+                         [('primary', 'update'), ('fallback', 'update'),
+                          ('security', 'update'), ('security', 'download'), ('security', 'install')])
+        for call in calls[-3:]:
+            self.assertIn('URIs: https://security.ubuntu.com/ubuntu', call['sources'])
+            self.assertIn('Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg', call['sources'])
+            self.assertIn('Suites: noble noble-updates noble-security', call['sources'])
+            self.assertIn('Dir::Etc::sourceparts=-', call['args'])
+            self.assertNotIn('--allow-unauthenticated', call['args'])
+            self.assertNotIn('trusted=yes', call['sources'])
+        self.assertIn('APT::Update::Error-Mode=any', calls[-3]['args'])
+        self.assertEqual(calls[-1]['args'][0], 'apt-get')
+        self.assertIn('--no-download', calls[-1]['args'])
+
+    def test_all_index_failures_never_download_or_install(self):
+        result, calls = self.run_setup('all_index_failures')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual([(c['mirror'], c['phase']) for c in calls],
+                         [('primary', 'update'), ('fallback', 'update'), ('security', 'update')])
 
     def test_failed_dpkg_install_is_not_retried_or_masked(self):
         result, calls = self.run_setup('install_failure')

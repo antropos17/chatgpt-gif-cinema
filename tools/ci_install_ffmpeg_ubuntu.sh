@@ -31,8 +31,12 @@ install_ubuntu_ffmpeg() (
     -o 'Acquire::https::Timeout=15'
   )
   # Avoid the runner's mirrorlist choosing the stalled Azure HTTP endpoint.
-  # Both attempts use official archives and the existing Ubuntu signing key.
-  for mirror in https://archive.ubuntu.com/ubuntu https://azure.archive.ubuntu.com/ubuntu; do
+  # Keep all three official archives from the hosted runner's mirror list.
+  # security.ubuntu.com is also a full archive and may remain reachable when
+  # the archive/Azure endpoints fail. Every attempt uses the existing signing key.
+  # https://github.com/actions/runner-images/blob/ubuntu24/20261101.360/images/ubuntu/scripts/build/configure-apt-sources.sh
+  for mirror in https://archive.ubuntu.com/ubuntu \
+      https://azure.archive.ubuntu.com/ubuntu https://security.ubuntu.com/ubuntu; do
     printf '%s\n' \
       'Types: deb' "URIs: $mirror" \
       'Suites: noble noble-updates noble-security' \
