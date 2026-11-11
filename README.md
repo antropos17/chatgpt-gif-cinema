@@ -62,6 +62,14 @@ Existing generated footage, turned into small edits. Titles and layouts do not c
 
 This standalone 3D example includes the actual editable scene, exports, font license and verification facts. It is not a new public CLI backend. The MP4 is 800 × 800 at 24 fps; the GIF is 640 × 640 at 20 fps. [Review scope and limitations](examples/blender-form-01/README.md#review-status).
 
+## Exact script montage
+
+Assemble an existing `film.json` with original GIF timing, hash-pinned source-frame
+cuts, exact subtitle timing and the script soundtrack. The lossless master keeps
+selected decoded drawings; its optional H.264/AAC viewing copy is lossy.
+See the [montage workflow](docs/EXACT-SCRIPT-EDIT.md) and the
+[120-frame Blender split-and-rejoin proof](examples/exact-form-edit/README.md).
+
 ## Motion graphics
 
 Real outputs from the public local renderer. Shapes, text and keyframes are editable; no model or API call is involved.

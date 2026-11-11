@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "title": "FORM / 01: exact three-shot edit",
+  "ratio": "1:1",
+  "width": 640,
+  "height": 640,
+  "fps": 20,
+  "style_bible": "The existing Blender FORM/01 artwork. Three sequential source-frame ranges reconstruct the original action without generating new artwork.",
+  "shots": [
+    {
+      "id": "open",
+      "source": "../blender-form-01/deliverables/FORM-01.gif",
+      "first_frame_target": "Use the original take at the selected in-frame.",
+      "last_frame_target": "Keep the original take through the exclusive out-frame.",
+      "caption": "OPEN"
+    },
+    {
+      "id": "turn",
+      "source": "../blender-form-01/deliverables/FORM-01.gif",
+      "first_frame_target": "Use the original take at the selected in-frame.",
+      "last_frame_target": "Keep the original take through the exclusive out-frame.",
+      "caption": "TURN"
+    },
+    {
+      "id": "return",
+      "source": "../blender-form-01/deliverables/FORM-01.gif",
+      "first_frame_target": "Use the original take at the selected in-frame.",
+      "last_frame_target": "Keep the original take through the exclusive out-frame.",
+      "caption": "RETURN"
+    }
+  ]
+}

@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased — exact decoded-GIF film master
+## Unreleased
+
+- Add source-only exact script montage: hash-pinned original drawing selections,
+  disposal-prefix budgets, exact SRT/timeline sidecars and script soundtrack.
+  Include a reproducible 120-frame Blender split-and-rejoin example. No new
+  intermediate poses or semantic-continuity guarantee.
+ — exact decoded-GIF film master
 
 - Add optional FFV1/BGRA Matroska masters with one frame per stored GIF drawing,
   exact RGBA/PTS/hold verification and explicit packet durations before muxing.
