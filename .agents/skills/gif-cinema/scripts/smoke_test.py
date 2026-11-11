@@ -9,7 +9,24 @@ import shutil
 import subprocess
 import sys
 
+sys.dont_write_bytecode = True
+
 from PIL import Image, ImageDraw
+import check_install
+
+
+COMPONENTS = ("media", "layers", "motion", "factory", "master")
+
+
+def verify_component_receipt(path):
+    """A successful process is not evidence that its behavioral checks passed."""
+    raw = Path(path).read_bytes()
+    report = json.loads(raw)
+    if (not isinstance(report, dict) or report.get("status") != "passed" or
+            type(report.get("provider_calls")) is not int or report["provider_calls"] != 0):
+        raise ValueError(f"Invalid zero-call component receipt: {path}")
+    return {"status": "passed", "provider_calls": 0,
+            "receipt_sha256": hashlib.sha256(raw).hexdigest(), "receipt_bytes": len(raw)}
 
 
 def main():
@@ -22,19 +39,18 @@ def main():
         raise ValueError("Smoke output belongs outside the installed skill directory")
     if not all(shutil.which(tool) for tool in ("ffmpeg", "ffprobe")):
         raise ValueError("FFmpeg and ffprobe are required for full smoke; use smoke_media.py for a no-encoder check")
+    installation = {"package": check_install.verify_files(),
+                    "runtime": check_install.check_runtime(require_master=True)}
     root.mkdir(parents=True, exist_ok=False)
     env = os.environ.copy()
     env.pop("OPENAI_API_KEY", None)
     env.update(TEMP=str(root), TMP=str(root), PYTHONDONTWRITEBYTECODE="1")
-    subprocess.run([sys.executable, str(skill / "scripts/smoke_media.py"),
-                    "--out", str(root / "media")], cwd=root, env=env, check=True,
-                   capture_output=True, text=True, timeout=60)
-    subprocess.run([sys.executable, str(skill / "scripts/smoke_layers.py"),
-                    "--out", str(root / "layers")], cwd=root, env=env, check=True,
-                   capture_output=True, text=True, timeout=180)
-    subprocess.run([sys.executable, str(skill / "scripts/smoke_motion.py"),
-                    "--out", str(root / "motion")], cwd=root, env=env, check=True,
-                   capture_output=True, text=True, timeout=180)
+    component_checks = {}
+    for name in COMPONENTS:
+        subprocess.run([sys.executable, str(skill / f"scripts/smoke_{name}.py"),
+                        "--out", str(root / name)], cwd=root, env=env, check=True,
+                       capture_output=True, text=True, timeout=180)
+        component_checks[name] = verify_component_receipt(root / name / "verification.json")
     calls = []
 
     def run(*parts):
@@ -112,7 +128,9 @@ def main():
                "render_sha256": render_sha, "plan": plan, "commands": calls,
                "reference_preflight_checked": True, "packaged_review_and_sprites_checked": True,
                "packaged_layers_and_strokes_checked": True, "packaged_gif_layers_checked": True,
-               "packaged_motion_checked": True,
+               "packaged_motion_checked": True, "packaged_factory_checked": True,
+               "packaged_master_checked": True, "components": component_checks,
+               "installation": installation, "visual_review": "pending", "user_acceptance": "pending",
                "scope": "CLI offline behavior; no live generation or artistic acceptance."}
     (root / "verification.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")
     print(json.dumps({k: receipt[k] for k in ("status", "provider_calls", "sources_unchanged",

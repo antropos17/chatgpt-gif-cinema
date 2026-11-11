@@ -15,6 +15,8 @@ sys.dont_write_bytecode = True
 SKILL = Path(__file__).resolve().parents[1]
 # Independent expected inventory, checked against the builder in regression tests.
 RESOURCE_FILES = frozenset({
+    'assets/example/factory.json', 'references/factory.md', 'references/master.md',
+    'scripts/smoke_factory.py', 'scripts/smoke_master.py',
     'assets/example/motion-loop.json',
     'references/motion.md',
     'scripts/smoke_motion.py',
@@ -86,10 +88,40 @@ def verify_files(root=SKILL):
             'notice': 'Checksums detect revision mismatch; they are not a publisher signature.'}
 
 
-def check_runtime(root=SKILL):
+def check_lossless(required=False):
+    """Inspect the optional codec in memory; never create a media file."""
+    report = {'status': 'unavailable', 'requirement': 'av>=16.1,<17',
+              'required': bool(required), 'ffv1_encoder': False, 'ffv1_decoder': False}
+    try:
+        import av
+        from fractions import Fraction
+        version = tuple(int(part) for part in av.__version__.split('.')[:2])
+        report['version'] = av.__version__
+        if not (version >= (16, 1) and version < (17, 0)):
+            raise ValueError('PyAV version is outside >=16.1,<17')
+        encoder = av.CodecContext.create('ffv1', 'w')
+        encoder.width = encoder.height = 24
+        encoder.pix_fmt = 'bgra'
+        encoder.time_base = Fraction(1, 100)
+        encoder.open()
+        report['ffv1_encoder'] = True
+        # FFV1 decoder initialization needs stream extradata. Check codec
+        # availability here; the smoke opens and decodes the real encoded master.
+        av.Codec('ffv1', 'r')
+        report['ffv1_decoder'] = True
+        report['status'] = 'available'
+    except Exception as error:
+        report['reason'] = f'{type(error).__name__}: {error}'
+        if required:
+            raise ValueError('Lossless master requires av>=16.1,<17 with usable FFV1 encoder and decoder; '
+                             'install the pinned runtime with [lossless]') from error
+    return report
+
+
+def check_runtime(root=SKILL, require_master=False):
     runtime = json.loads((Path(root) / 'runtime.json').read_text(encoding='utf-8'))
     import gif_cinema
-    from gif_cinema import cli, layers, motion, sprites
+    from gif_cinema import cli, factory, layers, master, master_script, motion, sprites
     if 'fixed_canvas' not in inspect.signature(cli.check_gif_limits).parameters:
         raise ValueError('Runtime lacks bounded review decoding; install the pinned runtime')
     if not all(callable(getattr(sprites, name, None)) for name in ('load_gif', 'load_sheet', 'export')):
@@ -131,6 +163,31 @@ def check_runtime(root=SKILL):
                 parser.parse_args(arguments)
         except SystemExit as error:
             raise ValueError('Runtime lacks motion CLI commands; install the pinned runtime') from error
+    for label, component, names in (
+            ('factory', factory, ('plan_factory', 'build_factory', 'verify_factory', 'run')),
+            ('master', master, ('plan', 'build', 'verify_master', 'require_av', 'rgba_frame', 'run')),
+            ('script master', master_script, ('load', 'edit_ranges', 'write_template', 'build', 'timeline', 'sidecars'))):
+        if not all(callable(getattr(component, name, None)) for name in names):
+            raise ValueError(f'Runtime lacks required {label} interfaces')
+    if not {'frame_ranges', 'canvas', 'source_hashes', 'sequence'} <= set(inspect.signature(master.build).parameters):
+        raise ValueError('Runtime lacks exact script master build interfaces')
+    if not {'edits', 'native_canvas', 'preview', 'dry_run'} <= set(inspect.signature(master_script.build).parameters):
+        raise ValueError('Runtime lacks exact script editing interfaces')
+    for label, arguments, dispatch in (
+            ('factory', ['factory', 'build', 'input.json', '--out', 'unused', '--dry-run'], factory.run),
+            ('factory', ['factory', 'verify', 'unused'], factory.run),
+            ('master', ['master', 'input.gif', '--out', 'unused', '--preview', '--audio', 'audio.wav', '--dry-run'], master.run),
+            ('script master', ['master', '--script', 'film.json', '--edits', 'edits.json', '--out', 'unused',
+                               '--preview', '--native-canvas', '--dry-run'], master.run),
+            ('script master', ['master', '--script', 'film.json', '--write-edits', 'edits.json'], master.run)):
+        try:
+            with redirect_stderr(io.StringIO()):
+                parsed = parser.parse_args(arguments)
+        except SystemExit as error:
+            raise ValueError(f'Runtime lacks {label} CLI commands') from error
+        if getattr(parsed, 'func', None) is not dispatch:
+            raise ValueError(f'Runtime lacks correct {label} CLI dispatch')
+    lossless = check_lossless(required=require_master)
     installed_commit = None
     try:
         distribution = metadata.distribution('gif-cinema')
@@ -144,17 +201,22 @@ def check_runtime(root=SKILL):
     return {'status': 'interfaces-present', 'runtime_version': gif_cinema.__version__,
             'expected_commit': runtime['runtime_commit'], 'installed_commit': installed_commit,
             'pin_matches_metadata': installed_commit == runtime['runtime_commit'],
-            'note': 'Interface checks are not behavioral or visual acceptance. Run smoke_media.py, smoke_layers.py, smoke_motion.py and smoke_test.py. A local checkout may not expose VCS installation metadata.'}
+            'optional_dependencies': {'lossless': lossless},
+            'note': 'Interface checks are not behavioral or visual acceptance. Run all five component smokes or smoke_test.py. A local checkout may not expose VCS installation metadata.'}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--files-only', action='store_true', help='Check extracted resources without importing the runtime')
+    parser.add_argument('--require-master', action='store_true',
+                        help='Require optional PyAV >=16.1,<17 and usable FFV1 encoder/decoder')
     args = parser.parse_args()
+    if args.files_only and args.require_master:
+        parser.error('--files-only cannot be combined with --require-master')
     try:
         report = {'package': verify_files()}
         if not args.files_only:
-            report['runtime'] = check_runtime()
+            report['runtime'] = check_runtime(require_master=args.require_master)
         print(json.dumps(report, indent=2))
     except (OSError, ValueError, ImportError) as error:
         print(f'Error: {error}', file=sys.stderr)

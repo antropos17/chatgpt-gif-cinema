@@ -64,7 +64,7 @@ class SkillPackageTests(unittest.TestCase):
             self.assertEqual(len(archive.namelist()), count)
             self.assertEqual(archive.namelist(), sorted(archive.namelist()))
             manifest = json.loads(archive.read('gif-cinema/package-manifest.json'))
-            self.assertEqual(manifest['skill_version'], '0.3.1')
+            self.assertEqual(manifest['skill_version'], '0.4.0')
             self.assertIs(manifest['runtime_bundled'], False)
             self.assertEqual(set(manifest['files']), set(packaging.FILES))
             self.assertEqual(len(manifest['files']) + 1, count)
@@ -429,7 +429,7 @@ class SkillPackageTests(unittest.TestCase):
     def test_missing_encoders_fail_before_creating_smoke_output(self):
         installed = self.unpack()
         no_encoders = {'PATH': str(self.root / 'no-tools')}
-        for script in ('smoke_layers.py', 'smoke_motion.py', 'smoke_test.py'):
+        for script in ('smoke_layers.py', 'smoke_motion.py', 'smoke_factory.py', 'smoke_master.py', 'smoke_test.py'):
             with self.subTest(script=script):
                 out = self.root / script
                 result = self.command(installed, script, '--out', str(out),
@@ -479,6 +479,17 @@ class SkillPackageTests(unittest.TestCase):
         self.assertTrue(report['packaged_layers_and_strokes_checked'])
         self.assertTrue(report['packaged_gif_layers_checked'])
         self.assertTrue(report['packaged_motion_checked'])
+        self.assertTrue(report['packaged_factory_checked'])
+        self.assertTrue(report['packaged_master_checked'])
+        self.assertEqual(set(report['components']), {'media', 'layers', 'motion', 'factory', 'master'})
+        for component in report['components']:
+            raw = (out / component / 'verification.json').read_bytes()
+            receipt = json.loads(raw)
+            self.assertEqual(receipt['status'], 'passed')
+            self.assertIs(type(receipt['provider_calls']), int)
+            self.assertEqual(receipt['provider_calls'], 0)
+            self.assertEqual(report['components'][component]['receipt_sha256'], hashlib.sha256(raw).hexdigest())
+            self.assertEqual(report['components'][component]['receipt_bytes'], len(raw))
         motion = json.loads((out / 'motion/verification.json').read_text())
         self.assertEqual(motion['frames_reopened_and_matched'], 234)
         self.assertEqual(motion['visual_review'], 'pending')
@@ -486,6 +497,241 @@ class SkillPackageTests(unittest.TestCase):
         self.assertEqual(layers['frames_reopened_and_matched'], 200)
         self.assertEqual(layers['visual_review'], 'pending')
         self.assertEqual(json.loads((out / 'media/verification.json').read_text())['visual_review'], 'pending')
+
+    def load_smoke(self, name, installed=SKILL):
+        checker = module('isolated_checker_' + name, installed / 'scripts/check_install.py')
+        # Earlier extracted-smoke tests may leave a module from an already-cleaned
+        # temporary installation in sys.modules. Bind each helper to its own root.
+        with patch.object(sys, 'path', [str(installed / 'scripts'), *sys.path]), \
+                patch.dict(sys.modules, {'check_install': checker}):
+            return module('test_' + name, installed / 'scripts' / name)
+
+    def test_factory_manifest_pins_unchanged_bundled_inputs(self):
+        manifest = json.loads((SKILL / 'assets/example/factory.json').read_text())
+        self.assertEqual([('gif' if 'gif' in item else 'scene') for item in manifest['items']], ['gif', 'scene'])
+        for item in manifest['items']:
+            path = SKILL / 'assets/example' / item.get('gif', item.get('scene'))
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), item['sha256'])
+
+    def test_checker_requires_factory_and_master_interfaces_and_dispatch(self):
+        from gif_cinema import factory, master
+        for component, label, name in ((factory, 'factory', 'build_factory'), (master, 'master', 'verify_master')):
+            with self.subTest(label=label), patch.object(component, name, None):
+                with self.assertRaisesRegex(ValueError, label + ' interfaces'):
+                    check.check_runtime()
+        for component, label in ((factory, 'factory'), (master, 'master')):
+            with self.subTest(label=label), patch.object(component, 'add_parser', return_value=None):
+                with self.assertRaisesRegex(ValueError, label + ' CLI commands'):
+                    check.check_runtime()
+        from gif_cinema import cli
+        original = cli.build_parser
+        def wrong_dispatch():
+            parser = original()
+            original_parse = parser.parse_args
+            def parse(*args, **kwargs):
+                result = original_parse(*args, **kwargs)
+                if result.command == 'master':
+                    result.func = factory.run
+                return result
+            parser.parse_args = parse
+            return parser
+        with patch.object(cli, 'build_parser', side_effect=wrong_dispatch):
+            with self.assertRaisesRegex(ValueError, 'master CLI dispatch'):
+                check.check_runtime()
+
+    def test_checker_requires_script_master_interfaces_and_cli_options(self):
+        from gif_cinema import master, master_script
+        with patch.object(master_script, 'write_template', None):
+            with self.assertRaisesRegex(ValueError, 'script master interfaces'):
+                check.check_runtime()
+        with patch.object(master_script, 'build', lambda *args, **kwargs: None):
+            with self.assertRaisesRegex(ValueError, 'script editing interfaces'):
+                check.check_runtime()
+        def legacy_parser(sub):
+            parser = sub.add_parser('master')
+            parser.add_argument('clips', nargs='+')
+            parser.add_argument('--out', required=True)
+            parser.add_argument('--preview', action='store_true')
+            parser.add_argument('--audio')
+            parser.add_argument('--dry-run', action='store_true')
+            parser.set_defaults(func=master.run)
+        with patch.object(master, 'add_parser', side_effect=legacy_parser):
+            with self.assertRaisesRegex(ValueError, 'script master CLI commands'):
+                check.check_runtime()
+
+    def test_missing_lossless_is_explicit_optional_or_required(self):
+        check.check_runtime()  # Load lazy CLI modules before patch.dict snapshots sys.modules.
+        with patch.dict(sys.modules, {'av': None}):
+            report = check.check_runtime()
+            lossless = report['optional_dependencies']['lossless']
+            self.assertEqual(lossless['status'], 'unavailable')
+            self.assertFalse(lossless['required'])
+            with self.assertRaisesRegex(ValueError, 'Lossless master requires'):
+                check.check_runtime(require_master=True)
+
+    def test_lossless_checker_rejects_unsupported_versions_and_missing_codec(self):
+        from types import SimpleNamespace
+        for version in ('16.0.0', '17.0.0', 'not-a-version'):
+            with self.subTest(version=version), patch.dict(sys.modules, {'av': SimpleNamespace(__version__=version)}):
+                self.assertEqual(check.check_lossless()['status'], 'unavailable')
+                with self.assertRaisesRegex(ValueError, 'Lossless master requires'):
+                    check.check_lossless(required=True)
+        try:
+            import av
+        except ImportError:
+            return
+        with patch.object(av, 'Codec', side_effect=RuntimeError('FFV1 decoder unavailable')):
+            report = check.check_lossless()
+            self.assertEqual(report['status'], 'unavailable')
+            self.assertTrue(report['ffv1_encoder'])
+            self.assertFalse(report['ffv1_decoder'])
+            with self.assertRaisesRegex(ValueError, 'Lossless master requires'):
+                check.check_lossless(required=True)
+
+    def test_missing_lossless_fails_master_and_full_smokes_before_output(self):
+        check.check_runtime()  # Preserve module identity across simulated missing-dependency cases.
+        for filename in ('smoke_master.py', 'smoke_test.py'):
+            smoke = self.load_smoke(filename)
+            out = self.root / filename
+            with self.subTest(filename=filename), patch.dict(sys.modules, {'av': None}), \
+                    patch.object(smoke.shutil, 'which', return_value='present'), \
+                    patch.object(sys, 'argv', [filename, '--out', str(out)]):
+                with self.assertRaisesRegex(ValueError, 'Lossless master requires'):
+                    smoke.main()
+                self.assertFalse(out.exists())
+
+    def test_full_smoke_requires_verified_exact_zero_call_component_receipts(self):
+        smoke = self.load_smoke('smoke_test.py')
+        self.assertEqual(smoke.COMPONENTS, ('media', 'layers', 'motion', 'factory', 'master'))
+        path = self.root / 'verification.json'
+        for data in ({}, [], {'status': 'passed'}, {'status': 'failed', 'provider_calls': 0},
+                     *({'status': 'passed', 'provider_calls': value}
+                       for value in (False, True, 0.0, '0', None, 1, -1))):
+            with self.subTest(data=data):
+                path.write_text(json.dumps(data))
+                with self.assertRaisesRegex(ValueError, 'component receipt'):
+                    smoke.verify_component_receipt(path)
+        raw = b'{"status":"passed","provider_calls":0}\n'
+        path.write_bytes(raw)
+        result = smoke.verify_component_receipt(path)
+        self.assertEqual(result['receipt_sha256'], hashlib.sha256(raw).hexdigest())
+        self.assertEqual(result['receipt_bytes'], len(raw))
+        path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            smoke.verify_component_receipt(path)
+        path.write_text('{')
+        with self.assertRaises(ValueError):
+            smoke.verify_component_receipt(path)
+
+    def test_factory_and_master_smokes_exercise_public_dispatch(self):
+        from gif_cinema import factory, master
+        for filename, component, call, args in (
+                ('smoke_factory.py', factory, 'factory_cli', ('build', 'unused.json', '--out', 'unused', '--dry-run')),
+                ('smoke_master.py', master, 'master_cli', ('unused.gif', '--out', 'unused', '--dry-run'))):
+            smoke = self.load_smoke(filename)
+            with self.subTest(filename=filename), patch.object(component, 'run', side_effect=RuntimeError('dispatcher injected')) as dispatch:
+                with self.assertRaises(SystemExit):
+                    getattr(smoke, call)(*args)
+                dispatch.assert_called_once()
+
+    def test_new_smokes_refuse_installed_output_without_bytecode(self):
+        installed = self.unpack()
+        for filename in ('smoke_factory.py', 'smoke_master.py', 'smoke_test.py'):
+            out = installed / filename
+            with self.subTest(filename=filename):
+                result = self.command(installed, filename, '--out', str(out), success=False, allow_bytecode=True)
+                self.assertIn('outside the installed skill', result.stderr)
+                self.assertFalse(out.exists())
+                self.assertEqual(list(installed.rglob('__pycache__')), [])
+
+    @unittest.skipUnless(shutil.which('ffmpeg') and shutil.which('ffprobe'), 'FFmpeg and ffprobe required')
+    def test_extracted_factory_smoke_rejects_tampered_collection(self):
+        installed = self.unpack()
+        out = self.root / 'factory smoke'
+        report = json.loads(self.command(installed, 'smoke_factory.py', '--out', str(out), allow_bytecode=True).stdout)
+        self.assertEqual(report['status'], 'passed')
+        self.assertEqual(report['collection']['output_hashes_verified'], 9)
+        self.assertEqual(report['collection']['zip_members_matched'], 8)
+        self.assertEqual(report['installation']['package']['status'], 'passed')
+        self.assertEqual(report['visual_review'], report['user_acceptance'])
+        self.assertEqual(report['visual_review'], 'pending')
+        smoke = self.load_smoke('smoke_factory.py', installed)
+        manifest, collection = installed / 'assets/example/factory.json', out / 'collection'
+        plan = smoke.factory_cli('build', manifest, '--out', self.root / 'unused', '--dry-run')
+        verified = smoke.factory_cli('verify', collection)
+        smoke.check_collection(collection, manifest, plan, verified)
+        imported = collection / 'gifs/astronaut.gif'
+        original = imported.read_bytes()
+        imported.write_bytes(original + b'changed')
+        with self.assertRaisesRegex(ValueError, 'Imported GIF bytes changed'):
+            smoke.check_collection(collection, manifest, plan, verified)
+        imported.write_bytes(original)
+        (collection / 'unexpected.txt').write_text('unexpected')
+        with self.assertRaisesRegex(ValueError, 'inventory'):
+            smoke.check_collection(collection, manifest, plan, verified)
+        (collection / 'unexpected.txt').unlink()
+        with zipfile.ZipFile(collection / 'collection.zip', 'a') as archive:
+            archive.writestr('collection/injected.txt', 'changed')
+        verified['zip_sha256'] = hashlib.sha256((collection / 'collection.zip').read_bytes()).hexdigest()
+        with self.assertRaisesRegex(ValueError, 'ZIP inventory'):
+            smoke.check_collection(collection, manifest, plan, verified)
+        self.assertEqual(list(installed.rglob('__pycache__')), [])
+
+    @unittest.skipUnless(shutil.which('ffmpeg') and shutil.which('ffprobe'), 'FFmpeg and ffprobe required')
+    def test_extracted_master_smoke_reopens_all_pixels_and_final_hold(self):
+        try:
+            import av
+        except ImportError:
+            self.skipTest('Optional av lossless extra required')
+        installed = self.unpack()
+        out = self.root / 'master smoke'
+        report = json.loads(self.command(installed, 'smoke_master.py', '--out', str(out), allow_bytecode=True).stdout)
+        self.assertEqual(report['frames_reopened_and_matched'], 3)
+        self.assertEqual(report['durations_ms'], [10, 20, 150])
+        self.assertEqual(report['pts_cs'], [0, 1, 3])
+        self.assertEqual(report['final_hold_ms'], 150)
+        self.assertEqual(report['preview_frames'], 18)
+        self.assertEqual(report['audio_target_samples'], 8640)
+        self.assertEqual(report['script_ranges'], [[0, 2], [2, 3]])
+        self.assertEqual(report['caption_ranges_ms'], [[0, 30], [30, 180]])
+        self.assertTrue(report['script_edit_checked'])
+        self.assertEqual(report['output_hashes_verified'], 4)
+        self.assertEqual(report['installation']['package']['status'], 'passed')
+        self.assertEqual(report['visual_review'], 'pending')
+        self.assertEqual(report['user_acceptance'], 'pending')
+        smoke = self.load_smoke('smoke_master.py', installed)
+        output, source, audio = out / 'master', out / 'source.gif', out / 'short.wav'
+        path = output / 'manifest.json'
+        original = path.read_bytes()
+        data = json.loads(original)
+        data['frames'][-1]['duration_cs'] = 14
+        path.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, 'trace mismatch'):
+            smoke.verify_export(output, source, audio, out / 'film.json', out / 'edits.json')
+        path.write_bytes(original)
+        # Updating a tampered sidecar's recorded checksum must not hide wrong cut timing.
+        for name, expected_error in (('captions.srt', 'Reopened SRT'), ('timeline.json', 'Reopened timeline')):
+            sidecar = output / name
+            saved_sidecar = sidecar.read_bytes()
+            if name == 'captions.srt':
+                sidecar.write_bytes(saved_sidecar.replace(b'00:00:00,030', b'00:00:00,040'))
+            else:
+                broken = json.loads(saved_sidecar)
+                broken['shots'][0]['end_ms'] = 40
+                sidecar.write_text(json.dumps(broken))
+            data = json.loads(original)
+            data['files'][name] = {'bytes': sidecar.stat().st_size,
+                                   'sha256': hashlib.sha256(sidecar.read_bytes()).hexdigest()}
+            path.write_text(json.dumps(data))
+            with self.subTest(sidecar=name), self.assertRaisesRegex(ValueError, expected_error):
+                smoke.verify_export(output, source, audio, out / 'film.json', out / 'edits.json')
+            sidecar.write_bytes(saved_sidecar)
+            path.write_bytes(original)
+        movie = output / 'master.mkv'
+        movie.write_bytes(movie.read_bytes() + b'changed')
+        with self.assertRaisesRegex(ValueError, 'Output hash/size mismatch'):
+            smoke.verify_export(output, source, audio, out / 'film.json', out / 'edits.json')
+        self.assertEqual(list(installed.rglob('__pycache__')), [])
 
 
 if __name__ == '__main__':

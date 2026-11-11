@@ -37,8 +37,11 @@ or a broken link to another archive.
 Only Python 3.10+ and Pillow 10.1+ are needed for existing-GIF collections. Scene
 entries also use the existing layer renderer, so FFmpeg and ffprobe must be installed.
 `python -m gif_cinema.factory build ...` is an equivalent module entry point.
-The published skill 0.3.1 runtime pin predates this command; installing that old pin
-alone does not add the factory. This change does not publish a new versioned skill ZIP.
+The maintained source skill package 0.4.0 pins a runtime with this command and bundles
+a smaller two-entry example plus `smoke_factory.py`. Generate its ZIP with
+`python tools/package_skill.py --out dist/gif-cinema.skill.zip`. The older GitHub
+Release `skill-v0.1.1` and previous source package 0.3.1 do not contain this installed
+workflow. Generating a source package does not publish a new GitHub Release.
 
 ## Manifest contract
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "GIF Cinema"
-  short_description: "Build GIF stories, editable layers and drawn-stroke motion"
+  short_description: "Build GIF stories, collections and exact-timing masters"
   default_prompt: "Use $gif-cinema to create an animated story or motion-design piece with editable layers and verified GIF/MP4 exports, preserving my supplied actions and assets."

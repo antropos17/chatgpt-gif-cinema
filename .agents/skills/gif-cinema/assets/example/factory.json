@@ -1,0 +1,23 @@
+{
+  "format": "gif-cinema-factory",
+  "schema_version": 1,
+  "title": "Bundled offline collection",
+  "items": [
+    {
+      "id": "astronaut",
+      "title": "Existing astronaut take",
+      "group": "Bundled offline examples",
+      "caption": "Existing bundled input; visual review and user acceptance pending.",
+      "gif": "shot-01.gif",
+      "sha256": "5599c7b0ccad2dd4fcaf2b86235cc12e3689a8da323311845b724c352d3d6dac"
+    },
+    {
+      "id": "stroke-reveal",
+      "title": "Editable stroke reveal",
+      "group": "Bundled offline examples",
+      "caption": "Existing bundled input; visual review and user acceptance pending.",
+      "scene": "stroke-reveal.json",
+      "sha256": "55510ee26fbce189cb16b7e4e4e09fb6d6609fd26c639715d504ed5d97a4e212"
+    }
+  ]
+}

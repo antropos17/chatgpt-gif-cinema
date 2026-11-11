@@ -2,7 +2,7 @@
 name: gif-cinema
 description: Make multi-scene animated stories and motion-design GIFs or MP4s from existing GIFs, editable text/shape/stroke layers, sprite atlases and reviewed takes. Use for narrative edits, composited animation and authored draw-on graphics.
 license: "GIF Cinema Source-Available Evaluation License v1.0 (see LICENSE)"
-metadata: {"version": "0.3.1"}
+metadata: {"version": "0.4.0"}
 ---
 
 # GIF Cinema
@@ -37,8 +37,9 @@ an honest animatic or production plan, not a claimed finished cartoon.
 
 ## Runtime and a no-key check
 
-Skill package **0.3.1** contains helpers, guides and examples. The Python runtime is
-installed separately. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
+Skill package **0.4.0** contains helpers, guides and examples. The Python runtime is
+installed separately. The install below adds the optional `av>=16.1,<17` lossless
+master dependency. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
 film, chapter, layer and motion export also need FFmpeg and ffprobe. Git/network access is needed only
 for the installation command below. Use an isolated environment.
 `runtime.json` records the exact tested commit (runtime version 0.5.0 is a separate
@@ -47,7 +48,7 @@ version number and by itself is not a compatibility guarantee):
 ```bash
 python -m venv .venv
 # Activate .venv with the command for your shell, then:
-python -m pip install "gif-cinema @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@b098d3b0cf3f9989f5b4bfb2b857f69a80e0c520"
+python -m pip install "gif-cinema[lossless] @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@11523f0a8d75f4422445658e7c5f9547bdc4d6d4"
 python -m gif_cinema --help
 ```
 
@@ -84,13 +85,28 @@ ffprobe, renders the bundled stroke and GIF-composition examples and verifies ev
 For whole-image motion, run
 `python scripts/smoke_motion.py --out ../project/motion-smoke`; it needs the same
 encoders and checks existing GIF/still inputs and the bundled returning-camera recipe.
-For the complete CLI/film check, first confirm `ffmpeg -version` and
+For hash-pinned offline collections, use [factory.md](references/factory.md) and
+`python scripts/smoke_factory.py --out ../project/factory-smoke`.
+For exact decoded-RGBA/native-delay preservation, read [master.md](references/master.md),
+run `python scripts/check_install.py --require-master`, then
+`python scripts/smoke_master.py --out ../project/master-smoke`. Its optional viewing
+MP4/audio are lossy; 100 fps repeats original drawings rather than inventing poses.
+`master --script` also assembles source-only scripts with hash-pinned original-frame
+ranges, exact caption/timeline sidecars and script audio; see the master guide.
+The default install check reports optional lossless dependency availability; full
+and master smokes require it and fail before creating output if it is unavailable.
+For the complete CLI/film and all five component checks, first confirm `ffmpeg -version` and
 `ffprobe -version`, then run `python scripts/smoke_test.py --out ../project/full-smoke`.
+The full receipt validates each child verification receipt and records its SHA-256.
 All output directories must be new and outside the installed skill. None of these checks
 needs a key. The media test blocks network and leaves visual review/user acceptance
 pending; synthetic fixtures are not an artwork-quality demonstration.
 The story helper never makes provider calls and refuses an existing output project. [story-project.md](references/story-project.md) documents
 its exact schema, commands, timing, and limits.
+
+Package 0.4.0 is generated from the maintained source using `tools/package_skill.py`.
+The older GitHub Release `skill-v0.1.1` predates these helpers and must not be
+described as this package. Building a source ZIP does not publish a GitHub Release.
 
 ## Direct before generating
 

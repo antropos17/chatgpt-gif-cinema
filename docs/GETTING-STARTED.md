@@ -247,7 +247,10 @@ runtime setup; installing the skill alone does not install the CLI, Python or FF
 Run its `scripts/check_install.py` and no-key `scripts/smoke_media.py` to check the
 actual extracted review/sprite installation. Its
 helpers use paths relative to the skill folder, and project outputs belong outside
-that installed folder. The older `skill-v0.1.1` release predates the current story
+that installed folder. Source package 0.4.0 also includes offline collection and
+lossless-master guides and smokes. Its full smoke requires the pinned `[lossless]`
+runtime plus FFmpeg/ffprobe; `check_install.py --require-master` checks the optional
+codec before output. Building this package does not publish a release. The older `skill-v0.1.1` release predates the current story
 planner and chapter helpers. [Packaging details](STORYTELLING-SKILL.md#package-and-verify-the-skill).
 
 Try asking your agent:
