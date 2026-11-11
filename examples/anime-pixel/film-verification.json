@@ -1,0 +1,18 @@
+{
+  "gif": {
+    "sha256": "743603656464e25f948218bc3451274b6174b2372b466b768385a6fff123532d",
+    "bytes": 976156,
+    "size": [
+      480,
+      270
+    ],
+    "frames": 128,
+    "unique_frames": 128,
+    "duration_ms": 15360,
+    "loop": null
+  },
+  "mp4": {
+    "sha256": "a95250522064ea91a6324be7d2bd074c12dc0a5ec13d01d867ff64007b82026b",
+    "bytes": 740741
+  }
+}
