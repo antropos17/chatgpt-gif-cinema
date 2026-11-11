@@ -38,6 +38,13 @@ class ExactScriptTests(unittest.TestCase):
 
     def save(self): self.script.write_text(json.dumps(self.data), encoding='utf-8')
 
+    def test_committed_form_edit_keeps_all_drawings_and_exact_script_hash(self):
+        example = Path(__file__).resolve().parents[1] / 'examples/exact-form-edit'
+        report = master_script.build(example / 'film.json', self.out, edits=example / 'edits.json', dry_run=True)
+        self.assertEqual(report['frame_count'], 120)
+        self.assertEqual(report['duration_cs'], 600)
+        self.assertEqual([(s['in_frame'], s['out_frame']) for s in report['sources']], [(0, 40), (40, 80), (80, 120)])
+
     def edits(self, ranges=((1, 3), (0, 2))):
         path = self.root / 'edits.json'
         master_script.write_template(self.script, path)
