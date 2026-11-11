@@ -32,7 +32,9 @@ class AttachmentTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        # macOS exposes its temporary directory through the /var symlink.
+        # Use the physical test directory; do not relax production output guards.
+        self.root = Path(self.temp.name).resolve()
 
     def prepare(self, value=None):
         path = self.root / 'scene.json'
