@@ -502,6 +502,8 @@ def build_parser():
     add_factory_parser(sub)
     from .sequence import add_parser as add_sequence_parser
     add_sequence_parser(sub)
+    from .pixel import add_parser as add_pixel_parser
+    add_pixel_parser(sub)
     from .master import add_parser as add_master_parser
     add_master_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")

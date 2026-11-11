@@ -337,30 +337,16 @@ def verify_sequence(directory):
 
 
 def publish(stage, out):
-    created = []
+    # Do not roll back already-published paths after a failure: another writer
+    # may have replaced or edited them. Retain partial output for inspection;
+    # publication never overwrites, and the completion receipt is written last.
     out.mkdir(exist_ok=False)
-    try:
-        for path in sorted((p for p in stage.rglob('*') if p.is_dir()), key=lambda p: len(p.parts)):
-            target = out / path.relative_to(stage)
-            target.mkdir(exist_ok=False); created.append(target)
-        files = sorted((p for p in stage.rglob('*') if p.is_file()), key=lambda p: (p.name == 'sequence-receipt.json', p.as_posix()))
-        for path in files:
-            target = out / path.relative_to(stage)
-            cli.publish_file(path, target); created.append(target)
-    except Exception:
-        for path in reversed(created):
-            if path.is_file() and not path.is_symlink():
-                path.unlink()
-            elif path.is_dir() and not path.is_symlink():
-                try:
-                    path.rmdir()
-                except OSError:
-                    pass
-        try:
-            out.rmdir()
-        except OSError:
-            pass
-        raise
+    for path in sorted((p for p in stage.rglob('*') if p.is_dir()), key=lambda p: len(p.parts)):
+        (out / path.relative_to(stage)).mkdir(exist_ok=False)
+    files = sorted((p for p in stage.rglob('*') if p.is_file()),
+                   key=lambda p: (p.name == 'sequence-receipt.json', p.as_posix()))
+    for path in files:
+        cli.publish_file(path, out / path.relative_to(stage))
 
 
 def build_sequence(path, out, dry_run=False):

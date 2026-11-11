@@ -182,3 +182,10 @@ This is an independent implementation, without copied upstream code or media:
 Only the general workflow ideas are adopted. GIF Cinema's existing source-available
 license remains unchanged. Background removal, arbitrary irregular-sheet segmentation,
 state generation, automatic loop repair and engine-specific exporters are not included.
+
+## Exact GIF palette preparation
+
+For an accepted GIF that must keep every visible color and integer pixel geometry,
+use [pixel inspect/build/verify](PIXEL-PALETTES.md) before packing it. That separate
+route refuses color overflow instead of quantizing. The sprite preview contract
+above remains a lossy viewing route; PNG frames and the atlas remain authoritative.
