@@ -84,8 +84,9 @@ Types:
   for bounds, original example, timing and additional dynamic-work budgets.
 
 Layer colors accept `#RRGGBB` or `#RRGGBBAA`. Opacity is multiplied with source
-alpha. Compositing is ordinary source-over. There are no masks, groups, parenting,
-blend modes, general SVG paths, repeaters, arbitrary attributes, expressions or plugins.
+alpha. Compositing is ordinary source-over. Optional [point attachments](PROP-ANCHORS.md) pin a prop anchor to another
+layer and support authored holder changes. There are no masks, groups, full
+transform parenting, blend modes, general SVG paths, repeaters, arbitrary attributes, expressions or plugins.
 Supersampled text/shapes and premultiplied-alpha transforms reduce edge fringes.
 
 Example keyframes:

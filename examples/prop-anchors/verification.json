@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "description": "Local authored prop-anchor schematic, not a finished character animation.",
+  "provider_calls": 0,
+  "source_scene_sha256": "4e851e6402435b233e9a214530887ebb1c61db0c60d04c85ab4adcab7766b6ce",
+  "width": 480,
+  "height": 300,
+  "fps": 25,
+  "duration_ms": 6000,
+  "png_samples": 150,
+  "gif_drawings": 96,
+  "gif_delays_ms": [
+    840,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    640,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    440,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    40,
+    400
+  ],
+  "loop": false,
+  "attachment_review": {
+    "status": "human-review-required",
+    "attached_layers": [
+      "lantern",
+      "glow"
+    ],
+    "switches": [
+      {
+        "layer": "lantern",
+        "time_ms": 2400,
+        "from_parent": "courier-hand",
+        "to_parent": "keeper-hand",
+        "own_schedule_switch": true,
+        "before_anchor_px": [
+          240.0,
+          185.0
+        ],
+        "after_anchor_px": [
+          240.0,
+          185.0
+        ],
+        "anchor_gap_px": 0.0
+      },
+      {
+        "layer": "lantern",
+        "time_ms": 4800,
+        "from_parent": "keeper-hand",
+        "to_parent": "hook",
+        "own_schedule_switch": true,
+        "before_anchor_px": [
+          380.0,
+          111.0
+        ],
+        "after_anchor_px": [
+          380.0,
+          111.0
+        ],
+        "anchor_gap_px": 0.0
+      }
+    ],
+    "max_switch_gap_px": 0.0,
+    "scope": "Authored anchor positions at schedule boundaries, not image tracking, grip/contact validation, collision detection or visual acceptance. Zero gap does not prove natural motion. Parent opacity, rotation and zoom are not inherited; the attachment point follows parent transforms."
+  },
+  "all_frame_verification": {
+    "status": "verified",
+    "frames_reopened_and_matched": 150,
+    "output_hashes_verified": 170
+  },
+  "files": {
+    "docs/assets/prop-anchors/contact-sheet.png": {
+      "bytes": 16714,
+      "sha256": "4b07b850028919b27bedbfc1027b4e2304a226a2581b867e5b100018f6b2fbdb"
+    },
+    "docs/assets/prop-anchors/preview.gif": {
+      "bytes": 92040,
+      "sha256": "5436afe1a806cfd06f7cadc6fcf00f85275e9617e5682ac24da297ef41d1ea91"
+    },
+    "docs/assets/prop-anchors/preview.mp4": {
+      "bytes": 28963,
+      "sha256": "0430d17312a1827364e1542b9234cf3f198b4483167f424908c55178d8bd0aec"
+    }
+  },
+  "visual_review": {
+    "status": "sampled-contact-sheet-inspection",
+    "samples_ms": [
+      0,
+      1480,
+      1960,
+      2360,
+      2400,
+      2440,
+      3000,
+      4480,
+      4760,
+      4800,
+      4840,
+      5960
+    ],
+    "notes": "Inspected actual sampled output frames and neighboring transfer samples. Schematic pads and one lantern are visible, with authored points meeting at both transfers. Full-motion visual and user acceptance are not established."
+  },
+  "limitations": [
+    "Anchor coordinates are authored, not measured image contact.",
+    "No new character drawings, rig inference, anatomy or physics.",
+    "GIF uses palette quantization and combines equal adjacent holds. MP4 is a lossy H.264 viewing copy.",
+    "No new skill package or remote release is included."
+  ]
+}
