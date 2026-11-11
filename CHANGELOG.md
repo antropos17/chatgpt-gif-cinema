@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Add exact source-GIF palette inspection, fixed global-table export and integer
+  nearest-neighbor upscaling, with no silent color reduction. Preserve canonical
+  visible RGBA timelines, delays, loop counts and original source bytes; reopen
+  all outputs and reject palette overflow, altered evidence and changed originals.
+  Interrupted publication retains partial output instead of deleting another
+  writer's edits. No new artwork, recoloring or visual approval is implied.
+
 - Add explicit stepped selection of existing atlas drawings with `pose_keys`,
   frame-grid validation and honest per-drawing timing receipts. Carry selected
   drawing identity through shared-stage sequences and reject boundary resets.

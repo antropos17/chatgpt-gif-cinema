@@ -36,6 +36,9 @@ there is no overwrite, resume, force, paid-execution or provider-budget option.
 The build stages and verifies the entire result before publishing its completion
 receipt. Originals are never rewritten. Editing inputs during a build prevents
 publication under the old source identity.
+If final file publication fails, partial output is retained rather than deleting
+paths another writer may have edited or replaced. A failed build is not a completed
+export; inspect the partial directory and use a new destination for another build.
 
 Open `output/garden/film/film.mp4`. The bundle includes:
 

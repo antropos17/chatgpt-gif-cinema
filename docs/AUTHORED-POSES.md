@@ -86,8 +86,11 @@ point that moves inside a cell must be authored and checked separately; selectin
 another pose does not automatically move a held prop to that depicted point.
 
 Source PNG colors and alpha remain authoritative. GIF previews are flattened and
-palette-quantized, and MP4 is lossy. This feature does **not** add a palette lock,
-color remapping or a new GIF quantizer. Review actual palette output separately.
+palette-quantized, and MP4 is lossy. Pose selection does **not** add a palette lock
+or color remapping. Use the separate
+[exact GIF palette workflow](PIXEL-PALETTES.md) to audit an accepted GIF, reuse a
+fixed exact palette and apply integer nearest-neighbor scaling without hidden
+color reduction. Review actual palette output separately.
 
 ## Carry a selected drawing through scene sequences
 
