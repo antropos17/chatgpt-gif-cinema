@@ -19,7 +19,7 @@ import stat
 import subprocess
 import tempfile
 
-from . import attachments, layer_gifs, layer_sprites, motion, strokes, text_fonts
+from . import attachments, layer_gifs, layer_sprites, motion, pose_tracks, strokes, text_fonts
 from .motion import run_command
 
 FORMAT = 'gif-cinema-layered-scene'
@@ -170,7 +170,7 @@ def normalize_scene(value):
                'text': ['text', 'font_size', 'fill', 'font_id', 'font_sha256'],
                'image': ['source', 'size', 'sha256'],
                'gif': ['source', 'size', 'sha256', 'playback', 'source_range_ms'],
-               'sprites': ['source', 'size', 'sha256', 'playback', 'frames', 'sampling', 'source_range_ms']}
+               'sprites': ['source', 'size', 'sha256', 'playback', 'frames', 'sampling', 'source_range_ms', 'pose_keys']}
     for layer in layers:
         if not isinstance(layer, dict) or not isinstance(layer.get('type'), str) or layer['type'] not in special:
             raise ValueError('Layer type must be rect, ellipse, stroke, text, image, gif or sprites')
@@ -230,6 +230,11 @@ def normalize_scene(value):
                     row['source_range_ms'] = layer_gifs.normalize_range(row['source_range_ms'])
             if kind == 'sprites':
                 row['frames'] = layer_sprites.normalize_frames(row.get('frames'))
+                if 'pose_keys' in row:
+                    if 'source_range_ms' in row or row['playback'] != 'once':
+                        raise ValueError('pose_keys cannot combine with source_range_ms or loop playback')
+                    row['pose_keys'] = pose_tracks.normalize(row['pose_keys'], len(row['frames']),
+                        row['out_ms'] - row['in_ms'], 1000 // scene['fps'])
                 row.setdefault('sampling', 'smooth')
                 if row['sampling'] not in ('smooth', 'pixel'):
                     raise ValueError('Sprite sampling must be smooth or pixel')
@@ -527,8 +532,9 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
             state['source_index'] = layer_gifs.frame_index(prepared['assets'][layer['source']],
                 time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms'))
         elif state is not None and layer['type'] == 'sprites':
-            state['source_index'] = layer_gifs.frame_index(prepared['sprite_sequences'][layer['id']],
-                time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms'))
+            state['source_index'] = (pose_tracks.index_at(layer, time_ms - layer['in_ms'])
+                if 'pose_keys' in layer else layer_gifs.frame_index(prepared['sprite_sequences'][layer['id']],
+                    time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms')))
         states[layer['id']] = state
         if state is None or state['opacity'] <= 0:
             continue
@@ -783,7 +789,9 @@ def render_scene(path, out, dry_run=False):
             'pillow': PIL.__version__, 'probe': probe, 'commands': commands, 'samples': samples, 'outputs': outputs,
             'limitations': ['Experimental GIF Cinema format, not Lottie-compatible.',
                 'Still images, existing GIF/PNG-atlas drawings, text, shapes and strokes; no new character poses.',
-                'Sprite layers use authored equal-size atlas rectangles and delays; no auto-rigging, automatic spatial trimming or pose synthesis.',
+                ('Sprite pose_keys select existing equal-size atlas drawings with stepped holds; native delays are unused, with no pose interpolation, auto-rigging or synthesis.'
+                 if any('pose_keys' in layer for layer in scene['layers']) else
+                 'Sprite layers use authored equal-size atlas rectangles and delays; no auto-rigging, automatic spatial trimming or pose synthesis.'),
                 'GIF layers retain native source cadence on the output frame grid; high FPS does not create new drawings.',
                 'GIF source loop metadata is ignored; each GIF layer explicitly plays once with final hold or loops.',
                 'Animated source_range_ms selects existing native intervals; it neither retimes drawings nor repairs a loop seam.',

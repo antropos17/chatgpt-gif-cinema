@@ -15,7 +15,7 @@ import shutil
 import subprocess
 import tempfile
 
-from . import attachments, cli, factory, layers, motion, render
+from . import attachments, cli, factory, layer_sprites, layers, motion, pose_tracks, render
 
 FORMAT = 'gif-cinema-layer-sequence'
 MAX_PROJECT_BYTES = 512 * 1024
@@ -48,8 +48,10 @@ def load_project(path):
     prepared = layers.prepare_scene(stage_path)
     scene = prepared['scene']
     for layer in scene['layers']:
-        if layer['type'] in ('gif', 'sprites'):
-            raise ValueError('Sequence stages use still assets; animated GIF/sprite clocks cannot implicitly reset between shots')
+        if layer['type'] == 'gif' or (layer['type'] == 'sprites' and 'pose_keys' not in layer):
+            raise ValueError('Sequence stages use still assets or explicit sprite pose_keys; native animated GIF/sprite clocks cannot implicitly reset between shots')
+        if layer['type'] == 'sprites' and any(key['frame'] != layer['pose_keys'][0]['frame'] for key in layer['pose_keys']):
+            raise ValueError('The stage must have a static starting sprite pose; author drawing changes in shot tracks')
         if layer['in_ms'] != 0 or layer['out_ms'] != scene['duration_ms']:
             raise ValueError('Every stage layer must be active throughout the seed scene')
         keys = layer['keyframes']
@@ -93,11 +95,20 @@ def pose_fields(layer, state, attached):
     return pose
 
 
+def scene_state(prepared, time_ms):
+    """Include the authored drawing identity alongside transform/holder state."""
+    result = attachments.resolve(prepared, time_ms)
+    for layer in prepared['scene']['layers']:
+        if layer['type'] == 'sprites':
+            result[layer['id']]['source_index'] = pose_tracks.index_at(layer, time_ms - layer['in_ms'])
+    return result
+
+
 def compile_sequence(path):
     path, raw, project, seed, ratio = load_project(path)
     stage = seed['scene']
     previous_scene = stage
-    carried = attachments.resolve(seed, 0)
+    carried = scene_state(seed, 0)
     compiled, timeline, elapsed = [], [], 0
     for shot in project['shots']:
         duration, sid = shot['duration_ms'], shot['id']
@@ -111,8 +122,16 @@ def compile_sequence(path):
         for layer in scene['layers']:
             name = layer['id']
             track = tracks.get(name, {})
-            layers.require_fields(track, ['keyframes', 'attachments'], [], f'{sid}.{name} track')
+            layers.require_fields(track, ['keyframes', 'attachments', 'pose_keys'], [], f'{sid}.{name} track')
             layer['in_ms'], layer['out_ms'] = 0, duration
+            if 'pose_keys' in track and layer['type'] != 'sprites':
+                raise ValueError('Only sprite layers accept authored pose_keys')
+            if layer['type'] == 'sprites':
+                poses = copy.deepcopy(track.get('pose_keys', [{'at': 0}, {'at': 1, 'frame': carried[name]['source_index']}]))
+                if not isinstance(poses, list) or not poses or not isinstance(poses[0], dict):
+                    raise ValueError(f'{sid}.{name}: invalid pose_keys')
+                poses[0] = {'frame': carried[name]['source_index'], **poses[0]}
+                layer['pose_keys'] = poses
             binding = None
             if 'attachments' in track:
                 binding = copy.deepcopy(track['attachments'])
@@ -132,7 +151,7 @@ def compile_sequence(path):
             layer['keyframes'] = keys
         scene = layers.normalize_scene(scene)
         prepared = {**seed, 'scene': scene}
-        beginning = attachments.resolve(prepared, 0)
+        beginning = scene_state(prepared, 0)
         for layer in scene['layers']:
             name = layer['id']
             for property_name, expected in carried[name].items():
@@ -142,7 +161,7 @@ def compile_sequence(path):
                 if abs(actual - expected) > POSE_TOLERANCE:
                     raise ValueError(f'{sid}.{name}.{property_name}: first pose differs from carried state '
                                      f'({actual!r} instead of {expected!r}); no implicit scene reset is allowed')
-        ending = attachments.resolve(prepared, duration)
+        ending = scene_state(prepared, duration)
         frames = duration * scene['fps'] // 1000
         timeline.append({'id': sid, 'action': shot['action'], 'start_ms': elapsed,
             'duration_ms': duration, 'frames': frames, 'start_state': beginning, 'end_state': ending,
@@ -158,6 +177,9 @@ def compile_sequence(path):
         'duration_ms': elapsed, 'frames': sum(row['frames'] for row in timeline),
         'timeline': timeline, 'visual_acceptance': 'not-established', 'scope': NOTICE,
         'sampling': 'Each scene exports samples at 0..duration-frame_period. The next scene begins at the previous conceptual duration endpoint, not its last stored frame.'}
+    if any(layer['type'] == 'sprites' for layer in stage['layers']):
+        report['scope'] = NOTICE.replace('Authored transforms and attachment states only.',
+            'Author-selected existing atlas drawings, with carried transforms and attachment states.')
     return {'path': path, 'raw': raw, 'project': project, 'seed': seed, 'compiled': compiled, 'report': report}
 
 
@@ -265,7 +287,7 @@ def verify_sequence(directory):
                     'last.png', 'closing-endpoint.png', 'loop-seam.png', 'encoded-loop-seam.png'}
         required.update(f'frames/{i:04}.png' for i in range(row['frames']))
         required.update(f'layers/{layer["id"]}.png' for layer in prepared['scene']['layers'])
-        required.update(f'editable/{layer["source"]}' for layer in prepared['scene']['layers'] if layer['type'] == 'image')
+        required.update(f'editable/{layer["source"]}' for layer in prepared['scene']['layers'] if layer['type'] in ('image', 'sprites'))
         if not isinstance(child.get('outputs'), dict) or set(child['outputs']) != required:
             raise ValueError('Scene export inventory is incomplete or unexpected')
         for name, expected_hash in child['outputs'].items():
@@ -274,6 +296,8 @@ def verify_sequence(directory):
                 raise ValueError('Scene export hash differs from its receipt')
         if child.get('attachment_review') != row['attachment_review']:
             raise ValueError('Scene attachment review differs from the compiled action')
+        if child.get('sprite_timing') != layer_sprites.timing_report(prepared['scene']):
+            raise ValueError('Scene sprite timing differs from the compiled action')
         for frame_index, sample in enumerate(child['samples']):
             timestamp = frame_index * (1000 // report['fps'])
             frame, states = layers.render_at(prepared, timestamp)
@@ -309,7 +333,7 @@ def verify_sequence(directory):
             'film_source_cache': 'byte-identical-to-scene-gif-exports',
             'encoded_film': 'inventory-hash-and-codec-size-duration-decode-only',
             'encoded_pixels_match_source': 'not-established',
-            'receipt_authenticity': 'not-established'}, 'scope': NOTICE}
+            'receipt_authenticity': 'not-established'}, 'scope': report['scope']}
 
 
 def publish(stage, out):

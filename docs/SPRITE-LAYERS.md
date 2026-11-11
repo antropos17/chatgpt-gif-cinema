@@ -110,10 +110,12 @@ to meet that minimum; `source_cycles` reports the count, and no final hold is ad
 - `playback`: `once` by default, holding the final cell, or `loop` at native duration.
   The clock begins at `in_ms`; normal transform/easing/opacity/anchor and `out_ms`
   apply independently. There is no reverse, speed remap or generated tweening.
+- `pose_keys`: optional [explicit drawing selection](AUTHORED-POSES.md), using stepped
+  holds instead of the native clock. Cannot combine with looping playback or trims.
 - `source_range_ms`: optional [native-time selection](SOURCE-TRIMS.md), keeping
   original cell indices and partial edge holds without changing atlas bytes.
 
-At each output time, the original delay interval selects one source cell. The
+Without `pose_keys`, the original delay interval selects one source cell at each output time. The
 `sprite_timing` plan/receipt lists rectangles, delays, used indices and omitted
 drawings. A 25 fps export may skip 20 ms cells. Selected indices do not prove that
 an overlapping layer left the drawing visible, or that its action is acceptable.

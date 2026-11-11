@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import re
 
-from . import layer_gifs, motion
+from . import layer_gifs, motion, pose_tracks
 
 MAX_ATLAS_PIXELS = 16 * 1024 * 1024
 MAX_ATLAS_SIDE = 16384
@@ -79,7 +79,8 @@ def timing_report(scene):
         result[layer['id']] = {'source_drawings': len(layer['frames']),
             'source_duration_ms': info['duration_ms'], 'source_delays_ms': info['delays_ms'],
             'playback': layer['playback'], 'sampling': layer['sampling'],
-            **layer_gifs.selection_report(info, layer, period),
+            **(pose_tracks.selection_report(layer, period) if 'pose_keys' in layer
+               else layer_gifs.selection_report(info, layer, period)),
             'rectangles': [record['rect'] for record in layer['frames']]}
     return result
 

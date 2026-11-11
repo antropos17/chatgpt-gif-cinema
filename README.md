@@ -142,6 +142,7 @@ Try this with your agent:
 | A short film with titles or illustrated story pages | [Storytelling skill](docs/STORYTELLING-SKILL.md) |
 | Independent text, shapes, strokes and existing GIF layers | [Layer renderer](docs/MULTILAYER-POC.md) · [GIF composition](docs/GIF-LAYERS.md) |
 | Whole-image motion with editable timing | [Motion recipes](docs/STANDALONE-MOTION.md) |
+| Explicit pose holds and continuity from accepted atlas drawings | [Authored pose tracks](docs/AUTHORED-POSES.md) |
 | A sprite atlas from accepted drawings | [Pack or slice sprites](docs/SPRITES.md) |
 | Every frame, cut and loop seam | [Review player & checklist](docs/GIF-REVIEW.md) |
 | Frame-accurate cuts, subtitle sidecars and a soundtrack | [Exact script montage](docs/EXACT-SCRIPT-EDIT.md) |

@@ -89,9 +89,10 @@ actually meet. Use the complete checked-in example for runnable inputs.
 The stage is a normal [layer scene](MULTILAYER-POC.md), with one static seed pose:
 all keyframe transform values are equal, all layers span its full duration, and
 any initial attachment has exactly one segment. `rect`, `ellipse`, `text`, `image`
-and `stroke` layers are supported. Existing GIF/sprite layers are deliberately
-rejected here: silently resetting their native animation clocks at every new
-scene could break the depicted pose. Ordinary GIF-film and layer workflows still
+and `stroke` layers are supported. Sprite layers also work with explicit
+[authored pose keys](AUTHORED-POSES.md): all seed keys must select one starting
+drawing. Native GIF/sprite clocks are deliberately rejected here: silently
+resetting them at every new scene could break the depicted pose. Ordinary GIF-film and layer workflows still
 handle those sources separately.
 
 The stage fixes dimensions, FPS, layer order, identities, artwork, anchor points,
@@ -105,6 +106,10 @@ Each shot has a unique portable `id`, a one-line `action`, `duration_ms`, and op
 - `keyframes`: the existing 2–32 keyframe format, including 0 and 1 endpoints.
   Begin with `{"at": 0}` to inherit the carried pose, then specify action targets.
   Omitted properties inherit normally. An omitted track holds its preceding result.
+- `pose_keys`: sprite-only stepped selection of existing atlas drawings. The first
+  key may omit `frame` to inherit the previous conceptual endpoint. Omit the track
+  to hold that drawing; an explicit boundary reset is rejected. See
+  [pose timing, source-first workflow and pixel-art limits](AUTHORED-POSES.md).
 - `attachments`: an explicit, complete [prop-anchor schedule](PROP-ANCHORS.md), in
   local scene milliseconds. Omit it to retain the final holder/point for the new
   scene. Set it to `null` to detach at the carried world position.
