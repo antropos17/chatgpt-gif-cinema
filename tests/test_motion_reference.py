@@ -58,11 +58,12 @@ class MotionReferenceTests(unittest.TestCase):
     def test_archive_is_visible_and_separate_from_native_output(self):
         readme = (ROOT / 'README.md').read_text(encoding='utf-8')
         visible = re.sub(r'<details\b.*?</details>', '', readme, flags=re.S)
-        section = visible.split('## Archived 3D study\n', 1)[1].split('\n## ', 1)[0]
+        section = visible.split('<strong>Chrome Trefoil</strong>', 1)[0].rsplit('<td ', 1)[1]
         self.assertIn('docs/assets/motion-elements/chrome.gif', section)
         self.assertIn('Blender EEVEE', section)
-        self.assertIn('not native API output', section)
-        self.assertIn('One loop is complete', section)
+        self.assertIn('original archived Blender EEVEE rotation', section)
+        self.assertIn('one 3.20-second loop', section)
+        self.assertIn('not native API output', readme)
         self.assertIn('(prefers-reduced-motion: reduce)', section)
         self.assertIn('docs/assets/motion-elements/poster.png', section)
 
