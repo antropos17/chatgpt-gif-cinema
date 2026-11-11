@@ -71,9 +71,28 @@ class MotionReviewTests(unittest.TestCase):
         json.dumps(report, allow_nan=False)
         self.assertEqual(review.sheet(codec.decode(gif([0], loop=None)), report).size, (640, 200))
 
+    def test_explicit_symlink_source_and_output_still_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # Canonicalize only our fixture root (macOS /var points to /private/var).
+            # User-supplied links must still reach and fail the production guard.
+            root = Path(tmp).resolve()
+            source = root / 'input.gif'
+            source.write_bytes(gif([0, 10]))
+            alias = root / 'alias'
+            try:
+                alias.symlink_to(root, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest('Directory symlinks unavailable')
+            with self.assertRaisesRegex(ValueError, 'symlinks'):
+                review.build(alias / 'input.gif', root / 'review')
+            with self.assertRaisesRegex(ValueError, 'symlinks'):
+                review.build(source, alias / 'review')
+            self.assertFalse((root / 'review').exists())
+            self.assertEqual(source.read_bytes(), gif([0, 10]))
+
     def test_round_trip_and_no_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp); source = root / 'input.gif'; source.write_bytes(gif([0, 10, 80]))
+            root = Path(tmp).resolve(); source = root / 'input.gif'; source.write_bytes(gif([0, 10, 80]))
             original = source.read_bytes()
             result = review.build(source, root / 'review')
             self.assertEqual(result, review.verify(root / 'review'))
@@ -84,7 +103,7 @@ class MotionReviewTests(unittest.TestCase):
 
     def test_receipt_tampering_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp); source = root / 'input.gif'; source.write_bytes(gif([0, 10]))
+            root = Path(tmp).resolve(); source = root / 'input.gif'; source.write_bytes(gif([0, 10]))
             review.build(source, root / 'review')
             receipt = root / 'review/receipt.json'
             report = json.loads(receipt.read_text()); report['visual_acceptance'] = 'accepted'
@@ -94,7 +113,7 @@ class MotionReviewTests(unittest.TestCase):
 
     def test_changed_source_cannot_publish(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp); source = root / 'input.gif'; source.write_bytes(gif([0, 10]))
+            root = Path(tmp).resolve(); source = root / 'input.gif'; source.write_bytes(gif([0, 10]))
             original_verify = review.verify
             def change_source(stage):
                 result = original_verify(stage)
@@ -126,7 +145,7 @@ class MotionReviewTests(unittest.TestCase):
 
     def test_png_tamper_rejected_even_with_rehashed_inventory(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp); source = root / 'input.gif'; source.write_bytes(gif([0, 10]))
+            root = Path(tmp).resolve(); source = root / 'input.gif'; source.write_bytes(gif([0, 10]))
             review.build(source, root / 'review')
             Image.new('RGBA', (8, 8), 'red').save(root / 'review/frames/0000.png')
             receipt = root / 'review/receipt.json'; report = json.loads(receipt.read_text())
