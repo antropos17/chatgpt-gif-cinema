@@ -74,24 +74,19 @@ class ReadmeTests(unittest.TestCase):
                         self.assertEqual(delays, asset['frame_durations_ms'])
                         self.assertEqual(sum(delays), asset['duration_ms'])
 
-    def test_finishing_previews_are_visible_before_setup(self):
+    def test_finishing_archive_remains_linked_and_labeled(self):
         source = (ROOT / 'README.md').read_text(encoding='utf-8')
-        # GitHub renders the source in order. Gallery media should not depend on
-        # opening a disclosure or scrolling through the installation instructions.
-        visible = re.sub(r'<details\b.*?</details>', '', source, flags=re.S)
-        setup = visible.index('## Make your first film')
-        for subject in ('cat', 'dog', 'astronaut'):
-            path = f'docs/assets/showcase/{subject}-preview.gif'
-            with self.subTest(subject=subject):
-                embedded = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
-                self.assertEqual(embedded.count(path), 2 if subject == 'cat' else 1)
-                self.assertNotIn(f']({path})](', source)
-                self.assertLess(visible.index(path), setup)
-                self.assertIn('docs/SHOWCASE.md', visible)
-        self.assertIn('not included in the\npublic CLI', visible)
-        self.assertIn('2.24-second excerpt', visible)
+        self.assertIn('Earlier films and finishing studies', source)
+        for fragment in ('cat--walk-jump-curl-up', 'dog--the-same-four-takes',
+                         'astronaut--two-shots-one-exchange'):
+            self.assertIn('docs/SHOWCASE.md#' + fragment, source)
+        self.assertIn('not included in the public CLI', source)
+        self.assertIn('2.24-second excerpt', source)
+        self.assertIn('docs/assets/showcase/cat-film.mp4', source)
         self.assertTrue({'see-it-in-motion', 'try-it-without-an-api-key',
-                         'give-the-skill-to-your-agent'} <= anchors(source))
+                         'give-the-skill-to-your-agent', 'character-stories',
+                         'motion-graphics', 'sprites-and-frame-review',
+                         'finishing-studies', 'archived-3d-study'} <= anchors(source))
 
     def test_visible_previews_preserve_existing_media(self):
         base = ROOT / 'docs/assets/showcase'
@@ -124,21 +119,33 @@ class ReadmeTests(unittest.TestCase):
         self.assertTrue(manifest['typography']['outlined'])
         self.assertEqual(manifest['typography']['family'], 'Open Sans')
 
-    def test_catalog_puts_real_motion_before_explanation(self):
+    def test_catalog_is_compact_and_keeps_real_motion_before_setup(self):
         source = (ROOT / 'README.md').read_text(encoding='utf-8')
         visible = re.sub(r'<details\b.*?</details>', '', source, flags=re.S)
         first_image = visible.index('<img ')
-        self.assertLess(first_image, visible.index('## Character stories'))
+        self.assertLess(first_image, visible.index('## Selected work'))
         self.assertLess(len(visible[:first_image].split()), 80)
         self.assertNotIn('assets/identity/cover', visible)
         self.assertNotRegex(visible, r'<img\b[^>]*height=')
         urls = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
-        self.assertGreaterEqual(len(urls), 12)
-        self.assertGreaterEqual(len({u for u in urls if u.endswith('.gif')}), 8)
-        self.assertGreaterEqual(visible.count('<table>'), 5)
+        expected = {
+            'examples/blender-form-01/deliverables/FORM-01.gif',
+            'docs/assets/example-gallery/titled-story.gif',
+            'docs/assets/motion-elements/chrome.gif',
+            'docs/assets/stroke-reveal/preview.gif',
+            'docs/assets/gif-layer/preview.gif',
+        }
+        self.assertEqual(set(urls), expected)
+        self.assertEqual(len(urls), len(expected))  # No repeated showcase downloads.
+        for path in urls:
+            self.assertLess(visible.index(path), visible.index('## Make your first film'))
         self.assertNotIn('width="33%"', visible)
+        self.assertNotIn('<script', source.lower())
         self.assertIn('docs/SPRITES.md', visible)
         self.assertIn('docs/GIF-REVIEW.md', visible)
+        self.assertIn('--execute --max-api-calls 0', visible)
+        self.assertIn('standalone scenes, not a CLI rendering backend', visible)
+        self.assertIn('source-available', visible)
 
     def test_catalog_local_outputs_match_their_sources_and_facts(self):
         def git_blob(data):

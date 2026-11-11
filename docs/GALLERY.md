@@ -36,7 +36,7 @@ The small shape GIF combines one equal pair into a longer hold; its total timing
 
 ## Sprites and review
 
-The homepage shows the original source take and the existing first/middle/last storyboard sheet. They are real footage and samples, not newly generated sprite artwork or a complete all-frame review. Run the actual tools for the complete output pack:
+The [source examples](EXAMPLES.md#the-actual-three-shot-story) show the original takes and an existing first/middle/last storyboard sheet. They are real footage and samples, not newly generated sprite artwork or a complete all-frame review. Run the actual tools for the complete output pack:
 
 ```bash
 python -m gif_cinema sprites pack .agents/skills/gif-cinema/assets/example/shot-01.gif --columns 4 --out output/my-sprites --dry-run
