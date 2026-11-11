@@ -15,7 +15,9 @@ class AtlasAlignmentExampleTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        # macOS temporary roots may use /var -> /private/var. Resolve only
+        # the fixture root; explicit input/output symlink tests remain intact.
+        self.root = Path(self.tmp.name).resolve()
         self.source = self.root / 'source.gif'
         self.out = self.root / 'result'
 
