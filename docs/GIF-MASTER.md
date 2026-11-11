@@ -35,8 +35,10 @@ its exact versions are recorded. NumPy is not required by this implementation.
 
 Pass the accepted shots in their intended order. These can be saved render takes,
 Blender GIFs, editable-layer exports or titles. Inputs are never overwritten.
-The destination must be new. The old versioned skill runtime pin does not contain
-this command; this change does not release a new skill ZIP.
+The destination must be new. Maintained source package 0.4.0 includes the master
+and script-edit guides plus an installed smoke. Its immutable runtime pin is in
+the skill folder. The older GitHub Release `skill-v0.1.1` predates these workflows;
+building a current source ZIP does not publish a new GitHub Release.
 
 For sound starting at the beginning of the viewing movie:
 

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "skill_version": "0.3.1",
+  "skill_version": "0.4.0",
   "runtime_version": "0.5.0",
   "runtime_repository": "https://github.com/antropos17/chatgpt-gif-cinema.git",
-  "runtime_commit": "b098d3b0cf3f9989f5b4bfb2b857f69a80e0c520",
+  "runtime_commit": "11523f0a8d75f4422445658e7c5f9547bdc4d6d4",
   "runtime_bundled": false,
   "python": ">=3.10",
   "pillow": ">=10.1",
@@ -27,7 +27,15 @@
     "authored stroke reveal",
     "complete layered output verification",
     "native-timing GIF layers",
-    "whole-image motion recipes and complete smoke checks"
+    "whole-image motion recipes and complete smoke checks",
+    "hash-pinned offline factory collections and ZIP verification",
+    "lossless decoded-RGBA masters with exact native delays",
+    "optional lossy viewing MP4 with local audio",
+    "source-only script montage with hash-pinned native drawing ranges and exact SRT/timeline sidecars"
   ],
-  "notice": "Skill and runtime have separate version numbers. Install the immutable commit; a runtime version string alone does not establish compatibility. Git and network access are needed for the documented initial pip install. No provider calls are needed for local review, sprite export or smoke tests."
+  "notice": "Skill and runtime have separate version numbers. Install the immutable commit; a runtime version string alone does not establish compatibility. Git and network access are needed for the documented initial pip install. No provider calls are needed for local review, sprite export or smoke tests.",
+  "lossless_dependencies": [
+    "av>=16.1,<17",
+    "PyAV FFV1 encoder and decoder"
+  ]
 }
