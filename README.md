@@ -9,33 +9,34 @@ graphics, review frames and export films.
 
 ## Anime pixel art
 
-**Separate outfits, separate takes.** Early motion studies; smoother pose sequences
-are still in progress.
+**Separate outfits, separate frames.** Three new raise-and-wave takes; drawing
+shifts remain at the joins.
 
 <p align="center">
-<a href="examples/anime-pixel/README.md#wave-and-bow"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/anime-pixel-wave-and-bow-v2-poster.png"><img src="examples/anime-pixel/anime-pixel-wave-and-bow-v2.gif" width="240" alt="Cream jacket: a blue-haired heroine waves, then bows in a separate short phase."></picture></a><br>
-<strong>Cream jacket · wave and bow</strong><br>
-32 frames · 3.84 s · 320 × 320 · repeating
+<a href="examples/anime-pixel/outfit-poses/README.md"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/casual-poster.png"><img src="examples/anime-pixel/outfit-poses/casual.gif" width="240" alt="Cream jacket: a separate 32-pose animation of a blue-haired heroine raising, waving and lowering her hand."></picture></a><br>
+<strong>Cream jacket · raise and wave</strong><br>
+32 frames · 2.56 s · 320 × 320 · repeating
 </p>
 
 <p align="center">
-<a href="examples/anime-pixel/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/traveler-poster.png"><img src="examples/anime-pixel/traveler.gif" width="240" alt="Jade traveler outfit: a standalone transparent character greeting and lifting one knee."></picture></a><br>
-<strong>Jade traveler · greeting</strong><br>
-16 frames · 1.92 s · 320 × 320 · repeating
+<a href="examples/anime-pixel/outfit-poses/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/traveler-poster.png"><img src="examples/anime-pixel/outfit-poses/traveler.gif" width="240" alt="Jade traveler outfit: a standalone 32-pose transparent raise-and-wave animation."></picture></a><br>
+<strong>Jade traveler · raise and wave</strong><br>
+32 frames · 2.56 s · 320 × 320 · repeating
 </p>
 
 <p align="center">
-<a href="examples/anime-pixel/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/festival-poster.png"><img src="examples/anime-pixel/festival.gif" width="240" alt="Coral festival yukata: a separate transparent character greeting and lifting one knee."></picture></a><br>
-<strong>Coral festival · greeting</strong><br>
-16 frames · 1.92 s · 320 × 320 · repeating
+<a href="examples/anime-pixel/outfit-poses/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/festival-poster.png"><img src="examples/anime-pixel/outfit-poses/festival.gif" width="240" alt="Coral festival yukata: a separate 32-pose transparent raise-and-wave animation."></picture></a><br>
+<strong>Coral festival · raise and wave</strong><br>
+32 frames · 2.56 s · 320 × 320 · repeating
 </p>
 
-Each outfit has its own source drawings and GIF. These silent drafts still show
-pose jumps and drift in face, hair and costume details; loop endpoints do not match.
-No interpolated poses or JavaScript animation.
+Each outfit has **32 individual PNG frames** and its own transparent GIF at 12.5 fps.
+The new poses raise, wave and lower the hand rather than reuse the earlier knee lift.
+Hair, face and sleeve outlines still shift between halves and at the loop reset.
+These are improved pose studies, not seamless or perfectly smooth finished animation.
 
-[Separate source atlases & recipe](examples/anime-pixel/README.md#sources-and-method) ·
-[Measured GIF facts](examples/anime-pixel/verification.json) ·
+[Individual frames & method](examples/anime-pixel/outfit-poses/README.md) ·
+[Measured GIF facts](examples/anime-pixel/outfit-poses/verification.json) ·
 [Draft festival film, 15.36 s](examples/anime-pixel/README.md#draft-festival-film)
 
 <details>

@@ -1,7 +1,7 @@
 # Anime pixel-art studies
 
-**Draft status:** separate outfit drawings are available, but smoother motion is
-still in progress. The combined garden scenes below are earlier composition tests,
+**Newer takes:** [32 separate pose frames per outfit](outfit-poses/README.md) now
+lead the main gallery. Drawing shifts remain at the joins. The combined garden scenes below are earlier composition tests,
 not the target format for the next outfit takes.
 
 Short character performances made from image-generated sprite drawings, sliced and
@@ -55,12 +55,13 @@ that support reduced-motion pictures.
 ## Verification and limits
 
 [verification.json](verification.json) records SHA-256, bytes, dimensions, frame
-counts, unique decoded drawings, delays and loop metadata for all six GIFs.
+counts, unique decoded drawings, delays and loop metadata for the six original study GIFs.
 All repeat indefinitely and have no audio. The top 140 rows in both garden scenes
 are pixel-identical across decoded frames. Repeating playback is not a seamless
 loop: the first and last drawings differ.
 
-All frames of the three gallery GIFs were inspected in contact sheets. Face/hair,
+All frames of the two garden GIFs and the original wave-and-bow GIF were inspected
+in contact sheets. Face/hair,
 costume-pattern and pose drift remain, especially at the transition between the
 two solo phases. These are pixel-art-style generated drawings, not verified
 hand-authored pixel grids or production-ready character continuity. No intermediate
