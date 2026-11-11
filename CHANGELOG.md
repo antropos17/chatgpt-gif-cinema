@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add explicit stepped selection of existing atlas drawings with `pose_keys`,
+  frame-grid validation and honest per-drawing timing receipts. Carry selected
+  drawing identity through shared-stage sequences and reject boundary resets.
+  This edits accepted source art; it neither generates GIFs nor adds new poses,
+  palette locking or in-betweens. Legacy native sprite timing is unchanged.
+
 - Add offline fixed-stage scene sequences with propagated poses and prop holders,
   explicit detach/rebind tracks, boundary mismatch rejection, portable sources,
   all-frame recompile verification and zero-call film assembly. Include a five-action
