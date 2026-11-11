@@ -1,0 +1,2 @@
+# The edit sidecar pins exact script bytes on Windows and Unix.
+*.json text eol=lf

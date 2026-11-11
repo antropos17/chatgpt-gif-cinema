@@ -67,7 +67,7 @@ def fields(value, allowed, label):
         raise ValueError(f"{label}: invalid object or unknown fields")
 
 
-def load_script(path, args):
+def load_script(path, args, *, source_only=False, inspect_imports=True, max_import_bytes=None):
     """Validate script/local inputs; strict audio decoding is execution preflight."""
     # Parse and identify exactly the bytes returned by the bounded regular-file
     # reader, before GIF/reference reads reuse raw or the script path changes.
@@ -102,7 +102,9 @@ def load_script(path, args):
     shots = script.get("shots")
     if not isinstance(shots, list) or not 1 <= len(shots) <= 64:
         raise ValueError("shots must contain 1..64 entries")
-    seen = set()
+    if source_only and any(not isinstance(shot, dict) or 'source' not in shot or 'prompt' in shot for shot in shots):
+        raise ValueError('Exact script assembly requires existing source GIFs for every shot; no generation is performed')
+    seen, import_bytes = set(), 0
     for shot in shots:
         fields(shot, {"id", "prompt", "source", "frames", "duration_ms", "transition", "first_frame_target", "last_frame_target", "audio_notes", "caption", "model", "size", "quality", "complexity", "references"}, "shot")
         sid = shot.get("id")
@@ -124,7 +126,16 @@ def load_script(path, args):
                 raise ValueError("Imported shots use their actual timing, not generation parameters")
             source = (path.parent / text(shot["source"], "source")).resolve()
             raw = cli.read_gif_bytes(source)
-            _, durations, _ = cli.validate_gif(io.BytesIO(raw))
+            import_bytes += len(raw)
+            if max_import_bytes is not None and import_bytes > max_import_bytes:
+                raise ValueError('Script imports exceed the aggregate encoded byte budget')
+            if inspect_imports:
+                _, durations, _ = cli.validate_gif(io.BytesIO(raw))
+            else:
+                # Exact assembly performs its stricter control/timing scan and
+                # aggregate budgets before decoding any drawings.
+                cli.check_gif_limits(raw, fixed_canvas=True)
+                durations = []
             shot["source_path"] = source
             shot["source_sha256"] = digest(raw)
             shot["expected_ms"] = sum(durations)

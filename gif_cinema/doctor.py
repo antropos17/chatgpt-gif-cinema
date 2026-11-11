@@ -32,7 +32,7 @@ def inspect_ffmpeg_capabilities():
                         core_filters={"fps", "scale", "pad", "concat", "tpad", "trim", "setpts", "format", "setsar", "setparams"} <= names,
                         motion_interpolation="minterpolate" in names,
                         aac_encoder="aac" in encoder_names,
-                        audio_padding="apad" in names)
+                        audio_padding={"apad", "aresample", "atrim", "asetpts"} <= names)
     return capabilities
 
 
@@ -41,7 +41,7 @@ def require_film_capabilities(audio=False):
     capabilities = inspect_ffmpeg_capabilities()
     required = {"h264_encoder": "libx264", "core_filters": "standard video filters"}
     if audio:
-        required.update(aac_encoder="AAC encoder", audio_padding="apad audio filter")
+        required.update(aac_encoder="AAC encoder", audio_padding="apad, aresample, atrim and asetpts audio filters")
     missing = [label for name, label in required.items() if not capabilities.get(name)]
     if missing:
         raise RuntimeError("FFmpeg cannot provide " + ", ".join(missing)

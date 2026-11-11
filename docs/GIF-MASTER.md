@@ -137,3 +137,9 @@ A cut can still be wrong even when every pixel and delay is preserved. Review ac
 playback for identity, pose/contact, eyelines, lighting, intent and pacing. Use aligned
 accepted shots, trims or authored transitions where appropriate. This route does not
 create unseen actions, improve source drawing cadence or make a discontinuity disappear.
+
+## Script-controlled edits
+
+`master --script film.json` adds source-only script order, optional exact frame-range
+selections, exact SRT/timeline sidecars and script audio. See
+[Exact script montage](EXACT-SCRIPT-EDIT.md) for the strict sidecar contract and limits.

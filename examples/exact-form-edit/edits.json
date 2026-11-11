@@ -1,0 +1,25 @@
+{
+  "format": "gif-cinema-exact-edit",
+  "schema_version": 1,
+  "script_sha256": "527a6e5877cba5d5aa588652ffb0b4d1e23d9785abbe96b12a4552f17a9f494d",
+  "shots": [
+    {
+      "id": "open",
+      "source_sha256": "650025f8a6547fb9c173f41e3574c91024839f683a9e552eb241e6391986fa18",
+      "in_frame": 0,
+      "out_frame": 40
+    },
+    {
+      "id": "turn",
+      "source_sha256": "650025f8a6547fb9c173f41e3574c91024839f683a9e552eb241e6391986fa18",
+      "in_frame": 40,
+      "out_frame": 80
+    },
+    {
+      "id": "return",
+      "source_sha256": "650025f8a6547fb9c173f41e3574c91024839f683a9e552eb241e6391986fa18",
+      "in_frame": 80,
+      "out_frame": 120
+    }
+  ]
+}

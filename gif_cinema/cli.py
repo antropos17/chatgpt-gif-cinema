@@ -13,6 +13,7 @@ import sys
 import time
 import tempfile
 from contextlib import contextmanager
+from fractions import Fraction
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -405,7 +406,13 @@ def _encode_film(args, clips, clip_frames, out, force, audio_path):
         filters.append(f"[{i}:v]tpad=stop_mode=clone:stop=-1,fps={args.fps},trim=end_frame={clip_frames[i]},scale={args.width}:{args.height}:force_original_aspect_ratio=decrease:out_color_matrix=bt709:out_range=tv,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709,setpts=PTS-STARTPTS[v{i}]")
     filters.append("".join(f"[v{i}]" for i in range(len(clips)))+f"concat=n={len(clips)}:v=1:a=0[outv]")
     command+=["-filter_complex",";".join(filters),"-map","[outv]"]
-    if audio_path is not None:command+=["-map",f"{len(clips)}:a:0","-af","apad","-shortest","-c:a","aac"]
+    if audio_path is not None:
+        # Both streams have explicit finite bounds. With an unbounded apad,
+        # -shortest can overrun the video by several AAC packets on some builds.
+        samples = round(Fraction(sum(clip_frames) * 48000, args.fps))
+        command += ["-map", f"{len(clips)}:a:0", "-af",
+                    f"aresample=48000,apad,atrim=end_sample={samples},asetpts=N/SR/TB",
+                    "-c:a", "aac", "-ar", "48000"]
     with output_lock(out):
         fd, name = tempfile.mkstemp(dir=out.parent, suffix=".mp4")
         os.close(fd)

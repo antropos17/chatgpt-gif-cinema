@@ -108,6 +108,26 @@ class AudioLimitTests(unittest.TestCase):
                 with audio.prepare_audio(source):
                     pass
 
+    def test_encoder_bounds_audio_to_quantized_video_sample_count(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            out = root / 'film.mp4'
+            args = cli.build_parser().parse_args(['film', 'first.gif', 'second.gif',
+                    '-o', str(out), '--fps', '29', '--audio', 'input.wav'])
+            def encode(command):
+                Path(command[-1]).write_bytes(b'encoded fixture')
+            with patch.object(cli, 'run_media', side_effect=encode) as run, \
+                    patch.object(audio, 'verify_film_audio') as verify:
+                cli._encode_film(args, [Path('first.gif'), Path('second.gif')],
+                                 [1, 58], out, False, Path('snapshot.wav'))
+            command = run.call_args.args[0]
+            self.assertEqual(command[command.index('-af') + 1],
+                    'aresample=48000,apad,atrim=end_sample=97655,asetpts=N/SR/TB')
+            self.assertEqual(command[command.index('-ar') + 1], '48000')
+            self.assertNotIn('-shortest', command)
+            self.assertEqual(verify.call_args.args[1], 59 / 29)
+            self.assertEqual(out.read_bytes(), b'encoded fixture')
+
     def test_final_coverage_allows_aac_padding_but_rejects_missing_duration(self):
         facts = {'codec_name': 'aac', 'sample_rate': 48000, 'channels': 1, 'duration_seconds': 1.984,
                  'start_seconds': 0, 'decoded_seconds': 2.005333}
@@ -209,6 +229,26 @@ class AudioRenderTests(unittest.TestCase):
                 manifest = json.loads((self.out / 'render-manifest.json').read_text())
                 self.assertEqual(manifest['audio_preflight']['sha256'], hashlib.sha256(original).hexdigest())
                 self.assertIn('00:00:00,000 --> 00:00:02,000', (self.out / 'captions.srt').read_text())
+
+    def test_audio_uses_explicit_duration_at_varied_rates_and_frame_grids(self):
+        cases = ((6, (20, 20), .02, 8000),
+                 (7, (900, 900), .2, 44100),
+                 (25, (1000, 1000), 2, 48000),
+                 (29, (1010, 1010), 10, 44100),
+                 (120, (20, 20), .02, 96000))
+        for fps, delays, seconds, rate in cases:
+            with self.subTest(fps=fps, rate=rate):
+                self.out = self.root / f'grid-{fps}'
+                self.data['fps'] = fps
+                self.clip.write_bytes(animation(delays))
+                self.source.write_bytes(wav_bytes(seconds, rate))
+                result = render.run(self.args('--execute', '--max-api-calls', '0'))
+                expected = max(1, round(sum(delays) * fps / 1000)) / fps
+                self.assertEqual(result['audio']['sample_rate'], 48000)
+                self.assertLessEqual(abs(result['audio']['duration_seconds'] - expected), .001)
+                self.assertLessEqual(abs(result['audio']['decoded_seconds'] - expected),
+                                     result['audio']['coverage_tolerance_seconds'])
+                self.assertEqual(result['film_seconds'], round(expected, 6))
 
     def test_validated_snapshot_survives_source_change_during_stubbed_generation(self):
         self.generated()

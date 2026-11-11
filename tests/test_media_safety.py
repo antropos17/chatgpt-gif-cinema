@@ -224,7 +224,7 @@ class CapabilityTests(unittest.TestCase):
     def test_capability_names_are_detected_from_encoder_and_filter_listing(self):
         encoders = ' V....D libx264 H.264\n A..... aac AAC\n'
         filters = '\n'.join(' ... ' + name + ' V->V' for name in
-                            ('fps', 'scale', 'pad', 'concat', 'tpad', 'trim', 'setpts', 'format', 'setsar', 'setparams', 'apad'))
+                            ('fps', 'scale', 'pad', 'concat', 'tpad', 'trim', 'setpts', 'format', 'setsar', 'setparams', 'apad', 'aresample', 'atrim', 'asetpts'))
         responses = [subprocess.CompletedProcess([], 0, encoders), subprocess.CompletedProcess([], 0, filters)]
         with patch('gif_cinema.doctor.subprocess.run', side_effect=responses):
             capabilities = doctor.inspect_ffmpeg_capabilities()
@@ -233,6 +233,15 @@ class CapabilityTests(unittest.TestCase):
         self.assertTrue(capabilities['aac_encoder'])
         self.assertTrue(capabilities['audio_padding'])
         self.assertFalse(capabilities['motion_interpolation'])
+
+    def test_each_audio_timing_filter_is_required(self):
+        for missing in ('apad', 'aresample', 'atrim', 'asetpts'):
+            filters = '\n'.join(' ... ' + name + ' A->A' for name in
+                                {'apad', 'aresample', 'atrim', 'asetpts'} - {missing})
+            responses = [subprocess.CompletedProcess([], 0, ' A..... aac AAC\n'),
+                         subprocess.CompletedProcess([], 0, filters)]
+            with self.subTest(missing=missing), patch('gif_cinema.doctor.subprocess.run', side_effect=responses):
+                self.assertFalse(doctor.inspect_ffmpeg_capabilities()['audio_padding'])
 
     def test_optional_audio_and_motion_are_not_required_for_silent_film(self):
         with patch('gif_cinema.doctor.inspect_ffmpeg_capabilities', return_value={'h264_encoder': True, 'core_filters': True}):

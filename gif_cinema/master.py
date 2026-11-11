@@ -65,19 +65,43 @@ def metadata(raw):
     return {**stats, 'timing': frames, 'duration_cs': sum(f['duration_cs'] for f in frames)}
 
 
-def plan(paths, preview=False, audio=None):
+def plan(paths, preview=False, audio=None, *, frame_ranges=None, canvas=None, source_hashes=None):
     if not 1 <= len(paths) <= 64: raise ValueError('Master requires 1..64 ordered local GIFs')
     if audio and not preview: raise ValueError('Audio belongs to the viewing MP4; request --preview too')
-    sources, total_bytes, duration = [], 0, 0
+    if frame_ranges is not None and len(frame_ranges) != len(paths): raise ValueError('One frame range is required per source')
+    if source_hashes is not None and len(source_hashes) != len(paths): raise ValueError('One source hash is required per source')
+    sources, total_bytes, duration, decode_pixels, decode_frames = [], 0, 0, 0, 0
     for index, path in enumerate(paths):
         raw = cli.read_gif_bytes(path)
         item = metadata(raw)
-        total_bytes += len(raw); duration += item['duration_cs']
+        sha = factory.digest(raw)
+        if source_hashes is not None and sha != source_hashes[index]: raise ValueError('Source GIF changed since script snapshot')
+        selected = (0, item['frames']) if frame_ranges is None else frame_ranges[index]
+        if (not isinstance(selected, (list, tuple)) or len(selected) != 2 or
+                any(type(value) is not int for value in selected) or not 0 <= selected[0] < selected[1] <= item['frames']):
+            raise ValueError('Frame range must be [in_frame, out_frame), within the original GIF drawings')
+        first, stop = selected
+        selected_duration = sum(frame['duration_cs'] for frame in item['timing'][first:stop])
+        total_bytes += len(raw); duration += selected_duration
+        # Disposal compositing may decode every drawing before the selected in
+        # point. A tiny final selection must not bypass the aggregate decode cap.
+        decode_pixels += stop * item['width'] * item['height']; decode_frames += stop
+        if decode_pixels > MAX_PIXELS or decode_frames > 6000:
+            raise ValueError('GIF prefix decoding exceeds 6000 frames or 512 Mi pixel-frames')
         if total_bytes > MAX_INPUT_BYTES or duration > MAX_DURATION_CS:
             raise ValueError('Master inputs exceed 256 MiB or 10 minutes')
-        sources.append({'index': index, 'name': Path(path).name, 'sha256': factory.digest(raw), **item})
+        sources.append({'index': index, 'name': Path(path).name, 'sha256': sha, **item,
+                        'in_frame': first, 'out_frame': stop, 'selected_frames': stop - first,
+                        'selected_duration_cs': selected_duration})
     width, height = max(s['width'] for s in sources), max(s['height'] for s in sources)
-    count = sum(s['frames'] for s in sources)
+    if canvas is not None:
+        if (not isinstance(canvas, (tuple, list)) or len(canvas) != 2 or
+                any(type(v) is not int or not 1 <= v <= 4096 for v in canvas)):
+            raise ValueError('Master canvas must have two integer dimensions in 1..4096')
+        if width > canvas[0] or height > canvas[1]:
+            raise ValueError('Source exceeds the script canvas; exact master cannot scale/crop. Use --native-canvas or enlarge the script canvas')
+        width, height = canvas
+    count = sum(s['selected_frames'] for s in sources)
     if count > 6000 or count * width * height > MAX_PIXELS:
         raise ValueError('Master exceeds 6000 frames or 512 Mi padded pixel-frames')
     if preview and duration * (width + width % 2) * (height + height % 2) > MAX_PREVIEW_PIXELS:
@@ -86,6 +110,7 @@ def plan(paths, preview=False, audio=None):
     if audio: cli.read_local_bytes(audio, 128 * 1024 * 1024, 'Audio')
     return {'format': 'gif-cinema-rgba-master', 'schema_version': 1, 'status': 'planned', 'provider_calls': 0,
             'width': width, 'height': height, 'frame_count': count, 'duration_cs': duration, 'sources': sources,
+            'decode_budget': {'prefix_frames': decode_frames, 'prefix_pixel_frames': decode_pixels},
             'pixel_format': 'RGBA8', 'loop_policy': 'one iteration per input',
             'dimension_policy': 'center-pad transparent; no scale or crop', 'preview': bool(preview),
             'audio_validation': 'pending' if audio else 'not-requested', 'visual_review': 'pending', 'notice': NOTICE}
@@ -165,7 +190,8 @@ def encode_master(snapshots, output, report):
                 with Image.open(path) as image:
                     if image.n_frames != source['frames']: raise ValueError('Pillow/descriptor counts disagree')
                     source['loop_metadata'] = image.info.get('loop')
-                    for index, spec in enumerate(source['timing']):
+                    for index in range(source['in_frame'], source['out_frame']):
+                        spec = source['timing'][index]
                         image.seek(index); rgba = image.convert('RGBA')
                         if rgba.size != (source['width'], source['height']): raise ValueError('GIF canvas changed during decode')
                         if image.info.get('duration') != spec['duration_cs'] * 10: raise ValueError('Decoder/GIF delays disagree')
@@ -264,11 +290,16 @@ def viewing_copy(master, output, report, audio):
     return facts
 
 
-def build(paths, out, preview=False, audio=None, dry_run=False):
+def build(paths, out, preview=False, audio=None, dry_run=False, *, frame_ranges=None, canvas=None,
+          source_hashes=None, sequence=None):
     out = Path(out).absolute()
     if out.exists() or any(p.is_symlink() for p in (out, *out.parents)):
         raise ValueError('Master output must be a new directory without symlinks')
-    report = plan(paths, preview, audio)
+    report = plan(paths, preview, audio, frame_ranges=frame_ranges, canvas=canvas, source_hashes=source_hashes)
+    if sequence is not None:
+        report['sequence'] = sequence
+        from .master_script import timeline
+        sequence['timeline'] = timeline(report)
     if dry_run: return report
     require_av()
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -286,6 +317,9 @@ def build(paths, out, preview=False, audio=None, dry_run=False):
         except require_av().FFmpegError:
             raise ValueError('Master codec failed; no output published') from None
         if preview: report['viewing_copy'] = viewing_copy(movie, stage / 'preview.mp4', report, prepared)
+        if sequence is not None:
+            from .master_script import sidecars
+            for name, raw in sidecars(report).items(): (stage / name).write_bytes(raw)
         report.update(status='verified-master', audio_validation='decoded-and-timed' if prepared else 'not-requested')
         report['files'] = {p.name: {'bytes': p.stat().st_size, 'sha256': file_sha(p)} for p in stage.iterdir()}
         (stage / 'manifest.json').write_bytes(factory.json_bytes(report))
@@ -303,15 +337,34 @@ def build(paths, out, preview=False, audio=None, dry_run=False):
 
 
 def run(args):
-    report = build(args.clips, args.out, args.preview, args.audio, args.dry_run)
+    if bool(args.script) == bool(args.clips): raise ValueError('Choose ordered GIF clips or --script, not both')
+    if args.script:
+        from . import master_script
+        if args.audio is not None: raise ValueError('Script audio is authoritative; edit its audio field instead of --audio')
+        if args.write_edits:
+            if args.out or args.edits or args.preview or args.dry_run or args.native_canvas:
+                raise ValueError('--write-edits is a separate command; omit output/render options')
+            report = master_script.write_template(args.script, args.write_edits)
+        else:
+            if args.out is None: raise ValueError('--out is required to plan or build a master')
+            report = master_script.build(args.script, args.out, edits=args.edits, preview=args.preview,
+                                         dry_run=args.dry_run, native_canvas=args.native_canvas)
+    else:
+        if args.edits or args.write_edits or args.native_canvas: raise ValueError('Edit options require --script')
+        if args.out is None: raise ValueError('--out is required')
+        report = build(args.clips, args.out, args.preview, args.audio, args.dry_run)
     print(json.dumps(report, indent=2, allow_nan=False))
     return report
 
 
 def add_parser(sub):
     parser = sub.add_parser('master', help='Build a verified lossless RGBA/VFR GIF master, optionally a viewing MP4')
-    parser.add_argument('clips', nargs='+', type=Path)
-    parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('clips', nargs='*', type=Path)
+    parser.add_argument('--script', type=Path, help='Existing source-only film.json; exact declared source cadence')
+    parser.add_argument('--edits', type=Path, help='Hash-pinned half-open source-frame selections')
+    parser.add_argument('--write-edits', type=Path, help='Write a new full-range edit template, without rendering')
+    parser.add_argument('--native-canvas', action='store_true', help='Use maximum source canvas instead of script dimensions; no resize')
+    parser.add_argument('--out', type=Path)
     parser.add_argument('--preview', action='store_true')
     parser.add_argument('--audio', type=Path, help='Optional audio for the lossy viewing MP4, not the silent pixel master')
     parser.add_argument('--dry-run', action='store_true')

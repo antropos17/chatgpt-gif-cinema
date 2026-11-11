@@ -118,7 +118,8 @@ project files; changed hashes stop execution. After a crash, remove a lock only 
 confirming the owning process has stopped.
 
 Execution checks runnable FFmpeg/ffprobe, the `libx264` encoder and all assembly
-filters before any paid call. Scripts with audio also require AAC and `apad`.
+filters before any paid call. Scripts with audio also require AAC and the `apad`, `aresample`, `atrim` and
+`asetpts` audio filters.
 Offline planning still needs no FFmpeg and performs none of these process checks.
 For audio, the plan explicitly reports that decode validation is still pending.
 
@@ -130,6 +131,11 @@ Assembly uses those exact validated snapshot bytes even if the original changes
 while shots are generated. The manifest records the audio hash, encoded size,
 codec, sample rate, channels and decoded duration; the snapshot is removed after
 the run. Existing audio/films are never changed by a failed preflight.
+
+The AAC soundtrack is resampled to 48 kHz, padded when short, and trimmed to the
+nearest audio sample of the quantized video duration. Both streams are explicitly
+bounded; assembly does not rely on `-shortest` to stop unbounded audio padding.
+Final AAC coverage verification still permits only its existing codec-padding tolerance.
 
 Audio input is limited to a regular local file of 128 MiB, one hour, eight channels
 and 192 kHz. Films with audio are limited to one hour. Supported containers are WAV,
