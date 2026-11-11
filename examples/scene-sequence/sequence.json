@@ -1,0 +1,162 @@
+{
+  "format": "gif-cinema-layer-sequence",
+  "schema_version": 1,
+  "title": "A light for the garden",
+  "stage": "stage.json",
+  "shots": [
+    {
+      "id": "01-offer",
+      "action": "The courier pivots its arm forward, offering the lantern.",
+      "duration_ms": 2000,
+      "tracks": {
+        "courier-arm": {
+          "keyframes": [
+            {
+              "at": 0
+            },
+            {
+              "at": 0.8,
+              "rotation": 0,
+              "easing": "smootherstep"
+            },
+            {
+              "at": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "02-receive",
+      "action": "The keeper reaches the same handle; both hands remain in contact.",
+      "duration_ms": 2000,
+      "tracks": {
+        "keeper-arm": {
+          "keyframes": [
+            {
+              "at": 0
+            },
+            {
+              "at": 0.2,
+              "zoom": 0.4
+            },
+            {
+              "at": 0.45,
+              "rotation": 180
+            },
+            {
+              "at": 0.8,
+              "zoom": 1
+            },
+            {
+              "at": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "03-release",
+      "action": "The keeper takes support; the courier withdraws its hand.",
+      "duration_ms": 1600,
+      "tracks": {
+        "lantern": {
+          "attachments": [
+            {
+              "start_ms": 0,
+              "end_ms": 1600,
+              "parent": "keeper-hand",
+              "point": [
+                0.5,
+                0.5
+              ]
+            }
+          ]
+        },
+        "courier-arm": {
+          "keyframes": [
+            {
+              "at": 0
+            },
+            {
+              "at": 0.8,
+              "rotation": -60,
+              "easing": "smootherstep"
+            },
+            {
+              "at": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "04-lift",
+      "action": "The keeper lifts the same lantern to the garden hook.",
+      "duration_ms": 2400,
+      "tracks": {
+        "keeper-arm": {
+          "keyframes": [
+            {
+              "at": 0
+            },
+            {
+              "at": 0.8,
+              "rotation": 225,
+              "easing": "smootherstep"
+            },
+            {
+              "at": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "05-hang",
+      "action": "The hook takes support; the keeper clears the handle upward, retracts its mechanical arm, and lowers it.",
+      "duration_ms": 2000,
+      "tracks": {
+        "lantern": {
+          "attachments": [
+            {
+              "start_ms": 0,
+              "end_ms": 2000,
+              "parent": "hook",
+              "point": [
+                0.5,
+                0.9090909090909091
+              ]
+            }
+          ]
+        },
+        "keeper-arm": {
+          "keyframes": [
+            {
+              "at": 0
+            },
+            {
+              "at": 0.2,
+              "rotation": 270
+            },
+            {
+              "at": 0.35,
+              "zoom": 0.4
+            },
+            {
+              "at": 0.7,
+              "rotation": 120
+            },
+            {
+              "at": 0.9,
+              "zoom": 1
+            },
+            {
+              "at": 1
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

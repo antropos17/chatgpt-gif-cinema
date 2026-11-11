@@ -55,6 +55,10 @@ Independent model outputs may still differ; prompt wording does not establish id
 | Generated shot | `model`, `size`, `quality`, `complexity` | Same conservative generator settings as `generate`; `model` defaults to `$GIF_CINEMA_MODEL`, else `gpt-image-2.6-flare` |
 | Generated shot | `references` | Optional 1..16 local still PNG/JPEG/WebP paths relative to the script, combined limit 20 MiB; uses `/v1/images/edits` |
 
+Imported shots may include a one-drawing GIF with a valid delay for an intentional
+static hold. This does not count as new motion; generated responses still require
+at least two drawings. Inspection and cut review can read these local holds too.
+
 Imported shots retain actual frame delays; generation parameters are rejected on
 imports. Script captions do not burn text into source GIFs. Width/height/FPS CLI
 overrides are validated before execution. The output directory must be new/empty or

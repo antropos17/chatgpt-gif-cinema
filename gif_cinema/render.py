@@ -130,7 +130,7 @@ def load_script(path, args, *, source_only=False, inspect_imports=True, max_impo
             if max_import_bytes is not None and import_bytes > max_import_bytes:
                 raise ValueError('Script imports exceed the aggregate encoded byte budget')
             if inspect_imports:
-                _, durations, _ = cli.validate_gif(io.BytesIO(raw))
+                _, durations, _ = cli.validate_gif(io.BytesIO(raw), allow_still=True)
             else:
                 # Exact assembly performs its stricter control/timing scan and
                 # aggregate budgets before decoding any drawings.
@@ -212,7 +212,7 @@ def cached(root, record, shot):
     raw = cli.read_gif_bytes(path)
     if digest(raw) != record.get("sha256"):
         raise ValueError(f"Saved shot {shot['id']} is missing or changed; use a new project directory")
-    cli.validate_gif(io.BytesIO(raw))
+    cli.validate_gif(io.BytesIO(raw), allow_still="source" in shot)
     return True
 
 
@@ -240,7 +240,7 @@ def diagnostics(root, script, records):
     draw = ImageDraw.Draw(sheet)
     joins, previous, previous_delays, previous_offset = [], None, None, 0
     for index, (shot, record) in enumerate(zip(script["shots"], records)):
-        frames, delays, _ = cli.validate_gif(local_path(root, record["output"]))
+        frames, delays, _ = cli.validate_gif(local_path(root, record["output"]), allow_still="source" in shot)
         for label, frame, x in (("first", frames[0], 0), ("last", frames[-1], 240)):
             output = root / f"{shot['id']}-{label}.png"
             data = io.BytesIO(); frame.save(data, format="PNG")
@@ -437,7 +437,7 @@ def execute(args, script_path, script, root, manifest_path, manifest, actions):
                         seconds = round(time.monotonic() - start, 3)
                         # The started status remains durable until the file is published.
                         break
-                frames, durations, _ = cli.validate_gif(io.BytesIO(raw))
+                frames, durations, _ = cli.validate_gif(io.BytesIO(raw), allow_still="source" in shot)
                 sha = digest(raw)
                 filename = f"{sid}-{shot['fingerprint'][:12]}-{sha[:12]}.gif"
                 target = local_path(root, filename)

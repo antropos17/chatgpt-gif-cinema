@@ -1,0 +1,2 @@
+# Example provenance hashes the exact authored JSON bytes.
+*.json text eol=lf
