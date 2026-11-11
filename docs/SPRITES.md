@@ -83,7 +83,9 @@ An image-model prompt asking for a grid does **not** prove that a PNG follows on
 Review the source: faces, proportions and pose origins may drift; characters can
 cross gutters or overlap their neighbors. `grid` only describes equal-sized cells.
 The command requires exact divisibility and never guesses cells, repairs anatomy,
-recenters characters or erases a background. Use a correctly prepared sheet if
+automatically recenters characters or erases a background. Measured repeated column
+drift can use the explicit [column-alignment workflow](ATLAS-ALIGNMENT.md); this
+does not recover content clipped by the nominal grid. Use a correctly prepared sheet if
 poses do not fit that grid. Any input source must be yours to use.
 
 ### Spec contract (version 1)
@@ -97,9 +99,10 @@ integers. All paths are local; `atlas` resolves relative to the spec file.
 | `atlas` | Required local still PNG; APNG and other formats are rejected |
 | `grid` | Required `[columns, rows]`, each 1..256, at most 256 cells total |
 | `cells` | Ordered zero-based `[column, row]` selections; 1..256 entries; default all cells, row-major; repeats allowed |
+| `column_offsets` | Optional one `[dx, dy]` integer correction per source column; positive right/down; common padded canvas; see [alignment contract](ATLAS-ALIGNMENT.md) |
 | `duration_ms` | Integer delay for all selections, or a list matching `cells`; default 120; each 20..60000 in multiples of 10 |
 | `loop` | Absent or `null`: play once; `0`: forever; 1..65535: repeat count |
-| `crop` | Optional common `[x, y, width, height]` inside every cell; warns if visible pixels are removed |
+| `crop` | Optional common `[x, y, width, height]` inside every cell, or the padded canvas when offsets are supplied; correction mode rejects visible clipping, legacy mode warns |
 | `trim` | Default `false`; one union of all selected alpha bounds; mutually exclusive with explicit `crop` |
 | `scale` | Integer 1..4; default 1; applied equally to all frames |
 | `sampling` | `pixel` (nearest neighbor, default), or `smooth` (Lanczos) |
@@ -117,7 +120,8 @@ Independent tight crops make a character's head, feet and apparent scale jump
 between poses. Shared trimming takes the union of every selected pose's alpha
 bounds and applies **that same rectangle to all drawings**. Their relative motion
 and empty space remain intact. Scaling is then shared, too. This preserves input
-alignment; it cannot fix source poses that were already misaligned.
+alignment. Explicit column corrections can repair a measured repeating layout
+shift before the common crop; they do not repair changing anatomy or missing poses.
 
 Do not interpret a transparent margin as visual approval. It detects visible pixels
 touching an edge, not missing fingers, inconsistent identity or a wrong facing

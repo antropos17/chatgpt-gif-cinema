@@ -21,6 +21,7 @@ MAX_PIXEL_FRAMES = 32 * 1024 * 1024
 MAX_FRAMES = 256
 MAX_DURATION_MS = 120000
 MAX_SPEC_BYTES = 1024 * 1024
+MAX_COLUMN_OFFSET = 16384
 
 
 def integer(value, label, low, high):
@@ -92,12 +93,74 @@ def validate_timing(delays, loop):
         integer(loop, 'loop', 0, 65535)
 
 
+def alignment_plan(options, size, count):
+    """Plan authored integer translations without decoding or allocating pixels.
+
+    Coordinates include the original cell and every declared column's translated
+    full cell, even columns not selected for export. Positive offsets go right/down.
+    Translation preserves all RGBA bytes; optional shared transforms follow it.
+    """
+    if 'column_offsets' not in options:
+        return None
+    columns, rows = pair(options.get('grid'), 'grid', 1, MAX_FRAMES)
+    offsets = options['column_offsets']
+    if not isinstance(offsets, list) or len(offsets) != columns:
+        raise ValueError('column_offsets must contain one [dx, dy] pair per grid column')
+    offsets = [pair(value, 'column_offsets', -MAX_COLUMN_OFFSET, MAX_COLUMN_OFFSET)
+               for value in offsets]
+    width, height = size
+    scale = integer(options.get('scale', 1), 'scale', 1, 4)
+    trim = options.get('trim', False)
+    if type(trim) is not bool:
+        raise ValueError('trim must be a boolean')
+    sampling = options.get('sampling', 'pixel')
+    if sampling not in ('pixel', 'smooth'):
+        raise ValueError('sampling must be pixel or smooth')
+    if scale > 1 and sampling != 'pixel':
+        raise ValueError('column_offsets scaling requires pixel sampling')
+    if trim and 'crop' in options:
+        raise ValueError('Choose shared automatic trim or an explicit crop, not both')
+    integer(options.get('require_margin', 0), 'require_margin', 0, 256)
+    left = max(0, -min(dx for dx, dy in offsets))
+    top = max(0, -min(dy for dx, dy in offsets))
+    right = max(0, max(dx for dx, dy in offsets))
+    bottom = max(0, max(dy for dx, dy in offsets))
+    padded = [width + left + right, height + top + bottom]
+    check_budget(padded, count)
+    crop = options.get('crop', [0, 0, *padded])
+    if not isinstance(crop, list) or len(crop) != 4:
+        raise ValueError('crop must be [x, y, width, height] in the padded canvas')
+    x, y, w, h = [integer(v, 'crop', 0, MAX_SHEET_PIXELS) for v in crop]
+    if not w or not h or x + w > padded[0] or y + h > padded[1]:
+        raise ValueError('crop lies outside the padded canvas')
+    # Trim is pixel-dependent: conservatively budget the full padded canvas.
+    check_budget((w * scale, h * scale), count)
+    layout_size((w * scale, h * scale), count,
+                options.get('columns', 8), options.get('padding', 1))
+    cells = options.get('cells', [[x, y] for y in range(rows) for x in range(columns)])
+    if not isinstance(cells, list) or len(cells) != count:
+        raise ValueError('cells must match the selected frames')
+    translations = []
+    for cell in cells:
+        x, y = pair(cell, 'cell', 0, MAX_FRAMES - 1)
+        if x >= columns or y >= rows:
+            raise ValueError('Cell lies outside the declared grid')
+        dx, dy = offsets[x]
+        translations.append([left + dx, top + dy])
+    return {'column_offsets': offsets, 'source_size': list(size),
+            'origin': [left, top], 'padding': [left, top, right, bottom],
+            'padding_order': ['left', 'top', 'right', 'bottom'],
+            'padded_size': padded, 'frame_translations': translations,
+            'coordinates': 'Positive dx/dy move right/down; translations map original cell pixels into the padded canvas.'}
+
+
 def load_sheet(spec_path):
     spec_path = Path(spec_path)
     spec = json.loads(read_bytes(spec_path, MAX_SPEC_BYTES).decode('utf-8'),
                       object_pairs_hook=reject_duplicate_keys)
     allowed = {'schema_version', 'atlas', 'grid', 'cells', 'duration_ms', 'loop',
-               'crop', 'trim', 'scale', 'sampling', 'columns', 'padding', 'require_margin'}
+               'crop', 'trim', 'scale', 'sampling', 'columns', 'padding', 'require_margin',
+               'column_offsets'}
     if not isinstance(spec, dict) or set(spec) - allowed:
         raise ValueError('Sprite spec must be an object with only documented fields')
     if type(spec.get('schema_version')) is not int or spec['schema_version'] != 1:
@@ -134,6 +197,7 @@ def load_sheet(spec_path):
             raise ValueError('duration_ms list must match the selected cells')
         loop = spec.get('loop')
         validate_timing(delays, loop)
+        alignment_plan(spec, (width, height), len(cells))
         sheet.load()
         rgba = sheet.convert('RGBA')
         frames = [rgba.crop((x, y, x + w, y + h)) for x, y, w, h in rects]
@@ -174,6 +238,7 @@ def transform(frames, options):
         raise ValueError('trim must be a boolean')
     margin = integer(options.get('require_margin', 0), 'require_margin', 0, 256)
     width, height = frames[0].size
+    alignment = alignment_plan(options, (width, height), len(frames))
     bounds = [frame.getchannel('A').getbbox() for frame in frames]
     warnings = []
     if any(box is None for box in bounds):
@@ -182,6 +247,18 @@ def transform(frames, options):
                               box[2] > width - margin or box[3] > height - margin)
                       for box in bounds):
         raise ValueError('A selected pose violates require_margin; review sheet boundaries')
+    if any(frame.getchannel('A').getextrema()[0] != 0 for frame in frames):
+        warnings.append('Some poses have no fully transparent background; no background removal was applied.')
+    if alignment is not None:
+        # No alpha mask: paste must preserve partial alpha and RGB under alpha=0.
+        result = []
+        for frame, translation in zip(frames, alignment['frame_translations']):
+            canvas = Image.new('RGBA', tuple(alignment['padded_size']))
+            canvas.paste(frame, tuple(translation))
+            result.append(canvas)
+        frames = result
+        width, height = frames[0].size
+        bounds = [frame.getchannel('A').getbbox() for frame in frames]
     crop = options.get('crop', [0, 0, width, height])
     if not isinstance(crop, list) or len(crop) != 4:
         raise ValueError('crop must be [x, y, width, height] in every cell')
@@ -197,9 +274,9 @@ def transform(frames, options):
         h = max(b[3] for b in visible) - y
     if any(box and (box[0] < x or box[1] < y or box[2] > x + w or box[3] > y + h)
            for box in bounds):
+        if alignment is not None:
+            raise ValueError('crop removes visible pixels after column_offsets correction')
         warnings.append('The explicit crop removes visible pixels. Inspect every output pose.')
-    if any(frame.getchannel('A').getextrema()[0] != 0 for frame in frames):
-        warnings.append('Some poses have no fully transparent background; no background removal was applied.')
     check_budget((w * scale, h * scale), len(frames))
     resampling = Image.Resampling.NEAREST if sampling == 'pixel' else Image.Resampling.LANCZOS
     result = []
@@ -208,23 +285,30 @@ def transform(frames, options):
         if scale != 1:
             cut = cut.resize((w * scale, h * scale), resampling)
         result.append(cut)
-    return result, {'crop': [x, y, w, h], 'scale': scale, 'sampling': sampling,
-                    'source_size': [width, height]}, warnings
+    info = {'crop': [x, y, w, h], 'scale': scale, 'sampling': sampling,
+            'source_size': alignment['source_size'] if alignment else [width, height]}
+    if alignment is not None:
+        info['column_alignment'] = alignment
+    return result, info, warnings
 
 
-def layout(frames, columns, padding):
+def layout_size(frame_size, count, columns, padding):
     columns = integer(columns, 'columns', 1, MAX_FRAMES)
     padding = integer(padding, 'padding', 0, 64)
-    columns = min(columns, len(frames))
-    rows = math.ceil(len(frames) / columns)
-    width, height = frames[0].size
+    columns = min(columns, count)
+    rows = math.ceil(count / columns)
+    width, height = frame_size
     size = (columns * (width + 2 * padding), rows * (height + 2 * padding))
     if size[0] * size[1] > MAX_SHEET_PIXELS or max(size) > 16384:
         raise ValueError('Packed atlas exceeds the 16 megapixel or 16384 dimension limit')
     rects = [[(i % columns) * (width + 2 * padding) + padding,
               (i // columns) * (height + 2 * padding) + padding, width, height]
-             for i in range(len(frames))]
+             for i in range(count)]
     return size, rects
+
+
+def layout(frames, columns, padding):
+    return layout_size(frames[0].size, len(frames), columns, padding)
 
 
 def write_preview(frames, delays, loop, path):

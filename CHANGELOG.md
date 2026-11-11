@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add measured integer column corrections for source atlas alignment before a
+  shared crop/scale. Preserve complete RGBA cells on a common padded canvas,
+  keep original-cell margin checks, reject visible clipping and retain authored
+  timing. Include a reproducible known-jitter recovery check; no automatic
+  centering, new poses or artistic acceptance is implied.
+
 - Add exact source-GIF palette inspection, fixed global-table export and integer
   nearest-neighbor upscaling, with no silent color reduction. Preserve canonical
   visible RGBA timelines, delays, loop counts and original source bytes; reopen
