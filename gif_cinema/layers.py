@@ -19,7 +19,7 @@ import stat
 import subprocess
 import tempfile
 
-from . import layer_gifs, layer_sprites, motion, strokes, text_fonts
+from . import attachments, layer_gifs, layer_sprites, motion, strokes, text_fonts
 from .motion import run_command
 
 FORMAT = 'gif-cinema-layered-scene'
@@ -163,7 +163,7 @@ def normalize_scene(value):
     if count * scene['width'] * scene['height'] * len(layers) > MAX_LAYER_PIXEL_FRAMES:
         raise ValueError('Scene exceeds bounded layer compositing budget')
     names, normalized = set(), []
-    common = ['id', 'type', 'name', 'keyframes', 'in_ms', 'out_ms', 'anchor']
+    common = ['id', 'type', 'name', 'keyframes', 'in_ms', 'out_ms', 'anchor', 'attachments']
     special = {'rect': ['size', 'fill', 'stroke', 'stroke_width', 'radius'],
                'ellipse': ['size', 'fill', 'stroke', 'stroke_width'],
                'stroke': ['size', 'points', 'stroke', 'stroke_width'],
@@ -237,6 +237,7 @@ def normalize_scene(value):
                 raise ValueError('Asset sha256 must be a lowercase SHA-256 digest')
         normalized.append(row)
     scene['layers'] = normalized
+    attachments.normalize(scene)
     from .text_fonts import bind_renderer
     bind_renderer(scene)
     raster_budget(scene)
@@ -516,11 +517,12 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
     canvas = Image.new('RGBA', (scene['width'], scene['height']))
     if only_layer is not None and only_layer not in prepared['rasters']:
         raise ValueError('Unknown layer ID')
+    resolved = attachments.resolve(prepared, time_ms)
     states = {}
     for layer in scene['layers']:
         if only_layer is not None and layer['id'] != only_layer:
             continue
-        state = layer_transform(scene, layer, time_ms)
+        state = resolved[layer['id']]
         if state is not None and layer['type'] == 'gif':
             state['source_index'] = layer_gifs.frame_index(prepared['assets'][layer['source']],
                 time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms'))
@@ -646,6 +648,9 @@ def render_scene(path, out, dry_run=False):
             'font_assets': text_fonts.font_receipt(scene),
             'asset_sha256': {name: asset['sha256'] for name, asset in prepared['assets'].items()},
             'sampling': 'frame i at i/fps; endpoint at duration is diagnostic and is not exported twice'}
+    attachment_review = attachments.review(prepared)
+    if attachment_review is not None:
+        plan['attachment_review'] = attachment_review
     if dry_run:
         return plan
     out = Path(out).absolute()
@@ -783,7 +788,8 @@ def render_scene(path, out, dry_run=False):
                 'GIF source loop metadata is ignored; each GIF layer explicitly plays once with final hold or loops.',
                 'Animated source_range_ms selects existing native intervals; it neither retimes drawings nor repairs a loop seam.',
                 'Stroke reveal follows authored point order and arc length; no handwriting generation, tracing or SVG import.',
-                'No expressions, scripts, URLs, font paths/downloads, parenting, masks, blend modes or Lottie import/export.',
+                'No expressions, scripts, URLs, font paths/downloads, full transform parenting, masks, blend modes or Lottie import/export.',
+                'Attachments position authored anchors, not depicted hands; parent switches can jump and require review.',
                 'Layer order is back to front; opacity uses source-over alpha compositing.',
                 'GIF and MP4 are flattened against matte; PNG frames and isolated layers retain alpha.',
                 'Text font bytes are hash-pinned; saved text scenes require their recorded Pillow and FreeType versions.',

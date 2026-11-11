@@ -69,11 +69,19 @@ def verify(directory):
         if layers.digest(layers.read_regular(path, 64 * 1024 * 1024)) != expected:
             raise ValueError(f'Export hash changed: {name}')
     prepared = layers.prepare_scene(scene_path)
+    # Legacy pinned runtimes have no attachment module and cannot parse this
+    # optional field. Keep their ordinary scene verification compatible.
+    attachment_review = (layers.attachments.review(prepared)
+                         if any(layer.get('attachments') for layer in scene['layers']) else None)
+    if attachment_review is not None and receipt.get('attachment_review') != attachment_review:
+        raise ValueError('Attachment review differs from the saved scene')
     for index, sample in enumerate(receipt['samples']):
         timestamp = index * (1000 // scene['fps'])
         if sample['frame'] != index or sample['time_ms'] != timestamp:
             raise ValueError('Receipt has a nonuniform or reordered timeline')
-        actual, _ = layers.render_at(prepared, timestamp)
+        actual, states = layers.render_at(prepared, timestamp)
+        if attachment_review is not None and sample.get('layers') != states:
+            raise ValueError(f'Attachment layer states differ at frame {index}')
         if layers.digest(actual.tobytes()) != sample['rgba_sha256']:
             raise ValueError(f'Reopened scene differs at frame {index}')
         raw = layers.read_regular(directory / 'frames' / f'{index:04}.png', 16 * 1024 * 1024)

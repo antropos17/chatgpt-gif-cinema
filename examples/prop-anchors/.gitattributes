@@ -1,0 +1,2 @@
+# Keep the raw scene checksum stable across Windows and Unix.
+*.json text eol=lf

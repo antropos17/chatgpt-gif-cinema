@@ -115,3 +115,7 @@ Limits: 1 MiB for each JSON input, 1–64 shots, 128 facts, 128 requirements/cha
 per shot/phase, 256 characters per value, 1,000 per reason, 128 MiB per source and
 512 MiB across sources. Inputs must be regular local files. No media is rewritten
 or copied, and no extra drawings or character actions are created.
+
+For actual authored hand/prop layer composition, use [prop anchor tracks](PROP-ANCHORS.md).
+The ledger checks declared facts across shots; attachments position existing layers
+within one scene. Neither tool interprets the pictures or generates missing actions.

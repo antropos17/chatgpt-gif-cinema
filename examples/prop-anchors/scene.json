@@ -1,0 +1,371 @@
+{
+  "format": "gif-cinema-layered-scene",
+  "schema_version": 1,
+  "title": "One prop, three anchors",
+  "width": 480,
+  "height": 300,
+  "fps": 25,
+  "duration_ms": 6000,
+  "loop": false,
+  "matte": "#121b2d",
+  "layers": [
+    {
+      "id": "ground",
+      "type": "rect",
+      "size": [
+        420,
+        2
+      ],
+      "fill": "#34435b",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.5,
+          "y": 0.8,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.5,
+          "y": 0.8,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "post",
+      "type": "rect",
+      "size": [
+        6,
+        144
+      ],
+      "radius": 3,
+      "fill": "#596a85",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.8333333333333334,
+          "y": 0.5533333333333333,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.8333333333333334,
+          "y": 0.5533333333333333,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "hook",
+      "type": "stroke",
+      "size": [
+        25,
+        25
+      ],
+      "points": [
+        [
+          24,
+          3
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          4,
+          17
+        ],
+        [
+          9,
+          21
+        ],
+        [
+          14,
+          17
+        ]
+      ],
+      "stroke": "#b5c6d8",
+      "stroke_width": 4,
+      "anchor": [
+        0.56,
+        0.68
+      ],
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.7916666666666666,
+          "y": 0.37,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.7916666666666666,
+          "y": 0.37,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "heading",
+      "type": "text",
+      "text": "ONE PROP / THREE ANCHORS",
+      "font_size": 22,
+      "fill": "#f7e5bd",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.5,
+          "y": 0.12,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.5,
+          "y": 0.12,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "caption",
+      "type": "text",
+      "text": "Authored contact points. No generated motion.",
+      "font_size": 13,
+      "fill": "#ccd2de",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.5,
+          "y": 0.22,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.5,
+          "y": 0.22,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "left-label",
+      "type": "text",
+      "text": "COURIER",
+      "font_size": 14,
+      "fill": "#ccd2de",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.225,
+          "y": 0.8866666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.225,
+          "y": 0.8866666666666667,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "right-label",
+      "type": "text",
+      "text": "KEEPER",
+      "font_size": 14,
+      "fill": "#ccd2de",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.6,
+          "y": 0.8866666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.6,
+          "y": 0.8866666666666667,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "courier-hand",
+      "type": "rect",
+      "size": [
+        48,
+        18
+      ],
+      "radius": 9,
+      "fill": "#e2ac81",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.2,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.13333333333333333,
+          "x": 0.2,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.3333333333333333,
+          "x": 0.45,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.43333333333333335,
+          "x": 0.45,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.5666666666666667,
+          "x": 0.2,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.2,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "keeper-hand",
+      "type": "rect",
+      "size": [
+        48,
+        18
+      ],
+      "radius": 9,
+      "fill": "#8fc9c6",
+      "keyframes": [
+        {
+          "at": 0.0,
+          "x": 0.65,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.2,
+          "x": 0.65,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.3333333333333333,
+          "x": 0.55,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.4666666666666667,
+          "x": 0.55,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.7333333333333333,
+          "x": 0.8416666666666667,
+          "y": 0.37,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.8,
+          "x": 0.8416666666666667,
+          "y": 0.37,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 0.9333333333333333,
+          "x": 0.65,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        },
+        {
+          "at": 1.0,
+          "x": 0.65,
+          "y": 0.6166666666666667,
+          "easing": "smootherstep"
+        }
+      ]
+    },
+    {
+      "id": "lantern",
+      "type": "rect",
+      "size": [
+        34,
+        42
+      ],
+      "radius": 6,
+      "stroke": "#ffdc91",
+      "stroke_width": 3,
+      "fill": "#bd733e",
+      "anchor": [
+        0.5,
+        -0.0
+      ],
+      "attachments": [
+        {
+          "parent": "courier-hand",
+          "start_ms": 0,
+          "end_ms": 2400,
+          "point": [
+            1,
+            0.5
+          ]
+        },
+        {
+          "parent": "keeper-hand",
+          "start_ms": 2400,
+          "end_ms": 4800,
+          "point": [
+            0,
+            0.5
+          ]
+        },
+        {
+          "parent": "hook",
+          "start_ms": 4800,
+          "end_ms": 6000,
+          "point": [
+            0.56,
+            0.68
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glow",
+      "type": "ellipse",
+      "size": [
+        16,
+        24
+      ],
+      "fill": "#fff0ab",
+      "attachments": [
+        {
+          "parent": "lantern",
+          "start_ms": 0,
+          "end_ms": 6000,
+          "point": [
+            0.5,
+            0.52
+          ]
+        }
+      ]
+    }
+  ]
+}

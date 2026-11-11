@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add bounded reusable prop-anchor tracks to the local layer renderer, with explicit
+  holder changes, acyclic attachment chains and before/after switch-gap diagnostics.
+  Include an editable no-key contact study, per-frame position/parent receipts and
+  all-frame reopen verification. These are authored constraints, not hand tracking,
+  full transform parenting, new character poses or automatic visual approval.
+
 - Bound ordinary film AAC to the video timeline at 48 kHz instead of relying on
   `-shortest` with unbounded padding. Keep existing coverage checks unchanged and
   check all required audio timing filters before execution.
