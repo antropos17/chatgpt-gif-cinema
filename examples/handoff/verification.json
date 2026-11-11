@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "title": "ONE SMALL LIGHT",
+  "status": "technical-prototype; visual acceptance pending",
+  "renderer": "Pillow procedural cutout builder; not Blender",
+  "runtime_base": "3fccd9467dc4774937a815ee25c5a5a9b9664f37",
+  "provider_calls": 0,
+  "fps": 10,
+  "duration_ms": 8000,
+  "dimensions": [
+    960,
+    540
+  ],
+  "authoring_ticks": 80,
+  "encoded_gif_drawings": 59,
+  "audio": "silent",
+  "loop": "play-once; viewers may override",
+  "sources_unchanged_from_reviewed_prototype": true,
+  "source_scenes": [
+    {
+      "id": "01-offer",
+      "file": "media/01-offer.gif",
+      "sha256": "fc629aa8900e06f0d98413b2a9b6fa197cfeb138f8c9dc4dee3a5a4c982f2111",
+      "authoring_ticks": 24,
+      "decoded_gif_frames": 17,
+      "duration_ms": 2400,
+      "lossless_against_palette_frames": true
+    },
+    {
+      "id": "02-handoff",
+      "file": "media/02-handoff.gif",
+      "sha256": "e2f8e957543c17852b4acaf17f80af6227b6a31026d87ee3f56b4d30e96364f0",
+      "authoring_ticks": 24,
+      "decoded_gif_frames": 16,
+      "duration_ms": 2400,
+      "lossless_against_palette_frames": true
+    },
+    {
+      "id": "03-hang",
+      "file": "media/03-hang.gif",
+      "sha256": "40299f12a292b9f7e2173d28f030c51d4ad5a52bf8b4c4608e2bb54748c0a0ce",
+      "authoring_ticks": 32,
+      "decoded_gif_frames": 28,
+      "duration_ms": 3200,
+      "lossless_against_palette_frames": true
+    }
+  ],
+  "joins": [
+    {
+      "from": 23,
+      "to": 24,
+      "png_pixels_identical": true,
+      "gif_pixels_identical": true,
+      "visual_review": "required; matching pixels do not validate whole action"
+    },
+    {
+      "from": 47,
+      "to": 48,
+      "png_pixels_identical": true,
+      "gif_pixels_identical": true,
+      "visual_review": "required; matching pixels do not validate whole action"
+    }
+  ],
+  "archive_contents": {
+    "frame_count": 80,
+    "layer_count": 3,
+    "frame_hashes": "anchor-ledger.json, frames[*].sha256"
+  },
+  "review": {
+    "method": "all decoded MP4 frames, original handoff poster, GIF contact sheets",
+    "realtime_player_review": false,
+    "user_acceptance": "pending",
+    "known_limits": [
+      "Fixed facial expressions and flexible procedural arms.",
+      "Flat 2D technical study; not final illustrated quality.",
+      "H.264 viewing copy is lossy; originals are separate."
+    ]
+  },
+  "files": {
+    "examples/handoff/anchor-ledger.json": "30544cc62c8c608f4f666501c74e7a7cc205e4a892acb308a06dc22367042a1c",
+    "examples/handoff/film.json": "a8e90e996b7d526fe5228bea7362deda90b82c4dd67cf57bc390324379da5bd3",
+    "examples/handoff/source-frames.zip": "c438ac579f74014e7ac08b0f2e3973aa2cc8aaf1600cf5b4da3053c4d631c39e",
+    "examples/handoff/media/02-handoff.gif": "e2f8e957543c17852b4acaf17f80af6227b6a31026d87ee3f56b4d30e96364f0",
+    "examples/handoff/media/03-hang.gif": "40299f12a292b9f7e2173d28f030c51d4ad5a52bf8b4c4608e2bb54748c0a0ce",
+    "examples/handoff/media/01-offer.gif": "fc629aa8900e06f0d98413b2a9b6fa197cfeb138f8c9dc4dee3a5a4c982f2111",
+    "docs/assets/handoff/contact-sheet.png": "c784898c0e7f81687d186f90f6319bb258b884d7c310634d1e96d2d203ddc855",
+    "docs/assets/handoff/one-small-light.gif": "db12446c5546201127aeabe7286902c9fb4f30a559e0e09442229e4f4fcc3d05",
+    "docs/assets/handoff/one-small-light.mp4": "42d08d3ebd3b4385882491694bf7c54023d1f1691ef024d799b9ded44153d2e1"
+  }
+}
