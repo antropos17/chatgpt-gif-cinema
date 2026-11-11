@@ -7,6 +7,8 @@ animate text, shapes and strokes, inspect the frames, and export a film or a col
 
 [See the work](#selected-work) · [Try it without a key](#make-your-first-film) · [Install the skill](#install-the-skill) · [Choose a workflow](#choose-a-workflow)
 
+<a id="blender-motion-study"></a>
+
 <p align="center">
 <a href="examples/blender-form-01/README.md"><picture><img src="examples/blender-form-01/deliverables/FORM-01.gif" width="480" alt="FORM / 01: porcelain arcs unfold around a copper sphere in an actual Blender-rendered six-second loop."></picture></a>
 </p>
@@ -130,6 +132,8 @@ Try this with your agent:
 
 <a id="sprites-and-frame-review"></a>
 
+<a id="exact-script-montage"></a>
+
 ## Choose a workflow
 
 | Make or inspect | Start here |
@@ -141,6 +145,8 @@ Try this with your agent:
 | Every frame, cut and loop seam | [Review player & checklist](docs/GIF-REVIEW.md) |
 | Frame-accurate cuts, subtitle sidecars and a soundtrack | [Exact script montage](docs/EXACT-SCRIPT-EDIT.md) |
 | A portable collection with an offline gallery and ZIP | [Offline GIF factory](docs/OFFLINE-FACTORY.md) |
+
+<a id="build-an-offline-gif-collection"></a>
 
 The factory combines existing GIFs and local layer scenes. From the installed
 checkout, build and verify the bundled collection:
