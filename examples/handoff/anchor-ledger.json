@@ -1,0 +1,2806 @@
+{
+  "schema_version": 1,
+  "coordinates": "pixels in 960x540 output",
+  "frames": [
+    {
+      "scene": "01-offer",
+      "frame": 0,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        365.0,
+        310.0
+      ],
+      "courier_palm": [
+        353.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        353.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        377.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 0,
+      "file": "frames/0000.png",
+      "sha256": "39590f9bf99312dec30535feb7f70489588995fe913fd9bcba933b31b0ddac86"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 1,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        365.0,
+        310.0
+      ],
+      "courier_palm": [
+        353.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        353.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        377.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 1,
+      "file": "frames/0001.png",
+      "sha256": "39590f9bf99312dec30535feb7f70489588995fe913fd9bcba933b31b0ddac86"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 2,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        365.0,
+        310.0
+      ],
+      "courier_palm": [
+        353.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        353.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        377.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 2,
+      "file": "frames/0002.png",
+      "sha256": "39590f9bf99312dec30535feb7f70489588995fe913fd9bcba933b31b0ddac86"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 3,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        365.0,
+        310.0
+      ],
+      "courier_palm": [
+        353.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        353.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        377.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 3,
+      "file": "frames/0003.png",
+      "sha256": "39590f9bf99312dec30535feb7f70489588995fe913fd9bcba933b31b0ddac86"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 4,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        365.9771,
+        310.0
+      ],
+      "courier_palm": [
+        353.9771,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        353.9771,
+        319.0
+      ],
+      "keeper_grasp": [
+        377.9771,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 4,
+      "file": "frames/0004.png",
+      "sha256": "437132c9587d390a7b4ce760e1dc5443efc09e10e212eff38bc8c8c3dc97d3b6"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 5,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        368.7383,
+        310.0
+      ],
+      "courier_palm": [
+        356.7383,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        356.7383,
+        319.0
+      ],
+      "keeper_grasp": [
+        380.7383,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 5,
+      "file": "frames/0005.png",
+      "sha256": "1a6f7730342236153e1bdae3c728fa5334324efb4d4845bd45857d40e0cec6a1"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 6,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        373.0288,
+        310.0
+      ],
+      "courier_palm": [
+        361.0288,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        361.0288,
+        319.0
+      ],
+      "keeper_grasp": [
+        385.0288,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 6,
+      "file": "frames/0006.png",
+      "sha256": "4999a21cf054f98f93c5f29579a95245a8e7486e44d74dec751ef4314c11d2e4"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 7,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        378.5938,
+        310.0
+      ],
+      "courier_palm": [
+        366.5938,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        366.5938,
+        319.0
+      ],
+      "keeper_grasp": [
+        390.5938,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 7,
+      "file": "frames/0007.png",
+      "sha256": "88a3cbb137ec7aef8e2b6c228eb234bcfbe421ffd398a77b5c1d8165a707ddaa"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 8,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        385.1782,
+        310.0
+      ],
+      "courier_palm": [
+        373.1782,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        373.1782,
+        319.0
+      ],
+      "keeper_grasp": [
+        397.1782,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 8,
+      "file": "frames/0008.png",
+      "sha256": "cb26dc106a74eeb47c54949ee2083e60ef9fe350d1edb630ec1b3e52e2f70183"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 9,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        392.5273,
+        310.0
+      ],
+      "courier_palm": [
+        380.5273,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        380.5273,
+        319.0
+      ],
+      "keeper_grasp": [
+        404.5273,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 9,
+      "file": "frames/0009.png",
+      "sha256": "5fc6e479930bfc0dabb5f84d7b994c6a17c556b4fce73cee28f24ac98e3d3a86"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 10,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        400.3862,
+        310.0
+      ],
+      "courier_palm": [
+        388.3862,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        388.3862,
+        319.0
+      ],
+      "keeper_grasp": [
+        412.3862,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 10,
+      "file": "frames/0010.png",
+      "sha256": "179f8a99d84d57905263f09269bdecfa386e1a100fd8989a929ad320f8b5ad48"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 11,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        408.5,
+        310.0
+      ],
+      "courier_palm": [
+        396.5,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        396.5,
+        319.0
+      ],
+      "keeper_grasp": [
+        420.5,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 11,
+      "file": "frames/0011.png",
+      "sha256": "ecf2869a211b9eebde3d5a8244d3d3e736747cbd3e3c1b68c82dd9f3493b2678"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 12,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        416.6138,
+        310.0
+      ],
+      "courier_palm": [
+        404.6138,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        404.6138,
+        319.0
+      ],
+      "keeper_grasp": [
+        428.6138,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 12,
+      "file": "frames/0012.png",
+      "sha256": "6c5d2817f94441bdb15bc344451d9ba04a3c71b72c1c27a56550ca86b8cfe814"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 13,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        424.4727,
+        310.0
+      ],
+      "courier_palm": [
+        412.4727,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        412.4727,
+        319.0
+      ],
+      "keeper_grasp": [
+        436.4727,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 13,
+      "file": "frames/0013.png",
+      "sha256": "87050fa13e35836e491cc32cf5032f841d06a87d53c7560d7da31335088adfe2"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 14,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        431.8218,
+        310.0
+      ],
+      "courier_palm": [
+        419.8218,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        419.8218,
+        319.0
+      ],
+      "keeper_grasp": [
+        443.8218,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 14,
+      "file": "frames/0014.png",
+      "sha256": "f76a61cf3f09b4b75299694ef6cd275182a67c07e1d0e8a3e3270a30d3e99fe3"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 15,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        438.4062,
+        310.0
+      ],
+      "courier_palm": [
+        426.4062,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        426.4062,
+        319.0
+      ],
+      "keeper_grasp": [
+        450.4062,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 15,
+      "file": "frames/0015.png",
+      "sha256": "0eaa1dc467a3675e50c004ffaded62150be1d49eedcb1f5cebb39ea4765a12a6"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 16,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        443.9712,
+        310.0
+      ],
+      "courier_palm": [
+        431.9712,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        431.9712,
+        319.0
+      ],
+      "keeper_grasp": [
+        455.9712,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 16,
+      "file": "frames/0016.png",
+      "sha256": "1138cc3fd818c513419540cb075dcbc49daee24f097fdb808de398b8bcce55e5"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 17,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        448.2617,
+        310.0
+      ],
+      "courier_palm": [
+        436.2617,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        436.2617,
+        319.0
+      ],
+      "keeper_grasp": [
+        460.2617,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 17,
+      "file": "frames/0017.png",
+      "sha256": "48a2eba5fe34e650c27f88f32272e49c588189c351ba7061ce67919eec188a9a"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 18,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        451.0229,
+        310.0
+      ],
+      "courier_palm": [
+        439.0229,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        439.0229,
+        319.0
+      ],
+      "keeper_grasp": [
+        463.0229,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 18,
+      "file": "frames/0018.png",
+      "sha256": "4f519769b2e175ff0fe19b94ed7b3031e9f10075454a1bc9be2810edbf30e7cc"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 19,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 19,
+      "file": "frames/0019.png",
+      "sha256": "642a3803cbf19abd749b737abd2cd3c22548210b6016681a1d3205ffcd961ab4"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 20,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 20,
+      "file": "frames/0020.png",
+      "sha256": "642a3803cbf19abd749b737abd2cd3c22548210b6016681a1d3205ffcd961ab4"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 21,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 21,
+      "file": "frames/0021.png",
+      "sha256": "642a3803cbf19abd749b737abd2cd3c22548210b6016681a1d3205ffcd961ab4"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 22,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 22,
+      "file": "frames/0022.png",
+      "sha256": "642a3803cbf19abd749b737abd2cd3c22548210b6016681a1d3205ffcd961ab4"
+    },
+    {
+      "scene": "01-offer",
+      "frame": 23,
+      "duration_ms": 100,
+      "phase": "offer",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 23,
+      "file": "frames/0023.png",
+      "sha256": "642a3803cbf19abd749b737abd2cd3c22548210b6016681a1d3205ffcd961ab4"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 0,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 24,
+      "file": "frames/0024.png",
+      "sha256": "642a3803cbf19abd749b737abd2cd3c22548210b6016681a1d3205ffcd961ab4"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 1,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        556.7078,
+        361.4911
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 25,
+      "file": "frames/0025.png",
+      "sha256": "6fa6b9153ddb0d06bf94e1c39ee7c989170df37dab3c9e921d4f844cb13e0e0f"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 2,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        547.8848,
+        357.4472
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 26,
+      "file": "frames/0026.png",
+      "sha256": "95049348f723acb7de2a35eef389a97198823132bbf0079183c066f64eb0614d"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 3,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        535.1111,
+        351.5926
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 27,
+      "file": "frames/0027.png",
+      "sha256": "902e0446354c619f684d2af77d6fa2d9ef12eae6a4305e74e04909d08d24dbf7"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 4,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        519.9671,
+        344.6516
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 28,
+      "file": "frames/0028.png",
+      "sha256": "18a28d753bbad58266fe906bf1fb44bccabf485a72c9b68bc25e4ab66295e135"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 5,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        504.0329,
+        337.3484
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 29,
+      "file": "frames/0029.png",
+      "sha256": "05b98b917b630f2db3ca681b4109917ce9d8d1d29726008660e8c1f62b7f183d"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 6,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        488.8889,
+        330.4074
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 30,
+      "file": "frames/0030.png",
+      "sha256": "a5fd10544845f635a276a5131e81a0486af591b988cc3af39431830068fbcbd3"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 7,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        476.1152,
+        324.5528
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 31,
+      "file": "frames/0031.png",
+      "sha256": "4bcda18c185ead13a1c57254ad9fa6896faf410ee8659164eb6cff22054b0f2f"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 8,
+      "duration_ms": 100,
+      "phase": "reach",
+      "owner": "courier",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        467.2922,
+        320.5089
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 32,
+      "file": "frames/0032.png",
+      "sha256": "7d687dd859a6d6cae1e4c6c49efd1d648456c3a87b0ca67571e8769defe97cb5"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 9,
+      "duration_ms": 100,
+      "phase": "shared-grip",
+      "owner": "shared",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 33,
+      "file": "frames/0033.png",
+      "sha256": "f01f1bc0d3c45f3c1afd92878fc9e533694c0c6f063d9eb75d0e61ce23c82d39"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 10,
+      "duration_ms": 100,
+      "phase": "shared-grip",
+      "owner": "shared",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 34,
+      "file": "frames/0034.png",
+      "sha256": "f01f1bc0d3c45f3c1afd92878fc9e533694c0c6f063d9eb75d0e61ce23c82d39"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 11,
+      "duration_ms": 100,
+      "phase": "shared-grip",
+      "owner": "shared",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 35,
+      "file": "frames/0035.png",
+      "sha256": "f01f1bc0d3c45f3c1afd92878fc9e533694c0c6f063d9eb75d0e61ce23c82d39"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 12,
+      "duration_ms": 100,
+      "phase": "shared-grip",
+      "owner": "shared",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 36,
+      "file": "frames/0036.png",
+      "sha256": "f01f1bc0d3c45f3c1afd92878fc9e533694c0c6f063d9eb75d0e61ce23c82d39"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 13,
+      "duration_ms": 100,
+      "phase": "shared-grip",
+      "owner": "shared",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 37,
+      "file": "frames/0037.png",
+      "sha256": "f01f1bc0d3c45f3c1afd92878fc9e533694c0c6f063d9eb75d0e61ce23c82d39"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 14,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        440.0,
+        319.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 38,
+      "file": "frames/0038.png",
+      "sha256": "f01f1bc0d3c45f3c1afd92878fc9e533694c0c6f063d9eb75d0e61ce23c82d39"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 15,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        433.1111,
+        322.4074
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 39,
+      "file": "frames/0039.png",
+      "sha256": "8a513bcbf6f7e5a709465c6fc2d39a1767a794f7d272ea65175d0673d8f14858"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 16,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        415.8889,
+        330.9259
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 40,
+      "file": "frames/0040.png",
+      "sha256": "6838e65eebbdb823b723e0c5fe6d1c1d2cc328f94ff411e56d2a65a9c711e12d"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 17,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        393.5,
+        342.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 41,
+      "file": "frames/0041.png",
+      "sha256": "20653381da5711b396304049596ec401f02d2a0d89c05dfd45e38d48b73194d4"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 18,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        371.1111,
+        353.0741
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 42,
+      "file": "frames/0042.png",
+      "sha256": "b03417e1f355f69b477f67e52a0204921eddde49c2e6c2b4c713200ab5d3b781"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 19,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        353.8889,
+        361.5926
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 43,
+      "file": "frames/0043.png",
+      "sha256": "44c5609448202325743d9edd35f07f5135d0b6ce78ba19b936c01be21e76cd21"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 20,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 44,
+      "file": "frames/0044.png",
+      "sha256": "817305c38b065ba415f7e874cb348089e8fcb54e1af73fa75c9cbbfd9965e9eb"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 21,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 45,
+      "file": "frames/0045.png",
+      "sha256": "817305c38b065ba415f7e874cb348089e8fcb54e1af73fa75c9cbbfd9965e9eb"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 22,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 46,
+      "file": "frames/0046.png",
+      "sha256": "817305c38b065ba415f7e874cb348089e8fcb54e1af73fa75c9cbbfd9965e9eb"
+    },
+    {
+      "scene": "02-handoff",
+      "frame": 23,
+      "duration_ms": 100,
+      "phase": "courier-release",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 47,
+      "file": "frames/0047.png",
+      "sha256": "817305c38b065ba415f7e874cb348089e8fcb54e1af73fa75c9cbbfd9965e9eb"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 0,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.0,
+        310.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        464.0,
+        319.0
+      ],
+      "courier_grasp": [
+        440.0,
+        319.0
+      ],
+      "keeper_grasp": [
+        464.0,
+        319.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 48,
+      "file": "frames/0048.png",
+      "sha256": "817305c38b065ba415f7e874cb348089e8fcb54e1af73fa75c9cbbfd9965e9eb"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 1,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        452.493,
+        309.449
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        464.493,
+        318.449
+      ],
+      "courier_grasp": [
+        440.493,
+        318.449
+      ],
+      "keeper_grasp": [
+        464.493,
+        318.449
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 49,
+      "file": "frames/0049.png",
+      "sha256": "4b03e661de246943c60fe70722650bb72a5580843dc778fa7688991d3df0a118"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 2,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        453.904,
+        307.872
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        465.904,
+        316.872
+      ],
+      "courier_grasp": [
+        441.904,
+        316.872
+      ],
+      "keeper_grasp": [
+        465.904,
+        316.872
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 50,
+      "file": "frames/0050.png",
+      "sha256": "4a2930393d8629a2f0ad0778b56ff7f2e07a5398943b640027691e86a8a52599"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 3,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        456.131,
+        305.383
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        468.131,
+        314.383
+      ],
+      "courier_grasp": [
+        444.131,
+        314.383
+      ],
+      "keeper_grasp": [
+        468.131,
+        314.383
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 51,
+      "file": "frames/0051.png",
+      "sha256": "53e5d2d339cc4882ceaf08d9e7986c28a1649386ab60217d62728bdd512846c4"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 4,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        459.072,
+        302.096
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        471.072,
+        311.096
+      ],
+      "courier_grasp": [
+        447.072,
+        311.096
+      ],
+      "keeper_grasp": [
+        471.072,
+        311.096
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 52,
+      "file": "frames/0052.png",
+      "sha256": "f1525e75738d8e3d5a9d7e4ea2aee8fd52ab44bb8c550e60d34b97003b384702"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 5,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        462.625,
+        298.125
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        474.625,
+        307.125
+      ],
+      "courier_grasp": [
+        450.625,
+        307.125
+      ],
+      "keeper_grasp": [
+        474.625,
+        307.125
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 53,
+      "file": "frames/0053.png",
+      "sha256": "6fb6892b843295b4d5956be2e9170f443abdd106c3da8dbce5736495ecd7f402"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 6,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        466.688,
+        293.584
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        478.688,
+        302.584
+      ],
+      "courier_grasp": [
+        454.688,
+        302.584
+      ],
+      "keeper_grasp": [
+        478.688,
+        302.584
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 54,
+      "file": "frames/0054.png",
+      "sha256": "31b38e8cd3a47d2a29c0f278e197d56bd70e7e5727e8692cd1ce06d0bedd21a1"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 7,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        471.159,
+        288.587
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        483.159,
+        297.587
+      ],
+      "courier_grasp": [
+        459.159,
+        297.587
+      ],
+      "keeper_grasp": [
+        483.159,
+        297.587
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 55,
+      "file": "frames/0055.png",
+      "sha256": "e37b599afca257331fb1fc7ff85e063b32085d17a00a4568466ac9f4ea0c42e0"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 8,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        475.936,
+        283.248
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        487.936,
+        292.248
+      ],
+      "courier_grasp": [
+        463.936,
+        292.248
+      ],
+      "keeper_grasp": [
+        487.936,
+        292.248
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 56,
+      "file": "frames/0056.png",
+      "sha256": "7d7dc1910cf5a6a6d20865505e5c8a9c188527b08d34f57642435bb1241b51a0"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 9,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        480.917,
+        277.681
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        492.917,
+        286.681
+      ],
+      "courier_grasp": [
+        468.917,
+        286.681
+      ],
+      "keeper_grasp": [
+        492.917,
+        286.681
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 57,
+      "file": "frames/0057.png",
+      "sha256": "e121848432fff11d3b1c53a42fd67a59d6ef13629d31af39f74054db0d79eaff"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 10,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        486.0,
+        272.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        498.0,
+        281.0
+      ],
+      "courier_grasp": [
+        474.0,
+        281.0
+      ],
+      "keeper_grasp": [
+        498.0,
+        281.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 58,
+      "file": "frames/0058.png",
+      "sha256": "833cf60d02ebc7e406e913f6ce1f65cd45be7e8dd2d453bce1c78209b8891622"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 11,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        491.083,
+        266.319
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        503.083,
+        275.319
+      ],
+      "courier_grasp": [
+        479.083,
+        275.319
+      ],
+      "keeper_grasp": [
+        503.083,
+        275.319
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 59,
+      "file": "frames/0059.png",
+      "sha256": "f06c584cda6a8cb89a8fc1324bc10931ed83d7750eb7f2e3fbbc96e3c39a3efd"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 12,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        496.064,
+        260.752
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        508.064,
+        269.752
+      ],
+      "courier_grasp": [
+        484.064,
+        269.752
+      ],
+      "keeper_grasp": [
+        508.064,
+        269.752
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 60,
+      "file": "frames/0060.png",
+      "sha256": "f84d607d9847f109367dbcb7da11766f3c336f36ebceb52be152c0e96836bb80"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 13,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        500.841,
+        255.413
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        512.841,
+        264.413
+      ],
+      "courier_grasp": [
+        488.841,
+        264.413
+      ],
+      "keeper_grasp": [
+        512.841,
+        264.413
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 61,
+      "file": "frames/0061.png",
+      "sha256": "19e2cd4f64af173f3c2a2bfcb45e44fbaf24caf2e2e5d117ccb1350e4fee8862"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 14,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        505.312,
+        250.416
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        517.312,
+        259.416
+      ],
+      "courier_grasp": [
+        493.312,
+        259.416
+      ],
+      "keeper_grasp": [
+        517.312,
+        259.416
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 62,
+      "file": "frames/0062.png",
+      "sha256": "3e4fd3318bbb01cab330eee29fff1d65e2603b0d29df9bc09534f7def8bda904"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 15,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        509.375,
+        245.875
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        521.375,
+        254.875
+      ],
+      "courier_grasp": [
+        497.375,
+        254.875
+      ],
+      "keeper_grasp": [
+        521.375,
+        254.875
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 63,
+      "file": "frames/0063.png",
+      "sha256": "4fb51130577b5e5eab7f2b28e15cca4b81fdbeb0244e3731a4bb40e647bafa31"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 16,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        512.928,
+        241.904
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        524.928,
+        250.904
+      ],
+      "courier_grasp": [
+        500.928,
+        250.904
+      ],
+      "keeper_grasp": [
+        524.928,
+        250.904
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 64,
+      "file": "frames/0064.png",
+      "sha256": "500b1043c6336e2e772d63c2a61c34f8e039aa7db8b558beb149028c88bb6e15"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 17,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        515.869,
+        238.617
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        527.869,
+        247.617
+      ],
+      "courier_grasp": [
+        503.869,
+        247.617
+      ],
+      "keeper_grasp": [
+        527.869,
+        247.617
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 65,
+      "file": "frames/0065.png",
+      "sha256": "9160132c27f47f135407eea4f04b1b9988755f46bfd446972366113db51cca79"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 18,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        518.096,
+        236.128
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        530.096,
+        245.128
+      ],
+      "courier_grasp": [
+        506.096,
+        245.128
+      ],
+      "keeper_grasp": [
+        530.096,
+        245.128
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 66,
+      "file": "frames/0066.png",
+      "sha256": "68cd517fc52852e2f772d2104a504942d5658b98c7b5204a44dea451e4d621f5"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 19,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        519.507,
+        234.551
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        531.507,
+        243.551
+      ],
+      "courier_grasp": [
+        507.50699999999995,
+        243.551
+      ],
+      "keeper_grasp": [
+        531.507,
+        243.551
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 67,
+      "file": "frames/0067.png",
+      "sha256": "74ff77e8dc03eeccad2b6cb1f5300e12ef07b32db36e71067b489129b366195f"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 20,
+      "duration_ms": 100,
+      "phase": "lift",
+      "owner": "keeper",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        532.0,
+        243.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 68,
+      "file": "frames/0068.png",
+      "sha256": "6e7ff27a11e0a7a4bfe74d25382e11ef37067a836477e8f4ee3c31464d990e42"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 21,
+      "duration_ms": 100,
+      "phase": "keeper-release",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        532.0,
+        243.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 69,
+      "file": "frames/0069.png",
+      "sha256": "6e7ff27a11e0a7a4bfe74d25382e11ef37067a836477e8f4ee3c31464d990e42"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 22,
+      "duration_ms": 100,
+      "phase": "keeper-release",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        550.0,
+        243.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 70,
+      "file": "frames/0070.png",
+      "sha256": "a0da557464706241c4d9bef2263ea87f044c3e80f17ed0837cb73a5834af589d"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 23,
+      "duration_ms": 100,
+      "phase": "keeper-release",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        568.0,
+        243.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 71,
+      "file": "frames/0071.png",
+      "sha256": "a3f83e31da953afff29d178e7d8b1480f2bcfa2fa088579c863f2d51415f5c8f"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 24,
+      "duration_ms": 100,
+      "phase": "keeper-release",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        567.168,
+        255.48
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 72,
+      "file": "frames/0072.png",
+      "sha256": "570fb1962c0b8c5071a2771f7fc66054778e13d1a9f33cf50eac805c6eef078f"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 25,
+      "duration_ms": 100,
+      "phase": "keeper-release",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        565.184,
+        285.24
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 73,
+      "file": "frames/0073.png",
+      "sha256": "bb4e4c478a898fe1bf2838e6dd72d1313fa8a612c68c79cfead24d119ddb3ffd"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 26,
+      "duration_ms": 100,
+      "phase": "keeper-release",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        562.816,
+        320.76
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 74,
+      "file": "frames/0074.png",
+      "sha256": "e2944ff4337ee8cd0ac6ab599397532d4e8c93e00bf4ff24b2e9d41837b3eaa4"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 27,
+      "duration_ms": 100,
+      "phase": "keeper-release",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        560.832,
+        350.52
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 75,
+      "file": "frames/0075.png",
+      "sha256": "f7e0e1d6581c639a2787fd7b2d0f4b1478cee92da74733a197d8077420633d25"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 28,
+      "duration_ms": 100,
+      "phase": "result-hold",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 76,
+      "file": "frames/0076.png",
+      "sha256": "b9bd025878982c176739527599f5360ac62fceb8bc5b7dc661e6972e95f5eefa"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 29,
+      "duration_ms": 100,
+      "phase": "result-hold",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 77,
+      "file": "frames/0077.png",
+      "sha256": "b9bd025878982c176739527599f5360ac62fceb8bc5b7dc661e6972e95f5eefa"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 30,
+      "duration_ms": 100,
+      "phase": "result-hold",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 78,
+      "file": "frames/0078.png",
+      "sha256": "b9bd025878982c176739527599f5360ac62fceb8bc5b7dc661e6972e95f5eefa"
+    },
+    {
+      "scene": "03-hang",
+      "frame": 31,
+      "duration_ms": 100,
+      "phase": "result-hold",
+      "owner": "hook",
+      "lantern_anchor": [
+        520.0,
+        234.0
+      ],
+      "courier_palm": [
+        347.0,
+        365.0
+      ],
+      "keeper_palm": [
+        560.0,
+        363.0
+      ],
+      "courier_grasp": [
+        508.0,
+        243.0
+      ],
+      "keeper_grasp": [
+        532.0,
+        243.0
+      ],
+      "hook_anchor": [
+        520,
+        234
+      ],
+      "prop_count": 1,
+      "global_frame": 79,
+      "file": "frames/0079.png",
+      "sha256": "b9bd025878982c176739527599f5360ac62fceb8bc5b7dc661e6972e95f5eefa"
+    }
+  ]
+}
