@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Bound ordinary film AAC to the video timeline at 48 kHz instead of relying on
+  `-shortest` with unbounded padding. Keep existing coverage checks unchanged and
+  check all required audio timing filters before execution.
+
 - Add source-only exact script montage: hash-pinned original drawing selections,
   disposal-prefix budgets, exact SRT/timeline sidecars and script soundtrack.
   Include a reproducible 120-frame Blender split-and-rejoin example. No new
