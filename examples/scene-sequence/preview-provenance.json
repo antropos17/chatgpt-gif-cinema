@@ -1,0 +1,72 @@
+{
+  "title": "A light for the garden",
+  "original_project_sha256": "a393f8810198ef2a548babb752640e306b05118bc99a9fd22304ce5690198cc8",
+  "original_stage_sha256": "74c9c1ceb7efd586bec47a3c32aa52996f753c9fb22d50bd8c55313e6f98a57d",
+  "asset_sha256": {
+    "assets/1900f9d2f360f0dd79dcfcf4991927aa6a69066bc912b0a773828c3274c115a3.image": "1900f9d2f360f0dd79dcfcf4991927aa6a69066bc912b0a773828c3274c115a3",
+    "assets/314dd3becf0fdda987d6df7706e288f1ed5f24557a4a2d651d2290326d9e2d01.image": "314dd3becf0fdda987d6df7706e288f1ed5f24557a4a2d651d2290326d9e2d01",
+    "assets/3e4d49f97cfb8623dc25110cae126a5768bed31175a383d6b2d5b40069ddf266.image": "3e4d49f97cfb8623dc25110cae126a5768bed31175a383d6b2d5b40069ddf266",
+    "assets/4cb866d5a9d9d510b513d8f841263f4535cf1cd992d5cb684a02e7ba1767c02b.image": "4cb866d5a9d9d510b513d8f841263f4535cf1cd992d5cb684a02e7ba1767c02b",
+    "assets/54a38d02ce664646268132bb39c8a9ef5361811c922f8528cbbb3fab33c95ad8.image": "54a38d02ce664646268132bb39c8a9ef5361811c922f8528cbbb3fab33c95ad8",
+    "assets/76846cd512344879914b987daa9bc9a32d77436ff948aa3a68b7c2397161e72c.image": "76846cd512344879914b987daa9bc9a32d77436ff948aa3a68b7c2397161e72c",
+    "assets/d285a1acb20200fbf976f8285a7592c4f82dd76a7c5959b8962b9c5118925f2e.image": "d285a1acb20200fbf976f8285a7592c4f82dd76a7c5959b8962b9c5118925f2e",
+    "assets/dfec83284e7b110283a2397238e1998fdc392781d8f9b53d0c94e5dd33eae820.image": "dfec83284e7b110283a2397238e1998fdc392781d8f9b53d0c94e5dd33eae820"
+  },
+  "duration_ms": 10000,
+  "frames": 250,
+  "fps": 25,
+  "provider_calls": 0,
+  "joins": [
+    {
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "next": "02-receive",
+      "next_first_rgba_sha256": "d705e85831bb1ac36acab38ee5846a9d8a1afed6bda8b5386f10d286bd286796",
+      "previous": "01-offer",
+      "previous_endpoint_rgba_sha256": "d705e85831bb1ac36acab38ee5846a9d8a1afed6bda8b5386f10d286bd286796",
+      "previous_last_rgba_sha256": "d705e85831bb1ac36acab38ee5846a9d8a1afed6bda8b5386f10d286bd286796",
+      "status": "human-review-required"
+    },
+    {
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "next": "03-release",
+      "next_first_rgba_sha256": "4b8f6bd4b6d1cf9d767237b1d265a8e2796677218e74ef8cfb83108551f2536e",
+      "previous": "02-receive",
+      "previous_endpoint_rgba_sha256": "4b8f6bd4b6d1cf9d767237b1d265a8e2796677218e74ef8cfb83108551f2536e",
+      "previous_last_rgba_sha256": "4b8f6bd4b6d1cf9d767237b1d265a8e2796677218e74ef8cfb83108551f2536e",
+      "status": "human-review-required"
+    },
+    {
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "next": "04-lift",
+      "next_first_rgba_sha256": "b0ae1d8a918e32ec0a2e0ea57da38b1b565b1bc1fdc8ca24c99400d6638e6cc7",
+      "previous": "03-release",
+      "previous_endpoint_rgba_sha256": "b0ae1d8a918e32ec0a2e0ea57da38b1b565b1bc1fdc8ca24c99400d6638e6cc7",
+      "previous_last_rgba_sha256": "b0ae1d8a918e32ec0a2e0ea57da38b1b565b1bc1fdc8ca24c99400d6638e6cc7",
+      "status": "human-review-required"
+    },
+    {
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "next": "05-hang",
+      "next_first_rgba_sha256": "527f9b57972a5fab782fce4f7319a790fa47e6415fea333c8c231ec6f2694a79",
+      "previous": "04-lift",
+      "previous_endpoint_rgba_sha256": "527f9b57972a5fab782fce4f7319a790fa47e6415fea333c8c231ec6f2694a79",
+      "previous_last_rgba_sha256": "527f9b57972a5fab782fce4f7319a790fa47e6415fea333c8c231ec6f2694a79",
+      "status": "human-review-required"
+    }
+  ],
+  "visual_acceptance": "not-established",
+  "review_scope": "First/middle/last source PNG samples and all four join triples are provided for review. Packaging does not establish full-motion human approval.",
+  "files": {
+    "contact-sheet.png": "c622199d6d69b561d654ed753e707461dc2e8cf3e3159f466e6a147e001dba9a",
+    "join-01.png": "d0a19870ffbe9fa04182413295bec2d010ed350f0d2862a453a4cd7dfd99a8b2",
+    "join-02.png": "60f5eb85747d403e9dd8e22948d93b3cc19b0e7eb47e8eecc876bd8f0ab1c293",
+    "join-03.png": "6988504e1da0fccb3207a4f1ee5f419c94cc401c889c3f7a0a5d1283052567d6",
+    "join-04.png": "20839dab987473a82ce8b900a3c2ddbb7623a09ec62697f6643481fff4e1392a",
+    "preview.gif": "7629eb064cc7cc01b8759a2349d7b9028574c90fe108c2290c80cef755d187fd",
+    "preview.mp4": "5ea12419ceb05f42a62dd7238942b156aea793615fbd6342762ef697020f9240"
+  }
+}

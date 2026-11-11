@@ -1,0 +1,59 @@
+{
+  "status": "verified",
+  "provider_calls": 0,
+  "frames_reopened_and_matched": 250,
+  "scene_count": 5,
+  "duration_ms": 10000,
+  "files_verified": 426,
+  "joins": [
+    {
+      "previous": "01-offer",
+      "next": "02-receive",
+      "previous_last_rgba_sha256": "d705e85831bb1ac36acab38ee5846a9d8a1afed6bda8b5386f10d286bd286796",
+      "previous_endpoint_rgba_sha256": "d705e85831bb1ac36acab38ee5846a9d8a1afed6bda8b5386f10d286bd286796",
+      "next_first_rgba_sha256": "d705e85831bb1ac36acab38ee5846a9d8a1afed6bda8b5386f10d286bd286796",
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "status": "human-review-required"
+    },
+    {
+      "previous": "02-receive",
+      "next": "03-release",
+      "previous_last_rgba_sha256": "4b8f6bd4b6d1cf9d767237b1d265a8e2796677218e74ef8cfb83108551f2536e",
+      "previous_endpoint_rgba_sha256": "4b8f6bd4b6d1cf9d767237b1d265a8e2796677218e74ef8cfb83108551f2536e",
+      "next_first_rgba_sha256": "4b8f6bd4b6d1cf9d767237b1d265a8e2796677218e74ef8cfb83108551f2536e",
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "status": "human-review-required"
+    },
+    {
+      "previous": "03-release",
+      "next": "04-lift",
+      "previous_last_rgba_sha256": "b0ae1d8a918e32ec0a2e0ea57da38b1b565b1bc1fdc8ca24c99400d6638e6cc7",
+      "previous_endpoint_rgba_sha256": "b0ae1d8a918e32ec0a2e0ea57da38b1b565b1bc1fdc8ca24c99400d6638e6cc7",
+      "next_first_rgba_sha256": "b0ae1d8a918e32ec0a2e0ea57da38b1b565b1bc1fdc8ca24c99400d6638e6cc7",
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "status": "human-review-required"
+    },
+    {
+      "previous": "04-lift",
+      "next": "05-hang",
+      "previous_last_rgba_sha256": "527f9b57972a5fab782fce4f7319a790fa47e6415fea333c8c231ec6f2694a79",
+      "previous_endpoint_rgba_sha256": "527f9b57972a5fab782fce4f7319a790fa47e6415fea333c8c231ec6f2694a79",
+      "next_first_rgba_sha256": "527f9b57972a5fab782fce4f7319a790fa47e6415fea333c8c231ec6f2694a79",
+      "endpoint_pixels_equal": true,
+      "last_stored_pixels_equal": true,
+      "status": "human-review-required"
+    }
+  ],
+  "visual_acceptance": "not-established",
+  "verification_scope": {
+    "source_pngs_and_joins": "rerendered-and-pixel-matched",
+    "film_source_cache": "byte-identical-to-scene-gif-exports",
+    "encoded_film": "inventory-hash-and-codec-size-duration-decode-only",
+    "encoded_pixels_match_source": "not-established",
+    "receipt_authenticity": "not-established"
+  },
+  "scope": "Authored transforms and attachment states only. No pose generation, hand tracking, physics, semantic continuity inference or automatic visual acceptance."
+}

@@ -104,7 +104,9 @@ its receipts are not cryptographically authenticated evidence.
 
 ## Continue into a longer film
 
-Use a short layer scene for each intentional action. Preserve accepted drawings,
+Use the [scene-sequence compiler](SCENE-SEQUENCES.md) to carry a shared stage's
+poses and holders through several actions without manually copying endpoints.
+For independently authored shots, use a short layer scene for each intentional action. Preserve accepted drawings,
 export each scene, then import the resulting GIFs into the ordinary film script.
 Carry final prop/character facts into the next action with the
 [authored story-state ledger](STORY-STATE.md), and review actual first/last frames

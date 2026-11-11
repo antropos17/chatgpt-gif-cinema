@@ -138,6 +138,7 @@ Try this with your agent:
 
 | Make or inspect | Start here |
 | --- | --- |
+| Connected actions on one shared stage, with persistent props | [Scene sequences](docs/SCENE-SEQUENCES.md) |
 | A short film with titles or illustrated story pages | [Storytelling skill](docs/STORYTELLING-SKILL.md) |
 | Independent text, shapes, strokes and existing GIF layers | [Layer renderer](docs/MULTILAYER-POC.md) · [GIF composition](docs/GIF-LAYERS.md) |
 | Whole-image motion with editable timing | [Motion recipes](docs/STANDALONE-MOTION.md) |

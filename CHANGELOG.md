@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Add offline fixed-stage scene sequences with propagated poses and prop holders,
+  explicit detach/rebind tracks, boundary mismatch rejection, portable sources,
+  all-frame recompile verification and zero-call film assembly. Include a five-action
+  original robot-cutout example and actual cut evidence. No new poses or physics.
+- Accept timed one-drawing local GIF holds in film import and review, while retaining
+  the two-drawing requirement for generated responses and generated-shot caches.
+
 - Add bounded reusable prop-anchor tracks to the local layer renderer, with explicit
   holder changes, acyclic attachment chains and before/after switch-gap diagnostics.
   Include an editable no-key contact study, per-frame position/parent receipts and

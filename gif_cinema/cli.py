@@ -183,8 +183,10 @@ def check_gif_limits(raw, *, max_frames=None, max_pixel_frames=None, fixed_canva
     raise ValueError("Invalid or truncated GIF; missing trailer")
 
 
-def validate_gif(source):
-    """Decode every accepted frame within explicit file, frame and pixel budgets."""
+def validate_gif(source, *, allow_still=False):
+    """Decode bounded frames; explicit local holds may have one timed drawing."""
+    if type(allow_still) is not bool:
+        raise ValueError("allow_still must be boolean")
     from PIL import Image, ImageSequence
     try:
         raw = read_gif_bytes(source)
@@ -211,7 +213,7 @@ def validate_gif(source):
                 frames.append(frame.convert("RGB").copy())
                 durations.append(duration)
                 pixels += frame_pixels
-            if len(frames) < 2:
+            if len(frames) < (1 if allow_still else 2):
                 raise ValueError("GIF must contain at least two frames")
             return frames, durations, loop
     except Image.DecompressionBombError as exc:
@@ -365,7 +367,7 @@ def film(args):
     clips=[Path(p).resolve() for p in args.clips]
     clip_frames = []
     for clip in clips:
-        _, durations, _ = validate_gif(clip)
+        _, durations, _ = validate_gif(clip, allow_still=True)
         clip_frames.append(max(1, round(sum(durations) * args.fps / 1000)))
     out=Path(args.output).resolve()
     if out.suffix.lower() != ".mp4":
@@ -431,7 +433,7 @@ def _encode_film(args, clips, clip_frames, out, force, audio_path):
             staged.unlink(missing_ok=True)
 
 def gif_frames(path):
-    return validate_gif(path)
+    return validate_gif(path, allow_still=True)
 
 def inspect(args):
     frames,durations,loop=gif_frames(args.gif)
@@ -498,6 +500,8 @@ def build_parser():
     add_story_state_parser(sub)
     from .factory import add_parser as add_factory_parser
     add_factory_parser(sub)
+    from .sequence import add_parser as add_sequence_parser
+    add_sequence_parser(sub)
     from .master import add_parser as add_master_parser
     add_master_parser(sub)
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")

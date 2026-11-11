@@ -28,7 +28,9 @@ Execution requires a **new** output directory. There is no overwrite switch.
   transparent palette entry. Alpha below 128 becomes transparent; other alpha
   becomes opaque. An animated preview can be a film-script source after visual
   review. Single-pose or fully merged previews are static and cannot be imported
-  by the film renderer, which requires at least two decoded GIF frames.
+  by the pinned installed film renderer, which requires at least two decoded GIF
+  frames. A newer repository checkout separately supports explicit timed local
+  holds; that does not change the pinned installation contract.
 - `manifest.json`: versioned runtime coordinates, individual delays, loop metadata,
   source checksum, crop/scale, RGBA pixel checksums, output file checksums, warnings
   and actual preview timing. Published last as the completion marker.

@@ -75,6 +75,20 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
+      - name: Build and verify the five-action scene sequence
+        if: matrix.artifact
+        run: |
+          python -m gif_cinema sequence build examples/scene-sequence/sequence.json --out output/scene-sequence --dry-run
+          python -m gif_cinema sequence build examples/scene-sequence/sequence.json --out output/scene-sequence
+          python -m gif_cinema sequence verify output/scene-sequence
+      - if: matrix.artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-scene-sequence
+          path: output/scene-sequence/
+          retention-days: 14
+          if-no-files-found: error
+
       - name: Package the installable skill
         if: matrix.artifact
         run: |
