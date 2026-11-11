@@ -4,7 +4,25 @@
 
 Original API footage, local compositions, reusable source drawings, private finishing and archived Blender artwork use different methods. The homepage labels those routes and links their actual sources. This is a smaller independent collection, not a claim of GIF Factory's style or example count.
 
+## Pixel characters
+
+Three separate transparent raise-and-wave studies. Each has 32 source PNGs and a
+2.56-second GIF. The drawing changes at 15 → 16 and 31 → 0 still need repair.
+
+<table>
+<tr>
+<td align="center" valign="top"><a href="../examples/anime-pixel/outfit-poses/casual.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="../examples/anime-pixel/outfit-poses/casual-poster.png"><img src="../examples/anime-pixel/outfit-poses/casual.gif" width="180" alt="Cream jacket, separate raise-and-wave pose study."></picture></a><br><strong>Cream jacket</strong><br><a href="../examples/anime-pixel/outfit-poses/casual.gif">GIF</a> · <a href="../examples/anime-pixel/outfit-poses/casual/00.png">First pose</a></td>
+<td align="center" valign="top"><a href="../examples/anime-pixel/outfit-poses/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="../examples/anime-pixel/outfit-poses/traveler-poster.png"><img src="../examples/anime-pixel/outfit-poses/traveler.gif" width="180" alt="Jade traveler, separate raise-and-wave pose study."></picture></a><br><strong>Jade traveler</strong><br><a href="../examples/anime-pixel/outfit-poses/traveler.gif">GIF</a> · <a href="../examples/anime-pixel/outfit-poses/traveler/00.png">First pose</a></td>
+<td align="center" valign="top"><a href="../examples/anime-pixel/outfit-poses/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="../examples/anime-pixel/outfit-poses/festival-poster.png"><img src="../examples/anime-pixel/outfit-poses/festival.gif" width="180" alt="Coral festival, separate raise-and-wave pose study."></picture></a><br><strong>Coral festival</strong><br><a href="../examples/anime-pixel/outfit-poses/festival.gif">GIF</a> · <a href="../examples/anime-pixel/outfit-poses/festival/00.png">First pose</a></td>
+</tr>
+</table>
+
+[All 96 individual PNGs & method](../examples/anime-pixel/outfit-poses/README.md) · [Measured facts](../examples/anime-pixel/outfit-poses/verification.json) · [Earlier takes and draft festival film](../examples/anime-pixel/README.md)
+
 ## Character stories
+
+<a href="EXAMPLES.md#2-titled-story-a-small-gif-to-share"><picture><img src="assets/example-gallery/titled-story.gif" width="480" alt="A Reply from the Stars, three existing astronaut takes with a local title."></picture></a>
+
 
 - [Original direct GIF](RECIPES.md#one-prompt-one-gif): historical paper-cut astronaut result, 9 drawings at 200 ms, 1.80 seconds. A new request needs supported access, billing and an authorized budget.
 - [Three bundled actions](EXAMPLES.md#the-actual-three-shot-story): 16 drawings at 160 ms each, 2.56 seconds per take. Wide → close → wide framing and details still differ. These are not three separate art styles.
@@ -19,7 +37,15 @@ python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out
 
 ## Local motion
 
-The two new GIFs were actually rendered with the public local layered-scene CLI from unchanged scene JSON in this repository. No model, API, downloaded artwork or Blender render was used.
+<table>
+<tr>
+<td align="center" valign="top"><a href="STROKE-REVEAL.md"><picture><img src="assets/stroke-reveal/preview.gif" width="280" alt="Authored heart, underline and sparkle strokes revealed locally."></picture></a><br><strong>Draw, pause, finish</strong><br><a href="STROKE-REVEAL.md">Editable strokes</a></td>
+<td align="center" valign="top"><a href="GIF-LAYERS.md"><picture><img src="assets/gif-layer/preview.gif" width="280" alt="Existing astronaut footage beside independently animated text and a line."></picture></a><br><strong>Action beside typography</strong><br><a href="GIF-LAYERS.md">GIF and graphic layers</a></td>
+</tr>
+</table>
+
+
+The two examples in the table below were rendered with the public local layered-scene CLI from unchanged scene JSON in this repository. No model, API, downloaded artwork or Blender render was used.
 
 | Example | Actual GIF | Source and method |
 | --- | --- | --- |
@@ -57,6 +83,16 @@ GIF previews have palette/binary-alpha limits. Shared trimming preserves source 
 Right-hand panels use private finishing tools outside the public CLI. Cat changes include compositing and framing cleanup as well as selective interpolation. More playback frames cannot repair missing props, bad contact or anatomy. The [57.2-second cat film](assets/showcase/cat-film.mp4) is assembled from short takes and locally finished, not one long model request.
 
 ## Archived 3D study
+
+<table>
+<tr>
+<td align="center" valign="top"><a href="../examples/blender-form-01/README.md"><picture><img src="../examples/blender-form-01/deliverables/FORM-01.gif" width="280" alt="FORM / 01, porcelain arcs and copper sphere rendered in Blender."></picture></a><br><strong>FORM / 01</strong><br><a href="../examples/blender-form-01/README.md">Scene and source</a></td>
+<td align="center" valign="top"><a href="MOTION-DESIGN.md"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/motion-elements/poster.png"><img src="assets/motion-elements/chrome.gif" width="280" alt="Chrome Trefoil, archived Blender EEVEE rotation."></picture></a><br><strong>Chrome Trefoil</strong><br><a href="MOTION-DESIGN.md">Method and provenance</a></td>
+</tr>
+</table>
+
+These are standalone Blender scenes, not a Cinema rendering backend.
+
 
 [Chrome Trefoil](MOTION-DESIGN.md) is one original Blender EEVEE study: 512 × 512, 80 unique frames at 40 ms, 3.20 seconds, silent and repeating. Original GIF/MP4 bytes remain unchanged. It is not native API output, a core generator feature or evidence of six completed variations. The public API workflow does not require Blender.
 

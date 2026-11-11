@@ -1,55 +1,55 @@
 # GIF Cinema
 
-**Turn short takes into films you can edit.**
+**A moving catalog. An editable workshop.**
 
-A Python toolkit and skill for **Codex and Claude Code**. Assemble GIFs, animate
-graphics, review frames and export films.
+GIFs, source frames and short films for **Codex and Claude Code**.
 
-[Pixel-art gallery](#anime-pixel-art) · [See the work](#selected-work) · [Try it without a key](#make-your-first-film) · [Install the skill](#install-the-skill) · [Choose a workflow](#choose-a-workflow)
+[Pixel characters](#anime-pixel-art) · [3D loops](#blender-motion-study) · [Stories & graphics](#selected-work) · [Full catalog](docs/GALLERY.md) · [Install](#install-the-skill)
 
 ## Anime pixel art
 
-**Separate outfits, separate frames.** Three new raise-and-wave takes; drawing
-shifts remain at the joins.
+One outfit per GIF. One PNG per pose. **Raise → wave → lower.**
 
-<p align="center">
-<a href="examples/anime-pixel/outfit-poses/README.md"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/casual-poster.png"><img src="examples/anime-pixel/outfit-poses/casual.gif" width="240" alt="Cream jacket: a separate 32-pose animation of a blue-haired heroine raising, waving and lowering her hand."></picture></a><br>
-<strong>Cream jacket · raise and wave</strong><br>
-32 frames · 2.56 s · 320 × 320 · repeating
-</p>
+<table>
+<tr>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/outfit-poses/casual.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/casual-poster.png"><img src="examples/anime-pixel/outfit-poses/casual.gif" width="180" alt="Cream jacket: separate transparent 32-pose raise-and-wave study; drawing shifts remain at the joins."></picture></a><br>
+<strong>Cream jacket</strong><br>
+<a href="examples/anime-pixel/outfit-poses/casual.gif">GIF</a> · <a href="examples/anime-pixel/outfit-poses/casual/00.png">First pose</a><br>
+<a href="examples/anime-pixel/outfit-poses/README.md">32 individual PNGs</a>
+</td>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/outfit-poses/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/traveler-poster.png"><img src="examples/anime-pixel/outfit-poses/traveler.gif" width="180" alt="Jade traveler: separate transparent 32-pose raise-and-wave study; drawing shifts remain at the joins."></picture></a><br>
+<strong>Jade traveler</strong><br>
+<a href="examples/anime-pixel/outfit-poses/traveler.gif">GIF</a> · <a href="examples/anime-pixel/outfit-poses/traveler/00.png">First pose</a><br>
+<a href="examples/anime-pixel/outfit-poses/README.md">32 individual PNGs</a>
+</td>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/outfit-poses/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/festival-poster.png"><img src="examples/anime-pixel/outfit-poses/festival.gif" width="180" alt="Coral festival: separate transparent 32-pose raise-and-wave study; drawing shifts remain at the joins."></picture></a><br>
+<strong>Coral festival</strong><br>
+<a href="examples/anime-pixel/outfit-poses/festival.gif">GIF</a> · <a href="examples/anime-pixel/outfit-poses/festival/00.png">First pose</a><br>
+<a href="examples/anime-pixel/outfit-poses/README.md">32 individual PNGs</a>
+</td>
+</tr>
+</table>
 
-<p align="center">
-<a href="examples/anime-pixel/outfit-poses/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/traveler-poster.png"><img src="examples/anime-pixel/outfit-poses/traveler.gif" width="240" alt="Jade traveler outfit: a standalone 32-pose transparent raise-and-wave animation."></picture></a><br>
-<strong>Jade traveler · raise and wave</strong><br>
-32 frames · 2.56 s · 320 × 320 · repeating
-</p>
+Each: **320 × 320 · 32 frames · 2.56 s · transparent**. These are pose studies:
+hair, face and sleeves still jump at **15 → 16** and **31 → 0**, not seamless loops.
 
-<p align="center">
-<a href="examples/anime-pixel/outfit-poses/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/festival-poster.png"><img src="examples/anime-pixel/outfit-poses/festival.gif" width="240" alt="Coral festival yukata: a separate 32-pose transparent raise-and-wave animation."></picture></a><br>
-<strong>Coral festival · raise and wave</strong><br>
-32 frames · 2.56 s · 320 × 320 · repeating
-</p>
-
-Each outfit has **32 individual PNG frames** and its own transparent GIF at 12.5 fps.
-The new poses raise, wave and lower the hand rather than reuse the earlier knee lift.
-Hair, face and sleeve outlines still shift between halves and at the loop reset.
-These are improved pose studies, not seamless or perfectly smooth finished animation.
-
-[Individual frames & method](examples/anime-pixel/outfit-poses/README.md) ·
-[Measured GIF facts](examples/anime-pixel/outfit-poses/verification.json) ·
-[Draft festival film, 15.36 s](examples/anime-pixel/README.md#draft-festival-film)
+[Frames & method](examples/anime-pixel/outfit-poses/README.md) · [Measured facts](examples/anime-pixel/outfit-poses/verification.json) · [Draft festival film](examples/anime-pixel/README.md#draft-festival-film)
 
 <details>
 <summary>Earlier shared-stage experiments</summary>
 
 [Three outfits in one garden](examples/anime-pixel/README.md#three-outfits) and
 [two heroes](examples/anime-pixel/README.md#two-heroes) are earlier composition tests,
-each 16 frames / 1.92 seconds. They are not the target format for the separate,
-smoother outfit studies.
+each 16 frames / 1.92 seconds. Separate outfit sources are shown above.
 
 </details>
 
 <a id="blender-motion-study"></a>
+
+## Sculptural loops
 
 <p align="center">
 <a href="examples/blender-form-01/README.md"><picture><img src="examples/blender-form-01/deliverables/FORM-01.gif" width="480" alt="FORM / 01: porcelain arcs unfold around a copper sphere in an actual Blender-rendered six-second loop."></picture></a>
@@ -61,8 +61,8 @@ Porcelain, copper, six seconds. Rendered in Blender EEVEE.<br>
 <a href="examples/blender-form-01/deliverables/FORM-01.mp4">Watch MP4</a> · <a href="examples/blender-form-01/form_01.blend">Open the .blend</a> · <a href="examples/blender-form-01/README.md#import-into-gif-cinema-with-zero-api-calls">Import into GIF Cinema</a>
 </p>
 
-The scene and Python source are included. Blender renders this artwork separately;
-GIF Cinema can import the finished GIF. No model call or JavaScript animation.
+Blender scene + Python source included. Import the rendered GIF into Cinema.
+No model call or JavaScript animation.
 
 <a id="see-it-in-motion"></a>
 <a id="on-the-screen"></a>
@@ -71,7 +71,7 @@ GIF Cinema can import the finished GIF. No model call or JavaScript animation.
 
 ## Selected work
 
-Real files, with their source and method. Click a preview to see how it was made.
+**Stories, lettering and graphic layers.** Open any preview for its source and recipe.
 
 <a id="character-stories"></a>
 <a id="a-reply-from-the-stars"></a>
@@ -111,10 +111,8 @@ Existing GIF + local graphic layers · 3.20 s<br>
 
 [More examples & recipes](docs/GALLERY.md) · [Original API take](docs/RECIPES.md#one-prompt-one-gif) · [Vertical motion](docs/VERTICAL-MOTION-EXAMPLE.md) · [Review the source drawings](docs/EXAMPLES.md#the-actual-three-shot-story)
 
-The astronaut examples reuse the same existing footage. Titles and layouts add no
-new character actions; hand, suit and framing differences remain between takes.
-The local graphics use the experimental layer renderer. Blender examples are
-standalone scenes, not a CLI rendering backend.
+The astronaut cards reuse existing footage, with differences between takes. Graphics
+use the experimental layer renderer. Blender examples are standalone scenes, not a CLI rendering backend.
 
 <a id="try-it-without-an-api-key"></a>
 

@@ -150,6 +150,20 @@ class ReadmeTests(unittest.TestCase):
         self.assertIn('standalone scenes, not a CLI rendering backend', visible)
         self.assertIn('source-available', visible)
 
+    def test_outfit_catalog_cards_link_independent_media_and_sources(self):
+        for name in ('README.md', 'docs/GALLERY.md'):
+            source = (ROOT / name).read_text(encoding='utf-8')
+            with self.subTest(document=name):
+                for outfit in ('casual', 'traveler', 'festival'):
+                    base = f'examples/anime-pixel/outfit-poses/{outfit}'
+                    self.assertIn(base + '.gif', source)
+                    self.assertIn(base + '-poster.png', source)
+                    self.assertIn(base + '/00.png', source)
+                self.assertIn('15 → 16', source)
+                self.assertIn('31 → 0', source)
+                self.assertNotIn('<script', source.lower())
+                self.assertNotIn('style=', source.lower())
+
     def test_catalog_local_outputs_match_their_sources_and_facts(self):
         def git_blob(data):
             return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()

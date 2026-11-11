@@ -4,12 +4,14 @@
 
 ## Show the work, then the route
 
-The README opens with FORM / 01, an existing Blender-rendered sculpture, and links
-its MP4, editable scene and GIF import recipe. Four smaller previews show an edit
-of existing generated takes, an archived Blender loop, authored strokes and a
-GIF/text composition. Each example has its actual method, duration and source.
-Five distinct GIFs replace the previous repeated and extended gallery; the wider
-catalog and earlier finishing studies remain linked.
+The README opens with three independently linked outfit GIFs: cream, traveler and
+festival. Each has its own first-pose link, reduced-motion poster and 32 PNG sources.
+The compact cards do not combine the outfits into one animation. Drawing jumps at
+15 → 16 and 31 → 0 remain explicitly visible limitations.
+
+Sculptural loops and stories/graphics follow as separate sections. Eight distinct
+GIF previews link to sources and methods. The wider catalog now shows the same
+real assets alongside its detailed recipes rather than a text-only inventory.
 
 The zero-key film commands are visible without opening a disclosure. Skill setup
 and a short workflow table follow. Provider access and visual-review limits are
@@ -39,12 +41,13 @@ an animation demo. Repository media provenance and licenses are unchanged.
 ## Presentation and verification
 
 The README uses GitHub's native typography with no scripts, remote badges, custom
-animation or new decorative assets. Two-column GIFs use responsive picture wrappers.
+animation or new decorative assets. All table GIFs use picture wrappers; the three outfit cards use 180-pixel previews.
 The archived chrome preview keeps its existing reduced-motion still; MP4 links
 provide pausable playback for the two Blender works. Other GIF playback behavior
 belongs to the viewer.
 
 Tests check local file links and anchors, the compact media set, zero-call setup,
 method labels and preserved asset hashes/timing. Old section anchors are retained.
-Rendering checks cover desktop and narrow layouts; these checks do not establish
-artistic acceptance or character continuity.
+Local Chromium rendering was attempted but blocked by sandbox socket restrictions.
+Desktop/mobile GitHub rendering is therefore not claimed verified. Link, HTML and
+media checks do not establish artistic acceptance or character continuity.
