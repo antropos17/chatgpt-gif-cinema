@@ -2,10 +2,52 @@
 
 **Turn short takes into films you can edit.**
 
-A Python toolkit and a skill for **Codex and Claude Code**. Assemble existing GIFs,
-animate text, shapes and strokes, inspect the frames, and export a film or a collection.
+A Python toolkit and skill for **Codex and Claude Code**. Assemble GIFs, animate
+graphics, review frames and export films.
 
-[See the work](#selected-work) · [Try it without a key](#make-your-first-film) · [Install the skill](#install-the-skill) · [Choose a workflow](#choose-a-workflow)
+[Pixel-art gallery](#anime-pixel-art) · [See the work](#selected-work) · [Try it without a key](#make-your-first-film) · [Install the skill](#install-the-skill) · [Choose a workflow](#choose-a-workflow)
+
+## Anime pixel art
+
+**Separate outfits, separate frames.** Three new raise-and-wave takes; drawing
+shifts remain at the joins.
+
+<p align="center">
+<a href="examples/anime-pixel/outfit-poses/README.md"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/casual-poster.png"><img src="examples/anime-pixel/outfit-poses/casual.gif" width="240" alt="Cream jacket: a separate 32-pose animation of a blue-haired heroine raising, waving and lowering her hand."></picture></a><br>
+<strong>Cream jacket · raise and wave</strong><br>
+32 frames · 2.56 s · 320 × 320 · repeating
+</p>
+
+<p align="center">
+<a href="examples/anime-pixel/outfit-poses/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/traveler-poster.png"><img src="examples/anime-pixel/outfit-poses/traveler.gif" width="240" alt="Jade traveler outfit: a standalone 32-pose transparent raise-and-wave animation."></picture></a><br>
+<strong>Jade traveler · raise and wave</strong><br>
+32 frames · 2.56 s · 320 × 320 · repeating
+</p>
+
+<p align="center">
+<a href="examples/anime-pixel/outfit-poses/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/festival-poster.png"><img src="examples/anime-pixel/outfit-poses/festival.gif" width="240" alt="Coral festival yukata: a separate 32-pose transparent raise-and-wave animation."></picture></a><br>
+<strong>Coral festival · raise and wave</strong><br>
+32 frames · 2.56 s · 320 × 320 · repeating
+</p>
+
+Each outfit has **32 individual PNG frames** and its own transparent GIF at 12.5 fps.
+The new poses raise, wave and lower the hand rather than reuse the earlier knee lift.
+Hair, face and sleeve outlines still shift between halves and at the loop reset.
+These are improved pose studies, not seamless or perfectly smooth finished animation.
+
+[Individual frames & method](examples/anime-pixel/outfit-poses/README.md) ·
+[Measured GIF facts](examples/anime-pixel/outfit-poses/verification.json) ·
+[Draft festival film, 15.36 s](examples/anime-pixel/README.md#draft-festival-film)
+
+<details>
+<summary>Earlier shared-stage experiments</summary>
+
+[Three outfits in one garden](examples/anime-pixel/README.md#three-outfits) and
+[two heroes](examples/anime-pixel/README.md#two-heroes) are earlier composition tests,
+each 16 frames / 1.92 seconds. They are not the target format for the separate,
+smoother outfit studies.
+
+</details>
 
 <a id="blender-motion-study"></a>
 

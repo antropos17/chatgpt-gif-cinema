@@ -1,0 +1,431 @@
+[
+  {
+    "outfit": "casual",
+    "file": "casual.gif",
+    "sha256": "7b5ef6adef02773aada462d550d7ba608f10ffd6750aa4810e4c93ceb440737d",
+    "bytes": 583333,
+    "width": 320,
+    "height": 320,
+    "frames": 32,
+    "unique_frames": 32,
+    "duration_ms": 2560,
+    "delay_ms": 80,
+    "loop": 0,
+    "png_frames": [
+      {
+        "file": "casual/00.png",
+        "sha256": "ed462d4aad317b668ac9d5e6fbca4eb9e601e474c461e8b29cd92eea7f19d561"
+      },
+      {
+        "file": "casual/01.png",
+        "sha256": "2c3cd9c86a18e311b8d19f6588475d718a98bb65b9e5f9f5bc093b529cae652e"
+      },
+      {
+        "file": "casual/02.png",
+        "sha256": "07ca65d72f3a57bb99e1cda001c87fbc10a61431f4576d558a8d92c339553894"
+      },
+      {
+        "file": "casual/03.png",
+        "sha256": "d84434590c0a0280f7a1eb732c1da21df0cd0785e1b7dbd8eed9179150bbb877"
+      },
+      {
+        "file": "casual/04.png",
+        "sha256": "dbe2ac19d340d69ddd3041a3f827c349b2f96f92b20215ed2796042a09eadf92"
+      },
+      {
+        "file": "casual/05.png",
+        "sha256": "d1a799a166abad446acef2b94e5feed0061765ae0a77bd6c3559b088fada5c0a"
+      },
+      {
+        "file": "casual/06.png",
+        "sha256": "5e96cb71f1684159434cc43c058c97b8433b74e34c109ae780a81f41bba60b58"
+      },
+      {
+        "file": "casual/07.png",
+        "sha256": "7c7281c25b733001cdee21a6e669502b8ed5fa0d4555e63ee0e3b9e2820656f7"
+      },
+      {
+        "file": "casual/08.png",
+        "sha256": "0476a245cf464478cf6c301581f626e19af47b9ee38ee63ad5b5ce353e650dfb"
+      },
+      {
+        "file": "casual/09.png",
+        "sha256": "262fc32144b749b77c11641c8bd12f6af6cd49098b609f9429ce6dea6f3e21bc"
+      },
+      {
+        "file": "casual/10.png",
+        "sha256": "1c8687a5ae2489d5f4e806502247725dbca9e75d6a128d58ab8bd1131aebbc26"
+      },
+      {
+        "file": "casual/11.png",
+        "sha256": "fe5760fda14506ba2eb0777ff04386cbcc469040f40d257b6f3d4d23aa46f9cc"
+      },
+      {
+        "file": "casual/12.png",
+        "sha256": "85de1209df76de8206351e5f2686469057ba48867b7cb707397e153134e44ed1"
+      },
+      {
+        "file": "casual/13.png",
+        "sha256": "e42d0bf731dc5ceb51f909c48680f025ff64f91ce910207b1d9f8280004e22e0"
+      },
+      {
+        "file": "casual/14.png",
+        "sha256": "072413169bd238bd58e39eba0e5daff1f88aa2f95f2f999f3657abb78bdcbcff"
+      },
+      {
+        "file": "casual/15.png",
+        "sha256": "a0c30ff63a1f0c9d92f6c660d3eea8fdf97408445c1e16c2c1429a9c0aacae2a"
+      },
+      {
+        "file": "casual/16.png",
+        "sha256": "f5e7169651a73a7485a4066867a4295e1fb0251693c785394f48bfab5df56017"
+      },
+      {
+        "file": "casual/17.png",
+        "sha256": "2dcb4e0161a747565239ab7d53fca964451896de6ff462aa50c3ad8c4c9b445d"
+      },
+      {
+        "file": "casual/18.png",
+        "sha256": "e23a11806e0b228a191824130ca11f2b12f8ff093099dc8fe8da8c7a7bfd2387"
+      },
+      {
+        "file": "casual/19.png",
+        "sha256": "2f8cfa9058535290e00e384ea8ae8930bf72f00fde2f62d21da0d8fdc93492fb"
+      },
+      {
+        "file": "casual/20.png",
+        "sha256": "6b8bb9f684da17d204dc3ca3ce9d4f35b7bd622012eab44b14b152a8ae0edba7"
+      },
+      {
+        "file": "casual/21.png",
+        "sha256": "cc33fa9145a43a1d8890bfaa8a3a445536b908912817a5f8abaa1c5d1d5a4554"
+      },
+      {
+        "file": "casual/22.png",
+        "sha256": "757ddec78a887bba0e4ed3e16a634bc78f54fe17ba8c573ce7cd2fb540684d84"
+      },
+      {
+        "file": "casual/23.png",
+        "sha256": "4d86032c7d1f64b0cf5acf90c7d4e826509bada21a243f22a2cfcb2af6d7c20e"
+      },
+      {
+        "file": "casual/24.png",
+        "sha256": "31179c89a33117d2924d235d7544f139924f5a71e18289dbf9c6930e781d6aed"
+      },
+      {
+        "file": "casual/25.png",
+        "sha256": "94b63f05a7caa7d2f3c5537eac8fb95323340946363395a7c469d42220c556b8"
+      },
+      {
+        "file": "casual/26.png",
+        "sha256": "09a6153529ea6bf21721de6d8fd76307f7bce6ba98f8927917f9c4237436c056"
+      },
+      {
+        "file": "casual/27.png",
+        "sha256": "cca46cc601da78581f32661d29a34e6fc7ef4a9911b883b99f4d1e670ae1bc80"
+      },
+      {
+        "file": "casual/28.png",
+        "sha256": "a94c54f17e8ec82c19ad5a62663f554466418563228bba03a3541c9d4ea322c4"
+      },
+      {
+        "file": "casual/29.png",
+        "sha256": "1baf80273f3f08edb8c89868b49808a6d1189ebbff2398e517c78e0a4201f79b"
+      },
+      {
+        "file": "casual/30.png",
+        "sha256": "3c7c293feb153ab510b9a2c456955e21818bc46498ca2f8cb3d21624b57abdb7"
+      },
+      {
+        "file": "casual/31.png",
+        "sha256": "c374c585301fe2da68efce90f89a292269dd5e78c996fede0b98a9349dcf0f4d"
+      }
+    ]
+  },
+  {
+    "outfit": "traveler",
+    "file": "traveler.gif",
+    "sha256": "e7ce5f1288a1c7a2d1618796337bf513112d0be9eb6990dca29a0683115169f7",
+    "bytes": 582181,
+    "width": 320,
+    "height": 320,
+    "frames": 32,
+    "unique_frames": 32,
+    "duration_ms": 2560,
+    "delay_ms": 80,
+    "loop": 0,
+    "png_frames": [
+      {
+        "file": "traveler/00.png",
+        "sha256": "a5ec88887a138762f823f49e6d183e7fd14affad1df4372038e4b2bdecf3a978"
+      },
+      {
+        "file": "traveler/01.png",
+        "sha256": "521badfaad9e8673676fc88be222e49b087703970816fe16965e52c1304814f7"
+      },
+      {
+        "file": "traveler/02.png",
+        "sha256": "548590191936af2cd64e271d6606c5df1d9b86b4d77a7cc5c72bf2cafc4334f8"
+      },
+      {
+        "file": "traveler/03.png",
+        "sha256": "cd1d00c70e184eea531f7b84943e2013bf64d5131639c3133d66ce009312dac6"
+      },
+      {
+        "file": "traveler/04.png",
+        "sha256": "7f7f690cac7727fb2a93df87073163b4f123a1bd15da074a8691f9be892752cb"
+      },
+      {
+        "file": "traveler/05.png",
+        "sha256": "4226defd0fe3ce750e9bf0d543e2de1c7ef6aaec2666737bfa41bb5995807c63"
+      },
+      {
+        "file": "traveler/06.png",
+        "sha256": "f24d431a4f4700477c21e3d6fa93af177969343bdc1be7a82a4cbe0004f5f7a8"
+      },
+      {
+        "file": "traveler/07.png",
+        "sha256": "6d3cce966fcfc0ea93b23c132c33820c6609f89227080c5404432cade86215b4"
+      },
+      {
+        "file": "traveler/08.png",
+        "sha256": "f8c923814b76f7fc45b6afb0081c029b672984d086937f6963f77484a9a9daf5"
+      },
+      {
+        "file": "traveler/09.png",
+        "sha256": "7d9d8f836fbf1756dc1663acb2304385d47c2e8ac143f4f1f5c85342ace35a85"
+      },
+      {
+        "file": "traveler/10.png",
+        "sha256": "4473321dc42dbcecddcdbf8f2ac8023ad8d2662b24bb409ba3d76dc87d9ca4c9"
+      },
+      {
+        "file": "traveler/11.png",
+        "sha256": "50bed3589ccaa19e31246442164958902d2aa75eb641f6e025288e66c3acd5c3"
+      },
+      {
+        "file": "traveler/12.png",
+        "sha256": "b65b8d0e21e578766dd455c9e96d1418bb3979d6c6fa778d6f4beab4db50a053"
+      },
+      {
+        "file": "traveler/13.png",
+        "sha256": "20ffd0a2684aacd3360ef2ce45f7bd5cf681cf0bfd571ee75e52af1ee069e5a1"
+      },
+      {
+        "file": "traveler/14.png",
+        "sha256": "6eddd72adaec9491d0cd7524ba2d3e5824e599799b6d50dc806bce6bfef3a432"
+      },
+      {
+        "file": "traveler/15.png",
+        "sha256": "90a60c99479a1698752a9e31042bbd5e75e70118e8fa8b97795378e4fa70be65"
+      },
+      {
+        "file": "traveler/16.png",
+        "sha256": "536d039ba42eb8417cb540c2a1fa0954ec43e896638ec644b3789e1f57faf7ef"
+      },
+      {
+        "file": "traveler/17.png",
+        "sha256": "a7461ab6c7db67d924df43b0b5f1760467edc2eb700e4e2ef4c83d26f03b6601"
+      },
+      {
+        "file": "traveler/18.png",
+        "sha256": "148ddf1ed7df2210164c2de2836cbc8d08def75501aa9c0a0386d6e1cf3b7477"
+      },
+      {
+        "file": "traveler/19.png",
+        "sha256": "7b24c1201d083a18a509b0472687a1ea51694f5863d473bd45bea55f667315c7"
+      },
+      {
+        "file": "traveler/20.png",
+        "sha256": "ea1213640d399c66cf69f0445fe5c392964b7a60d09975cfe55b81616fe562a1"
+      },
+      {
+        "file": "traveler/21.png",
+        "sha256": "3bbd64bcd7d6660c9215c404abd89747b0f811b7e7b433aae3d5ef3a16f669f9"
+      },
+      {
+        "file": "traveler/22.png",
+        "sha256": "46375beaa64d710278e207ff8a98304c632c7d50c5f42c553679f4fef1080a9a"
+      },
+      {
+        "file": "traveler/23.png",
+        "sha256": "72b9d663279a74a54c7050ce5dabbfa3804e173e2bccd6d747908d9dcd77fc45"
+      },
+      {
+        "file": "traveler/24.png",
+        "sha256": "2bea45567f9fb16f083055aeb44866b58fcbae8b2208009eb31ac44ed9c30832"
+      },
+      {
+        "file": "traveler/25.png",
+        "sha256": "48f8764ed3e05b44d1c7a5a5a6c54090173d4c06e4185db610d4347a1853d17c"
+      },
+      {
+        "file": "traveler/26.png",
+        "sha256": "06910a4aa6748e88c64eb984518f04e0ad8f3582ecfb3538877a9c84c512cd96"
+      },
+      {
+        "file": "traveler/27.png",
+        "sha256": "90ae2bcba05fc20b707c8f62e78d42e2a7bd460fb2495b93fa662f4b8fd407df"
+      },
+      {
+        "file": "traveler/28.png",
+        "sha256": "8dfb0a919229337d12257647345b3a1ecdb513c7430ef1574a3cd1b5846c537e"
+      },
+      {
+        "file": "traveler/29.png",
+        "sha256": "0288c2514732a9ad4b25b559a639fc8f29e9604c7771b5715fd71ee1ad2260cd"
+      },
+      {
+        "file": "traveler/30.png",
+        "sha256": "d6cbef134a673f70fad8eb980c19ae72574af980ec55caa6d17c5b99f2ff0542"
+      },
+      {
+        "file": "traveler/31.png",
+        "sha256": "3b18cdc01c900f965c5462688ae63bc6c9b70363f6850f9dc627d549254a3adf"
+      }
+    ]
+  },
+  {
+    "outfit": "festival",
+    "file": "festival.gif",
+    "sha256": "c41cad2f02840a9651a7c9c9571815069b1e27ad7a8c8560735ea96edd8e6e99",
+    "bytes": 584186,
+    "width": 320,
+    "height": 320,
+    "frames": 32,
+    "unique_frames": 32,
+    "duration_ms": 2560,
+    "delay_ms": 80,
+    "loop": 0,
+    "png_frames": [
+      {
+        "file": "festival/00.png",
+        "sha256": "240d5378e527a5713d7951d434cb24db9ca66d2bf17b114a824cb1782223a90e"
+      },
+      {
+        "file": "festival/01.png",
+        "sha256": "d8a14694da70aaddd3e0fa17eec6ba6d580893f1d385f355ea4bbb79cd5a7439"
+      },
+      {
+        "file": "festival/02.png",
+        "sha256": "3f7eda0b041761d5e048e784c451a69a52dbdd3fa6606cfd6142de3947bebb28"
+      },
+      {
+        "file": "festival/03.png",
+        "sha256": "a26e0b7fff43509078829eff4f08304b90fca051c209cec36ebf6be9d5f22760"
+      },
+      {
+        "file": "festival/04.png",
+        "sha256": "deac9241d9d03e25852807b039e918f321fb4c823f90d8b2229b1eeb031a56b3"
+      },
+      {
+        "file": "festival/05.png",
+        "sha256": "f43ee77991e4540356022b08dd462266d4d2a7a78600e4ac2e43ee3f603243e8"
+      },
+      {
+        "file": "festival/06.png",
+        "sha256": "3b5cf341af943009bfdea7f8474821cfc11a57e6ec8f32506e4a0f9d059c9faf"
+      },
+      {
+        "file": "festival/07.png",
+        "sha256": "b4056bfa3c9157fb7e96238bf722b6ee953d4dd96c63f70c6f93b5a81e74cd5f"
+      },
+      {
+        "file": "festival/08.png",
+        "sha256": "91fc59eead3dd20d08241fa52842df24089e577d26272ded41bb22d002c33ff3"
+      },
+      {
+        "file": "festival/09.png",
+        "sha256": "5715bef62117a4687e88ed38c73e9feb5525978f921409fae93e8ed2a667e9d7"
+      },
+      {
+        "file": "festival/10.png",
+        "sha256": "e30e45a165d0ffbc6432c604deb1403e65240ce8febafa47e3880e9e979ea76c"
+      },
+      {
+        "file": "festival/11.png",
+        "sha256": "0feba76b52b252cf408ad541fa2fb567d8522e72651fcb3d9993e90795461141"
+      },
+      {
+        "file": "festival/12.png",
+        "sha256": "c7b1b79b62e4084e6ecd4b568a93e6f0f8c37d065ea65a61ed0d55b4ff795d1a"
+      },
+      {
+        "file": "festival/13.png",
+        "sha256": "01ac69523585e27c0884017008857dead6af5de0b6bee9e79f22e195646dc229"
+      },
+      {
+        "file": "festival/14.png",
+        "sha256": "f73976622e207486bc8be172f622406b9456d6492ac558d385ef4d1925ae7510"
+      },
+      {
+        "file": "festival/15.png",
+        "sha256": "b1aaded4618f20daf857c926322b7aaf4701c7f3db395c513b51ac3166c13d41"
+      },
+      {
+        "file": "festival/16.png",
+        "sha256": "5b9f5ff6cf6369a3600c1c551f51cd695bfe4447d75695035e6bd17d03580b66"
+      },
+      {
+        "file": "festival/17.png",
+        "sha256": "311d6da0dd846e76c5a6249fd89747d761a8026d1598b1649e600f82b1fbc0f1"
+      },
+      {
+        "file": "festival/18.png",
+        "sha256": "a58f1c74b0e2ed7406f9de647f13950b5f207daa8680f15511e2f7079a9f1585"
+      },
+      {
+        "file": "festival/19.png",
+        "sha256": "b2e0abed38a8f05d313f90a808d20d08797b66220c63106807595c43932e04c2"
+      },
+      {
+        "file": "festival/20.png",
+        "sha256": "a7bc37d3c5615a03b3fe1b72fe9d7f1e63a6c88753c198ba10a2661a3b04d46d"
+      },
+      {
+        "file": "festival/21.png",
+        "sha256": "e0c276f7a19d567dde3b164be1a67c2add9c6d928c792d59466381250ad9c51a"
+      },
+      {
+        "file": "festival/22.png",
+        "sha256": "bc2afbae7848ec0c4b20aeb1e039b0cbbf66f006dd00c734978226c953672845"
+      },
+      {
+        "file": "festival/23.png",
+        "sha256": "4390b8eba5344283fdeafeceff53386d3a15dd4ab0945ea287f0e908ef8cf07d"
+      },
+      {
+        "file": "festival/24.png",
+        "sha256": "6c2b5395e8cf3bb83b55dd2c8b554b3a71e0294665a3bbd10681ccb74150e6f5"
+      },
+      {
+        "file": "festival/25.png",
+        "sha256": "1155be16a3b258119feb2e101e745b86132542a694c24d5a6825194d02a59718"
+      },
+      {
+        "file": "festival/26.png",
+        "sha256": "2b26f7c19303a77f711aa28e1977b75fe932a386d93f379900d382b839e39953"
+      },
+      {
+        "file": "festival/27.png",
+        "sha256": "027a6b2dd557fd9f12e29ae08b0c581f18aa4112588d7583d383fcd8ac6b6659"
+      },
+      {
+        "file": "festival/28.png",
+        "sha256": "1c8a929efff9ec3f4c75a6f2ed5f5540ff73cf39c04c29b7bf9f6eb93e6a7efb"
+      },
+      {
+        "file": "festival/29.png",
+        "sha256": "7838bfc8c484c9a4b712332273d1673c25091b7da9cda073e51aca37273e3cd9"
+      },
+      {
+        "file": "festival/30.png",
+        "sha256": "05d281b008d6c485ca3f5afd52d19c8da60a3dac53ca2c7ff3dab6d28a487a22"
+      },
+      {
+        "file": "festival/31.png",
+        "sha256": "12d46137eb699f838d8187fcd718ccc4ca13afc9f97501a44a3fadf969fc12f1"
+      }
+    ]
+  }
+]

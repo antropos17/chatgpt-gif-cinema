@@ -129,6 +129,9 @@ class ReadmeTests(unittest.TestCase):
         self.assertNotRegex(visible, r'<img\b[^>]*height=')
         urls = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
         expected = {
+            'examples/anime-pixel/outfit-poses/casual.gif',
+            'examples/anime-pixel/outfit-poses/traveler.gif',
+            'examples/anime-pixel/outfit-poses/festival.gif',
             'examples/blender-form-01/deliverables/FORM-01.gif',
             'docs/assets/example-gallery/titled-story.gif',
             'docs/assets/motion-elements/chrome.gif',
