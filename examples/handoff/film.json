@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "title": "ONE SMALL LIGHT",
+  "ratio": "16:9",
+  "width": 960,
+  "height": 540,
+  "fps": 10,
+  "style_bible": "Original flat cutout robots in a fixed dusk garden. One lantern. Locked identity, camera, scale and geography.",
+  "shots": [
+    {
+      "id": "01-offer",
+      "source": "media/01-offer.gif",
+      "first_frame_target": "Courier holds lantern beside their body.",
+      "last_frame_target": "Courier holds lantern between both characters.",
+      "caption": "The courier offers a lantern.",
+      "transition": "cut"
+    },
+    {
+      "id": "02-handoff",
+      "source": "media/02-handoff.gif",
+      "first_frame_target": "Courier holds lantern between both characters.",
+      "last_frame_target": "Keeper alone holds the same lantern.",
+      "caption": "The keeper takes the handle; the courier lets go.",
+      "transition": "cut"
+    },
+    {
+      "id": "03-hang",
+      "source": "media/03-hang.gif",
+      "first_frame_target": "Keeper alone holds the same lantern.",
+      "last_frame_target": "Lantern rests on the hook; both hands are clear.",
+      "caption": "The keeper hangs the lantern in the garden.",
+      "transition": "cut"
+    }
+  ]
+}
