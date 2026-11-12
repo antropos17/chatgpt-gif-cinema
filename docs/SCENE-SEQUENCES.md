@@ -18,6 +18,31 @@ are original mechanical cutouts, not generated anatomical performances. The GIF
 coalesces repeated holds into 206 stored drawings. Full-motion artistic acceptance
 remains unestablished; [the example records its actual review scope and limits](../examples/scene-sequence/README.md#provenance-and-limitations).
 
+## Preserve the original frames in one lossless master
+
+After building a sequence, assemble **the original RGBA PNG samples**, not the
+palette-reduced GIF previews, into a single FFV1/Matroska archive:
+
+```sh
+python -m pip install ".[lossless]"
+python -m gif_cinema sequence master output/garden --out output/garden-master
+```
+
+This first rerenders and verifies the portable source sequence, then decodes the
+completed master and checks **every RGBA pixel, timestamp and frame hold**, including
+the first/last sample of each action. Identical held samples remain separate frames;
+no scene loops are added, no frames are interpolated or dropped. The command is
+strictly local with zero provider calls, and refuses existing output directories.
+
+`master.mkv` retains alpha and colors before GIF quantization. `master-receipt.json`
+records ordered shot/frame identities, pixel hashes, exact centisecond timing,
+source receipt identity and verification results. Keep the source sequence bundle
+alongside it for editable provenance. The existing MP4 remains a lossy viewing copy;
+FFV1 is an archival file, not a browser/README preview. A passing technical check does
+**not** establish natural motion, good storytelling or visual equivalence to GIF
+Factory. A 15-second master requires 15 seconds of authored source actions, not an
+automatically lengthened short loop.
+
 ## Build and verify
 
 Use the current checkout with Python 3.10+, Pillow 10.1+, FFmpeg and ffprobe. This
