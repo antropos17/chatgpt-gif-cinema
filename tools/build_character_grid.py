@@ -85,7 +85,7 @@ def main():
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
-    markup, facts = build_grid(args.root, json.loads(args.manifest.read_text()))
+    markup, facts = build_grid(args.root, json.loads(args.manifest.read_text(encoding="utf-8")))
     args.out.write_text(markup, encoding="utf-8")
     args.out.with_suffix(".facts.json").write_text(json.dumps(facts, indent=2) + "\n")
 

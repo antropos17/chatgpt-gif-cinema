@@ -55,10 +55,10 @@ class CommittedCharacterGridTests(unittest.TestCase):
         import json
         root = Path(__file__).resolve().parents[1]
         folder = root / "examples/anime-pixel/character-previews"
-        entries = json.loads((folder / "grid.json").read_text())
+        entries = json.loads((folder / "grid.json").read_text(encoding="utf-8"))
         markup, facts = grid.build_grid(root, entries, columns=3)
-        self.assertEqual(facts, json.loads((folder / "verification.json").read_text()))
-        self.assertIn(markup, (root / "README.md").read_text())
+        self.assertEqual(facts, json.loads((folder / "verification.json").read_text(encoding="utf-8")))
+        self.assertIn(markup, (root / "README.md").read_text(encoding="utf-8"))
         self.assertEqual(len(entries), 9)
         for item in facts[:6]:
             self.assertEqual(item["frames"], 16)
