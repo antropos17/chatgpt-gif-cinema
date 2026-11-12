@@ -30,6 +30,13 @@ class CharacterGridTests(unittest.TestCase):
         self.assertEqual(facts[0]["unique_decoded_frames"], 2)
         self.assertEqual(facts[0]["duration_ms"], 200)
 
+    def test_compact_cards_keep_accessible_motion_and_limits(self):
+        markup, _ = grid.build_grid(self.root, [self.item], compact=True)
+        self.assertIn("001 · Hero &lt;one&gt;", markup)
+        self.assertIn("Method &amp; limits", markup)
+        self.assertIn('title="Not new poses."', markup)
+        self.assertIn("prefers-reduced-motion: reduce", markup)
+
     def test_static_rejected(self):
         self.item["gif"] = "still.png"
         with self.assertRaises(ValueError):
@@ -56,7 +63,7 @@ class CommittedCharacterGridTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         folder = root / "examples/anime-pixel/character-previews"
         entries = json.loads((folder / "grid.json").read_text(encoding="utf-8"))
-        markup, facts = grid.build_grid(root, entries, columns=3)
+        markup, facts = grid.build_grid(root, entries, columns=3, compact=True)
         self.assertEqual(facts, json.loads((folder / "verification.json").read_text(encoding="utf-8")))
         self.assertIn(markup, (root / "README.md").read_text(encoding="utf-8"))
         self.assertEqual(len(entries), 103)
