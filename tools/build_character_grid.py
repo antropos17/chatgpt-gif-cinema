@@ -28,7 +28,7 @@ def local_file(root, value):
     return resolved
 
 
-def build_grid(root, records, columns=4):
+def build_grid(root, records, columns=4, compact=False):
     if not 1 <= columns <= 6 or not records or len(records) > 103:
         raise ValueError("Use 1–103 GIF entries and 1–6 columns")
     ids, files, cards, facts = set(), set(), [], []
@@ -70,11 +70,22 @@ def build_grid(root, records, columns=4):
         first = html.escape(quote(item.get("first_pose", item["poster"]), safe="/"), quote=True)
         limitation = html.escape(item["limitations"])
         poster = html.escape(quote(item["poster"], safe="/"), quote=True)
-        cards.append(f'<td align="center" valign="top">\n'
-                     f'<a href="{link}"><picture><source media="(prefers-reduced-motion: reduce)" srcset="{poster}"><img src="{link}" width="160" alt="{name}: {method.lower()}."></picture></a><br>\n'
-                     f'<strong>{name}</strong><br>{duration / 1000:.2f} s · {count} frames<br>\n'
-                     f'{method}<br><a href="{source}">Source &amp; method</a> · <a href="{first}">First pose</a><br>\n'
-                     f'<small>{limitation}</small>\n</td>')
+        if compact:
+            label, _, action = item["name"].partition(" · ")
+            number = len(cards) + 1
+            label = html.escape(label)
+            action = html.escape(action or "Outfit study")
+            cards.append(f'<td align="center" valign="top" width="{100 / columns:.2f}%">\n'
+                         f'<a href="{link}"><picture><source media="(prefers-reduced-motion: reduce)" srcset="{poster}"><img src="{link}" width="100%" alt="{name}: {method.lower()}."></picture></a><br>\n'
+                         f'<strong>{number:03d} · {label}</strong><br>\n'
+                         f'<sub>{action} · {duration / 1000:.2f} s</sub><br>\n'
+                         f'<sub><a href="{source}" title="{limitation}">Method &amp; limits</a> · <a href="{first}">Still</a></sub>\n</td>')
+        else:
+            cards.append(f'<td align="center" valign="top">\n'
+                         f'<a href="{link}"><picture><source media="(prefers-reduced-motion: reduce)" srcset="{poster}"><img src="{link}" width="160" alt="{name}: {method.lower()}."></picture></a><br>\n'
+                         f'<strong>{name}</strong><br>{duration / 1000:.2f} s · {count} frames<br>\n'
+                         f'{method}<br><a href="{source}">Source &amp; method</a> · <a href="{first}">First pose</a><br>\n'
+                         f'<small>{limitation}</small>\n</td>')
     rows = ["<tr>\n" + "\n".join(cards[i:i + columns]) + "\n</tr>" for i in range(0, len(cards), columns)]
     return "<table>\n" + "\n".join(rows) + "\n</table>\n", facts
 
