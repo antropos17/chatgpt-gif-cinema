@@ -78,6 +78,1228 @@
     "sha256": "cabe75152a717344b38a9b8e5b4c76f798cbe4c0ec5581a8c5fb5a98953a6250"
   },
   {
+    "id": "herbalist",
+    "file": "examples/anime-pixel/catalog-100/herbalist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2e71120fedec7cd1cc67b278f3665f4a34de51a8699399b615d883e946bb0765"
+  },
+  {
+    "id": "magician",
+    "file": "examples/anime-pixel/catalog-100/magician.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2b02a539f0d0785e2665c9332cf09b355236c559cfd96ad14ba187a132833e2e"
+  },
+  {
+    "id": "baker",
+    "file": "examples/anime-pixel/catalog-100/baker.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "203c28342d642fc216e0eb38b440118ef3a4f858dc096a9d53222636de0e5e17"
+  },
+  {
+    "id": "lantern-sailor",
+    "file": "examples/anime-pixel/catalog-100/lantern-sailor.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "0c96b5f3584c3dc1ee71c3ca7218309e9393313b7291479f1dfdd6719fdcd0ad"
+  },
+  {
+    "id": "botanist",
+    "file": "examples/anime-pixel/catalog-100/botanist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "32ae73c93f7dffab6d4781dc78d08efe73f38b9eb747758d4098c16e8b126142"
+  },
+  {
+    "id": "dancer",
+    "file": "examples/anime-pixel/catalog-100/dancer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "7831ddeb06ca88a00ff0e6052641585fdbeaf99eb0344c3e6cd5d88ca4ecd2fb"
+  },
+  {
+    "id": "mechanic",
+    "file": "examples/anime-pixel/catalog-100/mechanic.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "26111422b6cd0076ceeba64665c6a899b12a63f2588fa94199dd07e7e319a82d"
+  },
+  {
+    "id": "detective",
+    "file": "examples/anime-pixel/catalog-100/detective.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "3b6974a60c2c815087f081e36a9bbe9f69cf5ce050361e4a63f87eaf83240a56"
+  },
+  {
+    "id": "potter",
+    "file": "examples/anime-pixel/catalog-100/potter.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "9d66f1d7ad70704a105c6a5ec6acdc912c93528b3fc752c4dd1f088878c17608"
+  },
+  {
+    "id": "tea-merchant",
+    "file": "examples/anime-pixel/catalog-100/tea-merchant.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "fb1a2a640c8e3fc36a4a0975358fa1985041905ebbdd309784b0ed7396b694b7"
+  },
+  {
+    "id": "silver-knight",
+    "file": "examples/anime-pixel/catalog-100/silver-knight.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "5a85dc1f058eb2a63e39248c82092c8e83f3e5ac25593ceb0c90a05e273c40b0"
+  },
+  {
+    "id": "cartographer",
+    "file": "examples/anime-pixel/catalog-100/cartographer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "f9a5556ef5124445965665effb57045e5f23dbed1aff181b1a9d2a5c7184e690"
+  },
+  {
+    "id": "aviator",
+    "file": "examples/anime-pixel/catalog-100/aviator.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "c3cf1569408ea4ba7f0aed240e7e811dec41cc7dc5f27986c45f8fc279c0c28d"
+  },
+  {
+    "id": "polar-traveler",
+    "file": "examples/anime-pixel/catalog-100/polar-traveler.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "9e615345247dd2a5122d539626c611c56f1f1335db4e1abadc0fe8b0c8b17c21"
+  },
+  {
+    "id": "professor",
+    "file": "examples/anime-pixel/catalog-100/professor.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "1684e71f355168b95fe7989acf29b86e9c0c880c01057565e54798a7822db1d3"
+  },
+  {
+    "id": "mountain-climber",
+    "file": "examples/anime-pixel/catalog-100/mountain-climber.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "321839bbe393f197871af259f6b7c5c1167a565783eac38f57486d30d6243add"
+  },
+  {
+    "id": "forest-courier",
+    "file": "examples/anime-pixel/catalog-100/forest-courier.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "169a9271bb6a93cf75ece34820988b7525bb8f9f48fdf2cf4d1790a3e1312f37"
+  },
+  {
+    "id": "innkeeper",
+    "file": "examples/anime-pixel/catalog-100/innkeeper.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "d748f02f4e4f9415ec283a5a362d3e039de298a013ea09539267a25853d9850f"
+  },
+  {
+    "id": "astronomer",
+    "file": "examples/anime-pixel/catalog-100/astronomer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2cc2355e7c308702d465a66c76ef3c732450dfcbb628bb4280e036c4b98b3e3e"
+  },
+  {
+    "id": "fisherman",
+    "file": "examples/anime-pixel/catalog-100/fisherman.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "bccaf4525af52b01032d7e80a1f3a89f4a8071507bfee57b473637d48c0ecd54"
+  },
+  {
+    "id": "trumpeter",
+    "file": "examples/anime-pixel/catalog-100/trumpeter.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "c4c360d0865aa27cb8f49cfbe571c88dc8fcdc2f799a7776bf3c50d758df4b43"
+  },
+  {
+    "id": "toolbox-mechanic",
+    "file": "examples/anime-pixel/catalog-100/toolbox-mechanic.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "001e5f3ec91a443b8e3aaa4a17819631054f8fe0e617479f58f5426282f29804"
+  },
+  {
+    "id": "martial-artist",
+    "file": "examples/anime-pixel/catalog-100/martial-artist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "b8ba2c316b7b3b5e7857486b0c0c89c70ab0e872a2799a88e8694e7d4e862376"
+  },
+  {
+    "id": "bicycle-courier",
+    "file": "examples/anime-pixel/catalog-100/bicycle-courier.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "c72d3b2ad9c3e25e78a2249e1bd775ad7fc86177f5876ddf157a672af341d6a3"
+  },
+  {
+    "id": "conductor",
+    "file": "examples/anime-pixel/catalog-100/conductor.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2ebf6078594166223c758c8144153bcdeea0a60f4f47e8c4ae983b407f30d8c6"
+  },
+  {
+    "id": "gardener",
+    "file": "examples/anime-pixel/catalog-100/gardener.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "47fbeb1bd6876d35be2cc6c04374b1cffda08e81bbf89be6071fc3b3514f09c1"
+  },
+  {
+    "id": "pastry-chef",
+    "file": "examples/anime-pixel/catalog-100/pastry-chef.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "05902db7f2beffd72c08a3fcafed49f658584cca9cf9d5738cfc961014f584b6"
+  },
+  {
+    "id": "armorer",
+    "file": "examples/anime-pixel/catalog-100/armorer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2e547ba23e69d968448dff1d847b7e370c5a9af90be39a083971d8ed5729e971"
+  },
+  {
+    "id": "archaeologist",
+    "file": "examples/anime-pixel/catalog-100/archaeologist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "ab56199a29e62e491bca520813eddbfade41fc4dfdf6736ad60bab902a37b449"
+  },
+  {
+    "id": "rope-sailor",
+    "file": "examples/anime-pixel/catalog-100/rope-sailor.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2cf52fd7eb497355b0359faa0d3cf1b44be91aa3118f395ec23a7932f077adf7"
+  },
+  {
+    "id": "moon-wizard",
+    "file": "examples/anime-pixel/catalog-100/moon-wizard.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "1bf061ab738fcf3b3870f53b4a123e0d136d8956da714ec451362dc2774781a7"
+  },
+  {
+    "id": "falconer",
+    "file": "examples/anime-pixel/catalog-100/falconer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "a09a788e8caa7108f27ab78bf6f9526a137c6d0322e9891e267abcd663055413"
+  },
+  {
+    "id": "beekeeper",
+    "file": "examples/anime-pixel/catalog-100/beekeeper.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "f1bfbaeac5d68459c0ea1b1ae3972cb9519b5e90399168299e09aeafad63c9f3"
+  },
+  {
+    "id": "mushroom-picker",
+    "file": "examples/anime-pixel/catalog-100/mushroom-picker.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "e5db81c5ef8a117913fc41ad47f72435a09ea7fd1e6b04f2b0de9933477474ac"
+  },
+  {
+    "id": "ice-sorceress",
+    "file": "examples/anime-pixel/catalog-100/ice-sorceress.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "ecc92326493d50bedc919a41020c21b57d4e5a6fb3c341b6e616e79d16f73156"
+  },
+  {
+    "id": "pirate",
+    "file": "examples/anime-pixel/catalog-100/pirate.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2a20249c8aa555957420e06a5337d944879034d0968aaf530260abc1a2ead4df"
+  },
+  {
+    "id": "quilter",
+    "file": "examples/anime-pixel/catalog-100/quilter.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "c9fbda81c591a7e09663357f457a057b46376fd18d470c4437e447af049d4b11"
+  },
+  {
+    "id": "drummer",
+    "file": "examples/anime-pixel/catalog-100/drummer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "01b0ca2230106462206d46a68d7bce2ca03f7306132c2f1e5ad3d2bb6645d886"
+  },
+  {
+    "id": "lute-player",
+    "file": "examples/anime-pixel/catalog-100/lute-player.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "637dc4d99f661a7dc0b959342faac89bb7351f00364eb491eb757ecd050399c5"
+  },
+  {
+    "id": "cellist",
+    "file": "examples/anime-pixel/catalog-100/cellist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "9e52cc6b71faa43725a30065e346266d63e1925f5dbcb32cdd9acb74dd352e43"
+  },
+  {
+    "id": "stage-technician",
+    "file": "examples/anime-pixel/catalog-100/stage-technician.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "38cea335bf0d46890d1e19a37c11f77264eee556b14cb79ca113af0ade6c6012"
+  },
+  {
+    "id": "flutist",
+    "file": "examples/anime-pixel/catalog-100/flutist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "db47afe0deb2461882c6fc19bf87ef13d4685a2687a247e08f6162e688be2040"
+  },
+  {
+    "id": "calligrapher",
+    "file": "examples/anime-pixel/catalog-100/calligrapher.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "8d111e01bd78e1e5ca10da5ffe9e438eebe63a8f7b25cf6466fceb26f60b7b2f"
+  },
+  {
+    "id": "cyclops-robot",
+    "file": "examples/anime-pixel/catalog-100/cyclops-robot.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "18ddb0897112d778deb09bb7ea46634e9c60244a1ea1bda2a7e05be9cf4d4349"
+  },
+  {
+    "id": "penguin-admiral",
+    "file": "examples/anime-pixel/catalog-100/penguin-admiral.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "85060dae02734130c40d1adad2a1a4cfae64b8e630484c4a505753cfcb764606"
+  },
+  {
+    "id": "lobster-boxer",
+    "file": "examples/anime-pixel/catalog-100/lobster-boxer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "776769174c20c83666e331a07956b364084165a560cecc9ef7cfe16746c9e368"
+  },
+  {
+    "id": "wolf-detective",
+    "file": "examples/anime-pixel/catalog-100/wolf-detective.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "0cf0947d125dcc01563cb28adee866a850c9bcad27cda36278a32e2a9a9cb8ed"
+  },
+  {
+    "id": "shark-mechanic",
+    "file": "examples/anime-pixel/catalog-100/shark-mechanic.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "a9047d0229f6ab9b701450de20b64cf1d8e350fb29ecd49e00ad17f81748684f"
+  },
+  {
+    "id": "raven-queen",
+    "file": "examples/anime-pixel/catalog-100/raven-queen.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "fb27fcddaea5d72cc645957c265510a6c157db9dfe23c7a7488394bd31200b8d"
+  },
+  {
+    "id": "moth-witch",
+    "file": "examples/anime-pixel/catalog-100/moth-witch.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "8a177c8704264e2b1e6fe4f426e71d93c7c76a0ca42c487c7c6ca3ea44f24af5"
+  },
+  {
+    "id": "axolotl-alchemist",
+    "file": "examples/anime-pixel/catalog-100/axolotl-alchemist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "5356acf54bec08e580d33599c0130a47695dde690d2964ef02b6660672683d6e"
+  },
+  {
+    "id": "jellyfish-princess",
+    "file": "examples/anime-pixel/catalog-100/jellyfish-princess.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "bb6d0460f1056e49f76e2a1db05fd1e3000840d5dfa6b239d9549087e14b0e1d"
+  },
+  {
+    "id": "steampunk-librarian",
+    "file": "examples/anime-pixel/catalog-100/steampunk-librarian.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "3a49241433cdcd1ce2238606dfe0de904c38d0c2563de5ed554c02535da59b84"
+  },
+  {
+    "id": "rabbit-samurai",
+    "file": "examples/anime-pixel/catalog-100/rabbit-samurai.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "330ecf0e62f99684ff3b258ef9287f5d571148aa606d5b38806dc96c6c857204"
+  },
+  {
+    "id": "dragon-aviator",
+    "file": "examples/anime-pixel/catalog-100/dragon-aviator.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "94dd6440562cfa08498bf7473b03844686d479bb2f9a818d16a1140fea80233d"
+  },
+  {
+    "id": "slime-bard",
+    "file": "examples/anime-pixel/catalog-100/slime-bard.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "6f7a5e98873546fa7cea96f2385285c1683e2d64d4b2e146fefe0b6566927433"
+  },
+  {
+    "id": "horned-gardener",
+    "file": "examples/anime-pixel/catalog-100/horned-gardener.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "d5b3dd6c595cd6204c80ac25fb395c5f56833287e8308be366c7c4fa52bdf6c1"
+  },
+  {
+    "id": "moon-knight",
+    "file": "examples/anime-pixel/catalog-100/moon-knight.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "2ac15c2e84ec141f3d9780a10e700036a6db2a788f977199828ff47481caa3e2"
+  },
+  {
+    "id": "mushroom-druid",
+    "file": "examples/anime-pixel/catalog-100/mushroom-druid.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "8d3fd1b5212f54100182e2a37bf7ca90cfa38deecdb322dd85c43aaadc2edf89"
+  },
+  {
+    "id": "cyber-violinist",
+    "file": "examples/anime-pixel/catalog-100/cyber-violinist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "fafb96105e2652cee26807cae200a6e9c89a80da6e2b2cc638dd9d01fdde92b6"
+  },
+  {
+    "id": "bat-courier",
+    "file": "examples/anime-pixel/catalog-100/bat-courier.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "cc8c7fcaf8af79802278f72d59c8ff98cc212f08b4df9ff1124bb86bb8066051"
+  },
+  {
+    "id": "robot-wolf",
+    "file": "examples/anime-pixel/catalog-100/robot-wolf.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "27fe0396a378d16dcc4cf04685d564b1298eb81cf59f56ac99e306d405b38543"
+  },
+  {
+    "id": "owl-cartographer",
+    "file": "examples/anime-pixel/catalog-100/owl-cartographer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "98f05f9bd70f438e90b11d367fdb950a18c15e7db7ca62e47d9d004361e83040"
+  },
+  {
+    "id": "red-panda-host",
+    "file": "examples/anime-pixel/catalog-100/red-panda-host.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "6dd785300f4ab9d18456519d2b86c320fac9a2eb27f537879c340b4ab9e24a08"
+  },
+  {
+    "id": "crystal-golem",
+    "file": "examples/anime-pixel/catalog-100/crystal-golem.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "491b4c9615da90f0cded101ee48bb0676b82c02ff6fb1c1e0194107dcd1d8985"
+  },
+  {
+    "id": "polar-bear-smith",
+    "file": "examples/anime-pixel/catalog-100/polar-bear-smith.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "3a16714746c3cda44d89684612b9bb2b4795bffa2cee12325bab068a470a8ed1"
+  },
+  {
+    "id": "chameleon-rogue",
+    "file": "examples/anime-pixel/catalog-100/chameleon-rogue.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "9829477bbf95610e06d53200706cfb514d39962742239fd98ce56005ce745bba"
+  },
+  {
+    "id": "bee-honeykeeper",
+    "file": "examples/anime-pixel/catalog-100/bee-honeykeeper.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "e1625cd4f4bb056e96297239765c295a5f473a2537bb877c7823a5ea283a24af"
+  },
+  {
+    "id": "turtle-paladin",
+    "file": "examples/anime-pixel/catalog-100/turtle-paladin.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "27773b5addd1970121ef40a6b3428b4c18ebe3f4a41e34ef440afca1521b9190"
+  },
+  {
+    "id": "snail-postwoman",
+    "file": "examples/anime-pixel/catalog-100/snail-postwoman.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "e54db0a81dc1b23ee1fd5cccacaf9b1bb4bd73f8277104a2f074e1711de3e8ce"
+  },
+  {
+    "id": "salamander-firefighter",
+    "file": "examples/anime-pixel/catalog-100/salamander-firefighter.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "33cf77752e6c97963e0a5b132e87e6777d97a15d23f664ddf59684a20d62f1eb"
+  },
+  {
+    "id": "vampire-librarian",
+    "file": "examples/anime-pixel/catalog-100/vampire-librarian.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "bdb62069368d0cb603783efbe0ee659b8b7a23510a14a9ea427b5291b7c9bacd"
+  },
+  {
+    "id": "phoenix-drummer",
+    "file": "examples/anime-pixel/catalog-100/phoenix-drummer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "96e3871f3595c7da45e65359bad411bc7cf7dd58eec756827fccfc0ea2e6f8b9"
+  },
+  {
+    "id": "lightning-mage",
+    "file": "examples/anime-pixel/catalog-100/lightning-mage.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "0fd23b1ae281b74ac58e94e9e50a4b63317c71e1485e15aeca13faec3ca11282"
+  },
+  {
+    "id": "rose-duelist",
+    "file": "examples/anime-pixel/catalog-100/rose-duelist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "ed7ef29f7918b0fda9d5925ae5c975471176462086d0f8f93312d33d695c8b30"
+  },
+  {
+    "id": "beetle-knight",
+    "file": "examples/anime-pixel/catalog-100/beetle-knight.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "7d40a266af0078678637d02ef25df9f8e8bc69474b995229674bb38661ca9fba"
+  },
+  {
+    "id": "star-witch",
+    "file": "examples/anime-pixel/catalog-100/star-witch.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "0c833302d507aeee4d43ea9a8978ae0a6fd2770a547f7a10624493fb84362b19"
+  },
+  {
+    "id": "whale-conductor",
+    "file": "examples/anime-pixel/catalog-100/whale-conductor.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "3c5f5ee812f2614da0b848f7c61cb3544ee41f8c1e492834a7ce0e74b5d744d9"
+  },
+  {
+    "id": "ice-elf-archer",
+    "file": "examples/anime-pixel/catalog-100/ice-elf-archer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "d81cc8236a80c181b1e0f99093b449a4bdd427f85788593d90ba24fa23369982"
+  },
+  {
+    "id": "cactus-cowboy",
+    "file": "examples/anime-pixel/catalog-100/cactus-cowboy.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "8ecb9b0e3f006efececcfb9498b659920ad18ff26e2b9d0131dffcf706719224"
+  },
+  {
+    "id": "fox-shrine-maiden",
+    "file": "examples/anime-pixel/catalog-100/fox-shrine-maiden.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "ab9e254460504ede527463a667bb401fd9b0c55af9bddd9754206a94dfe3ad70"
+  },
+  {
+    "id": "ghost-gardener",
+    "file": "examples/anime-pixel/catalog-100/ghost-gardener.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "31ff20ea41a66ceac5eedce61e3c7fdfcb115388894c6eb7321f7c92edd041a1"
+  },
+  {
+    "id": "roller-postgirl",
+    "file": "examples/anime-pixel/catalog-100/roller-postgirl.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "cf5bb235ef64426c7730359a8846e83dbbcb3f9ef3ce857b59d5ca9a9cd307c9"
+  },
+  {
+    "id": "clockwork-ballerina",
+    "file": "examples/anime-pixel/catalog-100/clockwork-ballerina.gif",
+    "frames": 12,
+    "unique_decoded_frames": 12,
+    "duration_ms": 1440,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "fb4b315253aeb071c173351f76ce7738f73ccc5d2e16d4a444a71b0c6d179db8"
+  },
+  {
+    "id": "lantern-ranger",
+    "file": "examples/anime-pixel/catalog-100/lantern-ranger.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "8ec92821467e4e97a99e4d0a655264c33ef07b4d2c185b446987d302d42c48c9"
+  },
+  {
+    "id": "painter",
+    "file": "examples/anime-pixel/catalog-100/painter.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "8e3012a48a3d7b0b6b60ccab457404efc85bae3ffc9fd01efbd02ef89217a0b0"
+  },
+  {
+    "id": "clockmaker",
+    "file": "examples/anime-pixel/catalog-100/clockmaker.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "8f3e87fc67d7262019f7d10838e1195869c879762f43500e57123fa8461534e9"
+  },
+  {
+    "id": "giraffe-astronomer",
+    "file": "examples/anime-pixel/catalog-100/giraffe-astronomer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "1e82e0216b813156159fce8dd3b856e8263041efc683d1c403e1be6ea6d4c031"
+  },
+  {
+    "id": "desert-dancer",
+    "file": "examples/anime-pixel/catalog-100/desert-dancer.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "fa3a9a889d827c96364cb65415314b07f21589e648e738f3a79f5c331922eb95"
+  },
+  {
+    "id": "rabbit-baker",
+    "file": "examples/anime-pixel/catalog-100/rabbit-baker.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "46d038aa8015b199ec87d786208f6d64fb497189049f37f1850a213535675b45"
+  },
+  {
+    "id": "octopus-scientist",
+    "file": "examples/anime-pixel/catalog-100/octopus-scientist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "d4dc27e765d5a228d0b8ad09d7a2eca5472e16fcaa2f7d735f07cb8357d47951"
+  },
+  {
+    "id": "glassworker",
+    "file": "examples/anime-pixel/catalog-100/glassworker.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "07f316b614661016bc04376c7a1b2206c16d8dcbcfb6a479140ab2351ebb4ef4"
+  },
+  {
+    "id": "sun-priestess",
+    "file": "examples/anime-pixel/catalog-100/sun-priestess.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "4c99b1d95bc6042e084a39c192d0b3dbf11ecde3677ab669c72da5e73eb51db1"
+  },
+  {
+    "id": "solar-priestess",
+    "file": "examples/anime-pixel/catalog-100/solar-priestess.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "9d3ddc50791b8b8b57b075333384c98e36e66f99721a20cab00573ddfb5789f1"
+  },
+  {
     "id": "casual",
     "file": "examples/anime-pixel/outfit-poses/casual.gif",
     "frames": 32,
