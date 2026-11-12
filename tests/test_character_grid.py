@@ -59,7 +59,9 @@ class CommittedCharacterGridTests(unittest.TestCase):
         markup, facts = grid.build_grid(root, entries, columns=3)
         self.assertEqual(facts, json.loads((folder / "verification.json").read_text(encoding="utf-8")))
         self.assertIn(markup, (root / "README.md").read_text(encoding="utf-8"))
-        self.assertEqual(len(entries), 9)
+        self.assertEqual(len(entries), 103)
+        self.assertEqual(len({item["sha256"] for item in facts}), 103)
+        self.assertEqual(sum(item["duration_ms"] == 1440 for item in facts[:100]), 1)
         for item in facts[:6]:
             self.assertEqual(item["frames"], 16)
             self.assertEqual(item["unique_decoded_frames"], 16)

@@ -144,6 +144,9 @@ class ReadmeTests(unittest.TestCase):
             'docs/assets/stroke-reveal/preview.gif',
             'docs/assets/gif-layer/preview.gif',
         }
+        inventory = json.loads((ROOT / "examples/anime-pixel/catalog-100/inventory.json").read_text(encoding="utf-8"))
+        expected.update("examples/anime-pixel/catalog-100/" + item["id"] + ".gif" for item in inventory[6:])
+        self.assertEqual(len(inventory), 100)
         self.assertEqual(set(urls), expected)
         self.assertEqual(len(urls), len(expected))  # No repeated showcase downloads.
         for path in urls:

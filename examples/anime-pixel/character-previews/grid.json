@@ -1,7 +1,7 @@
 [
   {
     "id": "fox-knight",
-    "name": "Fox knight \u00b7 shield salute",
+    "name": "Fox knight · shield salute",
     "gif": "examples/anime-pixel/character-previews/fox-knight.gif",
     "source": "examples/anime-pixel/character-previews/README.md",
     "method": "drawn-poses",
@@ -31,7 +31,7 @@
   },
   {
     "id": "dragon-chef",
-    "name": "Dragon chef \u00b7 offering basket",
+    "name": "Dragon chef · offering basket",
     "gif": "examples/anime-pixel/character-previews/dragon-chef.gif",
     "source": "examples/anime-pixel/character-previews/README.md",
     "method": "drawn-poses",
@@ -61,7 +61,7 @@
   },
   {
     "id": "raccoon-courier",
-    "name": "Raccoon courier \u00b7 goggle salute",
+    "name": "Raccoon courier · goggle salute",
     "gif": "examples/anime-pixel/character-previews-batch2/raccoon-courier.gif",
     "source": "examples/anime-pixel/character-previews-batch2/README.md",
     "method": "drawn-poses",
@@ -91,7 +91,7 @@
   },
   {
     "id": "coral-astronaut",
-    "name": "Coral astronaut \u00b7 hand wave",
+    "name": "Coral astronaut · hand wave",
     "gif": "examples/anime-pixel/character-previews-batch2/coral-astronaut.gif",
     "source": "examples/anime-pixel/character-previews-batch2/README.md",
     "method": "drawn-poses",
@@ -121,7 +121,7 @@
   },
   {
     "id": "violinist",
-    "name": "Violinist \u00b7 bow gesture",
+    "name": "Violinist · bow gesture",
     "gif": "examples/anime-pixel/character-previews-batch3/violinist.gif",
     "source": "examples/anime-pixel/character-previews-batch3/README.md",
     "method": "drawn-poses",
@@ -151,7 +151,7 @@
   },
   {
     "id": "blacksmith",
-    "name": "Blacksmith \u00b7 hammer inspection",
+    "name": "Blacksmith · hammer inspection",
     "gif": "examples/anime-pixel/character-previews-batch3/blacksmith.gif",
     "source": "examples/anime-pixel/character-previews-batch3/README.md",
     "method": "drawn-poses",
@@ -178,6 +178,852 @@
       "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
     },
     "poster": "examples/anime-pixel/character-previews-batch3/frames/blacksmith/00.png"
+  },
+  {
+    "id": "herbalist",
+    "name": "Herbalist · lavender offering",
+    "gif": "examples/anime-pixel/catalog-100/herbalist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/herbalist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "magician",
+    "name": "Magician · wand flourish",
+    "gif": "examples/anime-pixel/catalog-100/magician.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/magician.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "baker",
+    "name": "Baker · bread presentation",
+    "gif": "examples/anime-pixel/catalog-100/baker.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/baker.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "lantern-sailor",
+    "name": "Lantern sailor · lantern lift",
+    "gif": "examples/anime-pixel/catalog-100/lantern-sailor.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/lantern-sailor.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "botanist",
+    "name": "Botanist · plant inspection",
+    "gif": "examples/anime-pixel/catalog-100/botanist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/botanist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "dancer",
+    "name": "Dancer · arm flourish",
+    "gif": "examples/anime-pixel/catalog-100/dancer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/dancer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "mechanic",
+    "name": "Mechanic · wrench inspection",
+    "gif": "examples/anime-pixel/catalog-100/mechanic.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/mechanic.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "detective",
+    "name": "Detective · notebook idle",
+    "gif": "examples/anime-pixel/catalog-100/detective.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/detective.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "potter",
+    "name": "Potter · bowl inspection",
+    "gif": "examples/anime-pixel/catalog-100/potter.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/potter.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "tea-merchant",
+    "name": "Tea merchant · presentation",
+    "gif": "examples/anime-pixel/catalog-100/tea-merchant.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/tea-merchant.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "silver-knight",
+    "name": "Silver knight · sword gesture",
+    "gif": "examples/anime-pixel/catalog-100/silver-knight.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/silver-knight.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "cartographer",
+    "name": "Cartographer · map study",
+    "gif": "examples/anime-pixel/catalog-100/cartographer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/cartographer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "aviator",
+    "name": "Aviator · goggles salute",
+    "gif": "examples/anime-pixel/catalog-100/aviator.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/aviator.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "polar-traveler",
+    "name": "Polar traveler · scarf adjustment",
+    "gif": "examples/anime-pixel/catalog-100/polar-traveler.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/polar-traveler.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "professor",
+    "name": "Professor · adjusts glasses",
+    "gif": "examples/anime-pixel/catalog-100/professor.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/professor.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "mountain-climber",
+    "name": "Mountain climber · strap gesture",
+    "gif": "examples/anime-pixel/catalog-100/mountain-climber.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/mountain-climber.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "forest-courier",
+    "name": "Forest courier · map gesture",
+    "gif": "examples/anime-pixel/catalog-100/forest-courier.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/forest-courier.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "innkeeper",
+    "name": "Innkeeper · welcome gesture",
+    "gif": "examples/anime-pixel/catalog-100/innkeeper.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/innkeeper.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "astronomer",
+    "name": "Astronomer · glasses adjustment",
+    "gif": "examples/anime-pixel/catalog-100/astronomer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/astronomer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "fisherman",
+    "name": "Fisherman · net lift",
+    "gif": "examples/anime-pixel/catalog-100/fisherman.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/fisherman.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "trumpeter",
+    "name": "Trumpeter · subtle performance idle",
+    "gif": "examples/anime-pixel/catalog-100/trumpeter.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/trumpeter.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Very subtle finger/elbow changes; some variation is generative drift, not validated musical performance."
+  },
+  {
+    "id": "toolbox-mechanic",
+    "name": "Toolbox mechanic · wrench lift",
+    "gif": "examples/anime-pixel/catalog-100/toolbox-mechanic.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/toolbox-mechanic.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "martial-artist",
+    "name": "Martial artist · palm block",
+    "gif": "examples/anime-pixel/catalog-100/martial-artist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/martial-artist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "bicycle-courier",
+    "name": "Bicycle courier · wave",
+    "gif": "examples/anime-pixel/catalog-100/bicycle-courier.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/bicycle-courier.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "conductor",
+    "name": "Conductor · salute",
+    "gif": "examples/anime-pixel/catalog-100/conductor.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/conductor.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "gardener",
+    "name": "Gardener · wave",
+    "gif": "examples/anime-pixel/catalog-100/gardener.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/gardener.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "pastry-chef",
+    "name": "Pastry chef · presentation",
+    "gif": "examples/anime-pixel/catalog-100/pastry-chef.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/pastry-chef.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "armorer",
+    "name": "Armorer · hand gesture",
+    "gif": "examples/anime-pixel/catalog-100/armorer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/armorer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "archaeologist",
+    "name": "Archaeologist · brush inspection",
+    "gif": "examples/anime-pixel/catalog-100/archaeologist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/archaeologist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "rope-sailor",
+    "name": "Rope sailor · salute",
+    "gif": "examples/anime-pixel/catalog-100/rope-sailor.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/rope-sailor.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "moon-wizard",
+    "name": "Moon wizard · conjuring gesture",
+    "gif": "examples/anime-pixel/catalog-100/moon-wizard.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/moon-wizard.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "falconer",
+    "name": "Falconer · greeting",
+    "gif": "examples/anime-pixel/catalog-100/falconer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/falconer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "beekeeper",
+    "name": "Beekeeper · honey presentation",
+    "gif": "examples/anime-pixel/catalog-100/beekeeper.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/beekeeper.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "mushroom-picker",
+    "name": "Mushroom picker · basket offering",
+    "gif": "examples/anime-pixel/catalog-100/mushroom-picker.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/mushroom-picker.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "ice-sorceress",
+    "name": "Ice sorceress · spell gesture",
+    "gif": "examples/anime-pixel/catalog-100/ice-sorceress.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/ice-sorceress.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "pirate",
+    "name": "Pirate · compass gesture",
+    "gif": "examples/anime-pixel/catalog-100/pirate.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/pirate.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "quilter",
+    "name": "Quilter · showing quilt",
+    "gif": "examples/anime-pixel/catalog-100/quilter.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/quilter.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "drummer",
+    "name": "Drummer · alternating hands",
+    "gif": "examples/anime-pixel/catalog-100/drummer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/drummer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "lute-player",
+    "name": "Lute player · strum gesture",
+    "gif": "examples/anime-pixel/catalog-100/lute-player.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/lute-player.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "cellist",
+    "name": "Cellist · bow stroke",
+    "gif": "examples/anime-pixel/catalog-100/cellist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/cellist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "stage-technician",
+    "name": "Stage technician · lamp adjustment",
+    "gif": "examples/anime-pixel/catalog-100/stage-technician.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/stage-technician.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "flutist",
+    "name": "Flutist · finger gesture",
+    "gif": "examples/anime-pixel/catalog-100/flutist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/flutist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "calligrapher",
+    "name": "Calligrapher · collar gesture",
+    "gif": "examples/anime-pixel/catalog-100/calligrapher.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/calligrapher.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "cyclops-robot",
+    "name": "Cyclops robot · claw articulation",
+    "gif": "examples/anime-pixel/catalog-100/cyclops-robot.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/cyclops-robot.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "penguin-admiral",
+    "name": "Penguin admiral · flipper wave",
+    "gif": "examples/anime-pixel/catalog-100/penguin-admiral.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/penguin-admiral.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "lobster-boxer",
+    "name": "Lobster boxer · jab gestures",
+    "gif": "examples/anime-pixel/catalog-100/lobster-boxer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/lobster-boxer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "wolf-detective",
+    "name": "Wolf detective · lens inspection",
+    "gif": "examples/anime-pixel/catalog-100/wolf-detective.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/wolf-detective.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "shark-mechanic",
+    "name": "Shark mechanic · goggles adjustment",
+    "gif": "examples/anime-pixel/catalog-100/shark-mechanic.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/shark-mechanic.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Initial sheet rejected for disappearing glove; corrected glove remains present. Goggles end slightly higher than start; hair, tool and tail detail drift."
+  },
+  {
+    "id": "raven-queen",
+    "name": "Raven queen · head tilt and blink",
+    "gif": "examples/anime-pixel/catalog-100/raven-queen.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/raven-queen.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Subtle head tilt/blink; bird briefly opens beak, does not fly. Hair, crown and feather detail drift."
+  },
+  {
+    "id": "moth-witch",
+    "name": "Moth witch · wing folding",
+    "gif": "examples/anime-pixel/catalog-100/moth-witch.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/moth-witch.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Wing patterns and dress trim drift; antennae end angle differs slightly; wing fold is not flight."
+  },
+  {
+    "id": "axolotl-alchemist",
+    "name": "Axolotl alchemist · flask tilt",
+    "gif": "examples/anime-pixel/catalog-100/axolotl-alchemist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/axolotl-alchemist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Flask tilts with approximate liquid behavior, not physically simulated mixing. Tail and gill outlines drift; outfit remains same."
+  },
+  {
+    "id": "jellyfish-princess",
+    "name": "Jellyfish princess · cap pulse",
+    "gif": "examples/anime-pixel/catalog-100/jellyfish-princess.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/jellyfish-princess.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Visible cap compression and ribbon sway; bubbles/hem detail drift. Not swimming or physical jellyfish simulation."
+  },
+  {
+    "id": "steampunk-librarian",
+    "name": "Steampunk librarian · reading and page flutter",
+    "gif": "examples/anime-pixel/catalog-100/steampunk-librarian.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/steampunk-librarian.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Reading head/eye motion and short page lift; page drops abruptly at frame9, not a smooth complete page turn. Book stack differs from reference but remains consistent within clip."
+  },
+  {
+    "id": "rabbit-samurai",
+    "name": "Rabbit samurai · ceremonial bow",
+    "gif": "examples/anime-pixel/catalog-100/rabbit-samurai.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/rabbit-samurai.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Ceremonial bow, sword stays sheathed. Floral pattern and ear angles drift; minor feet registration variation. No sword fighting."
+  },
+  {
+    "id": "dragon-aviator",
+    "name": "Dragon aviator · grounded wingbeats",
+    "gif": "examples/anime-pixel/catalog-100/dragon-aviator.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/dragon-aviator.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Two grounded wing sweeps, not flight. Wing membrane and tail shape drift, slightly uneven timing."
+  },
+  {
+    "id": "slime-bard",
+    "name": "Slime bard · singing expression and strum",
+    "gif": "examples/anime-pixel/catalog-100/slime-bard.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/slime-bard.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Singing-like facial expressions and small strum, silent GIF not lip synced. Lute contour/strings drift and slime squash is subtle, not fluid simulation."
+  },
+  {
+    "id": "horned-gardener",
+    "name": "Horned gardener · watering",
+    "gif": "examples/anime-pixel/catalog-100/horned-gardener.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/horned-gardener.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Watering-can tilt and drawn stream; splash is stylized not simulated. Apron/basket pattern drifts; slight can-angle mismatch at wrap."
+  },
+  {
+    "id": "moon-knight",
+    "name": "Moon knight · shield guard",
+    "gif": "examples/anime-pixel/catalog-100/moon-knight.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/moon-knight.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Shield raising and crouch; sword is visibly drawn throughout despite initial prompt asking sheathed. No unsheathing action. Sword shape and cape-stars drift."
+  },
+  {
+    "id": "mushroom-druid",
+    "name": "Mushroom druid · bell swing",
+    "gif": "examples/anime-pixel/catalog-100/mushroom-druid.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/mushroom-druid.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Small bell swing and head/blink motion, silent GIF. Bell attachment and robe decoration drift; short uneven pendulum poses not physical simulation."
+  },
+  {
+    "id": "cyber-violinist",
+    "name": "Cyber violinist · bow gesture",
+    "gif": "examples/anime-pixel/catalog-100/cyber-violinist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/cyber-violinist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Bow gesture rather than anatomically accurate violin performance: bow angle/length and contact vary. Hair and coat detail drift."
+  },
+  {
+    "id": "bat-courier",
+    "name": "Bat courier · inspecting envelope",
+    "gif": "examples/anime-pixel/catalog-100/bat-courier.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/bat-courier.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Inspects closed envelope, not actually reading its contents. Wing/bag outlines drift; subtle head and wrist registration mismatch."
+  },
+  {
+    "id": "robot-wolf",
+    "name": "Robot wolf · head tilt and tail wag",
+    "gif": "examples/anime-pixel/catalog-100/robot-wolf.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/robot-wolf.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Seated head tilt and tail wag, not walking. Face turns somewhat abruptly at frame7; armor and tail silhouette drift."
+  },
+  {
+    "id": "owl-cartographer",
+    "name": "Owl cartographer · looking around",
+    "gif": "examples/anime-pixel/catalog-100/owl-cartographer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/owl-cartographer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Looks around while holding map, not clearly reading it. Map markings/feathers change subtly; no actual navigation."
+  },
+  {
+    "id": "red-panda-host",
+    "name": "Red panda host · cooling tea",
+    "gif": "examples/anime-pixel/catalog-100/red-panda-host.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/red-panda-host.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Pursed mouth/head lean and steam curls. Steam is stylized, not physically responding to breath; hat/robe details drift. Minor wrap head/tray registration mismatch."
+  },
+  {
+    "id": "crystal-golem",
+    "name": "Crystal golem · opening palm",
+    "gif": "examples/anime-pixel/catalog-100/crystal-golem.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/crystal-golem.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Palm opens/closes and head looks down. Finger/knuckle shape drifts; closing at9-to10 faster than opening. Minor shoulder/facet mismatch at wrap."
+  },
+  {
+    "id": "polar-bear-smith",
+    "name": "Polar bear smith · yawn",
+    "gif": "examples/anime-pixel/catalog-100/polar-bear-smith.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/polar-bear-smith.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Yawn with paw-to-chest gesture; hammer stays held. Mouth recovery9-to10 is quicker; apron/fur/hammer facets drift and minor wrist wrap mismatch."
+  },
+  {
+    "id": "chameleon-rogue",
+    "name": "Chameleon rogue · wary glance",
+    "gif": "examples/anime-pixel/catalog-100/chameleon-rogue.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/chameleon-rogue.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Subtle head/eye scan with tail curl; independent eye movement not clearly achieved. Tail/hood contour drift and residual seam offset."
+  },
+  {
+    "id": "bee-honeykeeper",
+    "name": "Bee honeykeeper · admiring jar",
+    "gif": "examples/anime-pixel/catalog-100/bee-honeykeeper.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/bee-honeykeeper.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Raises and admires closed honey jar; not actually tasting/smelling honey. Wing/flower/hand details drift."
+  },
+  {
+    "id": "turtle-paladin",
+    "name": "Turtle paladin · sleepy nod",
+    "gif": "examples/anime-pixel/catalog-100/turtle-paladin.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/turtle-paladin.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Small head nod and blink rather than full neck retraction; armor/trident outlines drift and head rises quickly around frame 11."
+  },
+  {
+    "id": "snail-postwoman",
+    "name": "Snail postwoman · cherished letter",
+    "gif": "examples/anime-pixel/catalog-100/snail-postwoman.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/snail-postwoman.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Envelope-to-cheek gesture and closed-eye smile; letter and cap details drift slightly, no letter opening or locomotion."
+  },
+  {
+    "id": "salamander-firefighter",
+    "name": "Salamander firefighter · nozzle drill",
+    "gif": "examples/anime-pixel/catalog-100/salamander-firefighter.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/salamander-firefighter.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Nozzle lowering and raising with blink, no water simulation. Nozzle length and tail spots drift slightly."
+  },
+  {
+    "id": "vampire-librarian",
+    "name": "Vampire librarian · reading",
+    "gif": "examples/anime-pixel/catalog-100/vampire-librarian.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/vampire-librarian.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head dips toward book; finger gesture is small and not a clear line trace. Finger rest differs slightly at wrap; page markings drift."
+  },
+  {
+    "id": "phoenix-drummer",
+    "name": "Phoenix drummer · stick flourish",
+    "gif": "examples/anime-pixel/catalog-100/phoenix-drummer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/phoenix-drummer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Stick flourish only: generated poses do not clearly show drumhead contact or alternating strikes. Feather, drum trim and stick details drift. Silent."
+  },
+  {
+    "id": "lightning-mage",
+    "name": "Lightning mage · palm spark",
+    "gif": "examples/anime-pixel/catalog-100/lightning-mage.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/lightning-mage.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Palm opens with spark; hand closes quickly around frame 13. Hair tips and staff details drift."
+  },
+  {
+    "id": "rose-duelist",
+    "name": "Rose duelist · flower scent",
+    "gif": "examples/anime-pixel/catalog-100/rose-duelist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/rose-duelist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Rose-to-face gesture with closed eyes. Sword guard, rose petals and dress trim drift slightly."
+  },
+  {
+    "id": "beetle-knight",
+    "name": "Beetle knight · shield guard",
+    "gif": "examples/anime-pixel/catalog-100/beetle-knight.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/beetle-knight.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Shield guard and knee bend. Helmet horns and shield crest drift; recovery around frame 9 is relatively fast."
+  },
+  {
+    "id": "star-witch",
+    "name": "Star witch · wand sweep",
+    "gif": "examples/anime-pixel/catalog-100/star-witch.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/star-witch.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Wand sweep with fading stars. Long near-hold around frames10-15, hand/hat decorations drift slightly."
+  },
+  {
+    "id": "whale-conductor",
+    "name": "Whale conductor · downbeat",
+    "gif": "examples/anime-pixel/catalog-100/whale-conductor.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/whale-conductor.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Baton downbeat and blink, silent and not synchronized to music. Baton angle and jacket trim drift at wrap."
+  },
+  {
+    "id": "ice-elf-archer",
+    "name": "Ice elf archer · collar adjustment",
+    "gif": "examples/anime-pixel/catalog-100/ice-elf-archer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/ice-elf-archer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Collar adjustment and blink, no bow draw or shot. Bow string and fur edges drift; fingers schematic."
+  },
+  {
+    "id": "cactus-cowboy",
+    "name": "Cactus cowboy · hat tip",
+    "gif": "examples/anime-pixel/catalog-100/cactus-cowboy.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/cactus-cowboy.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Hat tip and wink. Hat flower/spines and toy nozzle details drift slightly; no shooting."
+  },
+  {
+    "id": "fox-shrine-maiden",
+    "name": "Fox shrine maiden · lantern lift",
+    "gif": "examples/anime-pixel/catalog-100/fox-shrine-maiden.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/fox-shrine-maiden.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Lantern lift/head tilt. Tail curls overlap so exact nine-tail count is not visually verifiable; lantern trim and hem drift. Smaller subject from landscape sheet, no upscale."
+  },
+  {
+    "id": "ghost-gardener",
+    "name": "Ghost gardener · watering",
+    "gif": "examples/anime-pixel/catalog-100/ghost-gardener.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/ghost-gardener.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Watering-can tilt and drawn stream, not fluid simulation. Pot/leaves and dress trim drift slightly; opaque background, not transparent ghost asset."
+  },
+  {
+    "id": "roller-postgirl",
+    "name": "Roller postgirl · letter presentation",
+    "gif": "examples/anime-pixel/catalog-100/roller-postgirl.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/roller-postgirl.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Envelope presentation while stationary, not skating. Eyes remain cheerfully closed; wheel/braid details drift."
+  },
+  {
+    "id": "clockwork-ballerina",
+    "name": "Clockwork ballerina · plie",
+    "gif": "examples/anime-pixel/catalog-100/clockwork-ballerina.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/clockwork-ballerina.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.44 s loop, not a 15 s narrative or finished acting animation. 12-pose 1.44s plie preview. Source frames13-16 start another movement and were excluded to close first cycle. Joint/tutu detail drift; stylized, not verified ballet technique."
+  },
+  {
+    "id": "lantern-ranger",
+    "name": "Lantern ranger · lookout",
+    "gif": "examples/anime-pixel/catalog-100/lantern-ranger.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/lantern-ranger.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Hand-to-brow lookout. Cloak embroidery, hair and lantern details drift; fingers simplified."
+  },
+  {
+    "id": "painter",
+    "name": "Painter · palette glance",
+    "gif": "examples/anime-pixel/catalog-100/painter.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/painter.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head tilt/blink with brush held upright consistently; not a painting stroke. Palette spots, smock stains and hair drift. Replaces earlier rejected brush-flip attempt."
+  },
+  {
+    "id": "clockmaker",
+    "name": "Clockmaker · watch inspection",
+    "gif": "examples/anime-pixel/catalog-100/clockmaker.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/clockmaker.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Watch inspection head dip. Watch height/hand differs slightly at wrap; dial marks and skirt grid drift. Not mechanically accurate watch animation. New source replaces earlier hold."
+  },
+  {
+    "id": "giraffe-astronomer",
+    "name": "Giraffe astronomer · discovery gesture",
+    "gif": "examples/anime-pixel/catalog-100/giraffe-astronomer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/giraffe-astronomer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Raised index discovery gesture beside telescope, not looking through it. Telescope rings and fingers drift; hand ends lower than first pose. New source replaces earlier rejected telescope action."
+  },
+  {
+    "id": "desert-dancer",
+    "name": "Desert dancer · wrist gesture",
+    "gif": "examples/anime-pixel/catalog-100/desert-dancer.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/desert-dancer.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Stationary wrist gesture and blink, not full dance. Two grounded feet preserved; veil/jewelry/fingers drift. New source replaces earlier extra-foot hold."
+  },
+  {
+    "id": "rabbit-baker",
+    "name": "Rabbit baker · ear dip",
+    "gif": "examples/anime-pixel/catalog-100/rabbit-baker.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/rabbit-baker.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Gentle ear lowering and head tilt, not baking. Tray and basket remain held; bread and apron detail drift. New source replaces old wrap-jump hold."
+  },
+  {
+    "id": "octopus-scientist",
+    "name": "Octopus scientist · blink",
+    "gif": "examples/anime-pixel/catalog-100/octopus-scientist.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/octopus-scientist.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head tilt and blink only, not pouring. Flask stays held by a purple appendage, not a sleeved arm; no sleeve transformation. Tentacle edges and glasses drift."
+  },
+  {
+    "id": "glassworker",
+    "name": "Glassworker · vase inspection",
+    "gif": "examples/anime-pixel/catalog-100/glassworker.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/glassworker.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Vase inspection nod and blink, not glassblowing. Rod stays diagonal; vase markings, glasses and hair drift."
+  },
+  {
+    "id": "sun-priestess",
+    "name": "Sun priestess · bow",
+    "gif": "examples/anime-pixel/catalog-100/sun-priestess.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/sun-priestess.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Small reverent bow and blink, not a spellcast. Two hands remain stable; crown, fingers and robe embroidery drift."
+  },
+  {
+    "id": "solar-priestess",
+    "name": "Solar priestess · blink",
+    "gif": "examples/anime-pixel/catalog-100/solar-priestess.gif",
+    "method": "drawn-poses",
+    "source": "examples/anime-pixel/catalog-100/README.md",
+    "poster": "examples/anime-pixel/catalog-100/posters/solar-priestess.png",
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head turn and single blink; arms remain posed, not a hand spell. Same two hands, no third chest hand. Halo and facial details drift; final gaze slightly more front-facing than first."
   },
   {
     "id": "casual",

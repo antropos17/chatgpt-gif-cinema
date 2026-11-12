@@ -29,8 +29,8 @@ def local_file(root, value):
 
 
 def build_grid(root, records, columns=4):
-    if not 1 <= columns <= 6 or not records or len(records) > 100:
-        raise ValueError("Use 1–100 GIF entries and 1–6 columns")
+    if not 1 <= columns <= 6 or not records or len(records) > 103:
+        raise ValueError("Use 1–103 GIF entries and 1–6 columns")
     ids, files, cards, facts = set(), set(), [], []
     for item in records:
         identifier = item["id"]

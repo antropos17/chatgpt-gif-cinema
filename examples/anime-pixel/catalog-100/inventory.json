@@ -1,0 +1,802 @@
+[
+  {
+    "id": "fox-knight",
+    "name": "Fox knight · shield salute",
+    "file": "GIFs/fox-knight.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview; face/outline drift."
+  },
+  {
+    "id": "dragon-chef",
+    "name": "Dragon chef · offering basket",
+    "file": "GIFs/dragon-chef.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview; face/outline drift."
+  },
+  {
+    "id": "raccoon-courier",
+    "name": "Raccoon courier · goggle salute",
+    "file": "GIFs/raccoon-courier.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview; face/outline drift."
+  },
+  {
+    "id": "coral-astronaut",
+    "name": "Coral astronaut · hand wave",
+    "file": "GIFs/coral-astronaut.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview; face/outline drift."
+  },
+  {
+    "id": "violinist",
+    "name": "Violinist · bow gesture",
+    "file": "GIFs/violinist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview; face/outline drift."
+  },
+  {
+    "id": "blacksmith",
+    "name": "Blacksmith · hammer inspection",
+    "file": "GIFs/blacksmith.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview; face/outline drift."
+  },
+  {
+    "id": "herbalist",
+    "name": "Herbalist · lavender offering",
+    "file": "GIFs/herbalist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "magician",
+    "name": "Magician · wand flourish",
+    "file": "GIFs/magician.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "baker",
+    "name": "Baker · bread presentation",
+    "file": "GIFs/baker.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "lantern-sailor",
+    "name": "Lantern sailor · lantern lift",
+    "file": "GIFs/lantern-sailor.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "botanist",
+    "name": "Botanist · plant inspection",
+    "file": "GIFs/botanist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "dancer",
+    "name": "Dancer · arm flourish",
+    "file": "GIFs/dancer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "mechanic",
+    "name": "Mechanic · wrench inspection",
+    "file": "GIFs/mechanic.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "detective",
+    "name": "Detective · notebook idle",
+    "file": "GIFs/detective.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "potter",
+    "name": "Potter · bowl inspection",
+    "file": "GIFs/potter.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "tea-merchant",
+    "name": "Tea merchant · presentation",
+    "file": "GIFs/tea-merchant.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "silver-knight",
+    "name": "Silver knight · sword gesture",
+    "file": "GIFs/silver-knight.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "cartographer",
+    "name": "Cartographer · map study",
+    "file": "GIFs/cartographer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "aviator",
+    "name": "Aviator · goggles salute",
+    "file": "GIFs/aviator.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "polar-traveler",
+    "name": "Polar traveler · scarf adjustment",
+    "file": "GIFs/polar-traveler.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "professor",
+    "name": "Professor · adjusts glasses",
+    "file": "GIFs/professor.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "mountain-climber",
+    "name": "Mountain climber · strap gesture",
+    "file": "GIFs/mountain-climber.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "forest-courier",
+    "name": "Forest courier · map gesture",
+    "file": "GIFs/forest-courier.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "innkeeper",
+    "name": "Innkeeper · welcome gesture",
+    "file": "GIFs/innkeeper.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "astronomer",
+    "name": "Astronomer · glasses adjustment",
+    "file": "GIFs/astronomer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "fisherman",
+    "name": "Fisherman · net lift",
+    "file": "GIFs/fisherman.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "trumpeter",
+    "name": "Trumpeter · subtle performance idle",
+    "file": "GIFs/trumpeter.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Very subtle finger/elbow changes; some variation is generative drift, not validated musical performance."
+  },
+  {
+    "id": "toolbox-mechanic",
+    "name": "Toolbox mechanic · wrench lift",
+    "file": "GIFs/toolbox-mechanic.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "martial-artist",
+    "name": "Martial artist · palm block",
+    "file": "GIFs/martial-artist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "bicycle-courier",
+    "name": "Bicycle courier · wave",
+    "file": "GIFs/bicycle-courier.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "conductor",
+    "name": "Conductor · salute",
+    "file": "GIFs/conductor.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "gardener",
+    "name": "Gardener · wave",
+    "file": "GIFs/gardener.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "pastry-chef",
+    "name": "Pastry chef · presentation",
+    "file": "GIFs/pastry-chef.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "armorer",
+    "name": "Armorer · hand gesture",
+    "file": "GIFs/armorer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "archaeologist",
+    "name": "Archaeologist · brush inspection",
+    "file": "GIFs/archaeologist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "rope-sailor",
+    "name": "Rope sailor · salute",
+    "file": "GIFs/rope-sailor.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "moon-wizard",
+    "name": "Moon wizard · conjuring gesture",
+    "file": "GIFs/moon-wizard.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "falconer",
+    "name": "Falconer · greeting",
+    "file": "GIFs/falconer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "beekeeper",
+    "name": "Beekeeper · honey presentation",
+    "file": "GIFs/beekeeper.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "mushroom-picker",
+    "name": "Mushroom picker · basket offering",
+    "file": "GIFs/mushroom-picker.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "ice-sorceress",
+    "name": "Ice sorceress · spell gesture",
+    "file": "GIFs/ice-sorceress.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "pirate",
+    "name": "Pirate · compass gesture",
+    "file": "GIFs/pirate.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "quilter",
+    "name": "Quilter · showing quilt",
+    "file": "GIFs/quilter.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "drummer",
+    "name": "Drummer · alternating hands",
+    "file": "GIFs/drummer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "lute-player",
+    "name": "Lute player · strum gesture",
+    "file": "GIFs/lute-player.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "cellist",
+    "name": "Cellist · bow stroke",
+    "file": "GIFs/cellist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "stage-technician",
+    "name": "Stage technician · lamp adjustment",
+    "file": "GIFs/stage-technician.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "flutist",
+    "name": "Flutist · finger gesture",
+    "file": "GIFs/flutist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "calligrapher",
+    "name": "Calligrapher · collar gesture",
+    "file": "GIFs/calligrapher.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "cyclops-robot",
+    "name": "Cyclops robot · claw articulation",
+    "file": "GIFs/cyclops-robot.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "penguin-admiral",
+    "name": "Penguin admiral · flipper wave",
+    "file": "GIFs/penguin-admiral.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "lobster-boxer",
+    "name": "Lobster boxer · jab gestures",
+    "file": "GIFs/lobster-boxer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "wolf-detective",
+    "name": "Wolf detective · lens inspection",
+    "file": "GIFs/wolf-detective.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation."
+  },
+  {
+    "id": "shark-mechanic",
+    "name": "Shark mechanic · goggles adjustment",
+    "file": "GIFs/shark-mechanic.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Initial sheet rejected for disappearing glove; corrected glove remains present. Goggles end slightly higher than start; hair, tool and tail detail drift."
+  },
+  {
+    "id": "raven-queen",
+    "name": "Raven queen · head tilt and blink",
+    "file": "GIFs/raven-queen.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Subtle head tilt/blink; bird briefly opens beak, does not fly. Hair, crown and feather detail drift."
+  },
+  {
+    "id": "moth-witch",
+    "name": "Moth witch · wing folding",
+    "file": "GIFs/moth-witch.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Wing patterns and dress trim drift; antennae end angle differs slightly; wing fold is not flight."
+  },
+  {
+    "id": "axolotl-alchemist",
+    "name": "Axolotl alchemist · flask tilt",
+    "file": "GIFs/axolotl-alchemist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Flask tilts with approximate liquid behavior, not physically simulated mixing. Tail and gill outlines drift; outfit remains same."
+  },
+  {
+    "id": "jellyfish-princess",
+    "name": "Jellyfish princess · cap pulse",
+    "file": "GIFs/jellyfish-princess.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Visible cap compression and ribbon sway; bubbles/hem detail drift. Not swimming or physical jellyfish simulation."
+  },
+  {
+    "id": "steampunk-librarian",
+    "name": "Steampunk librarian · reading and page flutter",
+    "file": "GIFs/steampunk-librarian.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Reading head/eye motion and short page lift; page drops abruptly at frame9, not a smooth complete page turn. Book stack differs from reference but remains consistent within clip."
+  },
+  {
+    "id": "rabbit-samurai",
+    "name": "Rabbit samurai · ceremonial bow",
+    "file": "GIFs/rabbit-samurai.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Ceremonial bow, sword stays sheathed. Floral pattern and ear angles drift; minor feet registration variation. No sword fighting."
+  },
+  {
+    "id": "dragon-aviator",
+    "name": "Dragon aviator · grounded wingbeats",
+    "file": "GIFs/dragon-aviator.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Two grounded wing sweeps, not flight. Wing membrane and tail shape drift, slightly uneven timing."
+  },
+  {
+    "id": "slime-bard",
+    "name": "Slime bard · singing expression and strum",
+    "file": "GIFs/slime-bard.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Singing-like facial expressions and small strum, silent GIF not lip synced. Lute contour/strings drift and slime squash is subtle, not fluid simulation."
+  },
+  {
+    "id": "horned-gardener",
+    "name": "Horned gardener · watering",
+    "file": "GIFs/horned-gardener.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Watering-can tilt and drawn stream; splash is stylized not simulated. Apron/basket pattern drifts; slight can-angle mismatch at wrap."
+  },
+  {
+    "id": "moon-knight",
+    "name": "Moon knight · shield guard",
+    "file": "GIFs/moon-knight.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Shield raising and crouch; sword is visibly drawn throughout despite initial prompt asking sheathed. No unsheathing action. Sword shape and cape-stars drift."
+  },
+  {
+    "id": "mushroom-druid",
+    "name": "Mushroom druid · bell swing",
+    "file": "GIFs/mushroom-druid.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Small bell swing and head/blink motion, silent GIF. Bell attachment and robe decoration drift; short uneven pendulum poses not physical simulation."
+  },
+  {
+    "id": "cyber-violinist",
+    "name": "Cyber violinist · bow gesture",
+    "file": "GIFs/cyber-violinist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Bow gesture rather than anatomically accurate violin performance: bow angle/length and contact vary. Hair and coat detail drift."
+  },
+  {
+    "id": "bat-courier",
+    "name": "Bat courier · inspecting envelope",
+    "file": "GIFs/bat-courier.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Inspects closed envelope, not actually reading its contents. Wing/bag outlines drift; subtle head and wrist registration mismatch."
+  },
+  {
+    "id": "robot-wolf",
+    "name": "Robot wolf · head tilt and tail wag",
+    "file": "GIFs/robot-wolf.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Seated head tilt and tail wag, not walking. Face turns somewhat abruptly at frame7; armor and tail silhouette drift."
+  },
+  {
+    "id": "owl-cartographer",
+    "name": "Owl cartographer · looking around",
+    "file": "GIFs/owl-cartographer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Looks around while holding map, not clearly reading it. Map markings/feathers change subtly; no actual navigation."
+  },
+  {
+    "id": "red-panda-host",
+    "name": "Red panda host · cooling tea",
+    "file": "GIFs/red-panda-host.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Pursed mouth/head lean and steam curls. Steam is stylized, not physically responding to breath; hat/robe details drift. Minor wrap head/tray registration mismatch."
+  },
+  {
+    "id": "crystal-golem",
+    "name": "Crystal golem · opening palm",
+    "file": "GIFs/crystal-golem.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Palm opens/closes and head looks down. Finger/knuckle shape drifts; closing at9-to10 faster than opening. Minor shoulder/facet mismatch at wrap."
+  },
+  {
+    "id": "polar-bear-smith",
+    "name": "Polar bear smith · yawn",
+    "file": "GIFs/polar-bear-smith.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Yawn with paw-to-chest gesture; hammer stays held. Mouth recovery9-to10 is quicker; apron/fur/hammer facets drift and minor wrist wrap mismatch."
+  },
+  {
+    "id": "chameleon-rogue",
+    "name": "Chameleon rogue · wary glance",
+    "file": "GIFs/chameleon-rogue.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Subtle head/eye scan with tail curl; independent eye movement not clearly achieved. Tail/hood contour drift and residual seam offset."
+  },
+  {
+    "id": "bee-honeykeeper",
+    "name": "Bee honeykeeper · admiring jar",
+    "file": "GIFs/bee-honeykeeper.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Raises and admires closed honey jar; not actually tasting/smelling honey. Wing/flower/hand details drift."
+  },
+  {
+    "id": "turtle-paladin",
+    "name": "Turtle paladin · sleepy nod",
+    "file": "GIFs/turtle-paladin.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Small head nod and blink rather than full neck retraction; armor/trident outlines drift and head rises quickly around frame 11."
+  },
+  {
+    "id": "snail-postwoman",
+    "name": "Snail postwoman · cherished letter",
+    "file": "GIFs/snail-postwoman.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Envelope-to-cheek gesture and closed-eye smile; letter and cap details drift slightly, no letter opening or locomotion."
+  },
+  {
+    "id": "salamander-firefighter",
+    "name": "Salamander firefighter · nozzle drill",
+    "file": "GIFs/salamander-firefighter.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Nozzle lowering and raising with blink, no water simulation. Nozzle length and tail spots drift slightly."
+  },
+  {
+    "id": "vampire-librarian",
+    "name": "Vampire librarian · reading",
+    "file": "GIFs/vampire-librarian.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head dips toward book; finger gesture is small and not a clear line trace. Finger rest differs slightly at wrap; page markings drift."
+  },
+  {
+    "id": "phoenix-drummer",
+    "name": "Phoenix drummer · stick flourish",
+    "file": "GIFs/phoenix-drummer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Stick flourish only: generated poses do not clearly show drumhead contact or alternating strikes. Feather, drum trim and stick details drift. Silent."
+  },
+  {
+    "id": "lightning-mage",
+    "name": "Lightning mage · palm spark",
+    "file": "GIFs/lightning-mage.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Palm opens with spark; hand closes quickly around frame 13. Hair tips and staff details drift."
+  },
+  {
+    "id": "rose-duelist",
+    "name": "Rose duelist · flower scent",
+    "file": "GIFs/rose-duelist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Rose-to-face gesture with closed eyes. Sword guard, rose petals and dress trim drift slightly."
+  },
+  {
+    "id": "beetle-knight",
+    "name": "Beetle knight · shield guard",
+    "file": "GIFs/beetle-knight.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Shield guard and knee bend. Helmet horns and shield crest drift; recovery around frame 9 is relatively fast."
+  },
+  {
+    "id": "star-witch",
+    "name": "Star witch · wand sweep",
+    "file": "GIFs/star-witch.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Wand sweep with fading stars. Long near-hold around frames10-15, hand/hat decorations drift slightly."
+  },
+  {
+    "id": "whale-conductor",
+    "name": "Whale conductor · downbeat",
+    "file": "GIFs/whale-conductor.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Baton downbeat and blink, silent and not synchronized to music. Baton angle and jacket trim drift at wrap."
+  },
+  {
+    "id": "ice-elf-archer",
+    "name": "Ice elf archer · collar adjustment",
+    "file": "GIFs/ice-elf-archer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Collar adjustment and blink, no bow draw or shot. Bow string and fur edges drift; fingers schematic."
+  },
+  {
+    "id": "cactus-cowboy",
+    "name": "Cactus cowboy · hat tip",
+    "file": "GIFs/cactus-cowboy.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Hat tip and wink. Hat flower/spines and toy nozzle details drift slightly; no shooting."
+  },
+  {
+    "id": "fox-shrine-maiden",
+    "name": "Fox shrine maiden · lantern lift",
+    "file": "GIFs/fox-shrine-maiden.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Lantern lift/head tilt. Tail curls overlap so exact nine-tail count is not visually verifiable; lantern trim and hem drift. Smaller subject from landscape sheet, no upscale."
+  },
+  {
+    "id": "ghost-gardener",
+    "name": "Ghost gardener · watering",
+    "file": "GIFs/ghost-gardener.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Watering-can tilt and drawn stream, not fluid simulation. Pot/leaves and dress trim drift slightly; opaque background, not transparent ghost asset."
+  },
+  {
+    "id": "roller-postgirl",
+    "name": "Roller postgirl · letter presentation",
+    "file": "GIFs/roller-postgirl.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Envelope presentation while stationary, not skating. Eyes remain cheerfully closed; wheel/braid details drift."
+  },
+  {
+    "id": "clockwork-ballerina",
+    "name": "Clockwork ballerina · plie",
+    "file": "GIFs/clockwork-ballerina.gif",
+    "frames": 12,
+    "duration_ms": 1440,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.44 s loop, not a 15 s narrative or finished acting animation. 12-pose 1.44s plie preview. Source frames13-16 start another movement and were excluded to close first cycle. Joint/tutu detail drift; stylized, not verified ballet technique."
+  },
+  {
+    "id": "lantern-ranger",
+    "name": "Lantern ranger · lookout",
+    "file": "GIFs/lantern-ranger.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Hand-to-brow lookout. Cloak embroidery, hair and lantern details drift; fingers simplified."
+  },
+  {
+    "id": "painter",
+    "name": "Painter · palette glance",
+    "file": "GIFs/painter.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head tilt/blink with brush held upright consistently; not a painting stroke. Palette spots, smock stains and hair drift. Replaces earlier rejected brush-flip attempt."
+  },
+  {
+    "id": "clockmaker",
+    "name": "Clockmaker · watch inspection",
+    "file": "GIFs/clockmaker.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Watch inspection head dip. Watch height/hand differs slightly at wrap; dial marks and skirt grid drift. Not mechanically accurate watch animation. New source replaces earlier hold."
+  },
+  {
+    "id": "giraffe-astronomer",
+    "name": "Giraffe astronomer · discovery gesture",
+    "file": "GIFs/giraffe-astronomer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Raised index discovery gesture beside telescope, not looking through it. Telescope rings and fingers drift; hand ends lower than first pose. New source replaces earlier rejected telescope action."
+  },
+  {
+    "id": "desert-dancer",
+    "name": "Desert dancer · wrist gesture",
+    "file": "GIFs/desert-dancer.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Stationary wrist gesture and blink, not full dance. Two grounded feet preserved; veil/jewelry/fingers drift. New source replaces earlier extra-foot hold."
+  },
+  {
+    "id": "rabbit-baker",
+    "name": "Rabbit baker · ear dip",
+    "file": "GIFs/rabbit-baker.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Gentle ear lowering and head tilt, not baking. Tray and basket remain held; bread and apron detail drift. New source replaces old wrap-jump hold."
+  },
+  {
+    "id": "octopus-scientist",
+    "name": "Octopus scientist · blink",
+    "file": "GIFs/octopus-scientist.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head tilt and blink only, not pouring. Flask stays held by a purple appendage, not a sleeved arm; no sleeve transformation. Tentacle edges and glasses drift."
+  },
+  {
+    "id": "glassworker",
+    "name": "Glassworker · vase inspection",
+    "file": "GIFs/glassworker.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Vase inspection nod and blink, not glassblowing. Rod stays diagonal; vase markings, glasses and hair drift."
+  },
+  {
+    "id": "sun-priestess",
+    "name": "Sun priestess · bow",
+    "file": "GIFs/sun-priestess.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Small reverent bow and blink, not a spellcast. Two hands remain stable; crown, fingers and robe embroidery drift."
+  },
+  {
+    "id": "solar-priestess",
+    "name": "Solar priestess · blink",
+    "file": "GIFs/solar-priestess.gif",
+    "frames": 16,
+    "duration_ms": 1920,
+    "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Head turn and single blink; arms remain posed, not a hand spell. Same two hands, no third chest hand. Halo and facial details drift; final gaze slightly more front-facing than first."
+  }
+]
