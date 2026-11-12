@@ -1,12 +1,78 @@
 # GIF Cinema
 
-**Meet the cast. Build the story.**
+**Turn existing GIFs into a film. Inspect every cut.**
 
-A GIF-to-film workshop for **Codex and Claude Code**. Compose a sequence.
+A local workshop for **Codex and Claude Code**. No API key needed for the bundled demo.
 
-[Pixel characters](#anime-pixel-art) · [3D loops](#blender-motion-study) · [Stories & graphics](#selected-work) · [Full catalog](docs/GALLERY.md) · [Install](#install-the-skill)
+[Try it](#make-your-first-film) · [Exact-frame master](docs/GIF-MASTER.md) · [Agent skill](#install-the-skill) · [100-character grid](#anime-pixel-art) · [Workflows](#choose-a-workflow)
+
+<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share"><picture><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: a local title and three existing astronaut takes, played once."></picture></a>
+
+**Three takes + a title.** A 9.70-second example, not proof of perfect continuity.
+[Sources & recipe](docs/EXAMPLES.md)
+
+<a id="try-it-without-an-api-key"></a>
+
+## Make your first film
+
+**Three bundled GIFs → a 7.68-second MP4. No key, no paid requests.**
+
+You need Python 3.10+, Git, FFmpeg and ffprobe. Pillow installs with the package.
+
+```bash
+git clone https://github.com/antropos17/chatgpt-gif-cinema.git
+cd chatgpt-gif-cinema
+python -m venv .venv
+```
+
+Activate with `source .venv/bin/activate` on macOS/Linux, or
+`.\.venv\Scripts\Activate.ps1` in Windows PowerShell. Then:
+
+```bash
+python -m pip install .
+python -m gif_cinema doctor
+python -m gif_cinema render examples/film.json --dry-run --max-api-calls 0
+python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/my-first-film
+```
+
+Open **`output/my-first-film/film.mp4`**. The folder also includes a contact sheet,
+cut endpoints and a resumable manifest. Repeat the last command to verify reuse
+with zero new provider calls. [What this example preserves](docs/EXAMPLES.md#1-plain-film-preserve-the-source-timing).
+
+Need exact decoded drawings and native GIF holds? Use the optional
+[lossless film master](docs/GIF-MASTER.md). Ordinary MP4 export is a fixed-FPS,
+lossy viewing format.
+
+<a id="give-the-skill-to-your-agent"></a>
+<a id="copy-a-prompt"></a>
+
+## Install the skill
+
+Build the maintained **0.4.0 skill package** from this checkout:
+
+```bash
+python tools/package_skill.py --out dist/gif-cinema.skill.zip
+```
+
+Extract its single `gif-cinema` folder into:
+
+- **Codex:** `~/.codex/skills/gif-cinema`
+- **Claude Code:** `~/.claude/skills/gif-cinema`
+
+Follow [the included installation check](.agents/skills/gif-cinema/SKILL.md#runtime-and-a-no-key-check)
+to install and verify its pinned Python runtime separately. The older `skill-v0.1.1`
+GitHub Release is not this package.
+
+Try this with your agent:
+
+> Use the gif-cinema skill to assemble the included astronaut story with zero API calls. Return the MP4, a small GIF, the editable project and a review of both cuts.
 
 ## Anime pixel art
+
+Already tried the film? Explore the full cast below, or [browse methods and recipes](docs/GALLERY.md).
+The full grid stays on this page by design; animated media across the README totals about **93 MB**.
+On a slow connection, jump straight to [setup](#make-your-first-film) or open a character’s **Still** link.
+
 
 **100 characters · 3 outfit studies · real GIF previews**
 
@@ -758,7 +824,7 @@ No model call or JavaScript animation.
 <table>
 <tr>
 <td width="50%" align="center" valign="top">
-<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share"><picture><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: a local title and three existing astronaut takes, played once."></picture></a><br>
+<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share">Watch the opening story demo</a><br>
 <strong>A Reply from the Stars</strong><br>
 Three generated takes + local title · 9.70 s GIF<br>
 <a href="docs/EXAMPLES.md">Story recipe</a> · <a href=".agents/skills/gif-cinema/assets/example/storyboard.json">Storyboard</a>
@@ -790,62 +856,6 @@ Existing GIF + local graphic layers · 3.20 s<br>
 
 The astronaut cards reuse existing footage, with differences between takes. Graphics
 use the experimental layer renderer. Blender examples are standalone scenes, not a CLI rendering backend.
-
-<a id="try-it-without-an-api-key"></a>
-
-## Make your first film
-
-**Three bundled GIFs → a 7.68-second MP4. No key, no paid requests.**
-
-You need Python 3.10+, Git, FFmpeg and ffprobe. Pillow installs with the package.
-
-```bash
-git clone https://github.com/antropos17/chatgpt-gif-cinema.git
-cd chatgpt-gif-cinema
-python -m venv .venv
-```
-
-Activate with `source .venv/bin/activate` on macOS/Linux, or
-`.\.venv\Scripts\Activate.ps1` in Windows PowerShell. Then:
-
-```bash
-python -m pip install .
-python -m gif_cinema doctor
-python -m gif_cinema render examples/film.json --dry-run --max-api-calls 0
-python -m gif_cinema render examples/film.json --execute --max-api-calls 0 --out output/my-first-film
-```
-
-Open **`output/my-first-film/film.mp4`**. The folder also includes a contact sheet,
-cut endpoints and a resumable manifest. Repeat the last command to verify reuse
-with zero new provider calls. [What this example preserves](docs/EXAMPLES.md#1-plain-film-preserve-the-source-timing).
-
-Need exact decoded drawings and native GIF holds? Use the optional
-[lossless film master](docs/GIF-MASTER.md). Ordinary MP4 export is a fixed-FPS,
-lossy viewing format.
-
-<a id="give-the-skill-to-your-agent"></a>
-<a id="copy-a-prompt"></a>
-
-## Install the skill
-
-Build the maintained **0.4.0 skill package** from this checkout:
-
-```bash
-python tools/package_skill.py --out dist/gif-cinema.skill.zip
-```
-
-Extract its single `gif-cinema` folder into:
-
-- **Codex:** `~/.codex/skills/gif-cinema`
-- **Claude Code:** `~/.claude/skills/gif-cinema`
-
-Follow [the included installation check](.agents/skills/gif-cinema/SKILL.md#runtime-and-a-no-key-check)
-to install and verify its pinned Python runtime separately. The older `skill-v0.1.1`
-GitHub Release is not this package.
-
-Try this with your agent:
-
-> Use the gif-cinema skill to assemble the included astronaut story with zero API calls. Return the MP4, a small GIF, the editable project and a review of both cuts.
 
 <a id="sprites-and-frame-review"></a>
 
