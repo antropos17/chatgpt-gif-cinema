@@ -224,7 +224,7 @@ class CapabilityTests(unittest.TestCase):
     def test_capability_names_are_detected_from_encoder_and_filter_listing(self):
         encoders = ' V....D libx264 H.264\n A..... aac AAC\n'
         filters = '\n'.join(' ... ' + name + ' V->V' for name in
-                            ('fps', 'scale', 'pad', 'concat', 'tpad', 'trim', 'setpts', 'format', 'setsar', 'setparams', 'apad', 'aresample', 'atrim', 'asetpts'))
+                            ('fps', 'scale', 'pad', 'concat', 'tpad', 'trim', 'setpts', 'format', 'setsar', 'setparams', 'split', 'lutrgb', 'overlay', 'apad', 'aresample', 'atrim', 'asetpts'))
         responses = [subprocess.CompletedProcess([], 0, encoders), subprocess.CompletedProcess([], 0, filters)]
         with patch('gif_cinema.doctor.subprocess.run', side_effect=responses):
             capabilities = doctor.inspect_ffmpeg_capabilities()

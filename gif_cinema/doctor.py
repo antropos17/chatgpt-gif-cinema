@@ -29,7 +29,7 @@ def inspect_ffmpeg_capabilities():
     names = {line.split()[1] for line in filters.splitlines() if len(line.split()) >= 2}
     encoder_names = {line.split()[1] for line in encoders.splitlines() if len(line.split()) >= 2}
     capabilities.update(h264_encoder="libx264" in encoder_names,
-                        core_filters={"fps", "scale", "pad", "concat", "tpad", "trim", "setpts", "format", "setsar", "setparams"} <= names,
+                        core_filters={"fps", "scale", "pad", "concat", "tpad", "trim", "setpts", "format", "setsar", "setparams", "split", "lutrgb", "overlay"} <= names,
                         motion_interpolation="minterpolate" in names,
                         aac_encoder="aac" in encoder_names,
                         audio_padding={"apad", "aresample", "atrim", "asetpts"} <= names)
