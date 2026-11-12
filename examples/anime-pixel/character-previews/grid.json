@@ -1,0 +1,212 @@
+[
+  {
+    "id": "fox-knight",
+    "name": "Fox knight \u00b7 shield salute",
+    "gif": "examples/anime-pixel/character-previews/fox-knight.gif",
+    "source": "examples/anime-pixel/character-previews/README.md",
+    "method": "drawn-poses",
+    "frames": 16,
+    "unique_frames": 16,
+    "duration_ms": 1920,
+    "dimensions": [
+      320,
+      344
+    ],
+    "limitations": "Generated-pose preview; face/outline drift.",
+    "extraction": {
+      "column_origins": [
+        0,
+        285,
+        575,
+        860
+      ],
+      "row_stride": 328,
+      "cell_size": [
+        300,
+        328
+      ],
+      "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+    },
+    "poster": "examples/anime-pixel/character-previews/frames/fox-knight/00.png"
+  },
+  {
+    "id": "dragon-chef",
+    "name": "Dragon chef \u00b7 offering basket",
+    "gif": "examples/anime-pixel/character-previews/dragon-chef.gif",
+    "source": "examples/anime-pixel/character-previews/README.md",
+    "method": "drawn-poses",
+    "frames": 16,
+    "unique_frames": 16,
+    "duration_ms": 1920,
+    "dimensions": [
+      320,
+      344
+    ],
+    "limitations": "Generated-pose preview; face/outline drift.",
+    "extraction": {
+      "column_origins": [
+        0,
+        290,
+        580,
+        870
+      ],
+      "row_stride": 323,
+      "cell_size": [
+        300,
+        323
+      ],
+      "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+    },
+    "poster": "examples/anime-pixel/character-previews/frames/dragon-chef/00.png"
+  },
+  {
+    "id": "raccoon-courier",
+    "name": "Raccoon courier \u00b7 goggle salute",
+    "gif": "examples/anime-pixel/character-previews-batch2/raccoon-courier.gif",
+    "source": "examples/anime-pixel/character-previews-batch2/README.md",
+    "method": "drawn-poses",
+    "frames": 16,
+    "unique_frames": 16,
+    "duration_ms": 1920,
+    "dimensions": [
+      320,
+      344
+    ],
+    "limitations": "Generated-pose preview; face/outline drift.",
+    "extraction": {
+      "column_origins": [
+        30,
+        335,
+        640,
+        945
+      ],
+      "row_stride": 306,
+      "cell_size": [
+        280,
+        306
+      ],
+      "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+    },
+    "poster": "examples/anime-pixel/character-previews-batch2/frames/raccoon-courier/00.png"
+  },
+  {
+    "id": "coral-astronaut",
+    "name": "Coral astronaut \u00b7 hand wave",
+    "gif": "examples/anime-pixel/character-previews-batch2/coral-astronaut.gif",
+    "source": "examples/anime-pixel/character-previews-batch2/README.md",
+    "method": "drawn-poses",
+    "frames": 16,
+    "unique_frames": 16,
+    "duration_ms": 1920,
+    "dimensions": [
+      320,
+      344
+    ],
+    "limitations": "Generated-pose preview; face/outline drift.",
+    "extraction": {
+      "column_origins": [
+        20,
+        305,
+        595,
+        880
+      ],
+      "row_stride": 328,
+      "cell_size": [
+        280,
+        328
+      ],
+      "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+    },
+    "poster": "examples/anime-pixel/character-previews-batch2/frames/coral-astronaut/00.png"
+  },
+  {
+    "id": "violinist",
+    "name": "Violinist \u00b7 bow gesture",
+    "gif": "examples/anime-pixel/character-previews-batch3/violinist.gif",
+    "source": "examples/anime-pixel/character-previews-batch3/README.md",
+    "method": "drawn-poses",
+    "frames": 16,
+    "unique_frames": 16,
+    "duration_ms": 1920,
+    "dimensions": [
+      320,
+      344
+    ],
+    "limitations": "Generated-pose preview; face/outline drift.",
+    "extraction": {
+      "column_origins": [
+        7,
+        321,
+        634,
+        948
+      ],
+      "row_stride": 313.5,
+      "cell_size": [
+        300,
+        313
+      ],
+      "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+    },
+    "poster": "examples/anime-pixel/character-previews-batch3/frames/violinist/00.png"
+  },
+  {
+    "id": "blacksmith",
+    "name": "Blacksmith \u00b7 hammer inspection",
+    "gif": "examples/anime-pixel/character-previews-batch3/blacksmith.gif",
+    "source": "examples/anime-pixel/character-previews-batch3/README.md",
+    "method": "drawn-poses",
+    "frames": 16,
+    "unique_frames": 16,
+    "duration_ms": 1920,
+    "dimensions": [
+      320,
+      344
+    ],
+    "limitations": "Generated-pose preview; face/outline drift.",
+    "extraction": {
+      "column_origins": [
+        7,
+        321,
+        634,
+        948
+      ],
+      "row_stride": 313.5,
+      "cell_size": [
+        300,
+        313
+      ],
+      "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+    },
+    "poster": "examples/anime-pixel/character-previews-batch3/frames/blacksmith/00.png"
+  },
+  {
+    "id": "casual",
+    "name": "Cream jacket",
+    "gif": "examples/anime-pixel/outfit-poses/casual.gif",
+    "source": "examples/anime-pixel/outfit-poses/README.md",
+    "method": "drawn-poses",
+    "limitations": "Pose study; visible drawing shifts at joins.",
+    "poster": "examples/anime-pixel/outfit-poses/casual-poster.png",
+    "first_pose": "examples/anime-pixel/outfit-poses/casual/00.png"
+  },
+  {
+    "id": "traveler",
+    "name": "Jade traveler",
+    "gif": "examples/anime-pixel/outfit-poses/traveler.gif",
+    "source": "examples/anime-pixel/outfit-poses/README.md",
+    "method": "drawn-poses",
+    "limitations": "Pose study; visible drawing shifts at joins.",
+    "poster": "examples/anime-pixel/outfit-poses/traveler-poster.png",
+    "first_pose": "examples/anime-pixel/outfit-poses/traveler/00.png"
+  },
+  {
+    "id": "festival",
+    "name": "Coral festival",
+    "gif": "examples/anime-pixel/outfit-poses/festival.gif",
+    "source": "examples/anime-pixel/outfit-poses/README.md",
+    "method": "drawn-poses",
+    "limitations": "Pose study; visible drawing shifts at joins.",
+    "poster": "examples/anime-pixel/outfit-poses/festival-poster.png",
+    "first_pose": "examples/anime-pixel/outfit-poses/festival/00.png"
+  }
+]

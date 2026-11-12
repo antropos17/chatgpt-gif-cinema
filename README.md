@@ -8,35 +8,83 @@ GIFs, source frames and short films for **Codex and Claude Code**.
 
 ## Anime pixel art
 
-One outfit per GIF. One PNG per pose. **Raise → wave → lower.**
+**Nine separate GIF studies.** Six new characters and three separate outfit studies.
+Click a card for the actual animation; open its source to inspect the drawings.
 
 <table>
 <tr>
 <td align="center" valign="top">
-<a href="examples/anime-pixel/outfit-poses/casual.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/casual-poster.png"><img src="examples/anime-pixel/outfit-poses/casual.gif" width="180" alt="Cream jacket: separate transparent 32-pose raise-and-wave study; drawing shifts remain at the joins."></picture></a><br>
-<strong>Cream jacket</strong><br>
-<a href="examples/anime-pixel/outfit-poses/casual.gif">GIF</a> · <a href="examples/anime-pixel/outfit-poses/casual/00.png">First pose</a><br>
-<a href="examples/anime-pixel/outfit-poses/README.md">32 individual PNGs</a>
+<a href="examples/anime-pixel/character-previews/fox-knight.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/character-previews/frames/fox-knight/00.png"><img src="examples/anime-pixel/character-previews/fox-knight.gif" width="160" alt="Fox knight · shield salute: drawn poses."></picture></a><br>
+<strong>Fox knight · shield salute</strong><br>1.92 s · 16 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/character-previews/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/character-previews/frames/fox-knight/00.png">First pose</a><br>
+<small>Generated-pose preview; face/outline drift.</small>
 </td>
 <td align="center" valign="top">
-<a href="examples/anime-pixel/outfit-poses/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/traveler-poster.png"><img src="examples/anime-pixel/outfit-poses/traveler.gif" width="180" alt="Jade traveler: separate transparent 32-pose raise-and-wave study; drawing shifts remain at the joins."></picture></a><br>
-<strong>Jade traveler</strong><br>
-<a href="examples/anime-pixel/outfit-poses/traveler.gif">GIF</a> · <a href="examples/anime-pixel/outfit-poses/traveler/00.png">First pose</a><br>
-<a href="examples/anime-pixel/outfit-poses/README.md">32 individual PNGs</a>
+<a href="examples/anime-pixel/character-previews/dragon-chef.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/character-previews/frames/dragon-chef/00.png"><img src="examples/anime-pixel/character-previews/dragon-chef.gif" width="160" alt="Dragon chef · offering basket: drawn poses."></picture></a><br>
+<strong>Dragon chef · offering basket</strong><br>1.92 s · 16 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/character-previews/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/character-previews/frames/dragon-chef/00.png">First pose</a><br>
+<small>Generated-pose preview; face/outline drift.</small>
 </td>
 <td align="center" valign="top">
-<a href="examples/anime-pixel/outfit-poses/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/festival-poster.png"><img src="examples/anime-pixel/outfit-poses/festival.gif" width="180" alt="Coral festival: separate transparent 32-pose raise-and-wave study; drawing shifts remain at the joins."></picture></a><br>
-<strong>Coral festival</strong><br>
-<a href="examples/anime-pixel/outfit-poses/festival.gif">GIF</a> · <a href="examples/anime-pixel/outfit-poses/festival/00.png">First pose</a><br>
-<a href="examples/anime-pixel/outfit-poses/README.md">32 individual PNGs</a>
+<a href="examples/anime-pixel/character-previews-batch2/raccoon-courier.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/character-previews-batch2/frames/raccoon-courier/00.png"><img src="examples/anime-pixel/character-previews-batch2/raccoon-courier.gif" width="160" alt="Raccoon courier · goggle salute: drawn poses."></picture></a><br>
+<strong>Raccoon courier · goggle salute</strong><br>1.92 s · 16 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/character-previews-batch2/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/character-previews-batch2/frames/raccoon-courier/00.png">First pose</a><br>
+<small>Generated-pose preview; face/outline drift.</small>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/character-previews-batch2/coral-astronaut.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/character-previews-batch2/frames/coral-astronaut/00.png"><img src="examples/anime-pixel/character-previews-batch2/coral-astronaut.gif" width="160" alt="Coral astronaut · hand wave: drawn poses."></picture></a><br>
+<strong>Coral astronaut · hand wave</strong><br>1.92 s · 16 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/character-previews-batch2/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/character-previews-batch2/frames/coral-astronaut/00.png">First pose</a><br>
+<small>Generated-pose preview; face/outline drift.</small>
+</td>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/character-previews-batch3/violinist.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/character-previews-batch3/frames/violinist/00.png"><img src="examples/anime-pixel/character-previews-batch3/violinist.gif" width="160" alt="Violinist · bow gesture: drawn poses."></picture></a><br>
+<strong>Violinist · bow gesture</strong><br>1.92 s · 16 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/character-previews-batch3/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/character-previews-batch3/frames/violinist/00.png">First pose</a><br>
+<small>Generated-pose preview; face/outline drift.</small>
+</td>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/character-previews-batch3/blacksmith.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/character-previews-batch3/frames/blacksmith/00.png"><img src="examples/anime-pixel/character-previews-batch3/blacksmith.gif" width="160" alt="Blacksmith · hammer inspection: drawn poses."></picture></a><br>
+<strong>Blacksmith · hammer inspection</strong><br>1.92 s · 16 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/character-previews-batch3/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/character-previews-batch3/frames/blacksmith/00.png">First pose</a><br>
+<small>Generated-pose preview; face/outline drift.</small>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/outfit-poses/casual.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/casual-poster.png"><img src="examples/anime-pixel/outfit-poses/casual.gif" width="160" alt="Cream jacket: drawn poses."></picture></a><br>
+<strong>Cream jacket</strong><br>2.56 s · 32 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/outfit-poses/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/outfit-poses/casual/00.png">First pose</a><br>
+<small>Pose study; visible drawing shifts at joins.</small>
+</td>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/outfit-poses/traveler.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/traveler-poster.png"><img src="examples/anime-pixel/outfit-poses/traveler.gif" width="160" alt="Jade traveler: drawn poses."></picture></a><br>
+<strong>Jade traveler</strong><br>2.56 s · 32 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/outfit-poses/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/outfit-poses/traveler/00.png">First pose</a><br>
+<small>Pose study; visible drawing shifts at joins.</small>
+</td>
+<td align="center" valign="top">
+<a href="examples/anime-pixel/outfit-poses/festival.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/outfit-poses/festival-poster.png"><img src="examples/anime-pixel/outfit-poses/festival.gif" width="160" alt="Coral festival: drawn poses."></picture></a><br>
+<strong>Coral festival</strong><br>2.56 s · 32 frames<br>
+Drawn poses<br><a href="examples/anime-pixel/outfit-poses/README.md">Source &amp; method</a> · <a href="examples/anime-pixel/outfit-poses/festival/00.png">First pose</a><br>
+<small>Pose study; visible drawing shifts at joins.</small>
 </td>
 </tr>
 </table>
 
-Each: **320 × 320 · 32 frames · 2.56 s · transparent**. These are pose studies:
-hair, face and sleeves still jump at **15 → 16** and **31 → 0**, not seamless loops.
+**New characters:** fox knight raises a shield; dragon chef offers a basket;
+raccoon courier gestures near their goggles; coral astronaut waves while holding a helmet;
+violinist gestures with a bow; blacksmith inspects a hammer.
+Each has **16 distinct decoded frames · 1.92 s · opaque ivory background**.
+These are generated-pose previews with residual face/outline drift, not 15-second films.
 
-[Frames & method](examples/anime-pixel/outfit-poses/README.md) · [Measured facts](examples/anime-pixel/outfit-poses/verification.json) · [Draft festival film](examples/anime-pixel/README.md#draft-festival-film)
+**Outfit studies:** each has **32 frames · 2.56 s · transparent**.
+Hair, face and sleeves still jump at **15 → 16** and **31 → 0**, not seamless loops.
+Static concept sheets are not counted as animations.
+
+[New character sources & method](examples/anime-pixel/character-previews/README.md) · [Measured GIF facts](examples/anime-pixel/character-previews/verification.json) · [Outfit frames](examples/anime-pixel/outfit-poses/README.md) · [Draft festival film](examples/anime-pixel/README.md#draft-festival-film)
 
 <details>
 <summary>Earlier shared-stage experiments</summary>

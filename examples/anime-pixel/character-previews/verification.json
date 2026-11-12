@@ -1,0 +1,119 @@
+[
+  {
+    "id": "fox-knight",
+    "file": "examples/anime-pixel/character-previews/fox-knight.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "5b48be2eaab609fada3e17f5f90ccc2d69c1707b680852d7b7cff577291d19a3"
+  },
+  {
+    "id": "dragon-chef",
+    "file": "examples/anime-pixel/character-previews/dragon-chef.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "b5c8bde78352a048321e01903cc53a7180ccf1ad7464dcd51efa8a11fe281236"
+  },
+  {
+    "id": "raccoon-courier",
+    "file": "examples/anime-pixel/character-previews-batch2/raccoon-courier.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "f1b869090928916c5a948ec29ee412030e5acc6acc05f807447e5bd7f26d7a0f"
+  },
+  {
+    "id": "coral-astronaut",
+    "file": "examples/anime-pixel/character-previews-batch2/coral-astronaut.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "09ea369666449e1b0009f66995719b3181ae1e0d6b37ece5c1cf157ce8cbef4f"
+  },
+  {
+    "id": "violinist",
+    "file": "examples/anime-pixel/character-previews-batch3/violinist.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "b50f3894a455a7d8ea5a5e69557838572da2221952df3bb33dc38f82a6b9134b"
+  },
+  {
+    "id": "blacksmith",
+    "file": "examples/anime-pixel/character-previews-batch3/blacksmith.gif",
+    "frames": 16,
+    "unique_decoded_frames": 16,
+    "duration_ms": 1920,
+    "size": [
+      320,
+      344
+    ],
+    "method": "drawn-poses",
+    "sha256": "cabe75152a717344b38a9b8e5b4c76f798cbe4c0ec5581a8c5fb5a98953a6250"
+  },
+  {
+    "id": "casual",
+    "file": "examples/anime-pixel/outfit-poses/casual.gif",
+    "frames": 32,
+    "unique_decoded_frames": 32,
+    "duration_ms": 2560,
+    "size": [
+      320,
+      320
+    ],
+    "method": "drawn-poses",
+    "sha256": "7b5ef6adef02773aada462d550d7ba608f10ffd6750aa4810e4c93ceb440737d"
+  },
+  {
+    "id": "traveler",
+    "file": "examples/anime-pixel/outfit-poses/traveler.gif",
+    "frames": 32,
+    "unique_decoded_frames": 32,
+    "duration_ms": 2560,
+    "size": [
+      320,
+      320
+    ],
+    "method": "drawn-poses",
+    "sha256": "e7ce5f1288a1c7a2d1618796337bf513112d0be9eb6990dca29a0683115169f7"
+  },
+  {
+    "id": "festival",
+    "file": "examples/anime-pixel/outfit-poses/festival.gif",
+    "frames": 32,
+    "unique_decoded_frames": 32,
+    "duration_ms": 2560,
+    "size": [
+      320,
+      320
+    ],
+    "method": "drawn-poses",
+    "sha256": "c41cad2f02840a9651a7c9c9571815069b1e27ad7a8c8560735ea96edd8e6e99"
+  }
+]
