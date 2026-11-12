@@ -119,7 +119,7 @@ class ReadmeTests(unittest.TestCase):
         self.assertTrue(manifest['typography']['outlined'])
         self.assertEqual(manifest['typography']['family'], 'Open Sans')
 
-    def test_catalog_is_compact_and_keeps_real_motion_before_setup(self):
+    def test_first_result_precedes_full_catalog_and_retains_all_media(self):
         source = (ROOT / 'README.md').read_text(encoding='utf-8')
         visible = re.sub(r'<details\b.*?</details>', '', source, flags=re.S)
         first_image = visible.index('<img ')
@@ -149,8 +149,12 @@ class ReadmeTests(unittest.TestCase):
         self.assertEqual(len(inventory), 100)
         self.assertEqual(set(urls), expected)
         self.assertEqual(len(urls), len(expected))  # No repeated showcase downloads.
-        for path in urls:
-            self.assertLess(visible.index(path), visible.index('## Make your first film'))
+        self.assertLess(first_image, visible.index('## Make your first film'))
+        self.assertLess(visible.index('## Make your first film'), visible.index('## Anime pixel art'))
+        self.assertLess(visible.index('## Install the skill'), visible.index('## Anime pixel art'))
+        self.assertLess(visible.index('--execute --max-api-calls 0'), visible.index('<table>'))
+        self.assertIn('93 MB', visible)
+        self.assertIn('lossy viewing format', visible)
         self.assertNotIn('width="33%"', visible)
         self.assertNotIn('<script', source.lower())
         self.assertIn('docs/SPRITES.md', visible)

@@ -2,24 +2,27 @@
 
 [Visual homepage](../README.md) · [Methods and recipes](GALLERY.md)
 
-## Show the work, then the route
+## Show a first result, then the full cast
 
-The README opens with three independently linked outfit GIFs: cream, traveler and
-festival. Each has its own first-pose link, reduced-motion poster and 32 PNG sources.
-The compact cards do not combine the outfits into one animation. Drawing jumps at
-15 → 16 and 31 → 0 remain explicitly visible limitations.
+The README opens with the existing titled-story preview and a direct zero-key
+quickstart. The 9.70-second preview includes a title; the plain-film quickstart
+creates a 7.68-second MP4 from the same three bundled takes. Neither is presented
+as proof of seamless character continuity. The optional exact-frame master is
+linked explicitly; ordinary MP4 is a fixed-FPS lossy viewing copy.
 
-Sculptural loops and stories/graphics follow as separate sections. Eight distinct
-GIF previews link to sources and methods. The wider catalog now shows the same
-real assets alongside its detailed recipes rather than a text-only inventory.
+Runtime installation and maintained agent-skill setup appear before the first
+catalog table. The user-requested full grid remains visible: 100 independent
+characters and three outfit studies. No GIF bytes are changed or duplicated.
+The page warns that its referenced GIFs total about 93 MB; moving the instructions
+up reduces scrolling, not the browser's media downloads. A lean separate landing
+page would be a distinct follow-up, not a performance claim for this change.
 
-The zero-key film commands are visible without opening a disclosure. Skill setup
-and a short workflow table follow. Provider access and visual-review limits are
-stated together, with detailed contracts kept in their guides.
+Sculptural loops, stories/graphics and the workflow table remain available.
+Old section anchors and reduced-motion sources are preserved. Detailed limitations
+remain linked from cards; individual short studies are not 15-second films.
 
-GIF Factory informed the compact introduction, visual examples and linked methods.
-No upstream artwork, characters, fonts, template or exporter code is copied. This
-independent collection does not claim its style count or example volume.
+GIF Factory informed the compact presentation and linked methods. No upstream
+artwork, characters, fonts, template or exporter code is copied.
 
 ## Existing media, unchanged
 
@@ -41,7 +44,7 @@ an animation demo. Repository media provenance and licenses are unchanged.
 ## Presentation and verification
 
 The README uses GitHub's native typography with no scripts, remote badges, custom
-animation or new decorative assets. All table GIFs use picture wrappers; the three outfit cards use 180-pixel previews.
+animation or new decorative assets. All table GIFs use picture wrappers; the character cards use proportional widths.
 The archived chrome preview keeps its existing reduced-motion still; MP4 links
 provide pausable playback for the two Blender works. Other GIF playback behavior
 belongs to the viewer.
