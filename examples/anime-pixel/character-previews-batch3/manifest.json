@@ -1,0 +1,62 @@
+{
+  "entries": [
+    {
+      "id": "violinist",
+      "name": "Violinist \u00b7 bow gesture",
+      "gif": "violinist.gif",
+      "source": "sources/violinist-sheet.png",
+      "method": "drawn-poses",
+      "frames": 16,
+      "unique_frames": 16,
+      "duration_ms": 1920,
+      "dimensions": [
+        320,
+        344
+      ],
+      "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.",
+      "extraction": {
+        "column_origins": [
+          7,
+          321,
+          634,
+          948
+        ],
+        "row_stride": 313.5,
+        "cell_size": [
+          300,
+          313
+        ],
+        "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+      }
+    },
+    {
+      "id": "blacksmith",
+      "name": "Blacksmith \u00b7 hammer inspection",
+      "gif": "blacksmith.gif",
+      "source": "sources/blacksmith-sheet.png",
+      "method": "drawn-poses",
+      "frames": 16,
+      "unique_frames": 16,
+      "duration_ms": 1920,
+      "dimensions": [
+        320,
+        344
+      ],
+      "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.",
+      "extraction": {
+        "column_origins": [
+          7,
+          321,
+          634,
+          948
+        ],
+        "row_stride": 313.5,
+        "cell_size": [
+          300,
+          313
+        ],
+        "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+      }
+    }
+  ]
+}

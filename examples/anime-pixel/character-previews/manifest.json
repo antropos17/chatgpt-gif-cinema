@@ -1,0 +1,62 @@
+{
+  "entries": [
+    {
+      "id": "fox-knight",
+      "name": "Fox knight \u00b7 shield salute",
+      "gif": "fox-knight.gif",
+      "source": "sources/fox-knight-sheet.png",
+      "method": "drawn-poses",
+      "frames": 16,
+      "unique_frames": 16,
+      "duration_ms": 1920,
+      "dimensions": [
+        320,
+        344
+      ],
+      "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.",
+      "extraction": {
+        "column_origins": [
+          0,
+          285,
+          575,
+          860
+        ],
+        "row_stride": 328,
+        "cell_size": [
+          300,
+          328
+        ],
+        "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+      }
+    },
+    {
+      "id": "dragon-chef",
+      "name": "Dragon chef \u00b7 offering basket",
+      "gif": "dragon-chef.gif",
+      "source": "sources/dragon-chef-sheet.png",
+      "method": "drawn-poses",
+      "frames": 16,
+      "unique_frames": 16,
+      "duration_ms": 1920,
+      "dimensions": [
+        320,
+        344
+      ],
+      "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.",
+      "extraction": {
+        "column_origins": [
+          0,
+          290,
+          580,
+          870
+        ],
+        "row_stride": 323,
+        "cell_size": [
+          280,
+          323
+        ],
+        "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+      }
+    }
+  ]
+}

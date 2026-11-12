@@ -1,0 +1,62 @@
+{
+  "entries": [
+    {
+      "id": "raccoon-courier",
+      "name": "Raccoon courier \u00b7 goggle salute",
+      "gif": "raccoon-courier.gif",
+      "source": "sources/raccoon-courier-sheet.png",
+      "method": "drawn-poses",
+      "frames": 16,
+      "unique_frames": 16,
+      "duration_ms": 1920,
+      "dimensions": [
+        320,
+        344
+      ],
+      "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.",
+      "extraction": {
+        "column_origins": [
+          30,
+          335,
+          640,
+          945
+        ],
+        "row_stride": 306,
+        "cell_size": [
+          280,
+          306
+        ],
+        "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+      }
+    },
+    {
+      "id": "coral-astronaut",
+      "name": "Coral astronaut \u00b7 hand wave",
+      "gif": "coral-astronaut.gif",
+      "source": "sources/coral-astronaut-sheet.png",
+      "method": "drawn-poses",
+      "frames": 16,
+      "unique_frames": 16,
+      "duration_ms": 1920,
+      "dimensions": [
+        320,
+        344
+      ],
+      "limitations": "Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.",
+      "extraction": {
+        "column_origins": [
+          20,
+          305,
+          595,
+          880
+        ],
+        "row_stride": 328,
+        "cell_size": [
+          280,
+          328
+        ],
+        "strategy": "Fixed per-column crops; no per-frame resizing, silhouette recentering, interpolation, crossfade or reverse."
+      }
+    }
+  ]
+}
