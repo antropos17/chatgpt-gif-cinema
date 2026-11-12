@@ -14,7 +14,7 @@ label that method accurately. The skill does not embed a video service or free c
 
 ## Current public runtime contract
 
-Read the pinned [script schema](https://github.com/antropos17/chatgpt-gif-cinema/blob/11523f0a8d75f4422445658e7c5f9547bdc4d6d4/docs/SCRIPT-FORMAT.md)
+Read the pinned [script schema](https://github.com/antropos17/chatgpt-gif-cinema/blob/88262cd28f47a53188ea21f354ceaffc5c6a0f9c/docs/SCRIPT-FORMAT.md)
 when changing generation settings. It validates strict JSON fields before dispatch.
 
 - Request 2–16 frames, 20–2000 ms per frame in 10 ms steps. These are requested
@@ -52,3 +52,12 @@ actual `--force-shot ID` workflow only with the required retry authorization. Re
 both sides of a replaced shot. Finally, replace that storyboard's `generate` object
 with `source: "path/to/accepted.gif"` and compile a new source-only project. No titles
 or added montage shots are needed in a single-shot paid generation request.
+
+## Direct generation recovery
+
+The pinned runtime writes a durable `OUTPUT.gif.attempts.json` journal before a direct
+`generate` request. A timeout, interrupted request or invalid response blocks a
+repeat attempt, including `--resume`. Review provider request/billing history before
+using `--force`, which may incur another charge. Keep the journal with the output;
+changing the destination does not resolve an unknown provider outcome. Successful
+hash-verified GIFs can be reused with `--resume` without a new request.

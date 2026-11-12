@@ -1,6 +1,6 @@
 # Build an offline GIF collection
 
-Package 0.4.0 includes the `factory` command through its separately installed,
+Package 0.4.1 includes the `factory` command through its separately installed,
 immutable runtime pin. It gathers existing GIFs and local editable layer scenes
 into a static gallery and verified ZIP. It makes no provider calls or new poses.
 
