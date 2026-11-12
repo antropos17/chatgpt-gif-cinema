@@ -50,6 +50,37 @@ class CutContextTests(unittest.TestCase):
         self.assertEqual(report["pixel_metric"], "max-black-white-composite-rgb-thumbnail-mae-v1")
         self.assertEqual(cut_sheet([frame], [clear], report).getpixel((8, 24)), (24, 24, 24))
 
+    def test_import_preserves_later_frame_alpha_and_endpoint_pngs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "transparent.gif"
+            frames = []
+            for x in (1, 2):
+                frame = Image.new("P", (8, 8), 0)
+                frame.putpalette([255, 0, 0, 0, 255, 0] + [0, 0, 0] * 254)
+                frame.putpixel((x, 1), 1)
+                frames.append(frame)
+            frames[0].save(source, save_all=True, append_images=frames[1:],
+                           transparency=0, duration=[120, 120], disposal=2, optimize=False)
+            before = source.read_bytes()
+            imported, delays, _ = cli.gif_frames(source)
+            self.assertEqual(delays, [120, 120])
+            for index, frame in enumerate(imported):
+                self.assertEqual(frame.mode, "RGBA")
+                self.assertEqual(frame.getpixel((0, 0))[3], 0)
+                self.assertEqual(frame.getpixel((index + 1, 1)), (0, 255, 0, 255))
+            args = cli.build_parser().parse_args(["endpoints", str(source), "-o", str(root / "edge")])
+            cli.endpoints(args)
+            for name in ("first", "last"):
+                with Image.open(root / f"edge-{name}.png") as endpoint:
+                    self.assertEqual(endpoint.getpixel((0, 0))[3], 0)
+            script = {"shots": [{"id": "take", "source": source.name}]}
+            render.diagnostics(root, script, [{"output": source.name}])
+            with Image.open(root / "contact-sheet.png") as sheet:
+                self.assertEqual(sheet.getpixel((0, 0)), (24, 24, 24))
+                self.assertEqual(sheet.getpixel((240, 0)), (24, 24, 24))
+            self.assertEqual(source.read_bytes(), before)
+
     def test_variable_delays_and_original_indexes_survive_bounded_context(self):
         frames = drawings([0, 10, 20, 30, 40])
         result = cut_context(frames, [20, 40, 80, 160, 320], frames[:2], [60, 100])

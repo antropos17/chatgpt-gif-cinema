@@ -213,6 +213,10 @@ remains conservative on later resumes. Adopting the current generated proposal a
 restores automatic tracking. Keep custom edits elsewhere before doing either.
 The generation `--force` options do not grant permission to discard SRT edits.
 
+Decoded transparent GIF drawings retain RGBA on every frame, including later
+frames after palette/disposal composition. Opaque drawings retain RGB mode. Endpoint
+PNGs preserve alpha; both the overview and join strips composite onto a dark matte.
+
 Cut pixel diagnostics composite both frames onto black and white before thumbnail
 comparison and report the larger RGB MAE. This exposes alpha-only disappearance
 and ignores RGB hidden under fully transparent pixels. The JSON `pixel_metric`
