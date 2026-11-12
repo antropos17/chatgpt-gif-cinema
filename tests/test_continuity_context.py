@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from PIL import Image
 from gif_cinema import cli, render
-from gif_cinema.continuity import cut_context, cut_sheet
+from gif_cinema.continuity import cut_context, cut_sheet, pixel_mae
 
 
 def drawings(values):
@@ -24,6 +24,32 @@ def gif(path, values, delays):
 
 
 class CutContextTests(unittest.TestCase):
+    def test_hidden_rgb_does_not_create_a_false_cut(self):
+        a = Image.new("RGBA", (24, 24), (255, 0, 0, 0))
+        b = Image.new("RGBA", (24, 24), (0, 255, 255, 0))
+        before = (a.tobytes(), b.tobytes())
+        self.assertEqual(pixel_mae(a, b), 0)
+        self.assertEqual(before, (a.tobytes(), b.tobytes()))
+
+    def test_alpha_only_changes_are_visible_on_either_matte(self):
+        for color in ((0, 0, 0), (255, 255, 255)):
+            opaque = Image.new("RGBA", (24, 24), (*color, 255))
+            hidden = Image.new("RGBA", (24, 24), (*color, 0))
+            half = Image.new("RGBA", (24, 24), (*color, 128))
+            self.assertEqual(pixel_mae(opaque, hidden), 255)
+            self.assertEqual(pixel_mae(opaque, half), 127)
+            self.assertEqual(pixel_mae(hidden, opaque), 255)
+
+    def test_palette_transparency_and_strip_do_not_show_hidden_color(self):
+        frame = Image.new("P", (24, 24), 0)
+        frame.putpalette([255, 0, 0] + [0, 0, 0] * 255)
+        frame.info["transparency"] = 0
+        clear = Image.new("RGBA", frame.size, (0, 0, 0, 0))
+        self.assertEqual(pixel_mae(frame, clear), 0)
+        report = cut_context([frame], [100], [clear], [100])
+        self.assertEqual(report["pixel_metric"], "max-black-white-composite-rgb-thumbnail-mae-v1")
+        self.assertEqual(cut_sheet([frame], [clear], report).getpixel((8, 24)), (24, 24, 24))
+
     def test_variable_delays_and_original_indexes_survive_bounded_context(self):
         frames = drawings([0, 10, 20, 30, 40])
         result = cut_context(frames, [20, 40, 80, 160, 320], frames[:2], [60, 100])

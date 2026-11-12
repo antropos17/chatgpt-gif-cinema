@@ -12,11 +12,25 @@ REVIEW_CHECKS = [
 ]
 
 
+def _composite(frame, background):
+    rgba = frame.convert("RGBA")
+    canvas = Image.new("RGBA", rgba.size, (*background, 255))
+    return Image.alpha_composite(canvas, rgba).convert("RGB")
+
+
 def pixel_mae(left, right):
-    """Compare normalized RGB thumbnails, without judging semantic continuity."""
-    a = left.convert("RGB").resize((128, 128))
-    b = right.convert("RGB").resize((128, 128))
-    return sum(ImageStat.Stat(ImageChops.difference(a, b)).mean) / 3
+    """Worst RGB thumbnail MAE on black/white mattes; ignore invisible RGB.
+
+    Two mattes expose alpha-only changes even when the drawing matches one
+    background. Composite before resizing so hidden colors cannot bleed in.
+    This is a diagnostic, not a semantic or visual acceptance threshold.
+    """
+    scores = []
+    for background in ((0, 0, 0), (255, 255, 255)):
+        a = _composite(left, background).resize((128, 128))
+        b = _composite(right, background).resize((128, 128))
+        scores.append(sum(ImageStat.Stat(ImageChops.difference(a, b)).mean) / 3)
+    return max(scores)
 
 
 def context(frames, delays, side, frame_offset=0):
@@ -57,7 +71,9 @@ def cut_context(previous, previous_delays, following, following_delays, previous
             "cut_to_local_change_ratio": round(seam / baseline, 6) if baseline else None,
             "review_checks": list(REVIEW_CHECKS),
             "status": "human-review-required",
-            "note": "Scores describe pixels, not identity, motion direction or smoothness. "
+            "pixel_metric": "max-black-white-composite-rgb-thumbnail-mae-v1",
+            "note": "Scores compare alpha-composited black/white thumbnails, not identity, "
+                    "motion direction or smoothness. "
                     "A null ratio means no nonzero local baseline; it is not a pass."}
 
 
@@ -68,7 +84,7 @@ def cut_sheet(previous, following, report):
     sheet = Image.new("RGB", (208 * len(cells), 232), "#181818")
     draw = ImageDraw.Draw(sheet)
     for offset, (frames, row, label, frame_offset) in enumerate(cells):
-        thumb = frames[row["frame"] - frame_offset].convert("RGB")
+        thumb = _composite(frames[row["frame"] - frame_offset], (24, 24, 24))
         thumb.thumbnail((192, 180))
         x = offset * 208 + 8
         sheet.paste(thumb, (x, 24))

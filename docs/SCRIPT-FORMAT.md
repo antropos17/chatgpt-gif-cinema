@@ -213,6 +213,14 @@ remains conservative on later resumes. Adopting the current generated proposal a
 restores automatic tracking. Keep custom edits elsewhere before doing either.
 The generation `--force` options do not grant permission to discard SRT edits.
 
+Cut pixel diagnostics composite both frames onto black and white before thumbnail
+comparison and report the larger RGB MAE. This exposes alpha-only disappearance
+and ignores RGB hidden under fully transparent pixels. The JSON `pixel_metric`
+field identifies this definition; historical alpha-ignorant scores are not directly
+comparable for transparent inputs. Opaque-frame scores are unchanged. The review
+strip uses a dark matte so invisible colors do not appear as phantom drawings.
+These diagnostics never change the source frames, cadence or exported movie.
+
 Every continuity join remains `human-review-required`, even when pixel difference is
 small. Inspect identity, costume, pose, gaze, action direction, scene geography and
 causality at full playback speed. A three-shot MP4 that passes decoding is only a
