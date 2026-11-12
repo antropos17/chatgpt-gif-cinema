@@ -317,6 +317,8 @@ def generation_action(out, payload, *, resume=False, force=False):
             raise ValueError("Output or metadata already exists; use --resume to reuse or --force to regenerate")
     if out.is_dir() or meta.is_dir():
         raise ValueError("Output and metadata must be files")
+    from .generation_journal import check
+    check(out, force)
     return "generate"
 
 
@@ -337,7 +339,8 @@ def generate(args):
                 "note": "Execution rechecks the output under its lock; this preview writes nothing."}
         print(json.dumps(plan, ensure_ascii=False, indent=2))
         return plan
-    out.parent.mkdir(parents=True,exist_ok=True)
+    from . import generation_journal
+    generation_journal.create_directory(out.parent)
     meta = out.with_suffix(".json")
     with output_lock(out):
         if generation_action(out, payload, resume=resume, force=force) == "reuse":
@@ -346,16 +349,26 @@ def generate(args):
         key = os.environ.get("OPENAI_API_KEY")
         if not key:
             raise RuntimeError("Set OPENAI_API_KEY in your environment. Never commit it.")
-        start = time.monotonic()
-        raw,usage = request_gif(payload,key)
-        frames, durations, _ = validate_gif(io.BytesIO(raw))
-        metadata={"prompt":args.prompt,"parameters":payload,"output":str(out),
-                  "seconds":round(time.monotonic()-start,2),"usage":usage,
-                  "sha256":hashlib.sha256(raw).hexdigest(),
-                  "actual_frames":len(frames),"actual_duration_ms":sum(durations)}
-        write_result(out, raw, force)
-        write_result(meta, json.dumps(metadata,ensure_ascii=False,indent=2).encode("utf-8"), force)
+        journal = generation_journal.start(out, payload, force)
+        try:
+            start = time.monotonic()
+            raw,usage = request_gif(payload,key)
+            frames, durations, _ = validate_gif(io.BytesIO(raw))
+            metadata={"prompt":args.prompt,"parameters":payload,"output":str(out),
+                      "seconds":round(time.monotonic()-start,2),"usage":usage,
+                      "sha256":hashlib.sha256(raw).hexdigest(),
+                      "actual_frames":len(frames),"actual_duration_ms":sum(durations)}
+            write_result(out, raw, force)
+            write_result(meta, json.dumps(metadata,ensure_ascii=False,indent=2).encode("utf-8"), force)
+        except BaseException:
+            journal['attempts'][-1]['status'] = 'unknown'
+            # Even a failed update leaves the durable started receipt blocking retry.
+            generation_journal.save(out, journal)
+            raise
+        journal['attempts'][-1].update(status='succeeded', sha256=metadata['sha256'])
+        generation_journal.save(out, journal)
         print(f"Created {out} ({len(raw):,} bytes)")
+
 
 def film(args):
     from .audio import MAX_AUDIO_SECONDS, prepare_audio
@@ -509,7 +522,7 @@ def build_parser():
     g=sub.add_parser("generate");g.add_argument("prompt");g.add_argument("-o","--output",default="output/scene.gif")
     reuse = g.add_mutually_exclusive_group()
     reuse.add_argument("--resume",action="store_true",help="Reuse an existing GIF with matching parameters and checksum")
-    reuse.add_argument("--force",action="store_true",help="Replace existing output; makes a new paid API request")
+    reuse.add_argument("--force",action="store_true",help="Authorize a new paid request, even after an uncertain attempt; review provider history first")
     g.add_argument("--dry-run",action="store_true",help="Print the request that would be sent; no API call, key or writes")
     g.add_argument("--model",choices=MODELS,default=None,help=f"Default: ${MODEL_ENV} or {MODELS[0]}");g.add_argument("--frames",type=int,default=9)
     g.add_argument("--duration",type=int,default=200);g.add_argument("--size",default="auto")
