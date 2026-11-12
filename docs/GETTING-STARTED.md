@@ -290,3 +290,24 @@ OSI-approved open-source license. Personal non-commercial evaluation and researc
 are permitted; commercial use, redistribution and hosting require written permission.
 Read the [license](../LICENSE), and review prompts, references, media rights and
 private project records before sharing an editable project.
+
+### Direct generation: interrupted requests and paid retries
+
+`generate` writes a durable `scene.gif.attempts.json` receipt **before** contacting
+OpenAI. A timeout, malformed response, process interruption, or local save failure
+can leave a billable request with no usable output. Repeating the same output path
+(including `--resume`) then fails closed instead of silently paying again.
+
+Check your provider history first. Use `--resume` when the GIF and matching metadata
+are already present; it verifies and reuses them without a request. Only use
+`--force` after review to explicitly authorize **one new paid request**, which may
+replace an existing result. The journal preserves prior attempts. It contains
+parameter hashes and status, not API keys, prompts, response bodies or exception
+messages. Corrupt journals fail closed, even with `--force`; preserve them for
+inspection rather than deleting them to retry.
+
+This is an output-path guard, not provider-side idempotency or a global spending
+cap. A different output path is a new request. Old runs made before this guard have
+no receipt, and provider history remains the source for actual billing. A stale
+`.lock` after a hard crash must only be removed once the process is confirmed dead;
+the retained attempt receipt still prevents an accidental new request.
