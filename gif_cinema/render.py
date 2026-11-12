@@ -246,7 +246,7 @@ def diagnostics(root, script, records):
             data = io.BytesIO(); frame.save(data, format="PNG")
             cli.write_result(output, data.getvalue(), force=True)
             thumbnail = frame.copy(); thumbnail.thumbnail((238, 180))
-            sheet.paste(thumbnail, (x, index * 205))
+            sheet.paste(thumbnail, (x, index * 205), thumbnail.getchannel("A") if thumbnail.mode == "RGBA" else None)
             draw.text((x + 4, index * 205 + 183), f"{shot['id']} {label}", fill="white")
         if previous is not None:
             context = cut_context(previous, previous_delays, frames, delays, previous_offset)

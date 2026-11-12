@@ -1,6 +1,22 @@
 # Verification status
 
-Checked on November 6, 2026.
+## Current milestone — November 12, 2026
+
+The README now contains 100 distinct character GIF previews plus three older outfit
+variations ([catalogue](docs/GALLERY.md)). Ninety-nine character previews are 1.92 s;
+one is 1.44 s. They are short source takes, not 100 finished 15-second scenes.
+The final GIFs and posters for the expanded collection were recovered; original
+source sheets/builders for 94 of the characters are not included in that recovery.
+See [recovery scope](examples/anime-pixel/catalog-100/README.md).
+
+The remaining acceptance target is a 15–20 second multi-action pilot with one
+recognizable character, reviewed action/pose continuity, and no dropped source
+frames. Looping or slowing a short take is not new character action. The existing
+checks establish technical integrity, not artistic parity with GIF Factory.
+
+## Historical verification — November 6, 2026
+
+The evidence below describes that earlier milestone, not today's test count.
 
 ## Working public path
 

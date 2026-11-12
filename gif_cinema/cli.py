@@ -210,7 +210,14 @@ def validate_gif(source, *, allow_still=False):
                 duration = int(frame.info.get("duration", 0))
                 if duration < 20:
                     raise ValueError("GIF frames must have a duration of at least 20 ms")
-                frames.append(frame.convert("RGB").copy())
+                # Preserve composited alpha on every frame, including Pillow's
+                # later RGBA frames. Keep the historical RGB mode for opaque
+                # drawings; palette transparency metadata is no longer valid there.
+                decoded = frame.convert("RGBA")
+                if decoded.getchannel("A").getextrema() == (255, 255):
+                    decoded = decoded.convert("RGB")
+                    decoded.info.pop("transparency", None)
+                frames.append(decoded.copy())
                 durations.append(duration)
                 pixels += frame_pixels
             if len(frames) < (1 if allow_still else 2):
