@@ -425,7 +425,15 @@ def _encode_film(args, clips, clip_frames, out, force, audio_path):
     for i in range(len(clips)):
         # Pad before resampling so FFmpeg cannot drop the final GIF delay.
         # Trim to an explicit nearest-frame duration (ties to even), at least one.
-        filters.append(f"[{i}:v]tpad=stop_mode=clone:stop=-1,fps={args.fps},trim=end_frame={clip_frames[i]},scale={args.width}:{args.height}:force_original_aspect_ratio=decrease:out_color_matrix=bt709:out_range=tv,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709,setpts=PTS-STARTPTS[v{i}]")
+        # H.264 has no alpha. Composite explicitly instead of letting format
+        # conversion expose the GIF decoder's hidden RGB (often white).
+        # Use a finite foreground and shortest overlay so the background cannot
+        # extend a shot or its final hold. Match the master viewing-copy policy.
+        filters.append(f"[{i}:v]tpad=stop_mode=clone:stop=-1,fps={args.fps},trim=end_frame={clip_frames[i]},format=rgba,setpts=PTS-STARTPTS,split=2[fg{i}][base{i}]")
+        filters.append(f"[base{i}]lutrgb=r=0:g=0:b=0:a=255[bg{i}]")
+        # Composite at source resolution BEFORE scaling straight-alpha pixels:
+        # otherwise invisible decoder RGB can bleed into antialiased edges.
+        filters.append(f"[bg{i}][fg{i}]overlay=shortest=1:format=rgb,scale={args.width}:{args.height}:force_original_aspect_ratio=decrease:out_color_matrix=bt709:out_range=tv,pad={args.width}:{args.height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p,setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709,setpts=PTS-STARTPTS[v{i}]")
     filters.append("".join(f"[v{i}]" for i in range(len(clips)))+f"concat=n={len(clips)}:v=1:a=0[outv]")
     command+=["-filter_complex",";".join(filters),"-map","[outv]"]
     if audio_path is not None:

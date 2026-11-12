@@ -54,6 +54,62 @@ class RealFilmColorTests(unittest.TestCase):
         provider = patch.object(cli, 'request_gif', side_effect=AssertionError('Provider forbidden'))
         provider.start(); self.addCleanup(provider.stop)
 
+    def test_transparent_multiclip_background_is_black_with_exact_rounded_holds(self):
+        transparent = self.root / 'transparent.gif'
+        frames = []
+        for x in (16, 32):
+            frame = Image.new('P', (64, 64), 0)
+            # Hidden red must never leak into the opaque viewing copy.
+            frame.putpalette([255, 0, 0, 0, 220, 0] + [0] * 762)
+            frame.paste(1, (x, 20, x + 16, 44))
+            frames.append(frame)
+        frames[0].save(transparent, save_all=True, append_images=frames[1:],
+                       duration=[120, 280], transparency=0, disposal=2, optimize=False)
+        before = transparent.read_bytes()
+        output = self.root / 'transparent-film.mp4'
+        args = cli.build_parser().parse_args(['film', str(transparent), str(self.source),
+            '-o', str(output), '--width', '96', '--height', '64', '--fps', '25'])
+        with contextlib.redirect_stdout(io.StringIO()):
+            cli.film(args)
+        render.probe(output, 96, 64, 1.0, 25, 2)
+        decoded = cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(output),
+            '-pix_fmt', 'rgb24', '-f', 'rawvideo', '-']).stdout
+        frame_bytes = 96 * 64 * 3
+        self.assertEqual(len(decoded), 25 * frame_bytes)
+        for index in range(10):
+            rgb = Image.frombytes('RGB', (96, 64), decoded[index * frame_bytes:(index + 1) * frame_bytes])
+            self.assertLessEqual(max(rgb.getpixel((24, 8))), 3)  # inside source transparency
+            self.assertLessEqual(max(rgb.getpixel((0, 0))), 3)   # outside source letterbox
+            x = (16 if index < 3 else 32) + 16 + 8
+            self.assertGreater(rgb.getpixel((x, 32))[1], 200)
+            # The previous drawing's disposal must not become a visible ghost.
+            absent = (32 if index < 3 else 16) + 16 + 8
+            self.assertLessEqual(max(rgb.getpixel((absent, 32))), 5)
+        self.assertEqual(transparent.read_bytes(), before)
+
+    def test_transparent_scaled_edges_do_not_bleed_hidden_decoder_rgb(self):
+        source = self.root / 'small-alpha.gif'
+        frames = []
+        for offset in (0, 1):
+            frame = Image.new('P', (16, 16), 0)
+            frame.putpalette([255, 0, 0, 0, 220, 0] + [0] * 762)
+            frame.paste(1, (4 + offset, 4, 12 + offset, 12))
+            frames.append(frame)
+        frames[0].save(source, save_all=True, append_images=frames[1:],
+                       duration=[200, 200], transparency=0, disposal=2, optimize=False)
+        output = self.root / 'scaled-alpha.mp4'
+        args = cli.build_parser().parse_args(['film', str(source), '-o', str(output),
+            '--width', '128', '--height', '128', '--fps', '25'])
+        with contextlib.redirect_stdout(io.StringIO()):
+            cli.film(args)
+        decoded = cli.run_media(['ffmpeg', '-nostdin', '-v', 'error', '-i', str(output),
+            '-frames:v', '1', '-pix_fmt', 'rgb24', '-f', 'rawvideo', '-']).stdout
+        rgb = Image.frombytes('RGB', (128, 128), decoded)
+        # Green on black may gain minor H.264/chroma error, not a white/red halo.
+        for x in range(24, 42):
+            r, g, b = rgb.getpixel((x, 64))
+            self.assertLessEqual(max(r, b), 15, (x, (r, g, b)))
+
     def test_sd_and_hd_encode_matching_matrix_tags_and_pixel_colors(self):
         for width, height in ((64, 64), (1280, 720)):
             with self.subTest(size=(width, height)):

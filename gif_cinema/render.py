@@ -22,7 +22,7 @@ from .audio import MAX_AUDIO_SECONDS, prepare_audio, verify_film_audio
 from .captions import publish as publish_captions
 
 VERSION = 1
-ASSEMBLY_VERSION = 3  # Rebuild older untagged exports with a matched color matrix.
+ASSEMBLY_VERSION = 4  # Rebuild exports with explicit black alpha compositing.
 MAX_SCRIPT_BYTES = 1024 * 1024
 MAX_REFERENCE_BYTES = 20 * 1024 * 1024
 

@@ -154,7 +154,12 @@ and cannot wait on standard input. A timeout fails the run, cleans staging/locks
 and preserves an existing accepted movie; completed shots remain reusable.
 Output is staged,
 checked for H.264, dimensions, decoded frame count and duration, then fully decoded.
-Film encoding explicitly converts the decoded GIF's RGB colors to limited-range
+Transparent pixels are explicitly composited over black before scaling to the
+opaque viewing delivery. Letterboxing is also black; hidden GIF RGB values must
+not become a white/colored rectangle around the character. This is an opaque
+viewing-copy policy, not preservation of alpha (use `master` for that). Older
+script exports are rebuilt locally once on resume, without provider calls.
+Film encoding explicitly converts the resulting RGB colors to limited-range
 BT.709 YUV and labels the matrix, range, transfer and primaries in the H.264/MP4.
 The script verifier requires those matching color tags and includes them in
 `film-inspect.json`. This prevents players from having to guess an SD or HD color
