@@ -39,7 +39,8 @@ class LanternBuildTests(unittest.TestCase):
 
     def test_corrupt_checkpoint_is_rejected_before_decoder_dispatch(self):
         with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
+            # macOS exposes its temporary root through the /var symlink.
+            root = Path(temp).resolve()
             (root / 'scene.mkv').write_bytes(b'changed')
             record = {'file': 'scene.mkv', 'key': 'scene-key', 'sha256': BUILD.sha(b'original')}
             with mock.patch.object(BUILD, 'video_frames') as decoder:
@@ -52,7 +53,7 @@ class LanternBuildTests(unittest.TestCase):
         value = BUILD.read_json(BUILD.ROOT / 'timeline.json')
         value['scenes'][4]['start_frame'] += 1
         with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / 'timeline.json'
+            path = Path(temp).resolve() / 'timeline.json'
             path.write_text(json.dumps(value), encoding='utf-8')
             with self.assertRaisesRegex(ValueError, 'partition'):
                 BUILD.recipe(path)
