@@ -44,10 +44,13 @@ trails, impact rings, three ribbons, a star canopy, lantern arrivals and petals.
 The canopy is behind the characters so it cannot wash out their faces. The
 soundtrack consists of locally synthesized pads, chimes and stereo whooshes.
 
-This is an authored showcase with additional drawings and external local
-finishing, not a single public CLI command or native text-to-video API output.
-The final media and a review receipt are bundled here; the generation tool,
-RIFE backend and production compositor are not bundled by this example. The
+This is an authored showcase with additional drawings and local finishing,
+not native text-to-video API output. The offline example builder reconstructs
+the film from fixed source assets with one command.
+The [editable source and offline build](../examples/lantern-echo/README.md) now
+include the original drawings, prepared lossless motion atlases, timeline,
+compositor and synthesized soundtrack. Generation and RIFE inference are not
+rerun; the reviewed intermediate samples are bundled. The
 [zero-key astronaut quickstart](../README.md#make-your-first-film) remains the
 reproducible public CLI example. No new provider requests are needed to view or
 inspect this delivered film.

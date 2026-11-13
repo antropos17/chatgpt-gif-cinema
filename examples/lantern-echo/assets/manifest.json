@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "clips": {
+    "cast": {
+      "path": "assets/motion/cast.png",
+      "frames": 96,
+      "columns": 8,
+      "tile_size": [
+        320,
+        320
+      ],
+      "xy": [
+        560,
+        190
+      ],
+      "source_drawings": 24,
+      "native_keys_pixel_exact": true,
+      "rife_tool_sha256": "4b970319db2814c82b15fceed8193151560a676a9eb63f20d4877be77b98f44f",
+      "rife_model_sha256": "f334ed2260149ce0188a6dcf049844e8b0cdd912e01cbcfb63553157d2508958"
+    },
+    "catch": {
+      "path": "assets/motion/catch.png",
+      "frames": 96,
+      "columns": 8,
+      "tile_size": [
+        320,
+        320
+      ],
+      "xy": [
+        560,
+        190
+      ],
+      "source_drawings": 24,
+      "native_keys_pixel_exact": true,
+      "rife_tool_sha256": "4b970319db2814c82b15fceed8193151560a676a9eb63f20d4877be77b98f44f",
+      "rife_model_sha256": "f334ed2260149ce0188a6dcf049844e8b0cdd912e01cbcfb63553157d2508958"
+    },
+    "release": {
+      "path": "assets/motion/release.png",
+      "frames": 96,
+      "columns": 8,
+      "tile_size": [
+        320,
+        320
+      ],
+      "xy": [
+        560,
+        190
+      ],
+      "source_drawings": 24,
+      "native_keys_pixel_exact": true,
+      "rife_tool_sha256": "4b970319db2814c82b15fceed8193151560a676a9eb63f20d4877be77b98f44f",
+      "rife_model_sha256": "f334ed2260149ce0188a6dcf049844e8b0cdd912e01cbcfb63553157d2508958"
+    },
+    "boy": {
+      "path": "assets/motion/boy.png",
+      "frames": 96,
+      "columns": 8,
+      "tile_size": [
+        320,
+        320
+      ],
+      "xy": [
+        80,
+        180
+      ],
+      "source_drawings": 24,
+      "native_keys_pixel_exact": true,
+      "rife_tool_sha256": "4b970319db2814c82b15fceed8193151560a676a9eb63f20d4877be77b98f44f",
+      "rife_model_sha256": "f334ed2260149ce0188a6dcf049844e8b0cdd912e01cbcfb63553157d2508958"
+    },
+    "idle-girl": {
+      "path": "assets/motion/idle-girl.png",
+      "frames": 64,
+      "columns": 8,
+      "tile_size": [
+        320,
+        320
+      ],
+      "xy": [
+        560,
+        190
+      ],
+      "source_drawings": 16,
+      "native_keys_pixel_exact": true,
+      "rife_tool_sha256": "4b970319db2814c82b15fceed8193151560a676a9eb63f20d4877be77b98f44f",
+      "rife_model_sha256": "f334ed2260149ce0188a6dcf049844e8b0cdd912e01cbcfb63553157d2508958"
+    },
+    "idle-boy": {
+      "path": "assets/motion/idle-boy.png",
+      "frames": 64,
+      "columns": 8,
+      "tile_size": [
+        320,
+        320
+      ],
+      "xy": [
+        80,
+        180
+      ],
+      "source_drawings": 16,
+      "native_keys_pixel_exact": true,
+      "rife_tool_sha256": "4b970319db2814c82b15fceed8193151560a676a9eb63f20d4877be77b98f44f",
+      "rife_model_sha256": "f334ed2260149ce0188a6dcf049844e8b0cdd912e01cbcfb63553157d2508958"
+    },
+    "bow": {
+      "path": "assets/motion/bow.png",
+      "frames": 64,
+      "columns": 8,
+      "tile_size": [
+        320,
+        320
+      ],
+      "xy": [
+        560,
+        190
+      ],
+      "source_drawings": 16,
+      "native_keys_pixel_exact": true,
+      "rife_tool_sha256": "4b970319db2814c82b15fceed8193151560a676a9eb63f20d4877be77b98f44f",
+      "rife_model_sha256": "f334ed2260149ce0188a6dcf049844e8b0cdd912e01cbcfb63553157d2508958"
+    }
+  },
+  "files": {
+    "assets/drawings/bow.png": {
+      "bytes": 1135046,
+      "sha256": "c42041856feaf86222c459d4bc210eb825590fc0393bfb3cc4ae2ff262592c12"
+    },
+    "assets/drawings/boy.png": {
+      "bytes": 2232544,
+      "sha256": "8bddb2b16afc50da926e59a571a7e00427a361f949192dc8bfca781e16eeee43"
+    },
+    "assets/drawings/cast.png": {
+      "bytes": 2184816,
+      "sha256": "37fea0f24467532f63723cbf9a7987542f4081847bae8350a2de9caadbeb0a18"
+    },
+    "assets/drawings/catch.png": {
+      "bytes": 2104433,
+      "sha256": "fa7a9ce6eaa818cdc98c44dcb492918f14ae627433aa6e4d2d2bd8dba1d455f0"
+    },
+    "assets/drawings/idle.png": {
+      "bytes": 1503968,
+      "sha256": "dd4b165d6d427f9d8bd947adfda77e9742064a028d7ac9caa66ad4d7d37660a6"
+    },
+    "assets/drawings/release.png": {
+      "bytes": 2167056,
+      "sha256": "9df6df66c014e06052b81b464ab138165a6df3aa01e22efa09d604a41112e511"
+    },
+    "assets/garden.png": {
+      "bytes": 813185,
+      "sha256": "528bfcc1f76fe35d60ae0b8975ffc2aa2f6060a723d94896f02ea452f2f762b8"
+    },
+    "assets/motion/bow.png": {
+      "bytes": 4677419,
+      "sha256": "3b547b649f37d19fc602e99041961fd45a6bba3bde103d70b78bdc6480e7aed9"
+    },
+    "assets/motion/boy.png": {
+      "bytes": 7201839,
+      "sha256": "44ceb9669ef0c4a978dfe9881e5113b3d60cf03429ea1c77260b9afa0390c76a"
+    },
+    "assets/motion/cast.png": {
+      "bytes": 7472011,
+      "sha256": "6f5af625ab3463a9ab3469781ce3b2192dd77f13f6ad85ba4eb9f103fecc09de"
+    },
+    "assets/motion/catch.png": {
+      "bytes": 6906902,
+      "sha256": "5b9abe4fcad22de991a15ec02b29bd6eeea178f8df18e9cb05a09d5b660b6927"
+    },
+    "assets/motion/idle-boy.png": {
+      "bytes": 4681688,
+      "sha256": "dab8ed38eda9db263ead98b8f37173e60a66f378cc8fe306ca53209e2957fdb7"
+    },
+    "assets/motion/idle-girl.png": {
+      "bytes": 4608659,
+      "sha256": "ea9cbb89528075aabb27b5c12e2cbd4d337c9d10965aaa271973be6ae4fe590e"
+    },
+    "assets/motion/release.png": {
+      "bytes": 7350409,
+      "sha256": "3ffa7d01c70ba283e2f7cf5d1440c8b134b45aa9cdbbcb9e067fa6940c7982e7"
+    }
+  },
+  "provenance": {
+    "drawings": "Built-in image generation, previously reviewed; no generation occurs during builds",
+    "intermediates": "Previously reviewed RIFE v4.6, 4x spatial and temporal TTA; packed losslessly from saved RGB samples"
+  }
+}
