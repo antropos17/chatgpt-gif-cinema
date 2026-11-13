@@ -277,7 +277,7 @@ def verify_sequence(directory):
     for index, (prepared, row) in enumerate(zip(compilation['compiled'], report['timeline'])):
         shot_root = root / 'shots' / row['id']
         saved = layers.prepare_scene(shot_root / 'editable/scene.json')
-        if layers.serialize_scene(saved['scene']) != layers.serialize_scene(prepared['scene']):
+        if saved['scene'] != prepared['scene']:
             raise ValueError(f'{row["id"]}: saved scene differs from the compiled action')
         child = factory.parse_json(layers.read_regular(shot_root / 'receipt.json', layers.MAX_RECEIPT_BYTES))
         if (child.get('frames') != row['frames'] or not isinstance(child.get('samples'), list)
@@ -349,7 +349,10 @@ def publish(stage, out):
         cli.publish_file(path, out / path.relative_to(stage))
 
 
-def build_sequence(path, out, dry_run=False):
+def build_sequence(path, out, dry_run=False, *, resume=False, reuse_from=None):
+    if resume or reuse_from is not None:
+        from .sequence_incremental import build
+        return build(path, out, dry_run=dry_run, resume=resume, reuse_from=reuse_from)
     out = Path(out).absolute()
     if out.exists() or any(p.is_symlink() for p in (out, *out.parents)):
         raise ValueError('Sequence output must be a new directory without symlinks')
@@ -406,7 +409,9 @@ def run(args):
         result = build(args.directory, args.out)
     else:
         result = (verify_sequence(args.directory) if args.sequence_command == 'verify'
-                  else build_sequence(args.project, args.out, args.dry_run))
+                  else build_sequence(args.project, args.out, args.dry_run,
+                                      resume=getattr(args, "resume", False),
+                                      reuse_from=getattr(args, "reuse_from", None)))
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return result
 
@@ -418,6 +423,8 @@ def add_parser(sub):
     build.add_argument('project', type=Path)
     build.add_argument('--out', required=True, type=Path)
     build.add_argument('--dry-run', action='store_true')
+    build.add_argument('--resume', action='store_true', help='Keep checkpoints and resume the same input/output after interruption')
+    build.add_argument('--reuse-from', type=Path, help='Reuse matching verified scenes from a completed earlier version; output stays new')
     build.set_defaults(func=run)
     verify = commands.add_parser('verify', help='Recompile the portable project and verify every output frame')
     verify.add_argument('directory', type=Path)

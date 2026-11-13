@@ -80,3 +80,22 @@ class SequenceMasterTests(SequenceFixture, unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'outside'):
             sequence_master.build(source, source / 'master')
         self.assertFalse((source / 'master').exists())
+
+
+class SequenceDispatchTests(unittest.TestCase):
+    def test_master_dispatch(self):
+        from argparse import Namespace
+        from pathlib import Path
+        args = Namespace(sequence_command='master', directory=Path('built'), out=Path('master'))
+        with patch.object(sequence_master, 'build', return_value={}) as build, patch('builtins.print'):
+            sequence.run(args)
+        build.assert_called_once_with(args.directory, args.out)
+
+    def test_incremental_dispatch_survives_master_integration(self):
+        from argparse import Namespace
+        from pathlib import Path
+        args = Namespace(sequence_command='build', project=Path('project.json'),
+                         out=Path('v2'), dry_run=True, resume=True, reuse_from=Path('v1'))
+        with patch.object(sequence, 'build_sequence', return_value={}) as build, patch('builtins.print'):
+            sequence.run(args)
+        build.assert_called_once_with(args.project, args.out, True, resume=True, reuse_from=args.reuse_from)
