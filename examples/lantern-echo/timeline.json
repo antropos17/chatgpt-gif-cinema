@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "title": "Lantern Echo",
+  "width": 960,
+  "height": 540,
+  "fps": 25,
+  "frames": 520,
+  "scenes": [
+    {
+      "id": "01-establish",
+      "start_frame": 0,
+      "end_frame": 16,
+      "camera": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "02-cast",
+      "start_frame": 16,
+      "end_frame": 80,
+      "camera": [
+        410,
+        130,
+        960,
+        439.375
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "03-cap",
+      "start_frame": 80,
+      "end_frame": 140,
+      "camera": [
+        0,
+        105,
+        570,
+        425.625
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "04-catch",
+      "start_frame": 140,
+      "end_frame": 188,
+      "camera": [
+        410,
+        145,
+        960,
+        454.375
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "05-release",
+      "start_frame": 188,
+      "end_frame": 260,
+      "camera": [
+        350,
+        65,
+        960,
+        408.125
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "06-greeting",
+      "start_frame": 260,
+      "end_frame": 320,
+      "camera": [
+        0,
+        105,
+        570,
+        425.625
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "07-bow",
+      "start_frame": 320,
+      "end_frame": 368,
+      "camera": [
+        380,
+        160,
+        960,
+        486.25
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "08-lanterns",
+      "start_frame": 368,
+      "end_frame": 430,
+      "camera": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "09-reaction",
+      "start_frame": 430,
+      "end_frame": 460,
+      "camera": [
+        410,
+        130,
+        960,
+        439.375
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    },
+    {
+      "id": "10-ending",
+      "start_frame": 460,
+      "end_frame": 520,
+      "camera": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "effects": {
+        "canopy_gain": 1.0
+      }
+    }
+  ]
+}

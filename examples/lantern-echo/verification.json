@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "scope": "Local native qualification, not CI or user artistic acceptance",
+  "python": "3.10.6",
+  "pillow": "12.3.0",
+  "pyav": "16.1.0",
+  "generation_requests": 0,
+  "interpolation_inference_runs": 0,
+  "packed_motion_samples_verified_pixel_exact": 576,
+  "representative_original_compositor_rgb_matches": 17,
+  "original_pcm_wav_byte_exact": true,
+  "published_movie_sha256": "f6b17fb08b4365998206dc35ae7c88a39a9fc1b546497ca0810bb5d36602ce8b",
+  "baseline_rebuild_movie_sha256": "f6b17fb08b4365998206dc35ae7c88a39a9fc1b546497ca0810bb5d36602ce8b",
+  "baseline_rebuild_matches_published_bytes": true,
+  "uninterrupted_revision_scene_exports": {
+    "rendered": 1,
+    "reused": 9,
+    "resumed": 0
+  },
+  "resumed_revision_scene_exports": {
+    "rendered": 1,
+    "reused": 5,
+    "resumed": 4
+  },
+  "resumed_revision_matches_uninterrupted_bytes": true,
+  "revised_movie_sha256": "a862f8178b5ab8e9f32b87ed173a0b5aa691fd2dd47a1f0458fb7db3056b079b",
+  "hard_process_kill_during": "05-release",
+  "completed_before_interruption": [
+    "01-establish",
+    "02-cast",
+    "03-cap",
+    "04-catch"
+  ],
+  "baseline_bytes_and_mtimes_preserved": true,
+  "four_checkpoint_scene_files_and_mtimes_preserved": true,
+  "completed_resume_writes_no_result_files": true,
+  "changed_scenes": [
+    "05-release"
+  ],
+  "neighbor_scenes_for_review": [
+    "04-catch",
+    "06-greeting"
+  ],
+  "cuts_for_review": [
+    {
+      "previous": "04-catch",
+      "next": "05-release",
+      "at_ms": 7520
+    },
+    {
+      "previous": "05-release",
+      "next": "06-greeting",
+      "at_ms": 10400
+    }
+  ],
+  "failed_controls_preserved": [
+    "Initial taskkill was denied; that process completed an uninterrupted 1-render/9-reuse revision, not an interruption proof.",
+    "Polling checkpoint.json caused Windows delete-sharing denial. The monitor now observes append-only events and reads the checkpoint once mid-encode."
+  ],
+  "network_scope": "Python socket connects blocked in child builds; external FFmpeg receives local files and raw pipes only"
+}

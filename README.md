@@ -15,6 +15,11 @@ inbetweens and authored effects. The looping preview is a silent 6.4-second exce
 **[Download the full film with sound (MP4)](https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4)** ·
 [Production & review](docs/LANTERN-ECHO.md) · [Still](docs/assets/lantern-echo/poster.png)
 
+[Rebuild this film offline](examples/lantern-echo/README.md): after installing `.[lossless]`
+and FFmpeg, run `python examples/lantern-echo/build.py --out output/lantern-echo`.
+The source drawings, prepared motion atlases, effects and soundtrack are included;
+no new generations or model downloads are needed.
+
 <a id="try-it-without-an-api-key"></a>
 
 ## Make your first film
