@@ -2,14 +2,18 @@
 
 **Turn existing GIFs into a film. Inspect every cut.**
 
-A local workshop for **Codex and Claude Code**. No API key needed for the bundled demo.
+A local workshop for **Codex and Claude Code**. No API key needed for the bundled quickstart.
 
 [Try it](#make-your-first-film) · [Exact-frame master](docs/GIF-MASTER.md) · [Agent skill](#install-the-skill) · [100-character grid](#anime-pixel-art) · [Workflows](#choose-a-workflow)
 
-<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share"><picture><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: a local title and three existing astronaut takes, played once."></picture></a>
+<a href="docs/assets/lantern-echo/lantern-echo.mp4"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-echo/poster.png"><img src="docs/assets/lantern-echo/preview.gif" width="640" alt="Lantern Echo: an anime traveler releases light into a star canopy, a courier greets her, and she bows. Click for the full film with sound."></picture></a>
 
-**Three takes + a title.** A 9.70-second example, not proof of perfect continuity.
-[Sources & recipe](docs/EXAMPLES.md)
+**Lantern Echo — 20.8 seconds, with sound.** A traveler sends a light to a courier;
+it returns to her hands and lights the garden. New drawn actions, local RIFE
+inbetweens and authored effects. The looping preview is a silent 6.4-second excerpt.
+
+**[Watch the full film with sound](docs/assets/lantern-echo/lantern-echo.mp4)** ·
+[Production & review](docs/LANTERN-ECHO.md) · [Still](docs/assets/lantern-echo/poster.png)
 
 <a id="try-it-without-an-api-key"></a>
 
@@ -70,7 +74,7 @@ Try this with your agent:
 ## Anime pixel art
 
 Already tried the film? Explore the full cast below, or [browse methods and recipes](docs/GALLERY.md).
-The full grid stays on this page by design; animated media across the README totals about **93 MB**.
+The full grid stays on this page by design; animated media across the README totals about **97 MB**.
 On a slow connection, jump straight to [setup](#make-your-first-film) or open a character’s **Still** link.
 
 
@@ -824,7 +828,7 @@ No model call or JavaScript animation.
 <table>
 <tr>
 <td width="50%" align="center" valign="top">
-<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share">Watch the opening story demo</a><br>
+<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share"><picture><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: a local title and three existing astronaut takes, played once."></picture></a><br>
 <strong>A Reply from the Stars</strong><br>
 Three generated takes + local title · 9.70 s GIF<br>
 <a href="docs/EXAMPLES.md">Story recipe</a> · <a href=".agents/skills/gif-cinema/assets/example/storyboard.json">Storyboard</a>

@@ -4,16 +4,21 @@
 
 ## Show a first result, then the full cast
 
-The README opens with the existing titled-story preview and a direct zero-key
-quickstart. The 9.70-second preview includes a title; the plain-film quickstart
-creates a 7.68-second MP4 from the same three bundled takes. Neither is presented
-as proof of seamless character continuity. The optional exact-frame master is
-linked explicitly; ordinary MP4 is a fixed-FPS lossy viewing copy.
+The README opens with **Lantern Echo**, a 20.8-second authored anime film with
+sound. Its 6.4-second looping GIF excerpt links to the full repository-hosted
+MP4 and has a reduced-motion poster. The linked production note separates new
+drawings, external local RIFE interpolation and authored finishing from the
+public CLI. The former titled astronaut preview remains in Selected work.
+
+The direct zero-key quickstart still creates a 7.68-second MP4 from three bundled
+astronaut takes. The 9.70-second titled version uses those same takes. Neither
+is presented as proof of seamless character continuity. The optional exact-frame
+master is linked explicitly; ordinary MP4 is a fixed-FPS lossy viewing copy.
 
 Runtime installation and maintained agent-skill setup appear before the first
 catalog table. The user-requested full grid remains visible: 100 independent
 characters and three outfit studies. No GIF bytes are changed or duplicated.
-The page warns that its referenced GIFs total about 93 MB; moving the instructions
+The page warns that its referenced GIFs total about 97 MB; moving the instructions
 up reduces scrolling, not the browser's media downloads. A lean separate landing
 page would be a distinct follow-up, not a performance claim for this change.
 
@@ -26,7 +31,8 @@ artwork, characters, fonts, template or exporter code is copied.
 
 ## Existing media, unchanged
 
-No image or video bytes are changed by this presentation refresh. FORM / 01 and
+Existing image and video bytes remain unchanged; Lantern Echo adds a new film,
+preview, poster and receipt. FORM / 01 and
 Chrome Trefoil are separate Blender examples, not native API output or a public
 Blender CLI backend. The astronaut title and composition reuse existing action
 footage; titles, layout and extra playback frames do not create new character poses.
