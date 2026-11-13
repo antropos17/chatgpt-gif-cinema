@@ -6,13 +6,13 @@ A local workshop for **Codex and Claude Code**. No API key needed for the bundle
 
 [Try it](#make-your-first-film) · [Exact-frame master](docs/GIF-MASTER.md) · [Agent skill](#install-the-skill) · [100-character grid](#anime-pixel-art) · [Workflows](#choose-a-workflow)
 
-<a href="docs/assets/lantern-echo/lantern-echo.mp4"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-echo/poster.png"><img src="docs/assets/lantern-echo/preview.gif" width="640" alt="Lantern Echo: an anime traveler releases light into a star canopy, a courier greets her, and she bows. Click for the full film with sound."></picture></a>
+<a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-echo/poster.png"><img src="docs/assets/lantern-echo/preview.gif" width="640" alt="Lantern Echo: an anime traveler releases light into a star canopy, a courier greets her, and she bows. Click to download the full film with sound."></picture></a>
 
 **Lantern Echo — 20.8 seconds, with sound.** A traveler sends a light to a courier;
 it returns to her hands and lights the garden. New drawn actions, local RIFE
 inbetweens and authored effects. The looping preview is a silent 6.4-second excerpt.
 
-**[Watch the full film with sound](docs/assets/lantern-echo/lantern-echo.mp4)** ·
+**[Download the full film with sound (MP4)](https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4)** ·
 [Production & review](docs/LANTERN-ECHO.md) · [Still](docs/assets/lantern-echo/poster.png)
 
 <a id="try-it-without-an-api-key"></a>

@@ -1,7 +1,7 @@
 # Lantern Echo
 
-[Watch the full film with sound](assets/lantern-echo/lantern-echo.mp4) ·
-[Download the MP4](https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/main/docs/assets/lantern-echo/lantern-echo.mp4) ·
+[Download the full film with sound](https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4) ·
+[Download the MP4](https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4) ·
 [Back to the workshop](../README.md)
 
 ![The traveler releases a light into the garden](assets/lantern-echo/poster.png)
@@ -20,9 +20,9 @@ bows, and the film ends on both characters in the illuminated garden.
 | [Poster](assets/lantern-echo/poster.png) | 960 × 540 | Still from 9.80 s; reduced-motion fallback |
 
 The MP4 preserves the reviewed delivery bytes. The smaller GIF is a separately
-quantized excerpt, not the complete film or its soundtrack. The README links
-directly to the repository-hosted MP4; download it if your GitHub client does
-not offer inline video playback.
+quantized excerpt, not the complete film or its soundtrack. The README download points
+to the exact reviewed bytes at an immutable commit. Open the MP4 in your video
+player; GitHub's file page does not preview this 7.87 MB video.
 
 ## How it was made
 
