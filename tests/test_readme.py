@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from PIL import Image, ImageSequence
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ('README.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md')
+DOCS = ('README.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md', 'docs/LANTERN-ECHO.md')
 
 
 class Links(HTMLParser):
@@ -129,6 +129,7 @@ class ReadmeTests(unittest.TestCase):
         self.assertNotRegex(visible, r'<img\b[^>]*height=')
         urls = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
         expected = {
+            'docs/assets/lantern-echo/preview.gif',
             'examples/anime-pixel/character-previews/fox-knight.gif',
             'examples/anime-pixel/character-previews/dragon-chef.gif',
             'examples/anime-pixel/character-previews-batch2/raccoon-courier.gif',
@@ -153,7 +154,7 @@ class ReadmeTests(unittest.TestCase):
         self.assertLess(visible.index('## Make your first film'), visible.index('## Anime pixel art'))
         self.assertLess(visible.index('## Install the skill'), visible.index('## Anime pixel art'))
         self.assertLess(visible.index('--execute --max-api-calls 0'), visible.index('<table>'))
-        self.assertIn('93 MB', visible)
+        self.assertIn('97 MB', visible)
         self.assertIn('lossy viewing format', visible)
         self.assertNotIn('width="33%"', visible)
         self.assertNotIn('<script', source.lower())
