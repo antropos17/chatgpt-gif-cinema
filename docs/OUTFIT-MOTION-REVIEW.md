@@ -84,3 +84,26 @@ reversing the action, selecting arbitrary low-distance poses, or shifting each
 silhouette independently. Repeat this diagnostic on the candidate, inspect every
 native frame and actual playback, and retain both original and candidate receipts.
 No repaired take or new source drawings are supplied by this change.
+
+## Silhouette anchor diagnostics (receipt schema 2)
+
+New receipts include `anchor_motion`: the bottom-center of each visible alpha
+bounding box in the selected focus rectangle, and changes between successive
+hold-to-hold displacement rates (pixels per second). Consecutive identical
+decoded RGBA drawings are merged before timing calculations, so encoder-split
+holds do not produce false acceleration. `holds` preserves the original source
+frame ranges and summed durations. Existing schema-1 receipts still verify;
+unknown schema versions are rejected.
+
+This is a **report-only silhouette diagnostic**, not tracked anatomy, identity
+validation, physical acceleration, or an art-quality score. Costume changes,
+pose changes, detached effects and cropped limbs can move the anchor even when
+the character is correctly registered. Fully opaque or empty frames produce
+`null` anchors instead of a misleading zero. This version does not measure loop
+closure or stitch velocity across takes. Inspect decoded playback before fixing
+anything; do not pin all frames to a single anchor or smooth intentional motion.
+No pixels, delays or motion tracks are changed.
+
+Technique reference: [SpriteForge registration](https://github.com/Ping13with14/spriteforge/blob/e174b3911b791e257f1e2b38c80f9e85d24a2cdd/packages/core/src/register.ts)
+distinguishes fixed registration from motion-preserving anchor trajectories.
+Our bounded diagnostic is independently implemented; no source was copied.
