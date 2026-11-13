@@ -2,7 +2,7 @@
 name: gif-cinema
 description: Make multi-scene animated stories and motion-design GIFs or MP4s from existing GIFs, editable text/shape/stroke layers, sprite atlases and reviewed takes. Use for narrative edits, composited animation and authored draw-on graphics.
 license: "GIF Cinema Source-Available Evaluation License v1.0 (see LICENSE)"
-metadata: {"version": "0.4.0"}
+metadata: {"version": "0.4.1"}
 ---
 
 # GIF Cinema
@@ -37,7 +37,7 @@ an honest animatic or production plan, not a claimed finished cartoon.
 
 ## Runtime and a no-key check
 
-Skill package **0.4.0** contains helpers, guides and examples. The Python runtime is
+Skill package **0.4.1** contains helpers, guides and examples. The Python runtime is
 installed separately. The install below adds the optional `av>=16.1,<17` lossless
 master dependency. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
 film, chapter, layer and motion export also need FFmpeg and ffprobe. Git/network access is needed only
@@ -48,7 +48,7 @@ version number and by itself is not a compatibility guarantee):
 ```bash
 python -m venv .venv
 # Activate .venv with the command for your shell, then:
-python -m pip install "gif-cinema[lossless] @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@11523f0a8d75f4422445658e7c5f9547bdc4d6d4"
+python -m pip install "gif-cinema[lossless] @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@88262cd28f47a53188ea21f354ceaffc5c6a0f9c"
 python -m gif_cinema --help
 ```
 
@@ -104,7 +104,7 @@ pending; synthetic fixtures are not an artwork-quality demonstration.
 The story helper never makes provider calls and refuses an existing output project. [story-project.md](references/story-project.md) documents
 its exact schema, commands, timing, and limits.
 
-Package 0.4.0 is generated from the maintained source using `tools/package_skill.py`.
+Package 0.4.1 is generated from the maintained source using `tools/package_skill.py`.
 The older GitHub Release `skill-v0.1.1` predates these helpers and must not be
 described as this package. Building a source ZIP does not publish a GitHub Release.
 
