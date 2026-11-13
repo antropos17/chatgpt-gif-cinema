@@ -7,8 +7,8 @@ film and keeps the shared project plus every source PNG for review.
 
 ![A light for the garden: five connected actions](assets/scene-sequence/preview.gif)
 
-[Watch MP4](assets/scene-sequence/preview.mp4) ·
-[Editable five-scene example](../examples/scene-sequence/README.md) ·
+[Watch MP4](assets/scene-sequence/preview.mp4) Â·
+[Editable five-scene example](../examples/scene-sequence/README.md) Â·
 [Source frames at the cuts](assets/scene-sequence/contact-sheet.png)
 
 The example contains **five distinct authored actions, 10 seconds and 250 output
@@ -31,14 +31,17 @@ python -m gif_cinema sequence verify output/garden
 ```
 
 The equivalent standalone entry point is `python -m gif_cinema.sequence`.
-Dry-run writes nothing and needs no encoder. Every output directory must be new;
-there is no overwrite, resume, force, paid-execution or provider-budget option.
+Dry-run writes nothing and needs no encoder. Output revisions must be new;
+`--resume` may continue the same checkpointed revision. There is no overwrite, force,
+paid-execution or provider-budget option.
 The build stages and verifies the entire result before publishing its completion
 receipt. Originals are never rewritten. Editing inputs during a build prevents
 publication under the old source identity.
 If final file publication fails, partial output is retained rather than deleting
 paths another writer may have edited or replaced. A failed build is not a completed
-export; inspect the partial directory and use a new destination for another build.
+export. For a checkpointed build, repeat with `--resume`; changed partial files
+are preserved and cause an explicit error. Legacy builds without checkpoints
+require a new destination.
 
 Open `output/garden/film/film.mp4`. The bundle includes:
 
@@ -106,7 +109,7 @@ fixed-stage action workflow, not a general editor for unrelated camera setups.
 Each shot has a unique portable `id`, a one-line `action`, `duration_ms`, and optional
 `tracks`. Track keys must name existing layer IDs exactly. A track accepts only:
 
-- `keyframes`: the existing 2–32 keyframe format, including 0 and 1 endpoints.
+- `keyframes`: the existing 2â€“32 keyframe format, including 0 and 1 endpoints.
   Begin with `{"at": 0}` to inherit the carried pose, then specify action targets.
   Omitted properties inherit normally. An omitted track holds its preceding result.
 - `pose_keys`: sprite-only stepped selection of existing atlas drawings. The first
@@ -159,12 +162,12 @@ Unchanged artwork is not proof of natural character motion. Captions describe
 what the author intended and are a separate subtitle sidecar, not image analysis.
 
 Inputs are bounded to 512 KiB project JSON; the existing stage/asset limits still
-apply. There are 1–64 actions, each within the renderer's 30-second/1,500-frame
+apply. There are 1â€“64 actions, each within the renderer's 30-second/1,500-frame
 limit. The entire sequence is limited to five minutes, 7,500 output samples,
 335,544,320 canvas pixel-samples, 10,000 files, 128 MiB per file and 512 MiB total
 output, whichever bound is reached first. For example, the pixel bound permits
-less duration at 640 × 360 than at 320 × 180. The reduced aspect-ratio numerator
-and denominator must each fit 1–99 for the ordinary film script contract.
+less duration at 640 Ã— 360 than at 320 Ã— 180. The reduced aspect-ratio numerator
+and denominator must each fit 1â€“99 for the ordinary film script contract.
 Existing layer/raster compositing budgets and 25/50 fps grids also apply. Paths
 must be local, confined, portable and free of symlinks. Split a larger production
 into reviewed sequences, then assemble accepted exports with the film tools.
@@ -173,3 +176,54 @@ For narrative facts that are not transform coordinates, continue using the
 [authored story-state ledger](STORY-STATE.md). Neither system infers facts or
 creates missing events. Increase story length by adding meaningful actions,
 not by repeating the same clip or stretching a result hold.
+
+
+## Incremental revisions and interruption recovery
+
+Create a checkpointed first version:
+
+```sh
+python -m gif_cinema sequence build project/sequence.json --out output/v1 --resume
+```
+
+After editing the authored project, plan a separate revision and build it:
+
+```sh
+python -m gif_cinema sequence build project/sequence.json --out output/v2 --reuse-from output/v1 --dry-run
+python -m gif_cinema sequence build project/sequence.json --out output/v2 --reuse-from output/v1 --resume
+```
+
+Repeat the exact build command after interruption. `output/v1` is never modified.
+`--reuse-from` automatically enables checkpoints, even without `--resume`; add
+`--resume` on restart. Keep the previous version available until the new revision
+is complete, and supply the same reuse source when continuing uncopied scenes.
+A completed revision can be reverified with its original command and `--resume`.
+
+The compiler compares each normalized compiled scene, asset hashes and renderer
+source/Pillow identity. Changes in a carried endpoint or prop holder propagate
+through subsequent compiled scenes until state converges. Unchanged scene exports
+are copied byte-for-byte, without scene encoding. Whole-film assembly and full
+frame verification still run for each new revision. A changed action label also
+changes the saved scene identity. Changing only the overall title reuses footage.
+
+`review-required.json` lists each scene's encoding decision, direct or carried-state
+change, shifted start time, removed scenes/joins and adjacent cuts requiring review.
+New adjacency and either changed neighbor require a cut review. Review flags never
+assert artistic acceptance. Dry-run plans reuse without decoding the old movie;
+execution fully verifies the previous bundle before copying anything.
+
+Completed scene exports and durable `checkpoint.json` live beside the destination
+in `OUTPUT.sequence-work`. Checkpoints pin the exact input snapshot and engine.
+Changed inputs or renderer versions require a new output version. Corrupt or edited
+cached files fail explicitly; no existing output is replaced. A verified publication
+snapshot is retained so an interrupted final copy can finish with the exact same
+bytes. Existing partial files must match it; conflicting files remain untouched.
+File fsync and atomic checkpoint replacement are mandatory; directory sync is
+best-effort where unsupported (not exposed by Python on Windows).
+
+The existing 512 MiB/10,000-file budget also bounds the retained workspace, including
+unreferenced interrupted exports and the final publication snapshot. An interrupted
+scene without a committed checkpoint may be rendered again; completed checkpointed
+scenes are reused. The workspace is recovery data, not an automatically expiring
+cache. Keep it until the final version is independently verified and recovery is no
+longer needed. No automatic cleanup, paid requests or provider retry is introduced.
