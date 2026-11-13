@@ -8,7 +8,9 @@ jobs:
   python:
     name: ${{ matrix.os }} / Python ${{ matrix.python }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 20
+    # Full RGBA/FFmpeg and extracted-skill tests exceed 20 minutes on hosted Windows.
+    # Keep every check; allow bounded headroom only on that slower platform.
+    timeout-minutes: ${{ matrix.os == 'windows-2025' && 35 || 20 }}
     strategy:
       fail-fast: false
       matrix:
