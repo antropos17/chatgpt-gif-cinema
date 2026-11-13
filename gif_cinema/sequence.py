@@ -404,10 +404,14 @@ def build_sequence(path, out, dry_run=False, *, resume=False, reuse_from=None):
 
 
 def run(args):
-    result = (verify_sequence(args.directory) if args.sequence_command == 'verify'
-              else build_sequence(args.project, args.out, args.dry_run,
-                                  resume=getattr(args, "resume", False),
-                                  reuse_from=getattr(args, "reuse_from", None)))
+    if args.sequence_command == 'master':
+        from .sequence_master import build
+        result = build(args.directory, args.out)
+    else:
+        result = (verify_sequence(args.directory) if args.sequence_command == 'verify'
+                  else build_sequence(args.project, args.out, args.dry_run,
+                                      resume=getattr(args, "resume", False),
+                                      reuse_from=getattr(args, "reuse_from", None)))
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return result
 
@@ -425,6 +429,10 @@ def add_parser(sub):
     verify = commands.add_parser('verify', help='Recompile the portable project and verify every output frame')
     verify.add_argument('directory', type=Path)
     verify.set_defaults(func=run)
+    master = commands.add_parser('master', help='Lossless RGBA film from verified original sequence PNGs')
+    master.add_argument('directory', type=Path)
+    master.add_argument('--out', required=True, type=Path)
+    master.set_defaults(func=run)
 
 
 def main(argv=None):
