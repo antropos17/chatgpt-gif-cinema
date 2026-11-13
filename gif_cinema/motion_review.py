@@ -55,7 +55,54 @@ def change(left, right):
             'visible_mae_0_255': round(max(errors) / visible, 8) if visible else 0.0}
 
 
-def analyze(raw, focus=None):
+def anchor_motion(frames, delays):
+    """Measure visible-bound bottom-center motion, not character identity.
+
+    Opaque canvases and empty frames have no reliable silhouette anchor.
+    Intentional acceleration, pose changes and cropped limbs also affect this
+    diagnostic. Never automatically register frames from this score.
+    """
+    # A GIF encoder may split one displayed drawing into several records.
+    # Measure between visible holds, not storage records. Preserve source ranges.
+    holds = []
+    previous = None
+    for index, (frame, delay) in enumerate(zip(frames, delays)):
+        identity = frame.tobytes()
+        if holds and identity == previous:
+            holds[-1]['last_frame'] = index
+            holds[-1]['duration_ms'] += delay
+        else:
+            holds.append({'first_frame': index, 'last_frame': index, 'duration_ms': delay})
+        previous = identity
+    anchors = []
+    for hold in holds:
+        frame = frames[hold['first_frame']]
+        alpha = frame.getchannel('A')
+        box = alpha.getbbox()
+        if box is None or alpha.getextrema()[0] > 0:
+            anchors.append(None)
+        else:
+            anchors.append([(box[0] + box[2] - 1) / 2, box[3] - 1])
+    velocities = []
+    for i in range(len(holds) - 1):
+        a, b = anchors[i:i + 2]
+        velocities.append(None if a is None or b is None else
+                          [(b[j] - a[j]) * 1000 / holds[i]['duration_ms'] for j in (0, 1)])
+    changes = []
+    for i in range(1, len(velocities)):
+        a, b = velocities[i - 1:i + 1]
+        changes.append({'at_frame': holds[i]['first_frame'], 'velocity_change_px_per_second':
+                        None if a is None or b is None else
+                        round(sum((b[j] - a[j]) ** 2 for j in (0, 1)) ** .5, 6)})
+    return {'anchor': 'visible-bounds-bottom-center', 'positions': anchors, 'holds': holds,
+            'velocity_changes': changes,
+            'scope': 'Diagnostic only; intentional acceleration and pose changes also score. '
+                     'Opaque or empty frames are unmeasurable. No loop wrap or automatic repair.'}
+
+
+def analyze(raw, focus=None, *, schema_version=2):
+    if type(schema_version) is not int or schema_version not in (1, 2):
+        raise ValueError('Unsupported motion review schema version')
     source = codec.decode(raw)
     box = rectangle(focus, source['size'])
     frames = [f.crop(box) for f in source['frames']]
@@ -88,13 +135,16 @@ def analyze(raw, focus=None):
     for row in rows:
         row['rate_to_adjacent_median'] = round(row['visible_mae_per_second'] / baseline, 8) if baseline else None
     ranking = sorted(range(len(rows)), key=lambda i: (-rows[i]['visible_mae_per_second'], i))
-    return {'format': 'gif-cinema-motion-review', 'schema_version': 1,
+    report = {'format': 'gif-cinema-motion-review', 'schema_version': schema_version,
             'source_sha256': layers.digest(raw), 'size': list(source['size']), 'focus': box,
             'frames': len(frames), 'delays_ms': source['delays_ms'],
             'duration_ms': sum(source['delays_ms']), 'loop': source['loop'],
             'loop_seam_is_played': source['loop'] is not None,
             'adjacent_median_rate': baseline, 'edges': rows, 'ranked_edge_indexes': ranking,
             'visual_acceptance': 'not-established', 'provider_calls': 0, 'scope': SCOPE}
+    if schema_version == 2:
+        report['anchor_motion'] = anchor_motion(frames, source['delays_ms'])
+    return report
 
 
 def sheet(source, report):
@@ -151,7 +201,7 @@ def verify(directory):
     if not isinstance(report, dict):
         raise ValueError('Invalid motion review receipt')
     raw = layers.read_regular(root / 'source.gif', codec.MAX_BYTES)
-    expected = analyze(raw, report.get('focus'))
+    expected = analyze(raw, report.get('focus'), schema_version=report.get('schema_version'))
     source = codec.decode(raw)
     expected['files'] = pixel.file_inventory(root)
     required = {'source.gif', 'priority-edges.png'} | {f'frames/{i:04}.png' for i in range(len(source['frames']))}
