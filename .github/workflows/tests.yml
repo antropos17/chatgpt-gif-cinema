@@ -92,14 +92,14 @@ jobs:
       - name: Package the installable skill
         if: matrix.artifact
         run: |
-          python tools/package_skill.py --out output/gif-cinema-skill-0.4.1.zip
+          python tools/package_skill.py --out output/gif-cinema-skill-0.4.2.zip
           python tools/package_skill.py --out output/gif-cinema-skill-repeat.zip
           python - <<'PYCODE'
           import hashlib
           from pathlib import Path
-          first = Path('output/gif-cinema-skill-0.4.1.zip')
+          first = Path('output/gif-cinema-skill-0.4.2.zip')
           assert first.read_bytes() == Path('output/gif-cinema-skill-repeat.zip').read_bytes()
-          Path('output/gif-cinema-skill-0.4.1.sha256').write_text(
+          Path('output/gif-cinema-skill-0.4.2.sha256').write_text(
               hashlib.sha256(first.read_bytes()).hexdigest() + '  ' + first.name + '\n', encoding='utf-8')
           PYCODE
       - name: Smoke the extracted skill with its immutable runtime pin
@@ -115,7 +115,7 @@ jobs:
           import zipfile
 
           report_path = Path('output/installed-skill-smoke.json').resolve()
-          archive = Path('output/gif-cinema-skill-0.4.1.zip').resolve()
+          archive = Path('output/gif-cinema-skill-0.4.2.zip').resolve()
           with tempfile.TemporaryDirectory(prefix='installed-skill-') as temporary:
               work = Path(temporary).resolve()
               with zipfile.ZipFile(archive) as package:
@@ -168,10 +168,10 @@ jobs:
       - if: matrix.artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gif-cinema-skill-0.4.1
+          name: gif-cinema-skill-0.4.2
           path: |
-            output/gif-cinema-skill-0.4.1.zip
-            output/gif-cinema-skill-0.4.1.sha256
+            output/gif-cinema-skill-0.4.2.zip
+            output/gif-cinema-skill-0.4.2.sha256
             output/installed-skill-smoke.json
           retention-days: 14
           if-no-files-found: error

@@ -15,7 +15,7 @@ sys.dont_write_bytecode = True
 SKILL = Path(__file__).resolve().parents[1]
 # Independent expected inventory, checked against the builder in regression tests.
 RESOURCE_FILES = frozenset({
-    'assets/example/factory.json', 'references/factory.md', 'references/master.md',
+    'assets/example/factory.json', 'references/factory.md', 'references/master.md', 'references/sequences.md',
     'scripts/smoke_factory.py', 'scripts/smoke_master.py',
     'assets/example/motion-loop.json',
     'references/motion.md',
@@ -121,7 +121,7 @@ def check_lossless(required=False):
 def check_runtime(root=SKILL, require_master=False):
     runtime = json.loads((Path(root) / 'runtime.json').read_text(encoding='utf-8'))
     import gif_cinema
-    from gif_cinema import cli, factory, layers, master, master_script, motion, sprites
+    from gif_cinema import cli, factory, layers, master, master_script, motion, sprites, sequence, sequence_incremental, sequence_master
     if 'fixed_canvas' not in inspect.signature(cli.check_gif_limits).parameters:
         raise ValueError('Runtime lacks bounded review decoding; install the pinned runtime')
     if not all(callable(getattr(sprites, name, None)) for name in ('load_gif', 'load_sheet', 'export')):
@@ -187,6 +187,20 @@ def check_runtime(root=SKILL, require_master=False):
             raise ValueError(f'Runtime lacks {label} CLI commands') from error
         if getattr(parsed, 'func', None) is not dispatch:
             raise ValueError(f'Runtime lacks correct {label} CLI dispatch')
+    if not callable(getattr(sequence_master, 'build', None)) or not callable(getattr(sequence_incremental, 'build', None)):
+        raise ValueError('Runtime lacks sequence master or incremental build interfaces')
+    if not {'resume', 'reuse_from'} <= set(inspect.signature(sequence.build_sequence).parameters):
+        raise ValueError('Runtime lacks sequence revision interfaces')
+    for arguments in (['sequence', 'master', 'unused', '--out', 'unused-master'],
+                      ['sequence', 'build', 'input.json', '--out', 'unused', '--resume'],
+                      ['sequence', 'build', 'input.json', '--out', 'unused', '--reuse-from', 'previous']):
+        try:
+            with redirect_stderr(io.StringIO()):
+                parsed = parser.parse_args(arguments)
+        except SystemExit as error:
+            raise ValueError('Runtime lacks sequence master/revision CLI commands') from error
+        if getattr(parsed, 'func', None) is not sequence.run:
+            raise ValueError('Runtime lacks correct sequence CLI dispatch')
     lossless = check_lossless(required=require_master)
     installed_commit = None
     try:

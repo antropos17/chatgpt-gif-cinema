@@ -9,7 +9,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / '.agents/skills/gif-cinema'
 FILES = (
-    'assets/example/factory.json', 'references/factory.md', 'references/master.md',
+    'assets/example/factory.json', 'references/factory.md', 'references/master.md', 'references/sequences.md',
     'scripts/smoke_factory.py', 'scripts/smoke_master.py',
     'assets/example/motion-loop.json',
     'references/motion.md',
