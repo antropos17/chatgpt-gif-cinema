@@ -48,7 +48,7 @@ lossy viewing format.
 
 ## Install the skill
 
-Build the maintained **0.4.1 skill package** from this checkout:
+Build the maintained **0.4.2 skill package** from this checkout:
 
 ```bash
 python tools/package_skill.py --out dist/gif-cinema.skill.zip

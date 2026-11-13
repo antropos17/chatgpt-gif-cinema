@@ -2,7 +2,7 @@
 name: gif-cinema
 description: Make multi-scene animated stories and motion-design GIFs or MP4s from existing GIFs, editable text/shape/stroke layers, sprite atlases and reviewed takes. Use for narrative edits, composited animation and authored draw-on graphics.
 license: "GIF Cinema Source-Available Evaluation License v1.0 (see LICENSE)"
-metadata: {"version": "0.4.1"}
+metadata: {"version": "0.4.2"}
 ---
 
 # GIF Cinema
@@ -35,9 +35,19 @@ clip, or longer holds as a new character action. A long cartoon needs additional
 story events. If those drawings are missing and generation is unavailable, deliver
 an honest animatic or production plan, not a claimed finished cartoon.
 
+## Preserve and revise authored sequences
+
+For existing authored scene sequences, `sequence build --resume` resumes an
+interrupted build with unchanged inputs; `--reuse-from PREVIOUS` creates a new
+revision while reusing only matching, verified scene exports. Do not overwrite the
+accepted earlier sequence. After building, `sequence master BUILT_SEQUENCE --out NEW`
+assembles the original RGBA PNG samples into FFV1/Matroska and verifies every pixel,
+timestamp and frame hold, including action boundaries. See
+[the installed sequence guide](references/sequences.md).
+
 ## Runtime and a no-key check
 
-Skill package **0.4.1** contains helpers, guides and examples. The Python runtime is
+Skill package **0.4.2** contains helpers, guides and examples. The Python runtime is
 installed separately. The install below adds the optional `av>=16.1,<17` lossless
 master dependency. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
 film, chapter, layer and motion export also need FFmpeg and ffprobe. Git/network access is needed only
@@ -48,7 +58,7 @@ version number and by itself is not a compatibility guarantee):
 ```bash
 python -m venv .venv
 # Activate .venv with the command for your shell, then:
-python -m pip install "gif-cinema[lossless] @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@88262cd28f47a53188ea21f354ceaffc5c6a0f9c"
+python -m pip install "gif-cinema[lossless] @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@bf88126a7995c6feca20607ae71a1018eb3cc315"
 python -m gif_cinema --help
 ```
 
@@ -104,7 +114,7 @@ pending; synthetic fixtures are not an artwork-quality demonstration.
 The story helper never makes provider calls and refuses an existing output project. [story-project.md](references/story-project.md) documents
 its exact schema, commands, timing, and limits.
 
-Package 0.4.1 is generated from the maintained source using `tools/package_skill.py`.
+Package 0.4.2 is generated from the maintained source using `tools/package_skill.py`.
 The older GitHub Release `skill-v0.1.1` predates these helpers and must not be
 described as this package. Building a source ZIP does not publish a GitHub Release.
 

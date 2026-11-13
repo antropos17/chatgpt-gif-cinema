@@ -64,7 +64,7 @@ class SkillPackageTests(unittest.TestCase):
             self.assertEqual(len(archive.namelist()), count)
             self.assertEqual(archive.namelist(), sorted(archive.namelist()))
             manifest = json.loads(archive.read('gif-cinema/package-manifest.json'))
-            self.assertEqual(manifest['skill_version'], '0.4.1')
+            self.assertEqual(manifest['skill_version'], '0.4.2')
             self.assertIs(manifest['runtime_bundled'], False)
             self.assertEqual(set(manifest['files']), set(packaging.FILES))
             self.assertEqual(len(manifest['files']) + 1, count)
@@ -83,6 +83,16 @@ class SkillPackageTests(unittest.TestCase):
                              'scripts/verify_layers.py', 'scripts/smoke_layers.py',
                              'references/layers.md', 'assets/example/stroke-reveal.json'):
                 self.assertIn('gif-cinema/' + required, archive.namelist())
+
+    def test_sequence_install_interfaces_reject_old_runtime(self):
+        from gif_cinema import sequence, sequence_master
+        check.check_runtime()
+        with patch.object(sequence_master, 'build', None):
+            with self.assertRaisesRegex(ValueError, 'sequence master'):
+                check.check_runtime()
+        with patch.object(sequence, 'build_sequence', lambda path, out, dry_run=False: None):
+            with self.assertRaisesRegex(ValueError, 'sequence revision'):
+                check.check_runtime()
 
     def test_published_metadata_matches_skill_version_and_license(self):
         installed = self.unpack()
