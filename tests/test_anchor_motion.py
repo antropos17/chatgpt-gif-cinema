@@ -39,7 +39,7 @@ class AnchorTests(unittest.TestCase):
         from gif_cinema import motion_review as review
         from tests.test_motion_review import gif
         with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp)
+            path = Path(tmp).resolve()
             source = path / 'test.gif'
             source.write_bytes(gif([0, 20, 40]))
             report = review.build(source, path / 'review')
