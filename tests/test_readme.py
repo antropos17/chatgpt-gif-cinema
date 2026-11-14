@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from PIL import Image, ImageSequence
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ('README.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md', 'docs/LANTERN-ECHO.md', 'examples/lantern-echo/README.md')
+DOCS = ('README.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md', 'docs/LANTERN-ECHO.md', 'examples/lantern-echo/README.md', 'examples/native-shots/README.md', 'docs/NATIVE-SHOTS.md')
 
 
 class Links(HTMLParser):

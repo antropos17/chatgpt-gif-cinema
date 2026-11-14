@@ -20,6 +20,10 @@ and FFmpeg, run `python examples/lantern-echo/build.py --out output/lantern-echo
 The source drawings, prepared motion atlases, effects and soundtrack are included;
 no new generations or model downloads are needed.
 
+The [native engine fragment](examples/native-shots/README.md) recreates the catch,
+release and lantern payoff through `sequence build`, with performances, camera,
+effects and sound declared in JSON.
+
 <a id="try-it-without-an-api-key"></a>
 
 ## Make your first film

@@ -5,6 +5,11 @@ copying every final pose, prop position or holder into the next JSON file.
 `sequence` carries authored layer state, renders each action, assembles a silent
 film and keeps the shared project plus every source PNG for review.
 
+This page describes the fixed-stage layer contract. For scheduled sprite
+performances, changing camera coverage, authored lighting and stereo events, see
+the separate [native shot project contract](NATIVE-SHOTS.md). Both use
+`sequence build` and `sequence verify`; their schemas and receipts remain distinct.
+
 ![A light for the garden: five connected actions](assets/scene-sequence/preview.gif)
 
 [Watch MP4](assets/scene-sequence/preview.mp4) Â·

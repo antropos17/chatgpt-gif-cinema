@@ -55,6 +55,10 @@ rerun; the reviewed intermediate samples are bundled. The
 reproducible public CLI example. No new provider requests are needed to view or
 inspect this delivered film.
 
+The [native engine migration](../examples/native-shots/README.md) reconstructs the
+catch-to-lantern fragment through `gif_cinema sequence build`, using declarative
+camera coverage, performances, light effects and sound events.
+
 ## Review
 
 The exact delivered movie was decoded completely; all 520 frame timestamps and
