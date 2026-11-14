@@ -1,0 +1,79 @@
+name: Manual Direct Motion Pilot
+
+# No push, pull_request, schedule, or repository_dispatch generation trigger.
+on:
+  workflow_dispatch:
+    inputs:
+      execute:
+        description: "Request ONE paid native GIF (blocked while the cost bound is unknown)"
+        type: boolean
+        required: true
+        default: false
+      approved_usd:
+        description: "Maximum total USD approved for this one dispatch; not itself a cost guarantee"
+        type: string
+        required: true
+        default: "0"
+      confirm_billing:
+        description: "I authorize charging the existing OPENAI_API_KEY project's OpenAI billing"
+        type: boolean
+        required: true
+        default: false
+      prior_attempts_reviewed:
+        description: "I reviewed prior runs and unknown outcomes/billing before authorizing this new request"
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gif-cinema-live-api
+  cancel-in-progress: false
+
+jobs:
+  pilot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install existing project dependencies
+        run: python -m pip install -e '.[filmqa]'
+      - name: Run offline checks before any credential is available
+        run: |
+          python -m compileall -q gif_cinema tools/manual_motion.py
+          python -m unittest discover -s tests -v
+          python -m gif_cinema render examples/motion/chrome-trefoil.film.json --dry-run --max-api-calls 0 --retries 0
+          python -m tools.manual_motion prepare
+      - name: Require media tools before paid request
+        if: ${{ inputs.execute }}
+        run: |
+          command -v ffmpeg
+          command -v ffprobe
+      - name: Authorize and generate at most one direct OpenAI GIF
+        id: generate
+        if: ${{ inputs.execute }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          APPROVED_USD: ${{ inputs.approved_usd }}
+          CONFIRM_BILLING: ${{ inputs.confirm_billing }}
+          PRIOR_ATTEMPTS_REVIEWED: ${{ inputs.prior_attempts_reviewed }}
+        run: python -m tools.manual_motion execute
+      - name: Inspect every decoded frame without modifying the source GIF
+        if: ${{ always() && inputs.execute && steps.generate.outcome != 'skipped' }}
+        run: python -m tools.manual_motion review-if-available
+      - name: Preserve request, attempt records, and any returned media
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: direct-motion-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: output/manual-motion/
+          if-no-files-found: warn
+          retention-days: 14
+          include-hidden-files: false

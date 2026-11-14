@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "unknown",
+  "currency": "USD",
+  "request_sha256": null,
+  "maximum_total_usd": null,
+  "includes_all_charges": false,
+  "basis": null,
+  "source_url": null,
+  "valid_until": null,
+  "note": "No documented all-in upper bound for this native GIF request was found on 2026-11-09. Token rates are not a request quote. Keep execution blocked until a reviewed provider upper bound exists. Never put keys, account identifiers or private billing records in this file."
+}
