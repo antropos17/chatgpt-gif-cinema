@@ -349,7 +349,13 @@ def publish(stage, out):
         cli.publish_file(path, out / path.relative_to(stage))
 
 
-def build_sequence(path, out, dry_run=False, *, resume=False, reuse_from=None):
+def build_sequence(path, out, dry_run=False, *, resume=False, reuse_from=None, ffmpeg='ffmpeg'):
+    from .shot_project import FORMAT as SHOT_FORMAT
+    value = factory.parse_json(layers.read_regular(path, 1024 * 1024))
+    if value.get('format') == SHOT_FORMAT:
+        from .shots import build_project
+        return build_project(path, out, dry_run=dry_run, resume=resume,
+                             reuse_from=reuse_from, ffmpeg=ffmpeg)
     if resume or reuse_from is not None:
         from .sequence_incremental import build
         return build(path, out, dry_run=dry_run, resume=resume, reuse_from=reuse_from)
@@ -404,6 +410,18 @@ def build_sequence(path, out, dry_run=False, *, resume=False, reuse_from=None):
 
 
 def run(args):
+    # Native camera/sprite/effect projects share the CLI, but retain their own
+    # versioned contract. Existing layer-sequence semantics remain unchanged.
+    if args.sequence_command in ('verify', 'master') and (args.directory / 'project.json').is_file():
+        from .shot_project import FORMAT as SHOT_FORMAT
+        value = factory.parse_json(layers.read_regular(args.directory / 'project.json', 1024 * 1024))
+        if value.get('format') == SHOT_FORMAT:
+            if args.sequence_command == 'master':
+                raise ValueError('Native shot projects retain verified FFV1 scenes; sequence master currently accepts layer sequences only')
+            from .shots import verify_project
+            result = verify_project(args.directory)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return result
     if args.sequence_command == 'master':
         from .sequence_master import build
         result = build(args.directory, args.out)
@@ -411,7 +429,8 @@ def run(args):
         result = (verify_sequence(args.directory) if args.sequence_command == 'verify'
                   else build_sequence(args.project, args.out, args.dry_run,
                                       resume=getattr(args, "resume", False),
-                                      reuse_from=getattr(args, "reuse_from", None)))
+                                      reuse_from=getattr(args, "reuse_from", None),
+                                      **({'ffmpeg': args.ffmpeg} if getattr(args, 'ffmpeg', 'ffmpeg') != 'ffmpeg' else {})))
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return result
 
@@ -423,6 +442,7 @@ def add_parser(sub):
     build.add_argument('project', type=Path)
     build.add_argument('--out', required=True, type=Path)
     build.add_argument('--dry-run', action='store_true')
+    build.add_argument('--ffmpeg', default='ffmpeg', help='Encoder executable for native shot projects')
     build.add_argument('--resume', action='store_true', help='Keep checkpoints and resume the same input/output after interruption')
     build.add_argument('--reuse-from', type=Path, help='Reuse matching verified scenes from a completed earlier version; output stays new')
     build.set_defaults(func=run)

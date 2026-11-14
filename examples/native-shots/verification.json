@@ -1,0 +1,213 @@
+{
+  "status": "passed",
+  "scope": "Native CLI, source pixel comparison and owned hard interruption; visual playback review recorded separately",
+  "source_range": [
+    140,
+    430
+  ],
+  "source_interval_seconds": [
+    5.6,
+    17.2
+  ],
+  "frames_pixel_exact": 290,
+  "pcm_interval_byte_exact": true,
+  "delivered_frames_compared": 290,
+  "delivered_rgb_mae": 0.7035912112423727,
+  "delivered_psnr": 44.54211180849228,
+  "minimum_frame_psnr": 38.660704847267795,
+  "baseline_movie_sha256": "33f131886a9e230c94930e1bcf823b976e183605e286ed3dddff4012ca584e08",
+  "original_movie_sha256": "f6b17fb08b4365998206dc35ae7c88a39a9fc1b546497ca0810bb5d36602ce8b",
+  "original_bytes_and_mtime_preserved": true,
+  "uninterrupted_revision": {
+    "rendered": 1,
+    "reused": 4,
+    "resumed": 0
+  },
+  "hard_kill_resume": {
+    "rendered": 1,
+    "reused": 3,
+    "resumed": 1
+  },
+  "unchanged_scene_exports": 4,
+  "checkpoint_file_and_mtime_preserved": true,
+  "baseline_files_and_mtimes_preserved": true,
+  "completed_resume_writes_no_result_files": true,
+  "resumed_movie_matches_uninterrupted_bytes": true,
+  "revised_movie_sha256": "4ec42991128659453bdace82e3684a6abb77b48cb0b5dfa01dc966a7f416aab3",
+  "review": {
+    "scenes": [
+      {
+        "id": "04-catch",
+        "key": "c2180a9ef92395840b8e01e30317fb38736bd422665d00a60b7e2e28f5321b49",
+        "encoding": "reuse"
+      },
+      {
+        "id": "05-release",
+        "key": "ad258ad23e2e770ba98153c42b6076630928b6972cf02369e4aa9cfc70c6fb70",
+        "encoding": "render"
+      },
+      {
+        "id": "06-greeting",
+        "key": "a7e96a5884d4c0b1751670b0fe40ec7ed880fefa4f7df882d18013071c047923",
+        "encoding": "reuse"
+      },
+      {
+        "id": "07-bow",
+        "key": "4dbb00ccf3c1d6e3a8a728fce49b6db4cfb7f4b0970c9bd273107c24c6ab68bf",
+        "encoding": "reuse"
+      },
+      {
+        "id": "08-lanterns",
+        "key": "259f83006529e21d1254a5c6d3dd837ebd9da80617416e70ae33db8759b0c4dd",
+        "encoding": "reuse"
+      }
+    ],
+    "changed_scenes": [
+      "05-release"
+    ],
+    "neighbor_scenes_for_review": [
+      "04-catch",
+      "06-greeting"
+    ],
+    "cuts_for_review": [
+      {
+        "previous": "04-catch",
+        "next": "05-release",
+        "at_ms": 1920.0,
+        "source_at_ms": 7520.0
+      },
+      {
+        "previous": "05-release",
+        "next": "06-greeting",
+        "at_ms": 4800.0,
+        "source_at_ms": 10400.0
+      }
+    ],
+    "note": "Independent shots share an absolute performance clock. Neighbors require playback review, not automatic re-encoding."
+  },
+  "provider_calls": 0,
+  "interpolation_inference_runs": 0,
+  "network_scope": "Python socket connects blocked; FFmpeg inputs are local files and raw pipes",
+  "engine": {
+    "shots.py": "faf130926b21bc7e52cac21fa3c190c091ecbdd543c263faecf0548ba368bf53",
+    "shot_renderer.py": "fdb500c80f9b637b2247464fc30fde8af5c8e7c193cbba6a95e08645d233ead8",
+    "shot_project.py": "c8f3807509371c7466faf63b236c2efd998656cabe8174c34723c2aaccee87d0",
+    "durability.py": "bb96b7d67850c024deb7dbc6236de42f4ab0fdf570e6170ae29aa950a810c6bd"
+  },
+  "versions": {
+    "python": "3.10.6",
+    "pillow": "10.4.0",
+    "pyav": "17.0.1",
+    "ffmpeg": "ffmpeg version n8.0-23-gd1f31a829d-20251022 Copyright (c) 2000-2025 the FFmpeg developers"
+  },
+  "playback_review": {
+    "environment": "Headless installed Chrome with visible player screenshots; desktop capture returned black",
+    "complete": true,
+    "runs": [
+      {
+        "clip": "comparison.mp4",
+        "duration": 11.605,
+        "currentTime": 11.605,
+        "last": {
+          "mediaTime": 11.56,
+          "presentedFrames": 284
+        },
+        "callbacks": 283,
+        "totalFrames": 290,
+        "droppedFrames": 1,
+        "errors": []
+      },
+      {
+        "clip": "baseline/film.mp4",
+        "duration": 11.6,
+        "currentTime": 11.6,
+        "last": {
+          "mediaTime": 11.56,
+          "presentedFrames": 290
+        },
+        "callbacks": 280,
+        "totalFrames": 290,
+        "droppedFrames": 0,
+        "errors": []
+      },
+      {
+        "clip": "cuts/cut-1.mp4",
+        "duration": 1.88,
+        "currentTime": 1.88,
+        "last": {
+          "mediaTime": 1.84,
+          "presentedFrames": 24
+        },
+        "callbacks": 22,
+        "totalFrames": 24,
+        "droppedFrames": 0,
+        "errors": []
+      },
+      {
+        "clip": "cuts/cut-2.mp4",
+        "duration": 1.88,
+        "currentTime": 1.88,
+        "last": {
+          "mediaTime": 1.84,
+          "presentedFrames": 24
+        },
+        "callbacks": 22,
+        "totalFrames": 24,
+        "droppedFrames": 0,
+        "errors": []
+      },
+      {
+        "clip": "cuts/cut-3.mp4",
+        "duration": 1.88,
+        "currentTime": 1.88,
+        "last": {
+          "mediaTime": 1.84,
+          "presentedFrames": 24
+        },
+        "callbacks": 21,
+        "totalFrames": 24,
+        "droppedFrames": 0,
+        "errors": []
+      },
+      {
+        "clip": "cuts/cut-4.mp4",
+        "duration": 1.88,
+        "currentTime": 1.88,
+        "last": {
+          "mediaTime": 1.84,
+          "presentedFrames": 24
+        },
+        "callbacks": 22,
+        "totalFrames": 24,
+        "droppedFrames": 0,
+        "errors": []
+      }
+    ],
+    "observations": [
+      "A/B playback preserved the visible character acting, camera cuts, hand light, rear canopy and lantern arrivals.",
+      "The native fragment and all four half-speed cuts completed with zero dropped frames and zero media errors.",
+      "A/B comparison playback reported one dropped frame; no zero-drop claim is made for that comparison.",
+      "The original interpolation softness remains. Screenshot samples do not establish native-size anatomical inspection of every frame.",
+      "Audio was fully decoded and PCM-compared; subjective listening is not claimed."
+    ],
+    "revision_acceptance": "The 0.6-gain revision is a cache/recovery qualification, not a newly accepted artistic edit."
+  },
+  "local_checks": {
+    "native_behavioral_cases": 9,
+    "original_example_builder_cases": 5,
+    "documentation_cases": 11,
+    "legacy_dispatch_and_resume_cases": 3,
+    "status": "passed",
+    "earlier_legacy_run": {
+      "cases": 46,
+      "passed": 44,
+      "errors": 2,
+      "resolution": "A live source edit invalidated one engine identity during that test; rerun after freezing passed. Native CLI dispatch initially read a mocked nonexistent fixture before the existing dispatcher; dispatch was moved into build_sequence and both dispatch cases passed."
+    }
+  },
+  "retained_attempts": [
+    "Initial all-frame comparison found raster rounding drift at source frame 158; explicit authored path durations fixed it.",
+    "A second diagnostic run confirmed all source frames/PCM, then was stopped before completion to harden portable source publication and project identity checks. It is not a recovery proof.",
+    "The current baseline passed frame/PCM comparison; the first cut-preview command rejected .96 as a duration. The command now uses 0.96; the verified baseline was reused in the successful qualification."
+  ]
+}
