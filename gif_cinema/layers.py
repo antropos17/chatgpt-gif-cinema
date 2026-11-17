@@ -516,6 +516,30 @@ def layer_transform(scene, layer, time_ms):
     return evaluate(layer['keyframes'], progress)
 
 
+def _integer_translation(raster, matrix, canvas_size, method):
+    """Return an exact visible crop for integer translation, or None to resample.
+
+    This is not a cache or an approximate affine shortcut. Fractional positions,
+    scale and rotation always keep the original resampling path. Cropping before
+    conversion bounds the temporary raster to the visible canvas intersection.
+    """
+    from PIL import Image
+    # Straight RGBA with bicubic invokes Pillow's own premultiplication path;
+    # even an identity transform can round colors. Do not skip that conversion.
+    if raster.mode != 'RGBa' and not (raster.mode == 'RGBA' and method == Image.Resampling.NEAREST):
+        return None
+    a, b, c, d, e, f = matrix
+    if a != 1 or b != 0 or d != 0 or e != 1 or c != math.trunc(c) or f != math.trunc(f):
+        return None
+    x, y = -int(c), -int(f)
+    left, top = max(0, x), max(0, y)
+    right, bottom = min(canvas_size[0], x+raster.width), min(canvas_size[1], y+raster.height)
+    if right <= left or bottom <= top:
+        return None, None
+    crop = raster.crop((left-x, top-y, right-x, bottom-y)).convert('RGBA')
+    return crop, (left, top)
+
+
 def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
     from PIL import Image
     scene = prepared['scene']
@@ -532,9 +556,8 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
             state['source_index'] = layer_gifs.frame_index(prepared['assets'][layer['source']],
                 time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms'))
         elif state is not None and layer['type'] == 'sprites':
-            state['source_index'] = (pose_tracks.index_at(layer, time_ms - layer['in_ms'])
-                if 'pose_keys' in layer else layer_gifs.frame_index(prepared['sprite_sequences'][layer['id']],
-                    time_ms - layer['in_ms'], layer['playback'], layer.get('source_range_ms')))
+            state['source_index'] = layer_sprites.index_at(layer, time_ms - layer['in_ms'],
+                info=prepared['sprite_sequences'][layer['id']])
         states[layer['id']] = state
         if state is None or state['opacity'] <= 0:
             continue
@@ -553,12 +576,23 @@ def render_at(prepared, time_ms, only_layer=None, _layer_previews=None):
         ax, ay = layer['anchor'][0] * raster.width, layer['anchor'][1] * raster.height
         matrix = (a, b, ax - a * cx - b * cy, d, e, ay - d * cx - e * cy)
         method = Image.Resampling.NEAREST if layer.get('sampling') == 'pixel' else Image.Resampling.BICUBIC
-        transformed = raster.transform(canvas.size, Image.Transform.AFFINE, matrix, resample=method).convert('RGBA')
+        translated = _integer_translation(raster, matrix, canvas.size, method)
+        if translated is None:
+            transformed = raster.transform(canvas.size, Image.Transform.AFFINE, matrix, resample=method).convert('RGBA')
+            destination = (0, 0)
+        else:
+            transformed, destination = translated
+            if transformed is None:
+                continue
         if state['opacity'] != 1:
             transformed.putalpha(transformed.getchannel('A').point(lambda alpha: round(alpha * state['opacity'])))
         if _layer_previews is not None:
-            _collect_layer_preview(_layer_previews, scene, layer, time_ms, transformed)
-        canvas.alpha_composite(transformed)
+            preview = transformed
+            if destination != (0, 0) or transformed.size != canvas.size:
+                preview = Image.new('RGBA', canvas.size)
+                preview.paste(transformed, destination)
+            _collect_layer_preview(_layer_previews, scene, layer, time_ms, preview)
+        canvas.alpha_composite(transformed, destination)
     canvas.info.clear()
     return canvas, states
 

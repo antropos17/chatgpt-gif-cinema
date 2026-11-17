@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 import tempfile
 
-from PIL import Image, __version__ as PILLOW_VERSION
+from PIL import Image, ImageFile, __version__ as PILLOW_VERSION
 from . import cli, factory
 from .audio import prepare_audio, input_options as audio_input_options
 
@@ -133,11 +133,22 @@ def require_av():
 def video_frame(av, image):
     frame = av.VideoFrame(image.width, image.height, 'bgra')
     plane = frame.planes[0]
-    raw = image.tobytes('raw', 'BGRA')
-    data = bytearray(plane.buffer_size)
     row = image.width * 4
-    for y in range(image.height): data[y * plane.line_size:y * plane.line_size + row] = raw[y * row:(y + 1) * row]
-    plane.update(data)
+    if plane.line_size == row and plane.buffer_size == row * image.height:
+        # This is already the exact packed buffer consumed by the old row copy.
+        plane.update(image.tobytes('raw', 'BGRA'))
+    elif (PILLOW_VERSION in ('10.1.0', '13.0.0') and plane.line_size >= row
+            and plane.buffer_size == plane.line_size * image.height
+            and plane.line_size <= max(ImageFile.MAXBLOCK, row)):
+        # These raw encoders zero every padding byte, including the final row.
+        # Keep straight BGRA and top-down rows: no alpha/color conversion here.
+        plane.update(image.tobytes('raw', 'BGRA', plane.line_size, 1))
+    else:
+        # Preserve unusual layouts/versions and raw-encoder buffer constraints.
+        raw = image.tobytes('raw', 'BGRA')
+        data = bytearray(plane.buffer_size)
+        for y in range(image.height): data[y * plane.line_size:y * plane.line_size + row] = raw[y * row:(y + 1) * row]
+        plane.update(data)
     return frame
 
 
@@ -196,11 +207,18 @@ def encode_master(snapshots, output, report):
                         if rgba.size != (source['width'], source['height']): raise ValueError('GIF canvas changed during decode')
                         if image.info.get('duration') != spec['duration_cs'] * 10: raise ValueError('Decoder/GIF delays disagree')
                         x, y = (report['width'] - rgba.width) // 2, (report['height'] - rgba.height) // 2
-                        canvas = Image.new('RGBA', (report['width'], report['height']), (0, 0, 0, 0))
-                        canvas.paste(rgba, (x, y))  # No alpha compositing: preserve hidden RGB and alpha.
+                        source_digest = factory.digest(rgba.tobytes())
+                        if rgba.size == (report['width'], report['height']):
+                            # convert('RGBA') gave us an owned frame. No padding
+                            # is needed and later packing only reads this image.
+                            canvas, canvas_digest = rgba, source_digest
+                        else:
+                            canvas = Image.new('RGBA', (report['width'], report['height']), (0, 0, 0, 0))
+                            canvas.paste(rgba, (x, y))  # Preserve hidden RGB/alpha, not alpha compositing.
+                            canvas_digest = factory.digest(canvas.tobytes())
                         report['frames'].append({'index': len(report['frames']), 'source': source['index'], 'source_frame': index,
                             'pts_cs': cursor, 'duration_cs': spec['duration_cs'], 'roi': [x, y, rgba.width, rgba.height],
-                            'source_rgba_sha256': factory.digest(rgba.tobytes()), 'canvas_rgba_sha256': factory.digest(canvas.tobytes())})
+                            'source_rgba_sha256': source_digest, 'canvas_rgba_sha256': canvas_digest})
                         frame = video_frame(av, canvas)
                         frame.pts, frame.time_base, frame.duration = cursor, Fraction(1, 100), spec['duration_cs']
                         timing[Fraction(cursor, 100)] = Fraction(spec['duration_cs'], 100)

@@ -61,16 +61,23 @@ def playback_range(asset, layer):
     return start, end
 
 
-def frame_index(asset, time_ms, playback, source_range_ms=None):
-    """Sample original intervals inside a half-open trim, retaining source indices."""
+def frame_index(asset, time_ms, playback, source_range_ms=None, *, before=False):
+    """Sample original intervals inside a half-open trim, retaining source indices.
+
+    before=True selects the outgoing side of an exact positive boundary for
+    diagnostics. At time zero it still selects the first included drawing.
+    No epsilon, resampling, or change to ordinary playback is involved.
+    """
     start, end = source_range_ms if source_range_ms is not None else (0, asset['duration_ms'])
     duration = end - start
     elapsed = time_ms % duration if playback == 'loop' else max(0, time_ms)
-    if playback != 'loop' and elapsed >= duration:
+    if (playback != 'loop' and elapsed >= duration) or (
+            before and playback == 'loop' and time_ms > 0 and elapsed == 0):
         # end is exclusive: an exact source boundary must hold the preceding
         # drawing, not leak the first excluded drawing into the final hold.
         return min(len(asset['frames']) - 1, bisect.bisect_left(asset['ends_ms'], end))
-    return min(len(asset['frames']) - 1, bisect.bisect_right(asset['ends_ms'], start + elapsed))
+    locate = bisect.bisect_left if before and elapsed > 0 else bisect.bisect_right
+    return min(len(asset['frames']) - 1, locate(asset['ends_ms'], start + elapsed))
 
 
 def selection_report(asset, layer, period):

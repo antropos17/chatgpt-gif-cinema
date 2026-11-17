@@ -33,16 +33,19 @@ def normalize(value, drawing_count, duration_ms, period_ms):
     return result
 
 
-def index_at(layer, elapsed_ms):
+def index_at(layer, elapsed_ms, *, before=False):
     """Select a drawing at layer-relative time; at=1 is diagnostic, not exported.
 
     Validated grid times are integral milliseconds. Rounding their floating-point
     representation avoids delaying an authored event by a frame at exact boundaries.
+    before=True selects the outgoing drawing at a key boundary for handoff review;
+    it does not subtract an epsilon or alter the normal exported clock.
     """
     duration = layer['out_ms'] - layer['in_ms']
     keys = layer['pose_keys']
     times = [round(key['at'] * duration) for key in keys]
-    index = max(0, bisect.bisect_right(times, elapsed_ms) - 1)
+    locate = bisect.bisect_left if before else bisect.bisect_right
+    index = max(0, locate(times, elapsed_ms) - 1)
     return keys[index]['frame']
 
 
