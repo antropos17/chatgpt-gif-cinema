@@ -65,7 +65,13 @@ class CommittedCharacterGridTests(unittest.TestCase):
         entries = json.loads((folder / "grid.json").read_text(encoding="utf-8"))
         markup, facts = grid.build_grid(root, entries, columns=3, compact=True)
         self.assertEqual(facts, json.loads((folder / "verification.json").read_text(encoding="utf-8")))
-        self.assertIn(markup, (root / "README.md").read_text(encoding="utf-8"))
+        grouped = grid.group_readme_catalog(markup)
+        self.assertIn(grouped, (root / "README.md").read_text(encoding="utf-8"))
+        import re
+        self.assertEqual(re.findall(r"<td .*?</td>", markup, re.S),
+                         re.findall(r"<td .*?</td>", grouped, re.S))
+        self.assertEqual(grouped.count("<table>"), 5)
+        self.assertEqual(grouped.count("</table>"), 5)
         self.assertEqual(len(entries), 103)
         self.assertEqual(len({item["sha256"] for item in facts}), 103)
         self.assertEqual(sum(item["duration_ms"] == 1440 for item in facts[:100]), 1)
