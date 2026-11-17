@@ -94,14 +94,14 @@ jobs:
       - name: Package the installable skill
         if: matrix.artifact
         run: |
-          python tools/package_skill.py --out output/gif-cinema-skill-0.4.2.zip
+          python tools/package_skill.py --out output/gif-cinema-skill-0.4.3.zip
           python tools/package_skill.py --out output/gif-cinema-skill-repeat.zip
           python - <<'PYCODE'
           import hashlib
           from pathlib import Path
-          first = Path('output/gif-cinema-skill-0.4.2.zip')
+          first = Path('output/gif-cinema-skill-0.4.3.zip')
           assert first.read_bytes() == Path('output/gif-cinema-skill-repeat.zip').read_bytes()
-          Path('output/gif-cinema-skill-0.4.2.sha256').write_text(
+          Path('output/gif-cinema-skill-0.4.3.sha256').write_text(
               hashlib.sha256(first.read_bytes()).hexdigest() + '  ' + first.name + '\n', encoding='utf-8')
           PYCODE
       - name: Smoke the extracted skill with its immutable runtime pin
@@ -117,7 +117,7 @@ jobs:
           import zipfile
 
           report_path = Path('output/installed-skill-smoke.json').resolve()
-          archive = Path('output/gif-cinema-skill-0.4.2.zip').resolve()
+          archive = Path('output/gif-cinema-skill-0.4.3.zip').resolve()
           with tempfile.TemporaryDirectory(prefix='installed-skill-') as temporary:
               work = Path(temporary).resolve()
               with zipfile.ZipFile(archive) as package:
@@ -153,10 +153,11 @@ jobs:
               proof = json.loads((work / 'proof/verification.json').read_text(encoding='utf-8'))
               assert proof['status'] == 'passed' and type(proof['provider_calls']) is int and proof['provider_calls'] == 0
               assert proof['sources_unchanged'] and proof['packaged_motion_checked']
+              assert proof['packaged_backend_checked']
               proof['installation'] = installation
               proof['component_checks'] = {name: json.loads(
                   (work / 'proof' / name / 'verification.json').read_text(encoding='utf-8'))
-                  for name in ('media', 'layers', 'motion', 'factory', 'master')}
+                  for name in ('media', 'layers', 'motion', 'factory', 'master', 'backend')}
               assert all(report['status'] == 'passed' and type(report['provider_calls']) is int and report['provider_calls'] == 0
                   for report in proof['component_checks'].values())
               import hashlib
@@ -170,10 +171,10 @@ jobs:
       - if: matrix.artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gif-cinema-skill-0.4.2
+          name: gif-cinema-skill-0.4.3
           path: |
-            output/gif-cinema-skill-0.4.2.zip
-            output/gif-cinema-skill-0.4.2.sha256
+            output/gif-cinema-skill-0.4.3.zip
+            output/gif-cinema-skill-0.4.3.sha256
             output/installed-skill-smoke.json
           retention-days: 14
           if-no-files-found: error

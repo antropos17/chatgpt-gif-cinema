@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "skill_version": "0.4.2",
+  "skill_version": "0.4.3",
   "runtime_version": "0.5.0",
   "runtime_repository": "https://github.com/antropos17/chatgpt-gif-cinema.git",
-  "runtime_commit": "bf88126a7995c6feca20607ae71a1018eb3cc315",
+  "runtime_commit": "197068b60f1c4c4b9d3cd70d4a5faeca043f5c23",
   "runtime_bundled": false,
   "python": ">=3.10",
   "pillow": ">=10.1",
@@ -33,7 +33,9 @@
     "optional lossy viewing MP4 with local audio",
     "source-only script montage with hash-pinned native drawing ranges and exact SRT/timeline sidecars",
     "immutable authored sequence revisions with verified scene reuse and interruption resume",
-    "lossless original-RGBA scene sequence masters with per-frame timing verification"
+    "lossless original-RGBA scene sequence masters with per-frame timing verification",
+    "native camera/effect shot projects with exact authored actor-loop clocks",
+    "bounded GFC1 working-project export with verified RGBA frames and native holds"
   ],
   "notice": "Skill and runtime have separate version numbers. Install the immutable commit; a runtime version string alone does not establish compatibility. Git and network access are needed for the documented initial pip install. No provider calls are needed for local review, sprite export or smoke tests.",
   "lossless_dependencies": [

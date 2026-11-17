@@ -17,6 +17,7 @@ SKILL = Path(__file__).resolve().parents[1]
 RESOURCE_FILES = frozenset({
     'assets/example/factory.json', 'references/factory.md', 'references/master.md', 'references/sequences.md',
     'scripts/smoke_factory.py', 'scripts/smoke_master.py',
+    'scripts/smoke_backend.py', 'references/backend.md',
     'assets/example/motion-loop.json',
     'references/motion.md',
     'scripts/smoke_motion.py',
@@ -201,6 +202,25 @@ def check_runtime(root=SKILL, require_master=False):
             raise ValueError('Runtime lacks sequence master/revision CLI commands') from error
         if getattr(parsed, 'func', None) is not sequence.run:
             raise ValueError('Runtime lacks correct sequence CLI dispatch')
+    # A generic 0.5.0 version string also appears on older, incompatible pins.
+    # Native/editor capabilities must exist before an installation is accepted.
+    try:
+        from gif_cinema import editor_project, shots, shot_project, shot_renderer
+    except ImportError as error:
+        raise ValueError('Runtime lacks native/editor backend interfaces; install the pinned runtime') from error
+    for label, component, names in (
+            ('editor project', editor_project, ('parse_project', 'build', 'main')),
+            ('native shots', shots, ('build_project', 'verify_project')),
+            ('native project', shot_project, ('load_project',))):
+        if not all(callable(getattr(component, name, None)) for name in names):
+            raise ValueError(f'Runtime lacks required {label} interfaces')
+    if 'preview' not in inspect.signature(editor_project.build).parameters:
+        raise ValueError('Runtime lacks editor project preview control')
+    if not {'resume', 'reuse_from', 'dry_run'} <= set(inspect.signature(shots.build_project).parameters):
+        raise ValueError('Runtime lacks native shot revision interfaces')
+    renderer = getattr(shot_renderer, 'Renderer', None)
+    if not callable(renderer) or not all(callable(getattr(renderer, name, None)) for name in ('actors', 'frame')):
+        raise ValueError('Runtime lacks native actor/frame interfaces')
     lossless = check_lossless(required=require_master)
     installed_commit = None
     try:
@@ -216,7 +236,7 @@ def check_runtime(root=SKILL, require_master=False):
             'expected_commit': runtime['runtime_commit'], 'installed_commit': installed_commit,
             'pin_matches_metadata': installed_commit == runtime['runtime_commit'],
             'optional_dependencies': {'lossless': lossless},
-            'note': 'Interface checks are not behavioral or visual acceptance. Run all five component smokes or smoke_test.py. A local checkout may not expose VCS installation metadata.'}
+            'note': 'Interface checks are not behavioral or visual acceptance. Run all six component smokes or smoke_test.py. A local checkout may not expose VCS installation metadata.'}
 
 
 def main():

@@ -64,7 +64,7 @@ class SkillPackageTests(unittest.TestCase):
             self.assertEqual(len(archive.namelist()), count)
             self.assertEqual(archive.namelist(), sorted(archive.namelist()))
             manifest = json.loads(archive.read('gif-cinema/package-manifest.json'))
-            self.assertEqual(manifest['skill_version'], '0.4.2')
+            self.assertEqual(manifest['skill_version'], '0.4.3')
             self.assertIs(manifest['runtime_bundled'], False)
             self.assertEqual(set(manifest['files']), set(packaging.FILES))
             self.assertEqual(len(manifest['files']) + 1, count)
@@ -94,6 +94,22 @@ class SkillPackageTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'sequence revision'):
                 check.check_runtime()
 
+    def test_backend_interfaces_cannot_be_inferred_from_version_string(self):
+        from gif_cinema import editor_project, shots, shot_project, shot_renderer
+        check.check_runtime()
+        for component, name, label in ((editor_project, 'parse_project', 'editor project'),
+                                       (shots, 'verify_project', 'native shots'),
+                                       (shot_project, 'load_project', 'native project'),
+                                       (shot_renderer.Renderer, 'actors', 'native actor')):
+            with self.subTest(label=label), patch.object(component, name, None):
+                with self.assertRaisesRegex(ValueError, label):
+                    check.check_runtime()
+        with patch.object(editor_project, 'build', lambda source, out: None):
+            with self.assertRaisesRegex(ValueError, 'editor project preview'):
+                check.check_runtime()
+        with patch.object(shots, 'build_project', lambda path, out: None):
+            with self.assertRaisesRegex(ValueError, 'native shot revision'):
+                check.check_runtime()
     def test_published_metadata_matches_skill_version_and_license(self):
         installed = self.unpack()
         frontmatter = (installed / 'SKILL.md').read_text().split('---', 2)[1]
@@ -224,7 +240,8 @@ class SkillPackageTests(unittest.TestCase):
         self.assertIs(info['runtime_bundled'], False)
         self.assertIn(f"git+{info['runtime_repository']}@{info['runtime_commit']}",
                       (SKILL / 'SKILL.md').read_text())
-        for name in ('generation.md', 'sprites.md'):
+        self.assertEqual(info['runtime_commit'], '197068b60f1c4c4b9d3cd70d4a5faeca043f5c23')
+        for name in ('generation.md', 'sprites.md', 'sequences.md', 'backend.md'):
             self.assertIn(info['runtime_commit'], (SKILL / 'references' / name).read_text())
 
     def test_extracted_media_smoke_uses_pack_slice_and_pending_reviews(self):
@@ -491,7 +508,8 @@ class SkillPackageTests(unittest.TestCase):
         self.assertTrue(report['packaged_motion_checked'])
         self.assertTrue(report['packaged_factory_checked'])
         self.assertTrue(report['packaged_master_checked'])
-        self.assertEqual(set(report['components']), {'media', 'layers', 'motion', 'factory', 'master'})
+        self.assertTrue(report['packaged_backend_checked'])
+        self.assertEqual(set(report['components']), {'media', 'layers', 'motion', 'factory', 'master', 'backend'})
         for component in report['components']:
             raw = (out / component / 'verification.json').read_bytes()
             receipt = json.loads(raw)
@@ -600,7 +618,7 @@ class SkillPackageTests(unittest.TestCase):
 
     def test_missing_lossless_fails_master_and_full_smokes_before_output(self):
         check.check_runtime()  # Preserve module identity across simulated missing-dependency cases.
-        for filename in ('smoke_master.py', 'smoke_test.py'):
+        for filename in ('smoke_master.py', 'smoke_backend.py', 'smoke_test.py'):
             smoke = self.load_smoke(filename)
             out = self.root / filename
             with self.subTest(filename=filename), patch.dict(sys.modules, {'av': None}), \
@@ -612,7 +630,7 @@ class SkillPackageTests(unittest.TestCase):
 
     def test_full_smoke_requires_verified_exact_zero_call_component_receipts(self):
         smoke = self.load_smoke('smoke_test.py')
-        self.assertEqual(smoke.COMPONENTS, ('media', 'layers', 'motion', 'factory', 'master'))
+        self.assertEqual(smoke.COMPONENTS, ('media', 'layers', 'motion', 'factory', 'master', 'backend'))
         path = self.root / 'verification.json'
         for data in ({}, [], {'status': 'passed'}, {'status': 'failed', 'provider_calls': 0},
                      *({'status': 'passed', 'provider_calls': value}
@@ -646,7 +664,7 @@ class SkillPackageTests(unittest.TestCase):
 
     def test_new_smokes_refuse_installed_output_without_bytecode(self):
         installed = self.unpack()
-        for filename in ('smoke_factory.py', 'smoke_master.py', 'smoke_test.py'):
+        for filename in ('smoke_factory.py', 'smoke_master.py', 'smoke_backend.py', 'smoke_test.py'):
             out = installed / filename
             with self.subTest(filename=filename):
                 result = self.command(installed, filename, '--out', str(out), success=False, allow_bytecode=True)
