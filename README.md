@@ -61,7 +61,7 @@ lossy viewing format.
 
 ## Install the skill
 
-Build the maintained **0.4.2 skill package** from this checkout:
+Build the maintained **0.4.3 skill package** from this checkout:
 
 ```bash
 python tools/package_skill.py --out dist/gif-cinema.skill.zip
@@ -73,8 +73,11 @@ Extract its single `gif-cinema` folder into:
 - **Claude Code:** `~/.claude/skills/gif-cinema`
 
 Follow [the included installation check](.agents/skills/gif-cinema/SKILL.md#runtime-and-a-no-key-check)
-to install and verify its pinned Python runtime separately. The older `skill-v0.1.1`
-GitHub Release is not this package.
+to install and verify its pinned Python runtime separately. This package pins the
+merged backend from PR #76, including native actor timing and saved `.gfc` export.
+[The installed backend guide](.agents/skills/gif-cinema/references/backend.md)
+includes a real no-key smoke check. Downloaded older Release ZIPs do not update
+automatically; this source package does not deploy the private browser editor.
 
 Try this with your agent:
 

@@ -2,7 +2,7 @@
 
 Use a reviewed `gif-cinema-layer-sequence` project, not an arbitrary GIF or a
 sprite atlas. These commands do not generate new character drawings. The complete
-schema and authoring example are in the [pinned runtime guide](https://github.com/antropos17/chatgpt-gif-cinema/blob/bf88126a7995c6feca20607ae71a1018eb3cc315/docs/SCENE-SEQUENCES.md).
+schema and authoring example are in the [pinned runtime guide](https://github.com/antropos17/chatgpt-gif-cinema/blob/197068b60f1c4c4b9d3cd70d4a5faeca043f5c23/docs/SCENE-SEQUENCES.md).
 
 ```bash
 python -m gif_cinema sequence build project/sequence.json --out output/v1 --resume

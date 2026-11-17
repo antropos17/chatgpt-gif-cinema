@@ -11,6 +11,7 @@ SKILL = ROOT / '.agents/skills/gif-cinema'
 FILES = (
     'assets/example/factory.json', 'references/factory.md', 'references/master.md', 'references/sequences.md',
     'scripts/smoke_factory.py', 'scripts/smoke_master.py',
+    'scripts/smoke_backend.py', 'references/backend.md',
     'assets/example/motion-loop.json',
     'references/motion.md',
     'scripts/smoke_motion.py',

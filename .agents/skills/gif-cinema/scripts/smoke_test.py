@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw
 import check_install
 
 
-COMPONENTS = ("media", "layers", "motion", "factory", "master")
+COMPONENTS = ("media", "layers", "motion", "factory", "master", "backend")
 
 
 def verify_component_receipt(path):
@@ -129,7 +129,7 @@ def main():
                "reference_preflight_checked": True, "packaged_review_and_sprites_checked": True,
                "packaged_layers_and_strokes_checked": True, "packaged_gif_layers_checked": True,
                "packaged_motion_checked": True, "packaged_factory_checked": True,
-               "packaged_master_checked": True, "components": component_checks,
+               "packaged_master_checked": True, "packaged_backend_checked": True, "components": component_checks,
                "installation": installation, "visual_review": "pending", "user_acceptance": "pending",
                "scope": "CLI offline behavior; no live generation or artistic acceptance."}
     (root / "verification.json").write_text(json.dumps(receipt, indent=2), encoding="utf-8")

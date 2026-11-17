@@ -2,7 +2,7 @@
 name: gif-cinema
 description: Make multi-scene animated stories and motion-design GIFs or MP4s from existing GIFs, editable text/shape/stroke layers, sprite atlases and reviewed takes. Use for narrative edits, composited animation and authored draw-on graphics.
 license: "GIF Cinema Source-Available Evaluation License v1.0 (see LICENSE)"
-metadata: {"version": "0.4.2"}
+metadata: {"version": "0.4.3"}
 ---
 
 # GIF Cinema
@@ -47,7 +47,7 @@ timestamp and frame hold, including action boundaries. See
 
 ## Runtime and a no-key check
 
-Skill package **0.4.2** contains helpers, guides and examples. The Python runtime is
+Skill package **0.4.3** contains helpers, guides and examples. The Python runtime is
 installed separately. The install below adds the optional `av>=16.1,<17` lossless
 master dependency. Python 3.10+ and Pillow 10.1+ suffice for review and sprites;
 film, chapter, layer and motion export also need FFmpeg and ffprobe. Git/network access is needed only
@@ -58,7 +58,7 @@ version number and by itself is not a compatibility guarantee):
 ```bash
 python -m venv .venv
 # Activate .venv with the command for your shell, then:
-python -m pip install "gif-cinema[lossless] @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@bf88126a7995c6feca20607ae71a1018eb3cc315"
+python -m pip install "gif-cinema[lossless] @ git+https://github.com/antropos17/chatgpt-gif-cinema.git@197068b60f1c4c4b9d3cd70d4a5faeca043f5c23"
 python -m gif_cinema --help
 ```
 
@@ -105,7 +105,11 @@ MP4/audio are lossy; 100 fps repeats original drawings rather than inventing pos
 ranges, exact caption/timeline sidecars and script audio; see the master guide.
 The default install check reports optional lossless dependency availability; full
 and master smokes require it and fail before creating output if it is unavailable.
-For the complete CLI/film and all five component checks, first confirm `ffmpeg -version` and
+For native atlas shots and saved Browser Studio projects, read
+[backend.md](references/backend.md) and run
+`python scripts/smoke_backend.py --out ../project/backend-smoke`. This tests
+actual pose sampling and decoded working RGBA/holds, not live Site availability.
+For the complete CLI/film and all six component checks, first confirm `ffmpeg -version` and
 `ffprobe -version`, then run `python scripts/smoke_test.py --out ../project/full-smoke`.
 The full receipt validates each child verification receipt and records its SHA-256.
 All output directories must be new and outside the installed skill. None of these checks
@@ -114,9 +118,9 @@ pending; synthetic fixtures are not an artwork-quality demonstration.
 The story helper never makes provider calls and refuses an existing output project. [story-project.md](references/story-project.md) documents
 its exact schema, commands, timing, and limits.
 
-Package 0.4.2 is generated from the maintained source using `tools/package_skill.py`.
-The older GitHub Release `skill-v0.1.1` predates these helpers and must not be
-described as this package. Building a source ZIP does not publish a GitHub Release.
+Package 0.4.3 is generated from the maintained source using `tools/package_skill.py`.
+Previously downloaded Release ZIPs do not update automatically. Use this package
+and its exact pin; building a source ZIP does not publish a GitHub Release.
 
 ## Direct before generating
 
