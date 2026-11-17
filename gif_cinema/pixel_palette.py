@@ -241,11 +241,17 @@ def encode(frames, delays_ms, loop, palette_plan, path, scale=1):
                                             Image.Resampling.NEAREST)
                 if scale != 1 else canonical_rgba(frame) for frame in frames]
     stream = io.BytesIO()
-    for index, (frame, delay) in enumerate(zip(rendered, delays_ms)):
+    for index, (frame, delay) in enumerate(zip(frames, delays_ms)):
+        # Index each source pixel once. Integer NEAREST scaling duplicates those
+        # exact indices, so scale**2 repeated Python color lookups are unnecessary.
+        # Keep the independently scaled RGBA frames above for full verification.
         indices = bytes(color_indices[(r, g, b)] if a else transparent
                         for r, g, b, a in _pixels(frame))
         indexed = Image.frombytes('P', frame.size, indices)
         indexed.putpalette(palette_plan['palette'])
+        if scale != 1:
+            indexed = indexed.resize((frame.width * scale, frame.height * scale),
+                                     Image.Resampling.NEAREST)
         info = {'optimize': False, 'duration': delay, 'disposal': 2,
                 'include_color_table': False, 'background': transparent or 0}
         if transparent is not None:

@@ -4,10 +4,12 @@ All artwork, schedules, paths and event parameters come from a shot project.
 There are no example imports, code plugins, downloads or inference backends.
 """
 import array
+from fractions import Fraction
 import math
 import random
 import wave
 
+import PIL
 from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter
 
 
@@ -41,6 +43,50 @@ def path_at(segments, t):
     return tuple(segments[-1]['points'][-1])
 
 
+def _bounded_blur(image, radius, bounds=None):
+    """Use the unchanged finite Pillow filter on an exact zero-padded region.
+
+    Only tested implementations/modes qualify. Three extended box passes reach
+    at most ceil(radius)+1 pixels each; extra zero padding keeps the crop's
+    artificial edges from influencing nonzero output. Actual canvas edges stay.
+    Unknown Pillow versions retain the full-image path, never an approximation.
+    """
+    if (PIL.__version__ not in ('10.1.0', '13.0.0') or image.mode not in ('RGB', 'L')
+            or type(radius) not in (int, float) or not math.isfinite(radius) or not 0 <= radius <= 64):
+        return image.filter(ImageFilter.GaussianBlur(radius))
+    if bounds is None:
+        bounds = image.getbbox()
+    if bounds is None:
+        return image.copy()
+    padding = 3*(math.ceil(radius)+1)
+    left, top, right, bottom = bounds
+    region = (max(0,left-padding), max(0,top-padding),
+              min(image.width,right+padding), min(image.height,bottom+padding))
+    if (region[2]-region[0])*(region[3]-region[1])*4 >= image.width*image.height*3:
+        return image.filter(ImageFilter.GaussianBlur(radius))
+    blurred = image.crop(region).filter(ImageFilter.GaussianBlur(radius))
+    result = Image.new(image.mode, image.size)
+    result.paste(blurred, region)
+    result.info = image.info.copy()
+    return result
+
+
+def _composite_overlay(image, overlay):
+    """Blend onto an owned opaque RGB frame without an RGBA round-trip.
+
+    With destination alpha 255, masked paste gives the same rounded RGB samples
+    as source-over. The RGBA overlay is also its alpha mask, not a premultiplied
+    source. Mutate only this frame, never the retained stage or decoded sprites.
+    Keep the old path for different modes/sizes rather than applying opaque math
+    to a future transparent canvas.
+    """
+    if (image.mode == 'RGB' and 'transparency' not in image.info
+            and overlay.mode == 'RGBA' and image.size == overlay.size):
+        image.paste(overlay, (0, 0), overlay)
+        return image
+    return Image.alpha_composite(image.convert('RGBA'), overlay).convert('RGB')
+
+
 class Renderer:
     def __init__(self, project, paths):
         self.project = project
@@ -64,15 +110,45 @@ class Renderer:
                         mask = sheet.crop((col*w, row*h, (col+1)*w, (row+1)*h)).convert('RGBA').getchannel('A')
                     frames.append((tile, mask))
             self.clips[name] = frames
+        self._shadow_key = None
+        self._shadowed_background = None
+        self._background_with_shadows()
+
+    def _background_with_shadows(self):
+        """Cache only the static stage; retain the original for masks/occlusion.
+
+        Shadow recipe edits invalidate the cache. Dynamic actors, lights, camera
+        and overlays are still evaluated for every requested source timestamp.
+        The loaded background image is renderer-owned, like the decoded clips.
+        """
+        p = self.project
+        key = (p['shadow_blur'], tuple((tuple(s['xy']), tuple(s['radius']), tuple(s['color']))
+                                      for s in p['shadows']))
+        if key != self._shadow_key:
+            shade = Image.new('RGBA', self.size)
+            draw = ImageDraw.Draw(shade)
+            for shadow in p['shadows']:
+                x, y = shadow['xy']; rx, ry = shadow['radius']
+                draw.ellipse((x-rx, y-ry, x+rx, y+ry), fill=tuple(shadow['color']))
+            self._shadowed_background = Image.alpha_composite(self.background.convert('RGBA'),
+                shade.filter(ImageFilter.GaussianBlur(p['shadow_blur']))).convert('RGB')
+            self._shadow_key = key
+        return self._shadowed_background
 
     def actors(self, image, t):
+        # Pose selection is discrete: float modulo can turn an exact cycle start
+        # into its final pose (e.g. .6 % .2). Interpret authored decimal seconds
+        # exactly and retain the native encoder's rational frame/fps clock. No
+        # epsilon snapping: a genuine sample just before a cut remains before it.
+        clock = t if isinstance(t, Fraction) else Fraction(str(t))
         for actor in self.project['actors']:
             for track in actor['tracks']:
-                if track['start'] <= t < track['end']:
-                    phase = t - track['origin']
+                if Fraction(str(track['start'])) <= clock < Fraction(str(track['end'])):
+                    phase = clock - Fraction(str(track['origin']))
+                    duration = Fraction(str(track['duration']))
                     if track['loop']:
-                        phase %= track['duration']
-                    u = max(0, min(1, phase / track['duration']))
+                        phase %= duration
+                    u = max(0, min(1, phase / duration))
                     index = round(track['first'] + u * (track['last'] - track['first']))
                     tile, mask = self.clips[track['clip']][index]
                     image.paste(tile, tuple(self.project['clips'][track['clip']]['xy']), mask)
@@ -159,34 +235,49 @@ class Renderer:
         return core, glow
 
     def frame(self, t, scene):
+        actor_time = t
+        # Preserve the established float raster/effects/camera clock. Only the
+        # authored actor pose lookup needs exact rational boundaries.
+        if isinstance(t, Fraction):
+            t = float(t)
         p = self.project
-        im = self.background.copy()
-        shade = Image.new('RGBA', self.size); sd = ImageDraw.Draw(shade)
-        for shadow in p['shadows']:
-            x, y = shadow['xy']; rx, ry = shadow['radius']
-            sd.ellipse((x-rx, y-ry, x+rx, y+ry), fill=tuple(shadow['color']))
-        im = Image.alpha_composite(im.convert('RGBA'), shade.filter(ImageFilter.GaussianBlur(p['shadow_blur']))).convert('RGB')
-        self.actors(im, t)
+        im = self._background_with_shadows().copy()
+        self.actors(im, actor_time)
         front_core, front_glow = self.lights([e for e in p['effects'] if e['plane'] == 'front'], t)
         core, glow = self.lights([e for e in p['effects'] if e['plane'] == 'behind'], t)
         gain = scene['effects']['gain']
         if gain != 1:
             core = ImageEnhance.Brightness(core).enhance(gain)
             glow = ImageEnhance.Brightness(glow).enhance(gain)
-        occlusion = ImageChops.difference(im, self.background).convert('L').point(
-            lambda v: 255 if v > p['occlusion_threshold'] else 0).filter(ImageFilter.GaussianBlur(p['occlusion_blur']))
-        glow = glow.filter(ImageFilter.GaussianBlur(p['glow_blur']))
-        glow.paste((0, 0, 0), (0, 0, *self.size), occlusion)
-        core.paste((0, 0, 0), (0, 0, *self.size), occlusion)
-        im = ImageChops.add(ImageChops.add(im, glow), core)
-        im = ImageChops.add(ImageChops.add(im, front_glow.filter(ImageFilter.GaussianBlur(p['glow_blur']))), front_core)
-        overlay = Image.new('RGBA', self.size); draw = ImageDraw.Draw(overlay)
-        for e in p['overlays']:
-            for x, y, speed, phase in e['particles']:
-                xx = (x+t*speed) % e['wrap']-e['offset']; yy = y+math.sin(t*e['speed']+phase)*e['amplitude']
-                r = e['radius'][0]+speed/e['radius'][1]
-                draw.ellipse((xx-r, yy-r*e['aspect'], xx+r, yy+r*e['aspect']), fill=tuple(e['color']))
-        im = Image.alpha_composite(im.convert('RGBA'), overlay).convert('RGB')
+        # Check actual RGB pixels after gain, not effect schedules or grayscale
+        # brightness. Even a one-valued blue pixel must take the original path.
+        core_bounds, glow_bounds = core.getbbox(), glow.getbbox()
+        has_core, has_glow = core_bounds is not None, glow_bounds is not None
+        if has_core or has_glow:
+            occlusion = ImageChops.difference(im, self.background).convert('L').point(
+                lambda v: 255 if v > p['occlusion_threshold'] else 0)
+            occlusion = _bounded_blur(occlusion, p['occlusion_blur'])
+            if has_glow:
+                glow = _bounded_blur(glow, p['glow_blur'], glow_bounds)
+                glow.paste((0, 0, 0), (0, 0, *self.size), occlusion)
+                im = ImageChops.add(im, glow)
+            if has_core:
+                core.paste((0, 0, 0), (0, 0, *self.size), occlusion)
+                im = ImageChops.add(im, core)
+        front_glow_bounds = front_glow.getbbox()
+        if front_glow_bounds is not None:
+            im = ImageChops.add(im, _bounded_blur(front_glow, p['glow_blur'], front_glow_bounds))
+        if front_core.getbbox() is not None:
+            im = ImageChops.add(im, front_core)
+        # No overlay plane exists in this recipe; keep the owned frame as-is.
+        if p['overlays']:
+            overlay = Image.new('RGBA', self.size); draw = ImageDraw.Draw(overlay)
+            for e in p['overlays']:
+                for x, y, speed, phase in e['particles']:
+                    xx = (x+t*speed) % e['wrap']-e['offset']; yy = y+math.sin(t*e['speed']+phase)*e['amplitude']
+                    r = e['radius'][0]+speed/e['radius'][1]
+                    draw.ellipse((xx-r, yy-r*e['aspect'], xx+r, yy+r*e['aspect']), fill=tuple(e['color']))
+            im = _composite_overlay(im, overlay)
         box = scene['camera']; push = p['camera_push']
         z = 1+push['amplitude']*math.sin(t*push['speed'])
         cx, cy = (box[0]+box[2])/2, (box[1]+box[3])/2
@@ -194,29 +285,73 @@ class Renderer:
         return im.crop((cx-bw/2, cy-bh/2, cx+bw/2, cy+bh/2)).resize(self.size, Image.Resampling.LANCZOS)
 
     def sound(self, path):
-        p = self.project; audio = p['audio']; rate = audio['rate']
-        duration = audio['duration']; n = round(duration*rate)
-        left, right = [0.0]*n, [0.0]*n
-        for event in audio['tones']:
-            start, length, freq, gain, pan = event
-            begin, count = round(start*rate), round(length*rate)
-            for j in range(min(count, n-begin)):
-                u = j/rate; envelope = (1-math.exp(-u*40))*math.exp(-u*3/max(.1, length))
-                v = (math.sin(math.tau*freq*u)+.3*math.sin(math.tau*freq*2.003*u))*envelope*gain
-                left[begin+j] += v*(1-pan)*.5; right[begin+j] += v*(1+pan)*.5
-        for start, end, seed, gain in audio['noise']:
-            rng = random.Random(seed); v = 0
-            for i in range(round(start*rate), round(end*rate)):
-                u = (i/rate-start)/(end-start); v = .88*v+.12*rng.uniform(-1, 1)
-                val = v*math.sin(math.pi*u)**2*gain; pan = math.sin(u*math.pi-math.pi/2)
-                left[i] += val*(1-pan); right[i] += val*(1+pan)
-        out = array.array('h')
-        lo = round(p['scenes'][0]['start_frame']/p['fps']*rate)
-        hi = round(p['scenes'][-1]['end_frame']/p['fps']*rate)
-        for i in range(lo, hi):
-            fade = min(1, i/rate/audio['fade_in'], (duration-i/rate)/audio['fade_out'])
-            out.extend([round(math.tanh(left[i])*fade*26000), round(math.tanh(right[i])*fade*26000)])
-        if __import__('sys').byteorder != 'little':
-            out.byteswap()
-        with wave.open(str(path), 'wb') as stream:
-            stream.setnchannels(2); stream.setsampwidth(2); stream.setframerate(rate); stream.writeframes(out.tobytes())
+        """Write this renderer's project audio without changing the source clock."""
+        write_sound(self.project, path)
+
+
+def write_reused_sound(project, paths, path):
+    """Keep source decode validation without preparing unused visual caches.
+
+    The previous Renderer decoded even unused clips before writing audio.
+    Headers, hashes or PNG CRC verification alone do not validate compressed
+    pixels. Load each unique original source, but retain no atlas/tile/mask cache.
+    A one-pixel sample preserves the required mode-conversion checks as well.
+    """
+    sources = dict.fromkeys([project['background'],
+                             *(clip['source'] for clip in project['clips'].values())])
+    for name in sources:
+        with Image.open(paths[name]) as image:
+            image.load()
+            sample = image.crop((0, 0, 1, 1))
+            sample.convert('RGB')
+            if any(clip['source'] == name and clip['mask'] == 'alpha'
+                   for clip in project['clips'].values()):
+                sample.convert('RGBA')
+        del image, sample
+    write_sound(project, path)
+
+
+def write_sound(project, path):
+    """Write bounded PCM blocks with the original absolute sample clock.
+
+    Each sample retains tone order, then noise order, then fade/saturation.
+    Noise generators and recurrence state span blocks; no event is reseeded.
+    The caller writes into a private build attempt before verification.
+    """
+    p = project; audio = p['audio']; rate = audio['rate']
+    duration = audio['duration']; n = round(duration*rate)
+    lo = round(p['scenes'][0]['start_frame']/p['fps']*rate)
+    hi = round(p['scenes'][-1]['end_frame']/p['fps']*rate)
+    noises = [(start, end, random.Random(seed), gain, 0.0)
+              for start, end, seed, gain in audio['noise']]
+    with wave.open(str(path), 'wb') as stream:
+        stream.setnchannels(2); stream.setsampwidth(2); stream.setframerate(rate)
+        stream.setnframes(hi-lo)
+        # Synthesize the prefix too: a cropped performance must retain the
+        # seeded noise recurrence that began before its selected first frame.
+        for block_start in range(0, hi, 4096):
+            block_end = min(block_start+4096, hi)
+            left, right = [0.0]*(block_end-block_start), [0.0]*(block_end-block_start)
+            for start, length, freq, gain, pan in audio['tones']:
+                begin, count = round(start*rate), round(length*rate)
+                for i in range(max(begin, block_start), min(begin+count, n, block_end)):
+                    j = i-begin
+                    u = j/rate; envelope = (1-math.exp(-u*40))*math.exp(-u*3/max(.1, length))
+                    v = (math.sin(math.tau*freq*u)+.3*math.sin(math.tau*freq*2.003*u))*envelope*gain
+                    left[i-block_start] += v*(1-pan)*.5
+                    right[i-block_start] += v*(1+pan)*.5
+            for index, (start, end, rng, gain, v) in enumerate(noises):
+                for i in range(max(round(start*rate), block_start), min(round(end*rate), block_end)):
+                    u = (i/rate-start)/(end-start); v = .88*v+.12*rng.uniform(-1, 1)
+                    val = v*math.sin(math.pi*u)**2*gain; pan = math.sin(u*math.pi-math.pi/2)
+                    left[i-block_start] += val*(1-pan)
+                    right[i-block_start] += val*(1+pan)
+                noises[index] = (start, end, rng, gain, v)
+            out = array.array('h')
+            for i in range(max(lo, block_start), block_end):
+                fade = min(1, i/rate/audio['fade_in'], (duration-i/rate)/audio['fade_out'])
+                out.extend([round(math.tanh(left[i-block_start])*fade*26000),
+                            round(math.tanh(right[i-block_start])*fade*26000)])
+            if __import__('sys').byteorder != 'little':
+                out.byteswap()
+            stream.writeframesraw(out.tobytes())

@@ -10,6 +10,25 @@ from . import layer_gifs, motion, pose_tracks
 MAX_ATLAS_PIXELS = 16 * 1024 * 1024
 MAX_ATLAS_SIDE = 16384
 MAX_CROP_PIXEL_FRAMES = 32 * 1024 * 1024
+MAX_ANCHORS = 32
+
+
+def anchor_name(value):
+    if not isinstance(value, str) or not re.fullmatch(r'[A-Za-z0-9_-]{1,40}', value):
+        raise ValueError('Sprite anchor names must be 1..40 ASCII identifier characters')
+    return value
+
+
+def normalize_anchors(value):
+    if not isinstance(value, dict) or not 1 <= len(value) <= MAX_ANCHORS:
+        raise ValueError('Sprite anchors must contain 1..32 named normalized points')
+    for name, point in value.items():
+        anchor_name(name)
+        if not isinstance(point, list) or len(point) != 2:
+            raise ValueError('Sprite anchor point must be a normalized pair')
+        for component in point:
+            motion.number(component, 'sprite anchor point', 0, 1)
+    return copy.deepcopy(value)
 
 
 def normalize_frames(value):
@@ -17,8 +36,11 @@ def normalize_frames(value):
         raise ValueError('Sprite layer frames must contain 1..256 frame records')
     result, size, duration = [], None, 0
     for record in value:
-        if not isinstance(record, dict) or set(record) != {'rect', 'duration_ms'}:
-            raise ValueError('Sprite frame requires only rect and duration_ms')
+        if (not isinstance(record, dict) or not {'rect', 'duration_ms'} <= set(record)
+                or set(record) - {'rect', 'duration_ms', 'anchors'}):
+            raise ValueError('Sprite frame requires rect and duration_ms, with optional anchors only')
+        if 'anchors' in record:
+            normalize_anchors(record['anchors'])
         rect = record['rect']
         if not isinstance(rect, list) or len(rect) != 4:
             raise ValueError('Sprite rect must be [x, y, width, height]')
@@ -67,6 +89,48 @@ def sequence(layer):
     # The shared sampler only needs the number of records, not decoded images.
     return {'frames': layer['frames'], 'delays_ms': delays, 'ends_ms': ends,
             'duration_ms': elapsed, 'native_loop': None}
+
+
+def index_at(layer, elapsed_ms, *, info=None, before=False):
+    """One drawing clock for visible sprite pixels and authored attachment points."""
+    if 'pose_keys' in layer:
+        return pose_tracks.index_at(layer, elapsed_ms, before=before)
+    info = sequence(layer) if info is None else info
+    return layer_gifs.frame_index(info, elapsed_ms, layer['playback'],
+                                 layer.get('source_range_ms'), before=before)
+
+
+def transition_times(layer, start_ms, end_ms, *, info=None):
+    """Yield interior authored drawing events, not necessarily output samples.
+
+    Native events use integral 10ms units, at most 2999 unique interior times in
+    a validated 30s scene. Do not expand to pixels or step by a floating epsilon.
+    """
+    origin = layer['in_ms']
+    if 'pose_keys' in layer:
+        duration = layer['out_ms'] - origin
+        for key in layer['pose_keys']:
+            timestamp = origin + round(key['at'] * duration)
+            if start_ms < timestamp < end_ms:
+                yield timestamp
+        return
+    info = sequence(layer) if info is None else info
+    start, end = layer_gifs.playback_range(info, layer)
+    duration = end - start
+    offsets = [value - start for value in info['ends_ms'] if start < value < end]
+    looping = layer['playback'] == 'loop'
+    if looping:
+        offsets.append(duration)
+    # Jump to the first relevant cycle instead of scanning preceding holds.
+    cycle = max(0, (start_ms - origin) // duration) if looping else 0
+    while origin + cycle * duration < end_ms:
+        for offset in offsets:
+            timestamp = origin + cycle * duration + offset
+            if start_ms < timestamp < end_ms:
+                yield timestamp
+        if not looping:
+            break
+        cycle += 1
 
 
 def timing_report(scene):

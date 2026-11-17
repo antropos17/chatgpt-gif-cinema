@@ -22,6 +22,31 @@ Each actor has ordered nonoverlapping `tracks`: clip, active start/end seconds,
 phase origin, duration, boolean loop, first/last atlas indices. A nonlooping track
 clamps at its end pose; gaps draw no actor. Cuts do not restart performance clocks.
 
+Actor pose selection uses the exact native `frame_index / fps` clock and the
+decimal values of authored track times. Loop phase is rational modulo: an exact
+cycle start selects the first pose, not the outgoing last pose because of a
+floating-point remainder. Selection still uses nearest atlas index with ties to
+the even index; reverse/constant tracks, nonloop clamps and half-open `[start,end)`
+track intervals retain that rule. There is no epsilon snapping or interpolation.
+For direct `Renderer.frame(float_seconds, scene)` calls, the printed decimal
+float value is used for actor timing; pass a `Fraction` for exact rational samples.
+Camera, lighting, paths, overlays and audio retain their existing float clocks.
+
+This fixes reproduced pose stutter, not a codec PTS defect: a 30 fps / 0.2-second
+two-pose loop previously selected the old last pose at frame 18 (0.6 seconds),
+extending it for an unwanted frame. A 10 fps / 0.1-second loop had five wrong
+samples in ten. Actual FFV1 and viewing MP4 exports now select the intended poses;
+PTS/holds and source PCM/decoded AAC remain unchanged in those comparisons.
+Tests cover every supported integer rate (1..60), genuine just-before/after
+samples, half-even ties, negative origins, reversed/constant tracks, scene cuts
+and mutable authored timing. This does not prove smooth artwork, recognizability
+or face identity, and it cannot create missing drawings.
+
+The renderer source change changes checkpoint engine identity. Do not silently
+overwrite or reuse old generated poses: unchanged completed builds can still be
+verified, but rebuilding corrected poses requires a new output revision; an old
+incomplete checkpoint is not resumed under a different engine identity.
+
 ## Lighting and sound
 
 Effects have a `type`, a `plane` (`front` / `behind`) and explicit parameters:
