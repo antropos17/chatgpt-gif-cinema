@@ -90,6 +90,22 @@ def build_grid(root, records, columns=4, compact=False):
     return "<table>\n" + "\n".join(rows) + "\n</table>\n", facts
 
 
+def group_readme_catalog(markup):
+    """Split the full 103-card catalog into navigable groups without changing cards."""
+    for number, label in ((25, "025-048"), (49, "049-072"),
+                          (73, "073-096"), (97, "097-100")):
+        at = markup.index(f"<strong>{number:03d} ·")
+        row = markup.rfind("<tr>", 0, at)
+        heading = label.replace("-", "–")
+        if number == 97:
+            heading += " and outfit studies"
+        separator = ('</table>\n\n[Back to catalog](#anime-pixel-art) · '
+                     '[Quickstart](#make-your-first-film)\n\n'
+                     f'<a id="cast-{label}"></a>\n\n### Cast {heading}\n\n<table>\n')
+        markup = markup[:row] + separator + markup[row:]
+    return markup
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)

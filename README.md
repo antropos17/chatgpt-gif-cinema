@@ -1,14 +1,24 @@
-# GIF Cinema
+<h1 align="center">GIF Cinema</h1>
+<p align="center"><strong>Small takes. Complete stories.</strong><br>
+A local GIF-to-film workshop for Codex and Claude Code.</p>
+<p align="center">
+<a href="#make-your-first-film"><strong>Start without an API key</strong></a> &nbsp; / &nbsp;
+<a href="#selected-work">Watch examples</a> &nbsp; / &nbsp;
+<a href="#anime-pixel-art">Explore 100 characters</a> &nbsp; / &nbsp;
+<a href="#choose-a-workflow">Find a workflow</a>
+</p>
 
-**Turn existing GIFs into a film. Inspect every cut.**
+---
 
-A local workshop for **Codex and Claude Code**. No API key needed for the bundled quickstart.
+<p align="center"><sub>FEATURED SHORT · 20.8 SECONDS · SOUND INCLUDED</sub></p>
 
-[Try it](#make-your-first-film) · [Exact-frame master](docs/GIF-MASTER.md) · [Agent skill](#install-the-skill) · [100-character grid](#anime-pixel-art) · [Workflows](#choose-a-workflow)
+<p align="center">
+<a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-echo/poster.png"><img src="docs/assets/lantern-echo/preview.gif" width="100%" alt="Lantern Echo: an anime traveler releases light into a star canopy, a courier greets her, and she bows. Click to download the full film with sound."></picture></a>
+</p>
 
-<a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-echo/poster.png"><img src="docs/assets/lantern-echo/preview.gif" width="640" alt="Lantern Echo: an anime traveler releases light into a star canopy, a courier greets her, and she bows. Click to download the full film with sound."></picture></a>
+### Lantern Echo
 
-**Lantern Echo — 20.8 seconds, with sound.** A traveler sends a light to a courier;
+**A small gesture becomes a complete story.** A traveler sends a light to a courier;
 it returns to her hands and lights the garden. New drawn actions, local RIFE
 inbetweens and authored effects. The looping preview is a silent 6.4-second excerpt.
 
@@ -23,6 +33,17 @@ no new generations or model downloads are needed.
 The [native engine fragment](examples/native-shots/README.md) recreates the catch,
 release and lantern payoff through `sequence build`, with performances, camera,
 effects and sound declared in JSON.
+
+---
+
+### Your footage, your edit
+
+**Assemble** existing GIFs into a film. **Inspect** frames, cuts and timing.
+**Deliver** an MP4 viewing copy or an optional [exact-frame master](docs/GIF-MASTER.md).
+Start with included footage; generating new takes is optional.
+
+> **Available here:** a local Python CLI, an agent skill and reproducible examples.
+> The private browser editor is a separate work in progress, not a hosted version of this backend.
 
 <a id="try-it-without-an-api-key"></a>
 
@@ -83,6 +104,123 @@ Try this with your agent:
 
 > Use the gif-cinema skill to assemble the included astronaut story with zero API calls. Return the MP4, a small GIF, the editable project and a review of both cuts.
 
+<a id="blender-motion-study"></a>
+
+## Sculptural loops
+
+<p align="center">
+<a href="examples/blender-form-01/README.md"><picture><img src="examples/blender-form-01/deliverables/FORM-01.gif" width="480" alt="FORM / 01: porcelain arcs unfold around a copper sphere in an actual Blender-rendered six-second loop."></picture></a>
+</p>
+
+<p align="center">
+<strong>FORM / 01</strong><br>
+Porcelain, copper, six seconds. Rendered in Blender EEVEE.<br>
+<a href="examples/blender-form-01/deliverables/FORM-01.mp4">Watch MP4</a> · <a href="examples/blender-form-01/form_01.blend">Open the .blend</a> · <a href="examples/blender-form-01/README.md#import-into-gif-cinema-with-zero-api-calls">Import into GIF Cinema</a>
+</p>
+
+Blender scene + Python source included. Import the rendered GIF into Cinema.
+No model call or JavaScript animation.
+
+<a id="see-it-in-motion"></a>
+<a id="on-the-screen"></a>
+<a id="a-wave-from-the-moon"></a>
+<a id="01--one-prompt-one-small-performance"></a>
+
+## Selected work
+
+*Four ways to turn source material into something worth watching.*
+
+**Stories, lettering and graphic layers.** Open any preview for its source and recipe.
+
+<a id="character-stories"></a>
+<a id="a-reply-from-the-stars"></a>
+<a id="02--three-takes-a-complete-little-exchange"></a>
+<a id="motion-graphics"></a>
+
+<table>
+<tr>
+<td width="50%" align="center" valign="top">
+<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share"><picture><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: a local title and three existing astronaut takes, played once."></picture></a><br>
+<strong>A Reply from the Stars</strong><br>
+Three generated takes + local title · 9.70 s GIF<br>
+<a href="docs/EXAMPLES.md">Story recipe</a> · <a href=".agents/skills/gif-cinema/assets/example/storyboard.json">Storyboard</a>
+</td>
+<td width="50%" align="center" valign="top">
+<a href="docs/MOTION-DESIGN.md"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/motion-elements/poster.png"><img src="docs/assets/motion-elements/chrome.gif" width="300" alt="Chrome Trefoil: the original archived Blender EEVEE rotation, one 3.20-second loop."></picture></a><br>
+<strong>Chrome Trefoil</strong><br>
+Archived Blender EEVEE study · 3.20 s loop<br>
+<a href="docs/assets/motion-elements/chrome.mp4">Watch MP4</a> · <a href="docs/MOTION-DESIGN.md">Source & provenance</a>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+<a href="docs/STROKE-REVEAL.md"><picture><img src="docs/assets/stroke-reveal/preview.gif" width="300" alt="Three authored strokes reveal a heart, an underline and a sparkle. Local rendering, no generated artwork."></picture></a><br>
+<strong>Draw, pause, finish</strong><br>
+Editable stroke paths · 4.00 s play-once GIF<br>
+<a href="docs/STROKE-REVEAL.md">Draw-on workflow</a> · <a href="examples/stroke-reveal.json">Scene JSON</a>
+</td>
+<td width="50%" align="center" valign="top">
+<a href="docs/GIF-LAYERS.md"><picture><img src="docs/assets/gif-layer/preview.gif" width="300" alt="An existing astronaut action beside independently animated text and an accent line."></picture></a><br>
+<strong>Action beside typography</strong><br>
+Existing GIF + local graphic layers · 3.20 s<br>
+<a href="docs/GIF-LAYERS.md">Composition workflow</a> · <a href="examples/gif-layer/scene.json">Scene JSON</a>
+</td>
+</tr>
+</table>
+
+[More examples & recipes](docs/GALLERY.md) · [Original API take](docs/RECIPES.md#one-prompt-one-gif) · [Vertical motion](docs/VERTICAL-MOTION-EXAMPLE.md) · [Review the source drawings](docs/EXAMPLES.md#the-actual-three-shot-story)
+
+The astronaut cards reuse existing footage, with differences between takes. Graphics
+use the experimental layer renderer. Blender examples are standalone scenes, not a CLI rendering backend.
+
+<a id="sprites-and-frame-review"></a>
+
+<a id="exact-script-montage"></a>
+
+## Choose a workflow
+
+**Start with the result you want, not a list of commands.**
+
+| Make or inspect | Start here |
+| --- | --- |
+| Connected actions on one shared stage, with persistent props | [Scene sequences](docs/SCENE-SEQUENCES.md) |
+| A short film with titles or illustrated story pages | [Storytelling skill](docs/STORYTELLING-SKILL.md) |
+| Independent text, shapes, strokes and existing GIF layers | [Layer renderer](docs/MULTILAYER-POC.md) · [GIF composition](docs/GIF-LAYERS.md) |
+| Whole-image motion with editable timing | [Motion recipes](docs/STANDALONE-MOTION.md) |
+| Exact GIF palette control and integer pixel-art scaling | [Pixel palettes](docs/PIXEL-PALETTES.md) |
+| Explicit pose holds and continuity from accepted atlas drawings | [Authored pose tracks](docs/AUTHORED-POSES.md) |
+| A sprite atlas from accepted drawings | [Pack or slice sprites](docs/SPRITES.md) |
+| Every frame, cut and loop seam | [Review player & checklist](docs/GIF-REVIEW.md) |
+| Frame-accurate cuts, subtitle sidecars and a soundtrack | [Exact script montage](docs/EXACT-SCRIPT-EDIT.md) |
+| A portable collection with an offline gallery and ZIP | [Offline GIF factory](docs/OFFLINE-FACTORY.md) |
+
+<a id="build-an-offline-gif-collection"></a>
+
+The factory combines existing GIFs and local layer scenes. From the installed
+checkout, build and verify the bundled collection:
+
+```bash
+python -m gif_cinema factory build factory.example.json --out output/my-collection
+python -m gif_cinema factory verify output/my-collection
+```
+
+Open `output/my-collection/index.html`, or share `collection.zip` when you have the
+rights to its contents. The gallery is static HTML with native GIF playback, no scripts.
+
+## Before making new footage
+
+- **Generation is optional.** New model-generated takes need supported provider
+  access, billing and an explicitly authorized request cap. The demo and local tools
+  work without them. [Generation guide](.agents/skills/gif-cinema/references/generation.md).
+- **Review the actual motion.** Matching prompts, high playback FPS and successful
+  checks do not establish character continuity or a clean loop. Missing actions
+  stay unrendered until suitable footage exists.
+- **Keep the edit reproducible.** Preserve accepted source files, inspect neighboring
+  cuts after a retake, and deliver the project with its receipts. Technical
+  verification and artistic acceptance are separate.
+
+[Production guide](docs/PRODUCTION.md) · [Script format](docs/SCRIPT-FORMAT.md) · [Verification status](STATUS.md)
+
 ## Anime pixel art
 
 Already tried the film? Explore the full cast below, or [browse methods and recipes](docs/GALLERY.md).
@@ -91,6 +229,12 @@ On a slow connection, jump straight to [setup](#make-your-first-film) or open a 
 
 
 **100 characters · 3 outfit studies · real GIF previews**
+
+[001–024](#cast-001-024) · [025–048](#cast-025-048) · [049–072](#cast-049-072) · [073–096](#cast-073-096) · [097–100 + outfits](#cast-097-100)
+
+<a id="cast-001-024"></a>
+
+### Cast 001–024
 
 Short 1.44–1.92 s character studies, not finished 15-second scenes. Click to watch; “Method & limits” explains the remaining drift.
 
@@ -255,6 +399,15 @@ Short 1.44–1.92 s character studies, not finished 15-second scenes. Click to w
 <sub><a href="examples/anime-pixel/catalog-100/README.md" title="Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.">Method &amp; limits</a> · <a href="examples/anime-pixel/catalog-100/posters/innkeeper.png">Still</a></sub>
 </td>
 </tr>
+</table>
+
+[Back to catalog](#anime-pixel-art) · [Quickstart](#make-your-first-film)
+
+<a id="cast-025-048"></a>
+
+### Cast 025–048
+
+<table>
 <tr>
 <td align="center" valign="top" width="33.33%">
 <a href="examples/anime-pixel/catalog-100/astronomer.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/catalog-100/posters/astronomer.png"><img src="examples/anime-pixel/catalog-100/astronomer.gif" width="100%" alt="Astronomer · glasses adjustment: drawn poses."></picture></a><br>
@@ -415,6 +568,15 @@ Short 1.44–1.92 s character studies, not finished 15-second scenes. Click to w
 <sub><a href="examples/anime-pixel/catalog-100/README.md" title="Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation.">Method &amp; limits</a> · <a href="examples/anime-pixel/catalog-100/posters/flutist.png">Still</a></sub>
 </td>
 </tr>
+</table>
+
+[Back to catalog](#anime-pixel-art) · [Quickstart](#make-your-first-film)
+
+<a id="cast-049-072"></a>
+
+### Cast 049–072
+
+<table>
 <tr>
 <td align="center" valign="top" width="33.33%">
 <a href="examples/anime-pixel/catalog-100/calligrapher.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/catalog-100/posters/calligrapher.png"><img src="examples/anime-pixel/catalog-100/calligrapher.gif" width="100%" alt="Calligrapher · collar gesture: drawn poses."></picture></a><br>
@@ -575,6 +737,15 @@ Short 1.44–1.92 s character studies, not finished 15-second scenes. Click to w
 <sub><a href="examples/anime-pixel/catalog-100/README.md" title="Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Yawn with paw-to-chest gesture; hammer stays held. Mouth recovery9-to10 is quicker; apron/fur/hammer facets drift and minor wrist wrap mismatch.">Method &amp; limits</a> · <a href="examples/anime-pixel/catalog-100/posters/polar-bear-smith.png">Still</a></sub>
 </td>
 </tr>
+</table>
+
+[Back to catalog](#anime-pixel-art) · [Quickstart](#make-your-first-film)
+
+<a id="cast-073-096"></a>
+
+### Cast 073–096
+
+<table>
 <tr>
 <td align="center" valign="top" width="33.33%">
 <a href="examples/anime-pixel/catalog-100/chameleon-rogue.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/catalog-100/posters/chameleon-rogue.png"><img src="examples/anime-pixel/catalog-100/chameleon-rogue.gif" width="100%" alt="Chameleon rogue · wary glance: drawn poses."></picture></a><br>
@@ -735,6 +906,15 @@ Short 1.44–1.92 s character studies, not finished 15-second scenes. Click to w
 <sub><a href="examples/anime-pixel/catalog-100/README.md" title="Generated-pose preview. Residual face/outline drift; opaque ivory background; short 1.92 s loop, not a 15 s narrative or finished acting animation. Gentle ear lowering and head tilt, not baking. Tray and basket remain held; bread and apron detail drift. New source replaces old wrap-jump hold.">Method &amp; limits</a> · <a href="examples/anime-pixel/catalog-100/posters/rabbit-baker.png">Still</a></sub>
 </td>
 </tr>
+</table>
+
+[Back to catalog](#anime-pixel-art) · [Quickstart](#make-your-first-film)
+
+<a id="cast-097-100"></a>
+
+### Cast 097–100 and outfit studies
+
+<table>
 <tr>
 <td align="center" valign="top" width="33.33%">
 <a href="examples/anime-pixel/catalog-100/octopus-scientist.gif"><picture><source media="(prefers-reduced-motion: reduce)" srcset="examples/anime-pixel/catalog-100/posters/octopus-scientist.png"><img src="examples/anime-pixel/catalog-100/octopus-scientist.gif" width="100%" alt="Octopus scientist · blink: drawn poses."></picture></a><br>
@@ -806,118 +986,6 @@ each 16 frames / 1.92 seconds. Separate outfit sources are shown above.
 
 </details>
 
-<a id="blender-motion-study"></a>
-
-## Sculptural loops
-
-<p align="center">
-<a href="examples/blender-form-01/README.md"><picture><img src="examples/blender-form-01/deliverables/FORM-01.gif" width="480" alt="FORM / 01: porcelain arcs unfold around a copper sphere in an actual Blender-rendered six-second loop."></picture></a>
-</p>
-
-<p align="center">
-<strong>FORM / 01</strong><br>
-Porcelain, copper, six seconds. Rendered in Blender EEVEE.<br>
-<a href="examples/blender-form-01/deliverables/FORM-01.mp4">Watch MP4</a> · <a href="examples/blender-form-01/form_01.blend">Open the .blend</a> · <a href="examples/blender-form-01/README.md#import-into-gif-cinema-with-zero-api-calls">Import into GIF Cinema</a>
-</p>
-
-Blender scene + Python source included. Import the rendered GIF into Cinema.
-No model call or JavaScript animation.
-
-<a id="see-it-in-motion"></a>
-<a id="on-the-screen"></a>
-<a id="a-wave-from-the-moon"></a>
-<a id="01--one-prompt-one-small-performance"></a>
-
-## Selected work
-
-**Stories, lettering and graphic layers.** Open any preview for its source and recipe.
-
-<a id="character-stories"></a>
-<a id="a-reply-from-the-stars"></a>
-<a id="02--three-takes-a-complete-little-exchange"></a>
-<a id="motion-graphics"></a>
-
-<table>
-<tr>
-<td width="50%" align="center" valign="top">
-<a href="docs/EXAMPLES.md#2-titled-story-a-small-gif-to-share"><picture><img src="docs/assets/example-gallery/titled-story.gif" width="300" alt="A Reply from the Stars: a local title and three existing astronaut takes, played once."></picture></a><br>
-<strong>A Reply from the Stars</strong><br>
-Three generated takes + local title · 9.70 s GIF<br>
-<a href="docs/EXAMPLES.md">Story recipe</a> · <a href=".agents/skills/gif-cinema/assets/example/storyboard.json">Storyboard</a>
-</td>
-<td width="50%" align="center" valign="top">
-<a href="docs/MOTION-DESIGN.md"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/motion-elements/poster.png"><img src="docs/assets/motion-elements/chrome.gif" width="300" alt="Chrome Trefoil: the original archived Blender EEVEE rotation, one 3.20-second loop."></picture></a><br>
-<strong>Chrome Trefoil</strong><br>
-Archived Blender EEVEE study · 3.20 s loop<br>
-<a href="docs/assets/motion-elements/chrome.mp4">Watch MP4</a> · <a href="docs/MOTION-DESIGN.md">Source & provenance</a>
-</td>
-</tr>
-<tr>
-<td width="50%" align="center" valign="top">
-<a href="docs/STROKE-REVEAL.md"><picture><img src="docs/assets/stroke-reveal/preview.gif" width="300" alt="Three authored strokes reveal a heart, an underline and a sparkle. Local rendering, no generated artwork."></picture></a><br>
-<strong>Draw, pause, finish</strong><br>
-Editable stroke paths · 4.00 s play-once GIF<br>
-<a href="docs/STROKE-REVEAL.md">Draw-on workflow</a> · <a href="examples/stroke-reveal.json">Scene JSON</a>
-</td>
-<td width="50%" align="center" valign="top">
-<a href="docs/GIF-LAYERS.md"><picture><img src="docs/assets/gif-layer/preview.gif" width="300" alt="An existing astronaut action beside independently animated text and an accent line."></picture></a><br>
-<strong>Action beside typography</strong><br>
-Existing GIF + local graphic layers · 3.20 s<br>
-<a href="docs/GIF-LAYERS.md">Composition workflow</a> · <a href="examples/gif-layer/scene.json">Scene JSON</a>
-</td>
-</tr>
-</table>
-
-[More examples & recipes](docs/GALLERY.md) · [Original API take](docs/RECIPES.md#one-prompt-one-gif) · [Vertical motion](docs/VERTICAL-MOTION-EXAMPLE.md) · [Review the source drawings](docs/EXAMPLES.md#the-actual-three-shot-story)
-
-The astronaut cards reuse existing footage, with differences between takes. Graphics
-use the experimental layer renderer. Blender examples are standalone scenes, not a CLI rendering backend.
-
-<a id="sprites-and-frame-review"></a>
-
-<a id="exact-script-montage"></a>
-
-## Choose a workflow
-
-| Make or inspect | Start here |
-| --- | --- |
-| Connected actions on one shared stage, with persistent props | [Scene sequences](docs/SCENE-SEQUENCES.md) |
-| A short film with titles or illustrated story pages | [Storytelling skill](docs/STORYTELLING-SKILL.md) |
-| Independent text, shapes, strokes and existing GIF layers | [Layer renderer](docs/MULTILAYER-POC.md) · [GIF composition](docs/GIF-LAYERS.md) |
-| Whole-image motion with editable timing | [Motion recipes](docs/STANDALONE-MOTION.md) |
-| Exact GIF palette control and integer pixel-art scaling | [Pixel palettes](docs/PIXEL-PALETTES.md) |
-| Explicit pose holds and continuity from accepted atlas drawings | [Authored pose tracks](docs/AUTHORED-POSES.md) |
-| A sprite atlas from accepted drawings | [Pack or slice sprites](docs/SPRITES.md) |
-| Every frame, cut and loop seam | [Review player & checklist](docs/GIF-REVIEW.md) |
-| Frame-accurate cuts, subtitle sidecars and a soundtrack | [Exact script montage](docs/EXACT-SCRIPT-EDIT.md) |
-| A portable collection with an offline gallery and ZIP | [Offline GIF factory](docs/OFFLINE-FACTORY.md) |
-
-<a id="build-an-offline-gif-collection"></a>
-
-The factory combines existing GIFs and local layer scenes. From the installed
-checkout, build and verify the bundled collection:
-
-```bash
-python -m gif_cinema factory build factory.example.json --out output/my-collection
-python -m gif_cinema factory verify output/my-collection
-```
-
-Open `output/my-collection/index.html`, or share `collection.zip` when you have the
-rights to its contents. The gallery is static HTML with native GIF playback, no scripts.
-
-## Before making new footage
-
-- **Generation is optional.** New model-generated takes need supported provider
-  access, billing and an explicitly authorized request cap. The demo and local tools
-  work without them. [Generation guide](.agents/skills/gif-cinema/references/generation.md).
-- **Review the actual motion.** Matching prompts, high playback FPS and successful
-  checks do not establish character continuity or a clean loop. Missing actions
-  stay unrendered until suitable footage exists.
-- **Keep the edit reproducible.** Preserve accepted source files, inspect neighboring
-  cuts after a retake, and deliver the project with its receipts. Technical
-  verification and artistic acceptance are separate.
-
-[Production guide](docs/PRODUCTION.md) · [Script format](docs/SCRIPT-FORMAT.md) · [Verification status](STATUS.md)
 
 <a id="finishing-studies"></a>
 <a id="03--from-the-cutting-room"></a>
@@ -944,6 +1012,8 @@ not native API output. [FORM / 01 review scope](examples/blender-form-01/README.
 records the newer scene's technical checks and sampled visual review.
 
 </details>
+
+---
 
 ## Rights and credits
 
