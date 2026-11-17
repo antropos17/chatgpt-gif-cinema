@@ -60,3 +60,12 @@ method labels and preserved asset hashes/timing. Old section anchors are retaine
 Local Chromium rendering was attempted but blocked by sandbox socket restrictions.
 Desktop/mobile GitHub rendering is therefore not claimed verified. Link, HTML and
 media checks do not establish artistic acceptance or character continuity.
+
+## November 17 navigation polish
+
+Centered editorial title and full-width featured film use native GitHub HTML.
+Selected work and the workflow index now precede the long character catalog.
+All 100 characters and three outfit studies remain visible, split into five
+numbered groups with jump links and return links. This does not reduce media bytes.
+The local CLI and separate, not-yet-connected private browser editor are explicitly
+distinguished. No product capabilities, artwork or license terms were changed.
