@@ -34,7 +34,7 @@ class VerifiedSceneStreamTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.project = fixture(self.root)
         self.path = self.root/'project.json'
         self.path.write_text(json.dumps(self.project))
@@ -136,7 +136,7 @@ class AssemblyPublicationTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.path = self.root/'project.json'
         self.path.write_text(json.dumps(fixture(self.root)))
 

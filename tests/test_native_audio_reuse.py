@@ -22,7 +22,7 @@ from test_native_stream_audio import LegacyRenderer, project, render_sound
 class ProjectSoundTests(unittest.TestCase):
     def test_project_writer_matches_independent_legacy_pcm_with_crops_and_noise(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
+            root = Path(td).resolve()
             for rate, fps, first, last in ((8001, 25, 0, 23), (8192, 30, 7, 31), (44100, 60, 17, 59)):
                 value = project(rate=rate, duration=1.2, fps=fps, first=first, last=last)
                 before = copy.deepcopy(value)
@@ -39,7 +39,7 @@ class ProjectSoundTests(unittest.TestCase):
 
     def test_reused_writer_decodes_each_unique_source_without_preparing_tiles(self):
         with tempfile.TemporaryDirectory() as td:
-            root = Path(td); value = fixture(root)
+            root = Path(td).resolve(); value = fixture(root)
             value['clips']['unused-duplicate'] = copy.deepcopy(value['clips']['cells'])
             paths = {name: root/fact['path'] for name, fact in value['files'].items()}
             opened = []; ordinary = Image.open
@@ -55,7 +55,7 @@ class ProjectSoundTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location('audio_benchmark', path)
         tool = importlib.util.module_from_spec(spec); spec.loader.exec_module(tool)
         with tempfile.TemporaryDirectory() as td:
-            bad = Path(td)/'bad.py'; bad.write_text('raise AssertionError("must not execute")')
+            bad = Path(td).resolve()/'bad.py'; bad.write_text('raise AssertionError("must not execute")')
             with self.assertRaisesRegex(ValueError, 'exact 8d1cc28'): tool.reference(bad)
 
 
@@ -63,7 +63,7 @@ class ProjectSoundTests(unittest.TestCase):
 class AudioReuseTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.temp = tempfile.TemporaryDirectory(); root = Path(cls.temp.name)
+        cls.temp = tempfile.TemporaryDirectory(); root = Path(cls.temp.name).resolve()
         cls.inputs = root/'input'; cls.inputs.mkdir(); value = fixture(cls.inputs)
         (cls.inputs/'project.json').write_text(json.dumps(value))
         cls.built = root/'base'
@@ -73,7 +73,7 @@ class AudioReuseTests(unittest.TestCase):
     def tearDownClass(cls): cls.temp.cleanup()
 
     def setUp(self):
-        temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup); self.root = Path(temp.name)
+        temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup); self.root = Path(temp.name).resolve()
         self.input = self.root/'input'; self.base = self.root/'base'
         shutil.copytree(self.inputs, self.input); shutil.copytree(self.built, self.base)
         self.path = self.input/'project.json'; self.value = json.loads(self.path.read_text())

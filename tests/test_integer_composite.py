@@ -16,7 +16,7 @@ from tools.build_native_anchor_proof import make_scene
 
 class IntegerCompositeTests(unittest.TestCase):
     def setUp(self):
-        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name)
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name).resolve()
 
     def test_random_crop_and_composite_matches_full_affine_rgba_and_previews(self):
         rng=random.Random(4261)

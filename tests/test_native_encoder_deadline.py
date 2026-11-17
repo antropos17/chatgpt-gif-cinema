@@ -153,7 +153,7 @@ print(json.dumps(dict(results=sorted(results),workers=[x.name for x in threading
         spec = importlib.util.spec_from_file_location('deadline_benchmark', path)
         tool = importlib.util.module_from_spec(spec); spec.loader.exec_module(tool)
         with tempfile.TemporaryDirectory() as td:
-            bad = Path(td)/'bad.py'; bad.write_text('raise AssertionError("must not execute")')
+            bad = Path(td).resolve()/'bad.py'; bad.write_text('raise AssertionError("must not execute")')
             with self.assertRaisesRegex(ValueError, 'exact 658e446'): tool.reference(bad)
 
     def test_successful_io_does_not_terminate_encoder(self):
@@ -166,7 +166,7 @@ print(json.dumps(dict(results=sorted(results),workers=[x.name for x in threading
 @unittest.skipUnless(shutil.which('ffmpeg') and importlib.util.find_spec('av'), 'FFmpeg and PyAV required')
 class ExportDeadlineTests(unittest.TestCase):
     def setUp(self):
-        t=tempfile.TemporaryDirectory(); self.addCleanup(t.cleanup); self.root=Path(t.name)
+        t=tempfile.TemporaryDirectory(); self.addCleanup(t.cleanup); self.root=Path(t.name).resolve()
         self.path=self.root/'project.json'; self.path.write_text(json.dumps(fixture(self.root)))
 
     def test_stalled_assembly_preserves_scenes_and_can_resume(self):

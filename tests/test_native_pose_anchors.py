@@ -15,7 +15,7 @@ from tools.build_pose_anchor_proof import color_center, HAND, PROP
 class NativeAnchorTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
-        self.root=Path(self.tmp.name); self.path=make_scene(self.root/'source')
+        self.root=Path(self.tmp.name).resolve(); self.path=make_scene(self.root/'source')
         self.scene=json.loads(self.path.read_text())
 
     def prepare(self):

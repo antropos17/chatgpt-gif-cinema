@@ -25,7 +25,7 @@ def full(image,radius,bounds=None):
 
 class BoundedBlurTests(unittest.TestCase):
     def setUp(self):
-        t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);self.root=Path(t.name)
+        t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);self.root=Path(t.name).resolve()
 
     def equal(self,image,radius):
         before=image.tobytes();info=copy.deepcopy(image.info)
@@ -56,12 +56,17 @@ class BoundedBlurTests(unittest.TestCase):
     def test_actual_cropped_filter_and_metadata_remain_independent(self):
         image=Image.new('RGB',(400,300));ImageDraw.Draw(image).rectangle((190,140,210,160),fill='white')
         image.info={'test':{'kind':'original'}}
-        calls=[];original=Image.Image.filter
-        def counted(im,op):calls.append(im.size);return original(im,op)
-        with patch.object(Image.Image,'filter',counted):actual=_bounded_blur(image,3)
-        self.assertEqual(calls,[(45,45)])
-        self.assertEqual(actual.tobytes(),full(image,3).tobytes())
-        self.assertEqual(actual.info,image.info);self.assertIsNot(actual.info,image.info)
+        # Unqualified Pillow releases deliberately retain the exact full filter.
+        # Python 3.10 currently resolves Pillow 12.x rather than the 13.0 branch.
+        for version in (shot_renderer.PIL.__version__,'12.3.0'):
+            calls=[];original=Image.Image.filter
+            def counted(im,op):calls.append(im.size);return original(im,op)
+            with patch.object(shot_renderer.PIL,'__version__',version),patch.object(Image.Image,'filter',counted):
+                actual=_bounded_blur(image,3)
+            expected=(45,45) if version in ('10.1.0','13.0.0') else image.size
+            self.assertEqual(calls,[expected],version)
+            self.assertEqual(actual.tobytes(),full(image,3).tobytes())
+            self.assertEqual(actual.info,image.info);self.assertIsNot(actual.info,image.info)
 
     def test_dense_opposite_edges_and_large_padding_use_full_filter(self):
         for mode in ('RGB','L'):
@@ -90,12 +95,17 @@ class BoundedBlurTests(unittest.TestCase):
         for radius in (65, (2,3), True):self.equal(image,radius)
 
     def test_empty_planes_return_fresh_exact_copies(self):
-        for mode in ('RGB','L'):
-            image=Image.new(mode,(200,160));image.info={'key':'value'}
-            with patch.object(Image.Image,'filter',side_effect=AssertionError('no filter needed')):
-                actual=_bounded_blur(image,4)
-            self.assertIsNot(actual,image);self.assertEqual(actual.tobytes(),image.tobytes());self.assertEqual(actual.info,image.info)
-            actual.putpixel((0,0),255 if mode=='L' else (1,2,3));self.assertIsNone(image.getbbox())
+        for version in (shot_renderer.PIL.__version__,'12.3.0'):
+            for mode in ('RGB','L'):
+                image=Image.new(mode,(200,160));image.info={'key':'value'}
+                calls=[];original=Image.Image.filter
+                def counted(im,op):calls.append(im.size);return original(im,op)
+                with patch.object(shot_renderer.PIL,'__version__',version),patch.object(Image.Image,'filter',counted):
+                    actual=_bounded_blur(image,4)
+                expected=[] if version in ('10.1.0','13.0.0') else [image.size]
+                self.assertEqual(calls,expected,version)
+                self.assertIsNot(actual,image);self.assertEqual(actual.tobytes(),image.tobytes());self.assertEqual(actual.info,image.info)
+                actual.putpixel((0,0),255 if mode=='L' else (1,2,3));self.assertIsNone(image.getbbox())
 
     def test_live_source_edits_never_reuse_an_old_region(self):
         image=Image.new('RGB',(400,300))

@@ -17,7 +17,7 @@ from test_native_shots import fixture
 class ActorCadenceTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
-        self.root=Path(self.tmp.name);self.value=fixture(self.root)
+        self.root=Path(self.tmp.name).resolve();self.value=fixture(self.root)
         self.path=self.root/'project.json'
 
     def renderer(self,fps=30,duration=.2,origin=0):
@@ -93,7 +93,7 @@ class ActorCadenceTests(unittest.TestCase):
 @unittest.skipUnless(importlib.util.find_spec('av') and shutil.which('ffmpeg'),'PyAV/FFmpeg required')
 class ActorCadenceExportTests(unittest.TestCase):
     def setUp(self):
-        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name)
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name).resolve()
 
     def build(self,fps,duration):
         root=self.root/str(fps);root.mkdir();value=fixture(root);value['fps']=fps

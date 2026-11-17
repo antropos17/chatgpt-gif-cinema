@@ -70,7 +70,7 @@ class ParseTests(unittest.TestCase):
 @unittest.skipUnless(av,'PyAV required')
 class BuildTests(unittest.TestCase):
     def setUp(self):
-        self.tmp=tempfile.TemporaryDirectory();self.root=Path(self.tmp.name);self.source=self.root/'edit.gfc'
+        self.tmp=tempfile.TemporaryDirectory();self.root=Path(self.tmp.name).resolve();self.source=self.root/'edit.gfc'
         self.raw,self.frames=project();self.source.write_bytes(self.raw);self.out=self.root/'film'
     def tearDown(self):self.tmp.cleanup()
 

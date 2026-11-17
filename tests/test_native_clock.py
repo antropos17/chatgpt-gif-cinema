@@ -87,7 +87,7 @@ class NativeClockUnitTests(unittest.TestCase):
 @unittest.skipUnless(importlib.util.find_spec('av') and shutil.which('ffmpeg'),'PyAV and FFmpeg required')
 class NativeClockIntegrationTests(unittest.TestCase):
     def setUp(self):
-        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name)
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name).resolve()
 
     def make(self,fps=25,rate=8000,frames=8):
         path=self.root/f'p-{fps}-{rate}-{frames}';path.mkdir()

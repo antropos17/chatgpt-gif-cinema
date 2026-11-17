@@ -48,7 +48,7 @@ class AlwaysFilterRenderer(Renderer):
 class EmptyLightTests(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
-        self.root = Path(temp.name)
+        self.root = Path(temp.name).resolve()
         self.value = fixture(self.root)
         self.value['occlusion_blur'] = 1.25
         self.value['glow_blur'] = 1.5

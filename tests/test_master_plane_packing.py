@@ -100,7 +100,7 @@ class PlanePackingTests(unittest.TestCase):
 
     def test_same_canvas_hash_reuse_and_padding_still_match_source(self):
         with tempfile.TemporaryDirectory() as td:
-            root=Path(td);source=root/'a.gif';gif(source);ordinary=master.factory.digest
+            root=Path(td).resolve();source=root/'a.gif';gif(source);ordinary=master.factory.digest
             for canvas,expected in ((None,3),((26,22),6)):
                 report=master.plan([source],canvas=canvas);calls=[]
                 def digest(raw):calls.append(len(raw));return ordinary(raw)
@@ -111,7 +111,7 @@ class PlanePackingTests(unittest.TestCase):
 
     def test_changed_packed_pixels_still_fail_before_publication(self):
         with tempfile.TemporaryDirectory() as td:
-            root=Path(td);source=root/'a.gif';gif(source);out=root/'out';ordinary=master.video_frame
+            root=Path(td).resolve();source=root/'a.gif';gif(source);out=root/'out';ordinary=master.video_frame
             def bad(api,image):return ordinary(api,Image.new('RGBA',image.size,(0,0,0,0)))
             with patch.object(master,'video_frame',bad),self.assertRaisesRegex(ValueError,'RGBA mismatch'):master.build([source],out)
             self.assertFalse(out.exists())
@@ -120,7 +120,7 @@ class PlanePackingTests(unittest.TestCase):
     def test_disposal_mixed_sizes_preview_audio_and_final_holds_match(self):
         from tools.benchmark_master_packing import signature
         with tempfile.TemporaryDirectory() as td:
-            root=Path(td);paths=[]
+            root=Path(td).resolve();paths=[]
             for n,disposal in enumerate((1,2,3)):
                 path=root/f'{n}.gif';gif(path,(24+n,21+n),disposal);paths.append(path)
             before=[p.read_bytes() for p in paths];audio=root/'sound.wav'
@@ -139,5 +139,5 @@ class PlanePackingTests(unittest.TestCase):
         path=Path(__file__).resolve().parents[1]/'tools/benchmark_master_packing.py'
         spec=importlib.util.spec_from_file_location('packing_benchmark',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         with tempfile.TemporaryDirectory() as td:
-            source=Path(td)/'bad.py';source.write_text('raise AssertionError("must not execute")')
+            source=Path(td).resolve()/'bad.py';source.write_text('raise AssertionError("must not execute")')
             with self.assertRaisesRegex(ValueError,'exact e4853eb'):module.reference(source)

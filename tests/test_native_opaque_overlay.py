@@ -24,7 +24,7 @@ def original(image, overlay):
 class OpaqueOverlayTests(unittest.TestCase):
     def setUp(self):
         temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
-        self.root = Path(temp.name)
+        self.root = Path(temp.name).resolve()
 
     def test_every_channel_source_destination_alpha_combination(self):
         # All 256^3 channel cases, not just a tolerance or perceptual score.
