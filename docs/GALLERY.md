@@ -1,8 +1,8 @@
 # Visual catalog: methods, sources and recipes
 
-[Browse the moving homepage](../README.md) · [Install the skill](../README.md#install-the-skill)
+[Project overview](../README.md) · [Numbered character gallery](CHARACTER-GALLERY.md) · [Workflows and selected work](WORKFLOWS.md) · [Install the skill](../README.md#install-the-skill)
 
-Original API footage, local compositions, reusable source drawings, private finishing and archived Blender artwork use different methods. The homepage labels those routes and links their actual sources. This is a smaller independent collection, not a claim of GIF Factory's style or example count.
+Original API footage, local compositions, reusable source drawings, private finishing and archived Blender artwork use different methods. The linked workflows label those routes and their actual sources. This is a smaller independent collection, not a claim of GIF Factory's style or example count.
 
 ## Pixel characters
 

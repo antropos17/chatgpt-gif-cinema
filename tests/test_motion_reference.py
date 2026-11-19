@@ -56,7 +56,7 @@ class MotionReferenceTests(unittest.TestCase):
         self.assertAlmostEqual(float(info['format']['duration']), 3.2, places=2)
 
     def test_archive_is_visible_and_separate_from_native_output(self):
-        readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+        readme = (ROOT / 'docs/WORKFLOWS.md').read_text(encoding='utf-8')
         visible = re.sub(r'<details\b.*?</details>', '', readme, flags=re.S)
         section = visible.split('<strong>Chrome Trefoil</strong>', 1)[0].rsplit('<td ', 1)[1]
         self.assertIn('docs/assets/motion-elements/chrome.gif', section)
