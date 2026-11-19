@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 from PIL import Image, ImageSequence
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ('README.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md', 'docs/LANTERN-ECHO.md', 'examples/lantern-echo/README.md', 'examples/native-shots/README.md', 'docs/NATIVE-SHOTS.md')
+DOCS = ('README.md', 'docs/CHARACTER-GALLERY.md', 'docs/WORKFLOWS.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md', 'docs/LANTERN-ECHO.md', 'examples/lantern-echo/README.md', 'examples/native-shots/README.md', 'docs/NATIVE-SHOTS.md')
 
 
 class Links(HTMLParser):
@@ -76,13 +76,16 @@ class ReadmeTests(unittest.TestCase):
 
     def test_finishing_archive_remains_linked_and_labeled(self):
         source = (ROOT / 'README.md').read_text(encoding='utf-8')
-        self.assertIn('Earlier films and finishing studies', source)
+        archive = (ROOT / 'docs/WORKFLOWS.md').read_text(encoding='utf-8')
+        self.assertIn('docs/WORKFLOWS.md#finishing-studies', source)
+        self.assertIn('Earlier films and finishing studies', archive)
         for fragment in ('cat--walk-jump-curl-up', 'dog--the-same-four-takes',
                          'astronaut--two-shots-one-exchange'):
-            self.assertIn('docs/SHOWCASE.md#' + fragment, source)
-        self.assertIn('not included in the public CLI', source)
-        self.assertIn('2.24-second excerpt', source)
-        self.assertIn('docs/assets/showcase/cat-film.mp4', source)
+            self.assertIn('../docs/SHOWCASE.md#' + fragment, archive)
+        for document in (source, archive):
+            self.assertIn('not included in the public CLI', document)
+        self.assertIn('2.24-second excerpt', archive)
+        self.assertIn('../docs/assets/showcase/cat-film.mp4', archive)
         self.assertTrue({'see-it-in-motion', 'try-it-without-an-api-key',
                          'give-the-skill-to-your-agent', 'character-stories',
                          'motion-graphics', 'sprites-and-frame-review',
@@ -119,15 +122,37 @@ class ReadmeTests(unittest.TestCase):
         self.assertTrue(manifest['typography']['outlined'])
         self.assertEqual(manifest['typography']['family'], 'Open Sans')
 
-    def test_first_result_precedes_full_catalog_and_retains_all_media(self):
+    def test_front_page_is_light_and_points_to_the_complete_catalog(self):
         source = (ROOT / 'README.md').read_text(encoding='utf-8')
-        visible = re.sub(r'<details\b.*?</details>', '', source, flags=re.S)
-        first_image = visible.index('<img ')
-        self.assertLess(first_image, visible.index('## Selected work'))
-        self.assertLess(len(visible[:first_image].split()), 80)
-        self.assertNotIn('assets/identity/cover', visible)
-        self.assertNotRegex(visible, r'<img\b[^>]*height=')
-        urls = re.findall(r'<img\b[^>]*src="([^"]+)"', visible)
+        first_image = source.index('<img ')
+        self.assertLess(first_image, source.index('## Make your first film'))
+        self.assertLess(len(source[:first_image].split()), 80)
+        self.assertLess(len(source.encode('utf-8')), 12000)
+        self.assertNotIn('assets/identity/cover', source)
+        self.assertNotRegex(source, r'<img\b[^>]*height=')
+        urls = re.findall(r'<img\b[^>]*src="([^"]+)"', source)
+        self.assertEqual(urls, ['docs/assets/lantern-echo/preview.gif'])
+        self.assertEqual(sum((ROOT / url).stat().st_size for url in set(urls)), 3976137)
+        self.assertIn('docs/CHARACTER-GALLERY.md', source)
+        self.assertIn('docs/WORKFLOWS.md', source)
+        self.assertLess(source.index('## Make your first film'), source.index('## Anime pixel art'))
+        self.assertIn('python tools/demo.py', source)
+        self.assertIn('Zero new API calls', source)
+        self.assertIn('Pillow installs with the package', source)
+        self.assertIn('lossy viewing', source)
+        self.assertNotIn('<script', source.lower())
+        self.assertIn('docs/SPRITES.md', source)
+        self.assertIn('docs/GIF-REVIEW.md', source)
+        self.assertIn('not a CLI rendering backend', source)
+        self.assertIn('Source-available', source)
+        self.assertIn('request cap, not a dollar-budget guarantee', source)
+
+    def test_all_original_gifs_are_preserved_across_linked_documents(self):
+        media = []
+        for name in ('README.md', 'docs/CHARACTER-GALLERY.md', 'docs/WORKFLOWS.md'):
+            path = ROOT / name
+            urls = re.findall(r'<img\b[^>]*src="([^"]+)"', path.read_text(encoding='utf-8'))
+            media.extend((path.parent / url).resolve().relative_to(ROOT).as_posix() for url in urls)
         expected = {
             'docs/assets/lantern-echo/preview.gif',
             'examples/anime-pixel/character-previews/fox-knight.gif',
@@ -145,27 +170,45 @@ class ReadmeTests(unittest.TestCase):
             'docs/assets/stroke-reveal/preview.gif',
             'docs/assets/gif-layer/preview.gif',
         }
-        inventory = json.loads((ROOT / "examples/anime-pixel/catalog-100/inventory.json").read_text(encoding="utf-8"))
-        expected.update("examples/anime-pixel/catalog-100/" + item["id"] + ".gif" for item in inventory[6:])
+        inventory = json.loads((ROOT / 'examples/anime-pixel/catalog-100/inventory.json').read_text(encoding='utf-8'))
+        expected.update('examples/anime-pixel/catalog-100/' + item['id'] + '.gif' for item in inventory[6:])
         self.assertEqual(len(inventory), 100)
-        self.assertEqual(set(urls), expected)
-        self.assertEqual(len(urls), len(expected))  # No repeated showcase downloads.
-        self.assertLess(first_image, visible.index('## Make your first film'))
-        self.assertLess(visible.index('## Make your first film'), visible.index('## Anime pixel art'))
-        self.assertLess(visible.index('## Install the skill'), visible.index('## Anime pixel art'))
-        self.assertLess(visible.index('--execute --max-api-calls 0'), visible.index('<table>'))
-        self.assertIn('97 MB', visible)
-        self.assertIn('lossy viewing format', visible)
-        self.assertNotIn('width="33%"', visible)
-        self.assertNotIn('<script', source.lower())
-        self.assertIn('docs/SPRITES.md', visible)
-        self.assertIn('docs/GIF-REVIEW.md', visible)
-        self.assertIn('--execute --max-api-calls 0', visible)
-        self.assertIn('standalone scenes, not a CLI rendering backend', visible)
-        self.assertIn('source-available', visible)
+        self.assertEqual(set(media), expected)
+        self.assertEqual(len(media), len(expected))
+        self.assertEqual(len(media), 109)
+        self.assertEqual(sum((ROOT / url).stat().st_size for url in set(media)), 97091284)
+        gallery = (ROOT / 'docs/CHARACTER-GALLERY.md').read_text(encoding='utf-8')
+        self.assertEqual(len(re.findall(r'<img\b', gallery)), 103)
+        self.assertIn('79 MB', gallery)
+        self.assertIn('not 15-second films', gallery)
+        self.assertIn('prefers-reduced-motion: reduce', gallery)
+        self.assertNotIn('width="33%"', gallery)
+
+    def test_legacy_section_anchors_remain_navigation_targets(self):
+        source = (ROOT / 'README.md').read_text(encoding='utf-8')
+        expected = {
+            'lantern-echo', 'your-footage-your-edit', 'try-it-without-an-api-key',
+            'make-your-first-film', 'give-the-skill-to-your-agent', 'copy-a-prompt',
+            'install-the-skill', 'blender-motion-study', 'sculptural-loops',
+            'see-it-in-motion', 'on-the-screen', 'a-wave-from-the-moon',
+            '01--one-prompt-one-small-performance', 'selected-work',
+            'character-stories', 'a-reply-from-the-stars',
+            '02--three-takes-a-complete-little-exchange', 'motion-graphics',
+            'sprites-and-frame-review', 'exact-script-montage', 'choose-a-workflow',
+            'build-an-offline-gif-collection', 'before-making-new-footage',
+            'anime-pixel-art', 'cast-001-024', 'cast-001024', 'cast-025-048',
+            'cast-025048', 'cast-049-072', 'cast-049072', 'cast-073-096',
+            'cast-073096', 'cast-097-100', 'cast-097100-and-outfit-studies',
+            'finishing-studies', '03--from-the-cutting-room', 'from-the-cutting-room',
+            'cat--walk-jump-curl-up', 'dog--follow-the-ball',
+            'astronaut--a-signal-an-answer', 'archived-3d-study', 'rights-and-credits',
+        }
+        self.assertTrue(expected <= anchors(source))
+        for group in ('001-024', '025-048', '049-072', '073-096', '097-100'):
+            self.assertIn('docs/CHARACTER-GALLERY.md#cast-' + group, source)
 
     def test_outfit_catalog_cards_link_independent_media_and_sources(self):
-        for name in ('README.md', 'docs/GALLERY.md'):
+        for name in ('docs/CHARACTER-GALLERY.md', 'docs/GALLERY.md'):
             source = (ROOT / name).read_text(encoding='utf-8')
             with self.subTest(document=name):
                 for outfit in ('casual', 'traveler', 'festival'):
@@ -218,9 +261,11 @@ class ReadmeTests(unittest.TestCase):
                     self.tables -= 1
                 if tag == 'picture':
                     self.pictures -= 1
-        parser = Media()
-        parser.feed((ROOT / 'README.md').read_text(encoding='utf-8'))
-        self.assertEqual(parser.bare, [])
+        for name in ('README.md', 'docs/CHARACTER-GALLERY.md', 'docs/WORKFLOWS.md'):
+            parser = Media()
+            parser.feed((ROOT / name).read_text(encoding='utf-8'))
+            with self.subTest(document=name):
+                self.assertEqual(parser.bare, [])
 
     def test_cover_text_colors_have_readable_contrast(self):
         def luminance(color):

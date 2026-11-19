@@ -66,7 +66,11 @@ class CommittedCharacterGridTests(unittest.TestCase):
         markup, facts = grid.build_grid(root, entries, columns=3, compact=True)
         self.assertEqual(facts, json.loads((folder / "verification.json").read_text(encoding="utf-8")))
         grouped = grid.group_readme_catalog(markup)
-        self.assertIn(grouped, (root / "README.md").read_text(encoding="utf-8"))
+        import re
+        relocated = re.sub(r'(\b(?:href|src|srcset)=")([^"#]+)(")',
+                           lambda m: m[1] + '../' + m[2] + m[3], grouped)
+        relocated = relocated.replace('](#make-your-first-film)', '](../README.md#make-your-first-film)')
+        self.assertIn(relocated, (root / "docs/CHARACTER-GALLERY.md").read_text(encoding="utf-8"))
         import re
         self.assertEqual(re.findall(r"<td .*?</td>", markup, re.S),
                          re.findall(r"<td .*?</td>", grouped, re.S))
