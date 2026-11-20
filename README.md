@@ -74,9 +74,9 @@ format, not proof of seamless continuity. [What the example preserves](docs/EXAM
 
 ## Install the skill
 
-Prefer an agent? [Build the 0.4.3 skill from this checkout](docs/WORKFLOWS.md#install-the-skill)
-and follow its pinned runtime install. The skill ZIP does **not** bundle the Python
-runtime; older release ZIPs do not update automatically.
+**[Download GIF Cinema skill 0.4.3](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.4.3)** for Codex or Claude Code. Follow the bundled `SKILL.md` to install the pinned Python runtime separately.
+
+Prefer to build it yourself? [Build the skill from this checkout](docs/WORKFLOWS.md#install-the-skill). Older release ZIPs do not update automatically.
 
 <a id="see-it-in-motion"></a>
 <a id="on-the-screen"></a>
