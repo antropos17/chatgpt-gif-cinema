@@ -7,9 +7,10 @@ Replace a take without starting over. Inspect cuts and keep the frame holds you 
 <a href="docs/WORKFLOWS.md">Workflows & examples</a>
 </p>
 
-<p align="center"><a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/refs/heads/main/docs/assets/lantern-delivery/lantern-delivery.mp4"><img src="docs/assets/lantern-delivery/poster.jpg" width="720" alt="Lantern Delivery: a paper-cutout short film starring a fox courier."></a></p>
+<p align="center"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-delivery/poster.jpg"><img src="docs/assets/lantern-delivery/preview.gif" width="720" alt="Lantern Delivery preview: a fox courier carries a lantern across a river toward a tree."></picture></p>
 
-<p align="center"><strong><a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/refs/heads/main/docs/assets/lantern-delivery/lantern-delivery.mp4">Watch Lantern Delivery (MP4 · 24.5 seconds · sound)</a></strong><br>
+<p align="center"><sub>Silent 5-second excerpt</sub><br>
+<strong><a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/refs/heads/main/docs/assets/lantern-delivery/lantern-delivery.mp4">Download Lantern Delivery (MP4 · 24.5 seconds · sound)</a></strong><br>
 An original paper-cutout film rendered locally with GIF Cinema. The artwork and motion were authored, not generated from a GIF prompt.</p>
 
 ### Your footage, your edit
