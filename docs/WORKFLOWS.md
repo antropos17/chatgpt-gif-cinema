@@ -19,8 +19,12 @@ python tools/package_skill.py --out dist/gif-cinema.skill.zip
 
 Extract its single `gif-cinema` folder into:
 
-- **Codex:** `~/.codex/skills/gif-cinema`
+- **Codex:** `$HOME/.agents/skills/gif-cinema`
 - **Claude Code:** `~/.claude/skills/gif-cinema`
+
+For Codex, check that `$HOME/.agents/skills/gif-cinema/SKILL.md` exists after
+extraction. If the skill doesn't show up in the `$` picker, restart Codex.
+See [Codex skill locations](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills).
 
 Follow [the included installation check](../.agents/skills/gif-cinema/SKILL.md#runtime-and-a-no-key-check)
 to install and verify its pinned Python runtime separately. This package pins the

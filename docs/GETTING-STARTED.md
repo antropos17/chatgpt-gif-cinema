@@ -239,8 +239,12 @@ python tools/package_skill.py --out dist/gif-cinema-story-skill.zip
 
 Extract the ZIP's single `gif-cinema` folder into:
 
-- Codex: `~/.codex/skills/gif-cinema`
+- Codex: `$HOME/.agents/skills/gif-cinema`
 - Claude Code: `~/.claude/skills/gif-cinema`
+
+For Codex, check that `$HOME/.agents/skills/gif-cinema/SKILL.md` exists after
+extraction. If the skill doesn't show up in the `$` picker, restart Codex.
+See [Codex skill locations](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills).
 
 Back up any existing installation before replacing it. Follow the packaged skill's
 runtime setup; installing the skill alone does not install the CLI, Python or FFmpeg.
