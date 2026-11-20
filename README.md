@@ -1,26 +1,16 @@
 <h1 align="center">GIF Cinema</h1>
-<p align="center"><strong>Turn GIF shots into short films.</strong><br>
-Control cuts, inspect frame timing, and cap new generation requests.</p>
+<p align="center"><strong>Turn multiple GIF shots into a short film.</strong><br>
+Replace a take without starting over. Inspect cuts and keep the frame holds you chose.</p>
 <p align="center">
 <a href="#make-your-first-film"><strong>Run the no-key demo</strong></a> &nbsp; / &nbsp;
 <a href="docs/CHARACTER-GALLERY.md">Explore 100 characters</a> &nbsp; / &nbsp;
 <a href="docs/WORKFLOWS.md">Workflows & examples</a>
 </p>
 
-<p align="center"><sub>LANTERN ECHO · 20.8 SECONDS · SOUND INCLUDED</sub></p>
-<p align="center">
-<a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-echo/poster.png"><img src="docs/assets/lantern-echo/preview.gif" width="100%" alt="Lantern Echo: a traveler sends light to a courier and receives it back. Download the full film with sound."></picture></a>
-</p>
+<p align="center"><a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/refs/heads/main/docs/assets/lantern-delivery/lantern-delivery.mp4"><img src="docs/assets/lantern-delivery/poster.jpg" width="720" alt="Lantern Delivery: a paper-cutout short film starring a fox courier."></a></p>
 
-### Lantern Echo
-
-A traveler sends a light to a courier; it returns to her hands and lights the
-garden. Drawn actions, prepared local RIFE inbetweens and authored effects.
-The looping GIF above is a **silent 6.4-second excerpt**, not the full film.
-
-**[Download the full film with sound (MP4)](https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4)** ·
-[Production & review](docs/LANTERN-ECHO.md) · [Still](docs/assets/lantern-echo/poster.png) ·
-[Rebuild offline](examples/lantern-echo/README.md)
+<p align="center"><strong><a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/refs/heads/main/docs/assets/lantern-delivery/lantern-delivery.mp4">Watch Lantern Delivery (MP4 · 24.5 seconds · sound)</a></strong><br>
+An original paper-cutout film rendered locally with GIF Cinema. The artwork and motion were authored, not generated from a GIF prompt.</p>
 
 ### Your footage, your edit
 
@@ -77,6 +67,21 @@ format, not proof of seamless continuity. [What the example preserves](docs/EXAM
 **[Download GIF Cinema skill 0.4.3](https://github.com/antropos17/chatgpt-gif-cinema/releases/tag/skill-v0.4.3)** for Codex or Claude Code. Follow the bundled `SKILL.md` to install the pinned Python runtime separately.
 
 Prefer to build it yourself? [Build the skill from this checkout](docs/WORKFLOWS.md#install-the-skill). Older release ZIPs do not update automatically.
+
+<p align="center"><sub>LANTERN ECHO · 20.8 SECONDS · SOUND INCLUDED</sub></p>
+<p align="center">
+<a href="https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4"><picture><source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/lantern-echo/poster.png"><img src="docs/assets/lantern-echo/preview.gif" width="100%" alt="Lantern Echo: a traveler sends light to a courier and receives it back. Download the full film with sound."></picture></a>
+</p>
+
+### Lantern Echo
+
+A traveler sends a light to a courier; it returns to her hands and lights the
+garden. Drawn actions, prepared local RIFE inbetweens and authored effects.
+The looping GIF above is a **silent 6.4-second excerpt**, not the full film.
+
+**[Download the full film with sound (MP4)](https://raw.githubusercontent.com/antropos17/chatgpt-gif-cinema/8844c1a04a01566bcb3bd8308ee9e16d15f67825/docs/assets/lantern-echo/lantern-echo.mp4)** ·
+[Production & review](docs/LANTERN-ECHO.md) · [Still](docs/assets/lantern-echo/poster.png) ·
+[Rebuild offline](examples/lantern-echo/README.md)
 
 <a id="see-it-in-motion"></a>
 <a id="on-the-screen"></a>
