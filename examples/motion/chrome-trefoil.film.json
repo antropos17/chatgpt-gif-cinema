@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "title": "Chrome Trefoil: direct motion pilot",
+  "ratio": "1:1",
+  "width": 512,
+  "height": 512,
+  "fps": 25,
+  "style_bible": "Premium abstract sculptural motion design. A single polished silver trefoil knot on a near-black studio background, broad fixed softbox reflections and a restrained ice-blue edge light. Locked camera and focal length. Entire object within generous negative space. No characters, green, text, logos, border or montage.",
+  "shots": [
+    {
+      "id": "chrome-trefoil",
+      "prompt": "Animate the actual rigid knot, not a camera move over a still. One continuous small periodic sway around the vertical axis, at most plus or minus 6 degrees from rest. Preserve one continuous constant-thickness tube, exactly three rounded lobes, unchanged topology and the open center. Keep the center, scale, lighting and background fixed. Sample one complete cycle across the 16 drawings with continuous phase progression. No melt, stretching, dissolve, cuts, frozen frame sequence or reverse-playback effect.",
+      "model": "gpt-image-2.6-flare",
+      "size": "512x512",
+      "quality": "max",
+      "complexity": "high",
+      "frames": 16,
+      "duration_ms": 200,
+      "first_frame_target": "Initial phase of a continuous small-amplitude periodic sway.",
+      "last_frame_target": "The next phase leads naturally into the first frame, without duplicating that first pose or adding a pause. Loop quality requires visual review.",
+      "transition": "cut"
+    }
+  ]
+}
