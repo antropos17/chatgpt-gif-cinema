@@ -93,6 +93,48 @@ class DemoLauncherTests(unittest.TestCase):
 
 @unittest.skipUnless(shutil.which('ffmpeg') and shutil.which('ffprobe'), 'FFmpeg/ffprobe required')
 class RealDemoTests(unittest.TestCase):
+    def test_redirected_cp1252_reports_cyrillic_path_without_failing_export(self):
+        import subprocess
+        import sys
+
+        with tempfile.TemporaryDirectory() as td:
+            output = Path(td).resolve()/'Фильм с пробелами café'
+            movie = output/'film.mp4'
+            sources = [demo.ROOT/'examples/film.json', *sorted((demo.ROOT/'.agents/skills/gif-cinema/assets/example').glob('shot-*.gif'))]
+            def snapshot(paths):
+                return {p: (render.digest(p.read_bytes()), p.stat().st_mtime_ns) for p in paths}
+            original_sources = snapshot(sources)
+            env = os.environ.copy()
+            for key in ('OPENAI_API_KEY', 'PYTHONPATH', 'PYTHONHOME'):
+                env.pop(key, None)
+            env['PYTHONIOENCODING'] = 'cp1252:strict'
+            command = [sys.executable, str(demo.ROOT/'tools/demo.py'), '--out', str(output)]
+            def launch():
+                return subprocess.run(command, cwd=td, env=env, capture_output=True,
+                                      encoding='cp1252', timeout=90)
+            first = launch()
+            self.assertEqual(first.returncode, 0, first.stderr)
+            self.assertEqual(first.stderr, '')
+            display_path = str(movie).encode('cp1252', 'backslashreplace').decode('cp1252')
+            self.assertIn(f'Ready: {display_path}', first.stdout)
+            self.assertIn(r'\u0424', first.stdout)
+            self.assertIn('café', first.stdout)
+            self.assertIn('192 frames', first.stdout)
+            self.assertTrue((output/'contact-sheet.png').is_file())
+            receipt = json.loads((output/'receipt.json').read_bytes())
+            self.assertEqual((receipt['status'], receipt['api_calls'], receipt['generated'], receipt['imported']),
+                             ('complete', 0, 0, 3))
+            verified = render.probe(movie, 512, 512, 7.68, 25, 3)
+            self.assertEqual(int(verified['nb_read_frames']), 192)
+
+            original_outputs = snapshot(output.iterdir())
+            repeat = launch()
+            self.assertEqual(repeat.returncode, 1)
+            self.assertIn('already exists and was not changed', repeat.stderr)
+            self.assertNotIn('Traceback', repeat.stderr)
+            self.assertEqual(snapshot(output.iterdir()), original_outputs)
+            self.assertEqual(snapshot(sources), original_sources)
+
     def test_actual_export_repeat_and_changed_file_are_kept_without_api(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td).resolve(); original_reserve = demo.reserve_output
