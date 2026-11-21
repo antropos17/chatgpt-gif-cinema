@@ -17,6 +17,15 @@ class DemoError(RuntimeError):
     pass
 
 
+def _report(message, *, file=None, flush=False):
+    """Escape unsupported display characters without changing paths or the stream."""
+    stream = sys.stdout if file is None else file
+    encoding = getattr(stream, 'encoding', None)
+    if encoding:
+        message = message.encode(encoding, errors='backslashreplace').decode(encoding)
+    print(message, file=stream, flush=flush)
+
+
 def prerequisites():
     if sys.version_info < (3, 10):
         raise DemoError('Python 3.10+ is required. Activate a supported Python environment.')
@@ -98,17 +107,17 @@ def run_demo(requested=None):
         raise DemoError('Bundled GIF timing changed; expected three 2.56-second shots.')
     output = reserve_output(requested)
     args.out = str(output)
-    print(f'Building three existing GIFs with zero API calls. Output: {output}', flush=True)
+    _report(f'Building three existing GIFs with zero API calls. Output: {output}', flush=True)
     # Keep the default experience short; the normal renderer still saves its
     # manifest, inspection reports and receipt inside this newly claimed folder.
     with contextlib.redirect_stdout(io.StringIO()):
         result = render.run(args)
     verify(render, script, result, output)
     movie = output/'film.mp4'
-    print(f'Ready: {movie}')
+    _report(f'Ready: {movie}')
     print('Verified: 7.68 seconds | 192 frames | 512x512 | 25 fps | silent')
     print('Existing footage only: no new drawings, interpolation or soundtrack. Review the cuts yourself.')
-    print(f'Open the MP4 in your video player. Review sheet: {output / "contact-sheet.png"}')
+    _report(f'Open the MP4 in your video player. Review sheet: {output / "contact-sheet.png"}')
     return movie
 
 
@@ -130,7 +139,7 @@ No automatic install or browser launch. Existing outputs and failed attempts are
         print('Demo interrupted. Any created output was kept; run again for a fresh directory.', file=sys.stderr)
         return 130
     except Exception as exc:
-        print(f'Demo failed: {exc}\nAny created output was kept. Check python -m gif_cinema doctor; choose a new output directory to retry.', file=sys.stderr)
+        _report(f'Demo failed: {exc}\nAny created output was kept. Check python -m gif_cinema doctor; choose a new output directory to retry.', file=sys.stderr)
         return 1
 
 

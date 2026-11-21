@@ -136,7 +136,7 @@ class PoseAnchorTests(unittest.TestCase):
     def test_invalid_anchor_maps_names_and_coordinates(self):
         bad=[None,{},[],{'hand':[1]}, {'hand':[True,0]}, {'hand':[float('nan'),0]},
              {'hand':[float('inf'),0]}, {'hand':[-.01,0]}, {'hand':[0,1.01]},
-             {'not a name':[0,0]}, {'рука':[0,0]}, {'x'*41:[0,0]}, {'':[0,0]},
+             {'not a name':[0,0]}, {'\u0440\u0443\u043a\u0430':[0,0]}, {'x'*41:[0,0]}, {'':[0,0]},
              {str(n):[0,0] for n in range(33)}]
         for anchors in bad:
             with self.subTest(anchors=anchors):
