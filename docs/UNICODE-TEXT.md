@@ -1,4 +1,4 @@
-# Reproducible Russian and Azerbaijani text
+# Reproducible text rendering
 
 This candidate fixes silent missing-glyph boxes without changing the appearance
 of existing supported legacy text. It does not promise universal Unicode support.
@@ -11,7 +11,7 @@ Set `font_id` on a text layer:
 {
   "id": "greeting",
   "type": "text",
-  "text": "Привет, Əli! Azərbaycan",
+  "text": "Coffee at the café",
   "font_id": "noto-sans-regular-2.004",
   "font_size": 32,
   "fill": "#ffffff"
@@ -25,12 +25,12 @@ The installed wheel contains the TTF, coverage manifests and complete OFL licens
 The font is licensed separately from GIF Cinema under SIL OFL 1.1. See
 [third-party notices](../THIRD-PARTY-NOTICES.md).
 
-Russian and modern Azerbaijani Latin uppercase/lowercase alphabets, including
-Ё/ё and Ə/ə, Ğ/ğ, I/ı, İ/i, Ş/ş, Ç/ç, Ö/ö, Ü/ü, are checked against real cmap
-entries and rendered glyph masks. Both alphabets are covered by the pinned font.
+Tests verify the pinned font’s Russian and modern Azerbaijani Latin alphabet
+coverage against real cmap entries and rendered glyph masks. Representative
+checks include U+0401, U+0451, U+018F, U+0259 and U+011E.
 
-Text is normalized to NFC. Common decomposed spellings such as Е + diaeresis,
-И + breve, G + breve and I + dot become their precomposed letters. Unsupported
+Text is normalized to NFC. For example, U+0415 followed by U+0308 becomes U+0401,
+and Latin G followed by U+0306 becomes U+011E. Unsupported
 characters are rejected with their Unicode codepoints before raster allocation,
 output creation or encoding. Emoji, CJK, format controls, variation selectors and
 remaining combining-mark sequences are not supported by this text renderer.

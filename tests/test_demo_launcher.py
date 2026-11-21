@@ -93,12 +93,12 @@ class DemoLauncherTests(unittest.TestCase):
 
 @unittest.skipUnless(shutil.which('ffmpeg') and shutil.which('ffprobe'), 'FFmpeg/ffprobe required')
 class RealDemoTests(unittest.TestCase):
-    def test_redirected_cp1252_reports_cyrillic_path_without_failing_export(self):
+    def test_redirected_cp1252_reports_unicode_path_without_failing_export(self):
         import subprocess
         import sys
 
         with tempfile.TemporaryDirectory() as td:
-            output = Path(td).resolve()/'Фильм с пробелами café'
+            output = Path(td).resolve()/'Film with spaces \u2605 caf\u00e9'
             movie = output/'film.mp4'
             sources = [demo.ROOT/'examples/film.json', *sorted((demo.ROOT/'.agents/skills/gif-cinema/assets/example').glob('shot-*.gif'))]
             def snapshot(paths):
@@ -117,8 +117,8 @@ class RealDemoTests(unittest.TestCase):
             self.assertEqual(first.stderr, '')
             display_path = str(movie).encode('cp1252', 'backslashreplace').decode('cp1252')
             self.assertIn(f'Ready: {display_path}', first.stdout)
-            self.assertIn(r'\u0424', first.stdout)
-            self.assertIn('café', first.stdout)
+            self.assertIn(r'\u2605', first.stdout)
+            self.assertIn('caf\u00e9', first.stdout)
             self.assertIn('192 frames', first.stdout)
             self.assertTrue((output/'contact-sheet.png').is_file())
             receipt = json.loads((output/'receipt.json').read_bytes())

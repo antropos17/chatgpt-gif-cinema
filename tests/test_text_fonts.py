@@ -14,12 +14,12 @@ from unittest.mock import patch
 from PIL import Image, ImageFont
 from gif_cinema import layers, text_fonts
 
-RUSSIAN = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+RUSSIAN = '\u0410\u0411\u0412\u0413\u0414\u0415\u0401\u0416\u0417\u0418\u0419\u041a\u041b\u041c\u041d\u041e\u041f\u0420\u0421\u0422\u0423\u0424\u0425\u0426\u0427\u0428\u0429\u042a\u042b\u042c\u042d\u042e\u042f\u0430\u0431\u0432\u0433\u0434\u0435\u0451\u0436\u0437\u0438\u0439\u043a\u043b\u043c\u043d\u043e\u043f\u0440\u0441\u0442\u0443\u0444\u0445\u0446\u0447\u0448\u0449\u044a\u044b\u044c\u044d\u044e\u044f'
 AZERBAIJANI = 'ABCÇDEƏFGĞHXIİJKQLMNOÖPRSŞTUÜVYZabcçdeəfgğhxıijkqlmnoöprsştuüvyz'
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def scene(text='Привет, Əli! Azərbaycan', font_id=text_fonts.NOTO_FONT):
+def scene(text='\u041f\u0440\u0438\u0432\u0435\u0442, Əli! Azərbaycan', font_id=text_fonts.NOTO_FONT):
     layer = {'id': 'label', 'type': 'text', 'text': text, 'font_size': 24,
              'keyframes': [{'at': 0, 'x': .48}, {'at': 1, 'x': .52}]}
     if font_id is not None:
@@ -83,7 +83,7 @@ class FontCoverageTests(unittest.TestCase):
             self.assertEqual(layers.normalize_scene(scene(alphabet))['layers'][0]['text'], alphabet)
 
     def test_legacy_missing_glyphs_are_rejected_before_pixel_allocation(self):
-        for text in ('Привет', 'Əli', 'ə ı İ ğ', '😀'):
+        for text in ('\u041f\u0440\u0438\u0432\u0435\u0442', 'Əli', 'ə ı İ ğ', '😀'):
             with self.subTest(text=text), patch('PIL.Image.new', side_effect=AssertionError('No raster allocation')):
                 with self.assertRaisesRegex(ValueError, 'Unsupported text.*U\\+'):
                     layers.normalize_scene(scene(text, font_id=None))
@@ -113,8 +113,8 @@ class FontCoverageTests(unittest.TestCase):
                 layers.normalize_scene(scene(text))
 
     def test_nfc_normalization_handles_decomposed_ru_and_az_letters(self):
-        normalized = layers.normalize_scene(scene('Е\u0308 И\u0306 G\u0306 I\u0307 C\u0327 S\u0327'))
-        self.assertEqual(normalized['layers'][0]['text'], 'Ё Й Ğ İ Ç Ş')
+        normalized = layers.normalize_scene(scene('\u0415\u0308 \u0418\u0306 G\u0306 I\u0307 C\u0327 S\u0327'))
+        self.assertEqual(normalized['layers'][0]['text'], '\u0401 \u0419 Ğ İ Ç Ş')
         self.assertEqual(normalized['text_renderer']['normalization'], 'NFC')
 
     def test_font_hash_and_renderer_identity_are_saved_explicitly(self):
@@ -215,7 +215,7 @@ class FontFileTests(unittest.TestCase):
         self.assertEqual(verify(out)['frames_reopened_and_matched'], 4)
 
     def test_bad_unicode_fails_dry_run_before_output_or_encoder(self):
-        self.path.write_text(json.dumps(scene('Привет', font_id=None)), encoding='utf-8')
+        self.path.write_text(json.dumps(scene('\u041f\u0440\u0438\u0432\u0435\u0442', font_id=None)), encoding='utf-8')
         out = self.root / 'bad'
         with patch('subprocess.run', side_effect=AssertionError('No encoder')):
             with self.assertRaisesRegex(ValueError, 'Unsupported text'):

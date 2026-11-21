@@ -72,9 +72,9 @@ class MotionPresetTests(unittest.TestCase):
                         self.assertEqual(state['opacity'], 1)
 
     def test_custom_copy_unicode_and_color_are_preserved(self):
-        scene = presets.make_scene('focus-card', headline='НАЙДИ', second_line='РИТМ', caption='Твой следующий кадр', accent='#eebb55')
+        scene = presets.make_scene('focus-card', headline='CAF\u00c9', second_line='MOVE', caption='Your next frame', accent='#eebb55')
         copy = {row['id']: row for row in scene['layers'] if row['type'] == 'text'}
-        self.assertEqual(copy['headline']['text'], 'НАЙДИ')
+        self.assertEqual(copy['headline']['text'], 'CAF\u00c9')
         self.assertEqual(copy['second_line']['fill'], '#eebb55')
         self.assertEqual(layers.parse_scene(layers.serialize_scene(scene)), scene)
 
