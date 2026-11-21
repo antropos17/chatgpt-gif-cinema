@@ -12,6 +12,9 @@ from PIL import Image, ImageSequence
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ('README.md', 'docs/CHARACTER-GALLERY.md', 'docs/WORKFLOWS.md', 'docs/RECIPES.md', 'docs/README-DESIGN.md', 'docs/MOTION-DESIGN.md', 'docs/GALLERY.md', 'docs/LANTERN-ECHO.md', 'examples/lantern-echo/README.md', 'examples/native-shots/README.md', 'docs/NATIVE-SHOTS.md')
+DELIVERY_PREVIEW = 'docs/assets/lantern-delivery/preview.gif'
+DELIVERY_POSTER = 'docs/assets/lantern-delivery/poster.jpg'
+ECHO_PREVIEW = 'docs/assets/lantern-echo/preview.gif'
 
 
 class Links(HTMLParser):
@@ -131,8 +134,9 @@ class ReadmeTests(unittest.TestCase):
         self.assertNotIn('assets/identity/cover', source)
         self.assertNotRegex(source, r'<img\b[^>]*height=')
         urls = re.findall(r'<img\b[^>]*src="([^"]+)"', source)
-        self.assertEqual(urls, ['docs/assets/lantern-echo/preview.gif'])
-        self.assertEqual(sum((ROOT / url).stat().st_size for url in set(urls)), 3976137)
+        self.assertEqual(urls, [DELIVERY_PREVIEW, ECHO_PREVIEW])
+        self.assertEqual((ROOT / ECHO_PREVIEW).stat().st_size, 3976137)
+        self.assertLessEqual(sum((ROOT / url).stat().st_size for url in urls), 4_300_000)
         self.assertIn('docs/CHARACTER-GALLERY.md', source)
         self.assertIn('docs/WORKFLOWS.md', source)
         self.assertLess(source.index('## Make your first film'), source.index('## Anime pixel art'))
@@ -147,6 +151,20 @@ class ReadmeTests(unittest.TestCase):
         self.assertIn('Source-available', source)
         self.assertIn('request cap, not a dollar-budget guarantee', source)
 
+    def test_delivery_uses_a_short_preview_and_a_reduced_motion_still(self):
+        source = (ROOT / 'README.md').read_text(encoding='utf-8')
+        picture = next((tag for tag in re.findall(r'<picture>.*?</picture>', source, re.S)
+                        if f'src="{DELIVERY_PREVIEW}"' in tag), '')
+        self.assertIn(f'media="(prefers-reduced-motion: reduce)" srcset="{DELIVERY_POSTER}"', picture)
+        self.assertIn('alt="Lantern Delivery preview:', picture)
+        self.assertLessEqual((ROOT / DELIVERY_PREVIEW).stat().st_size, 300_000)
+        self.assertLessEqual((ROOT / DELIVERY_POSTER).stat().st_size, 50_000)
+        with Image.open(ROOT / DELIVERY_PREVIEW) as preview, Image.open(ROOT / DELIVERY_POSTER) as poster:
+            self.assertEqual(preview.size, (480, 270))
+            self.assertEqual(preview.n_frames, 50)
+            self.assertEqual(sum(frame.info['duration'] for frame in ImageSequence.Iterator(preview)), 5000)
+            self.assertEqual(poster.format, 'JPEG')
+
     def test_all_original_gifs_are_preserved_across_linked_documents(self):
         media = []
         for name in ('README.md', 'docs/CHARACTER-GALLERY.md', 'docs/WORKFLOWS.md'):
@@ -154,7 +172,7 @@ class ReadmeTests(unittest.TestCase):
             urls = re.findall(r'<img\b[^>]*src="([^"]+)"', path.read_text(encoding='utf-8'))
             media.extend((path.parent / url).resolve().relative_to(ROOT).as_posix() for url in urls)
         expected = {
-            'docs/assets/lantern-echo/preview.gif',
+            ECHO_PREVIEW,
             'examples/anime-pixel/character-previews/fox-knight.gif',
             'examples/anime-pixel/character-previews/dragon-chef.gif',
             'examples/anime-pixel/character-previews-batch2/raccoon-courier.gif',
@@ -173,6 +191,9 @@ class ReadmeTests(unittest.TestCase):
         inventory = json.loads((ROOT / 'examples/anime-pixel/catalog-100/inventory.json').read_text(encoding='utf-8'))
         expected.update('examples/anime-pixel/catalog-100/' + item['id'] + '.gif' for item in inventory[6:])
         self.assertEqual(len(inventory), 100)
+        # Account for the new front-page asset without relaxing the frozen original inventory.
+        self.assertEqual(media.count(DELIVERY_PREVIEW), 1)
+        media.remove(DELIVERY_PREVIEW)
         self.assertEqual(set(media), expected)
         self.assertEqual(len(media), len(expected))
         self.assertEqual(len(media), 109)
